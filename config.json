@@ -1,0 +1,4 @@
+{
+  "times": ["05:30", "11:00", "16:30"],
+  "prompt": "Generate a clever and funny programming joke. Append it to jokes.md in this directory. Use today's date as a markdown header (e.g. ## 2026-04-15), then write the joke below it. Do not repeat jokes already in the file."
+}
