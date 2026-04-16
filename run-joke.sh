@@ -11,5 +11,5 @@ PROMPT=$(python3 -c "import json; print(json.load(open('$CONFIG'))['prompt'])")
 
 cd "$SCRIPT_DIR"
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Running joke prompt..." >> "$LOG"
-claude -p "$PROMPT" >> "$LOG" 2>&1
+/home/mi/.local/bin/claude -p "$PROMPT" >> "$LOG" 2>&1
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Done." >> "$LOG"
