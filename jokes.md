@@ -25,3 +25,9 @@ A programmer's wife says: "Go to the store, get a gallon of milk. If they have e
 The programmer returns with 12 gallons of milk.
 
 "They had eggs."
+
+## 2026-04-17
+
+Why do Java developers wear glasses?
+
+Because they don't C#.
