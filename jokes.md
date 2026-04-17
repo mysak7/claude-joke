@@ -17,3 +17,11 @@ Because light attracts bugs.
 A SQL query walks into a bar, walks up to two tables and asks...
 
 "Can I JOIN you?"
+
+## 2026-04-17
+
+A programmer's wife says: "Go to the store, get a gallon of milk. If they have eggs, get a dozen."
+
+The programmer returns with 12 gallons of milk.
+
+"They had eggs."
