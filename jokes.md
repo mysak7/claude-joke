@@ -31,3 +31,9 @@ The programmer returns with 12 gallons of milk.
 Why do Java developers wear glasses?
 
 Because they don't C#.
+
+## 2026-04-17
+
+A senior dev reviews a junior's code and says: "This is the worst thing I've ever seen. There's no error handling, no tests, and it's completely unreadable."
+
+The junior asks: "So you've seen my code before?"
