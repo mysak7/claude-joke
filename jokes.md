@@ -51,3 +51,13 @@ The edge cases: empty string, null, and production.
 ## 2026-04-18
 
 There are 10 types of people in the world: those who understand binary, those who don't, and those who didn't expect this joke to be in base 3.
+
+## 2026-04-18
+
+A QA engineer walks into a bar.
+
+Orders 1 beer. Orders 0 beers. Orders 99999999 beers. Orders -1 beers. Orders asdfjkl; beers. Orders NULL beers. Orders 1/0 beers.
+
+The bartender handles each case gracefully.
+
+First real customer walks in and asks where the bathroom is. The bar bursts into flames.
