@@ -47,3 +47,7 @@ A developer is asked to estimate how long a task will take.
 Three months later, they say: "Almost done — just need to handle edge cases."
 
 The edge cases: empty string, null, and production.
+
+## 2026-04-18
+
+There are 10 types of people in the world: those who understand binary, those who don't, and those who didn't expect this joke to be in base 3.
