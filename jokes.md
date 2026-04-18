@@ -37,3 +37,13 @@ Because they don't C#.
 A senior dev reviews a junior's code and says: "This is the worst thing I've ever seen. There's no error handling, no tests, and it's completely unreadable."
 
 The junior asks: "So you've seen my code before?"
+
+## 2026-04-18
+
+A developer is asked to estimate how long a task will take.
+
+"Two weeks," they say.
+
+Three months later, they say: "Almost done — just need to handle edge cases."
+
+The edge cases: empty string, null, and production.
