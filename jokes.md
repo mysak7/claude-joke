@@ -61,3 +61,11 @@ Orders 1 beer. Orders 0 beers. Orders 99999999 beers. Orders -1 beers. Orders as
 The bartender handles each case gracefully.
 
 First real customer walks in and asks where the bathroom is. The bar bursts into flames.
+
+## 2026-04-19
+
+A team spent six months building a microservices architecture to replace a monolith.
+
+Deployment time went from 5 minutes to 3 hours, latency tripled, and debugging now requires correlating logs across 47 services.
+
+They gave a conference talk about it called "How We Scaled to Handle Our Imaginary Future Load."
