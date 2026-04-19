@@ -75,3 +75,11 @@ They gave a conference talk about it called "How We Scaled to Handle Our Imagina
 A programmer is asked: "Why do you always mix up Halloween and Christmas?"
 
 "Because Oct 31 == Dec 25."
+
+## 2026-04-19
+
+A dev opens a 10-year-old codebase and finds a comment:
+
+`// TODO: fix this hack before going to production`
+
+The git blame says it was written by them.
