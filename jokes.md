@@ -69,3 +69,9 @@ A team spent six months building a microservices architecture to replace a monol
 Deployment time went from 5 minutes to 3 hours, latency tripled, and debugging now requires correlating logs across 47 services.
 
 They gave a conference talk about it called "How We Scaled to Handle Our Imaginary Future Load."
+
+## 2026-04-19
+
+A programmer is asked: "Why do you always mix up Halloween and Christmas?"
+
+"Because Oct 31 == Dec 25."
