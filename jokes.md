@@ -107,3 +107,9 @@ Response time drops from 200ms to 12ms.
 Users complain it feels broken because it loads "too fast."
 
 The developer adds `await sleep(188)`.
+
+## 2026-04-20
+
+A junior dev asks a senior: "What's the difference between a senior and a junior developer?"
+
+The senior replies: "A junior reads the error message and Googles it. A senior reads the error message and already knows which Stack Overflow answer is wrong."
