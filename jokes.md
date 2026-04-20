@@ -95,3 +95,15 @@ Heaven is a fluorescent-lit room with Windows XP machines and everyone maintaini
 The developer chooses hell. One week later, screaming in flames, they cry: "What happened to the nice office?!"
 
 St. Peter replies: "That was the demo environment."
+
+## 2026-04-20
+
+A manager asks a developer: "Can you make the app faster?"
+
+The developer spends two weeks optimizing the database queries, adding caching layers, and rewriting the hot path in C.
+
+Response time drops from 200ms to 12ms.
+
+Users complain it feels broken because it loads "too fast."
+
+The developer adds `await sleep(188)`.
