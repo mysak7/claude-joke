@@ -83,3 +83,15 @@ A dev opens a 10-year-old codebase and finds a comment:
 `// TODO: fix this hack before going to production`
 
 The git blame says it was written by them.
+
+## 2026-04-20
+
+A developer dies and arrives at the Pearly Gates. St. Peter says: "We have two options: heaven and hell. Let me show you both."
+
+Hell is a lush office with free snacks, standing desks, and everyone writing elegant code together.
+
+Heaven is a fluorescent-lit room with Windows XP machines and everyone maintaining legacy COBOL in silence.
+
+The developer chooses hell. One week later, screaming in flames, they cry: "What happened to the nice office?!"
+
+St. Peter replies: "That was the demo environment."
