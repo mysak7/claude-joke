@@ -113,3 +113,17 @@ The developer adds `await sleep(188)`.
 A junior dev asks a senior: "What's the difference between a senior and a junior developer?"
 
 The senior replies: "A junior reads the error message and Googles it. A senior reads the error message and already knows which Stack Overflow answer is wrong."
+
+## 2026-04-21
+
+A developer fixes a critical production bug at 2am.
+
+Commit message: `fix`
+
+The next morning, the team asks what changed.
+
+They open the diff. It's a single deleted space.
+
+They write three paragraphs in the post-mortem about "whitespace-induced parsing ambiguity in the tokenization layer."
+
+The fix is promoted to a conference talk.
