@@ -135,3 +135,17 @@ A developer sets up a CI/CD pipeline with 47 automated checks: linting, formatti
 Every check passes in under 3 minutes.
 
 They then spend 4 hours manually clicking through the app to "just make sure."
+
+## 2026-04-21
+
+A developer inherits a codebase and finds a 200-line function with one comment at the top:
+
+`// magic — do not touch`
+
+They refactor it. Clean, readable, well-tested. Deploys to production.
+
+The company loses $2M in the next hour.
+
+The function was calculating currency exchange rates. In a way no one can explain. But correctly.
+
+The comment is restored. The function is now 201 lines.
