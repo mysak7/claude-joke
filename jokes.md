@@ -127,3 +127,11 @@ They open the diff. It's a single deleted space.
 They write three paragraphs in the post-mortem about "whitespace-induced parsing ambiguity in the tokenization layer."
 
 The fix is promoted to a conference talk.
+
+## 2026-04-21
+
+A developer sets up a CI/CD pipeline with 47 automated checks: linting, formatting, unit tests, integration tests, security scans, dependency audits, and a Docker build.
+
+Every check passes in under 3 minutes.
+
+They then spend 4 hours manually clicking through the app to "just make sure."
