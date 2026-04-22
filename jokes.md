@@ -149,3 +149,13 @@ The company loses $2M in the next hour.
 The function was calculating currency exchange rates. In a way no one can explain. But correctly.
 
 The comment is restored. The function is now 201 lines.
+
+## 2026-04-22
+
+A developer nails the whiteboard interview: reverses a linked list, balances a binary tree, implements Dijkstra's from memory.
+
+They're hired.
+
+Four years later, they have built 38 forms in React. Each one has a date picker. Each date picker behaves differently.
+
+They still haven't touched a linked list.
