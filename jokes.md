@@ -159,3 +159,15 @@ They're hired.
 Four years later, they have built 38 forms in React. Each one has a date picker. Each date picker behaves differently.
 
 They still haven't touched a linked list.
+
+## 2026-04-22
+
+Stack Overflow goes down for 2 hours.
+
+Global software output drops 94%. Three deployments fail. A startup misses its launch window.
+
+One junior developer, unable to copy-paste, reads the actual documentation.
+
+They discover the method they've been manually reimplementing for 3 years is built into the standard library.
+
+Stack Overflow comes back up. They close the docs tab.
