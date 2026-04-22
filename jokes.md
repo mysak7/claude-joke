@@ -171,3 +171,21 @@ One junior developer, unable to copy-paste, reads the actual documentation.
 They discover the method they've been manually reimplementing for 3 years is built into the standard library.
 
 Stack Overflow comes back up. They close the docs tab.
+
+## 2026-04-22
+
+A developer needs to find when a bug was introduced. They run `git log`.
+
+```
+WIP
+temp
+asdf
+fix
+fix fix
+fix for real this time
+FINAL FIX
+DO NOT MERGE (merged anyway)
+cleanup
+```
+
+The bug is in `cleanup`.
