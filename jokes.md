@@ -209,3 +209,19 @@ They ship with the log. The message: `"looking for bug"`.
 Two years pass. The app is stable. The team considers the log a load-bearing architectural component.
 
 It appears in the onboarding docs under "Core Infrastructure."
+
+## 2026-04-23
+
+A developer finds a function called `calculateTotal()` that hasn't been touched in five years.
+
+They trace the call stack. It's called from `doTheThing()`, which is called from `handleStuff()`, which is called from `main2()`.
+
+`main2()` was introduced after `main()` "got complicated."
+
+They trace `main()`. It calls `doTheThing2()`.
+
+`doTheThing2()` is identical to `doTheThing()` but with a comment: `// same as doTheThing but this one works`.
+
+Both are called in production. The outputs are summed and divided by two.
+
+No one knows why. The numbers are correct.
