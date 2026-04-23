@@ -225,3 +225,25 @@ They trace `main()`. It calls `doTheThing2()`.
 Both are called in production. The outputs are summed and divided by two.
 
 No one knows why. The numbers are correct.
+
+## 2026-04-23
+
+A new developer joins the team. Their first task: center a div.
+
+They Google it. The first result is from 2009. The second from 2014. The third from 2018. All different. All marked accepted.
+
+They try all three. Each works. Each breaks something else.
+
+They ask the senior developer.
+
+The senior stares into the distance. "I use a table," they say quietly.
+
+The junior submits a PR with `display: flex; justify-content: center; align-items: center;`.
+
+The senior approves it without reading it.
+
+"Does it work?" they ask.
+
+"Yes."
+
+"Ship it."
