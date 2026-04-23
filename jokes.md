@@ -189,3 +189,23 @@ cleanup
 ```
 
 The bug is in `cleanup`.
+
+## 2026-04-23
+
+A developer spends three days hunting a race condition. Logs everywhere. Thread dumps. Memory profiler. Nothing.
+
+On day four, they add one `console.log("here")` to narrow it down.
+
+The bug disappears.
+
+They remove the log.
+
+The bug comes back.
+
+They try smaller logs. Bigger logs. Logs in different places. Each time: log present → no bug. Log absent → bug.
+
+They ship with the log. The message: `"looking for bug"`.
+
+Two years pass. The app is stable. The team considers the log a load-bearing architectural component.
+
+It appears in the onboarding docs under "Core Infrastructure."
