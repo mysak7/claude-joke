@@ -247,3 +247,17 @@ The senior approves it without reading it.
 "Yes."
 
 "Ship it."
+
+## 2026-04-24
+
+A library releases version 2.0.
+
+The changelog: "Complete rewrite. Faster, cleaner, no legacy baggage."
+
+A developer upgrades. Their app breaks. They open the migration guide — 47 pages, starting with: "We recommend beginning fresh."
+
+They read the diff. The only user-facing change: one function was renamed.
+
+They pin to 1.x. So does everyone else. Downloads for 1.x triple overnight.
+
+Six months later, the maintainer deprecates 2.0 and announces 3.0: "Complete rewrite. We learned from 2.0."
