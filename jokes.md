@@ -261,3 +261,17 @@ They read the diff. The only user-facing change: one function was renamed.
 They pin to 1.x. So does everyone else. Downloads for 1.x triple overnight.
 
 Six months later, the maintainer deprecates 2.0 and announces 3.0: "Complete rewrite. We learned from 2.0."
+
+## 2026-04-24
+
+A developer spends two hours fighting TypeScript to properly type a function.
+
+They get it perfect: generic constraints, conditional types, inferred return values, a 14-line type signature.
+
+The function body: `return x + 1`.
+
+Their colleague opens the PR.
+
+"Why not just use `any`?"
+
+They close their laptop. They do not open it again that day.
