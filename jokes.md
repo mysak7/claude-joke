@@ -275,3 +275,23 @@ Their colleague opens the PR.
 "Why not just use `any`?"
 
 They close their laptop. They do not open it again that day.
+
+## 2026-04-24
+
+A developer clones a project and runs `npm install`.
+
+47 seconds. 1,312 packages. 3 vulnerabilities (2 critical).
+
+They open `package.json`. There are 4 dependencies.
+
+They trace the dependency tree. The 4 deps have 847 transitive dependencies between them.
+
+One package, downloaded 2 billion times a week, does exactly one thing:
+
+```js
+module.exports = n => n % 2 === 0;
+```
+
+Its name is `is-even`.
+
+It has its own dependencies.
