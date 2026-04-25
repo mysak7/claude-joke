@@ -332,3 +332,15 @@ The explanation is thorough, confident, and plausible.
 It is completely wrong.
 
 They merge the PR.
+
+## 2026-04-25
+
+A team adopts Agile. Their calendar fills with ceremonies: daily standup, sprint planning, backlog refinement, sprint review, retrospective.
+
+Week three, a developer does the math. Between ceremonies, context-switching recovery time, and writing up the meeting notes, they have approximately 6 hours per week left to write code.
+
+Their sprint velocity: 8 story points.
+
+The team decides they need more visibility into why velocity keeps dropping.
+
+They schedule a biweekly ceremony to review the ceremonies.
