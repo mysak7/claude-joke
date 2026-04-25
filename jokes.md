@@ -313,3 +313,22 @@ Three years later, the developer is the one asking what the code does.
 They check git blame. The author: themselves.
 
 The code is still self-documenting. It documents that they were having a bad day in 2023.
+
+## 2026-04-25
+
+A developer integrates an AI coding assistant into their workflow.
+
+Week 1: It writes their boilerplate. They feel 10x faster.
+Week 2: It writes their unit tests.
+Week 3: It writes their features, complete with explanations.
+Week 4: It writes their PR descriptions.
+
+By month three, they haven't typed a line of code. They no longer understand the codebase.
+
+They ask the AI to explain the code it wrote.
+
+The explanation is thorough, confident, and plausible.
+
+It is completely wrong.
+
+They merge the PR.
