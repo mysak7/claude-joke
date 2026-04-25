@@ -295,3 +295,21 @@ module.exports = n => n % 2 === 0;
 Its name is `is-even`.
 
 It has its own dependencies.
+
+## 2026-04-25
+
+A developer submits a PR with no comments or documentation.
+
+The reviewer asks: "Where's the documentation?"
+
+"The code is self-documenting."
+
+The reviewer looks at the function names: `doProcess()`, `handleData()`, `executeMain()`, `runThing()`.
+
+They approve it. They don't know why.
+
+Three years later, the developer is the one asking what the code does.
+
+They check git blame. The author: themselves.
+
+The code is still self-documenting. It documents that they were having a bad day in 2023.
