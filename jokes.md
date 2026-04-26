@@ -344,3 +344,19 @@ Their sprint velocity: 8 story points.
 The team decides they need more visibility into why velocity keeps dropping.
 
 They schedule a biweekly ceremony to review the ceremonies.
+
+## 2026-04-26
+
+Phil Karlton said: "There are only two hard things in Computer Science: cache invalidation and naming things."
+
+A developer takes this as a challenge.
+
+Six months later, they've solved cache invalidation: distributed, consistent, fault-tolerant. A genuine engineering breakthrough.
+
+They prepare to open source it.
+
+Naming it takes three weeks.
+
+They ship it as `my-cache-lib-v2-FINAL`.
+
+The repo has two stars. One is theirs. The other is a coworker who starred it by accident and hasn't figured out how to unstar.
