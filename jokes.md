@@ -360,3 +360,23 @@ Naming it takes three weeks.
 They ship it as `my-cache-lib-v2-FINAL`.
 
 The repo has two stars. One is theirs. The other is a coworker who starred it by accident and hasn't figured out how to unstar.
+
+## 2026-04-26
+
+A developer submits a 2,000-line PR.
+
+Reviewer 1: "LGTM 👍"
+Reviewer 2: "Ship it."
+Reviewer 3: "Looks good."
+
+Merged in 20 minutes.
+
+Three weeks later, post-mortem: the PR introduced a SQL injection vulnerability, broke a database migration, and silently deleted the user avatar feature.
+
+All three reviewers agree they "would have caught it if the PR had been smaller."
+
+The developer splits their next change into a 3-line PR.
+
+It takes 9 days, 2 reverts, and a Zoom call to merge.
+
+Final comment before approval: "Can you break this into smaller PRs?"
