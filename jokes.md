@@ -380,3 +380,35 @@ The developer splits their next change into a 3-line PR.
 It takes 9 days, 2 reverts, and a Zoom call to merge.
 
 Final comment before approval: "Can you break this into smaller PRs?"
+
+## 2026-04-26
+
+A developer builds a scheduling app. Tests pass. Ships to production.
+
+First complaint: "My 3pm appointment shows as 2am."
+
+They add timezone support. Tests pass.
+
+Second complaint: "Dates in Sydney show as yesterday."
+
+They add UTC conversion. Tests pass.
+
+Third complaint: something breaks every second Sunday in March.
+
+Daylight saving time. They fix it. Then discover DST happens on different days per country. Some regions opted out. Some switched. Some never had it. One country is UTC+5:45.
+
+A year later, the app has 14,000 lines of date-handling code and a policy document titled "Timezone Philosophy."
+
+A new developer joins and asks: "Why not just use `moment-timezone`?"
+
+The team looks at them.
+
+"We tried that," someone says quietly. "It suggested we use `luxon`."
+
+"And?"
+
+"Luxon suggested `date-fns`."
+
+"And?"
+
+No one answers. They gesture at the 14,000 lines.
