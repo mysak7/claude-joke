@@ -412,3 +412,21 @@ The team looks at them.
 "And?"
 
 No one answers. They gesture at the 14,000 lines.
+
+## 2026-04-27
+
+A developer spends four hours on a bug. No progress.
+
+They pull up Slack to ask for help. They start typing, explaining the problem step by step.
+
+Halfway through the second sentence, they see it.
+
+They close Slack without sending. Fix the bug in 30 seconds.
+
+This happens every day for eight years.
+
+Their senior developer considers them a brilliant, self-sufficient engineer.
+
+They have never needed help. They have also never once finished a Slack message.
+
+Their draft folder has 847 unsent messages. Each one ends mid-sentence with the answer.
