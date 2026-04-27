@@ -430,3 +430,24 @@ Their senior developer considers them a brilliant, self-sufficient engineer.
 They have never needed help. They have also never once finished a Slack message.
 
 Their draft folder has 847 unsent messages. Each one ends mid-sentence with the answer.
+
+## 2026-04-27
+
+A developer has a task that takes 5 minutes a week.
+
+"I'll write a script," they say.
+
+Two days later: the script is done, configurable via flags, handles edge cases, has a CLI, and is fully documented.
+
+Time spent: 14 hours.
+Time saved after one year: 4 hours and 20 minutes.
+
+The script has 94% test coverage.
+
+The task is eliminated in a Q3 restructuring.
+
+The script still runs every Tuesday at 9am. It emails a report to a distribution list.
+
+Three people on the list have left the company. The fourth has a filter that moves it to trash unopened.
+
+The developer has been promoted twice for "process automation initiatives."
