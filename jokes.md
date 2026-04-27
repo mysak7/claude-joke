@@ -451,3 +451,27 @@ The script still runs every Tuesday at 9am. It emails a report to a distribution
 Three people on the list have left the company. The fourth has a filter that moves it to trash unopened.
 
 The developer has been promoted twice for "process automation initiatives."
+
+## 2026-04-27
+
+A developer refactors the codebase from callbacks to Promises.
+
+Three months. The code is clean, readable, testable. They're proud.
+
+They return a year later to add a feature. Everything is `async/await` now. Someone migrated while they were on vacation.
+
+They ask why.
+
+"Promises are confusing," the new dev says.
+
+They look at the code. Async functions returning Promises. Awaited Promises returning Promises. A Promise wrapped in a Promise awaited inside an async function that returns — a Promise.
+
+"It's the same thing," they say.
+
+"I know," says the new dev. "But now it *looks* different."
+
+The codebase now has three styles: callbacks, Promises, and async/await. All correct. All used inside the same function. A senior dev once tried to consolidate them. They are no longer with the company.
+
+The onboarding doc now has a section titled "Async Patterns." It says: "Use whichever style the surrounding code uses."
+
+The surrounding code uses all three.
