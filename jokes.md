@@ -539,3 +539,33 @@ They ship it. The only complaint: users named O'Brien can't register. They patch
 They consider this a success.
 
 The regex is later reused to validate phone numbers. No one knows how this happened. No one asks.
+
+## 2026-04-28
+
+A team decides to rewrite their Python service in Rust for "10x performance and memory safety."
+
+Eighteen months later, the Rust service is done. It is 10x faster, uses half the memory, and has zero runtime panics.
+
+It is also:
+- 40,000 lines, up from 3,000
+- Understood by exactly two people
+- Rejected in code review 14 times for being "unreadable"
+- Unmaintainable by the four developers now responsible for it
+
+The Python service ran for six years with three outages, all caused by a daylight saving time bug that also exists in the Rust version.
+
+The team gives a conference talk: "Memory Safety at Scale: Our Rust Migration Story."
+
+An audience member asks: "Was the Python service crashing?"
+
+"No."
+
+"Was it too slow?"
+
+"Not really. P99 was fine."
+
+"So why—"
+
+"It wasn't in Rust."
+
+Thunderous applause.
