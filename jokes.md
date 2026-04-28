@@ -511,3 +511,31 @@ The senior nods. "The app is the documentation."
 "The app was crashing."
 
 "Right. That's the documentation."
+
+## 2026-04-28
+
+A developer needs to validate an email address.
+
+They write a regex. It works for `user@example.com`. They add edge cases: dots, subdomains, plus signs. The regex grows.
+
+Week two: international TLDs. The regex is now 280 characters. A colleague says it looks like someone fell asleep on the keyboard.
+
+Week three: someone submits `user@xn--p1ai`. Valid. The regex rejects it.
+
+A senior suggests: "Just use a library."
+
+"I'm so close," the developer says.
+
+The final regex is 834 characters, has 19 capture groups, three lookaheads, and one comment: `# don't`.
+
+It correctly validates 99.3% of all email addresses in the wild.
+
+It rejects `me@me.me`.
+
+It accepts `@@`.
+
+They ship it. The only complaint: users named O'Brien can't register. They patch in `'`. A week later, users named `O'Brien; DROP TABLE users;--` can't register either.
+
+They consider this a success.
+
+The regex is later reused to validate phone numbers. No one knows how this happened. No one asks.
