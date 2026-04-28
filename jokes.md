@@ -475,3 +475,39 @@ The codebase now has three styles: callbacks, Promises, and async/await. All cor
 The onboarding doc now has a section titled "Async Patterns." It says: "Use whichever style the surrounding code uses."
 
 The surrounding code uses all three.
+
+## 2026-04-28
+
+A developer ships to production for the first time.
+
+The app crashes.
+`Error: DATABASE_URL is undefined.`
+
+They set it. It crashes again.
+`Error: API_KEY is undefined.`
+
+They set it. It crashes again.
+`Error: JWT_SECRET is undefined.`
+
+An hour and eleven environment variables later, the app is running.
+
+The junior developer asks: "Is there a list of required environment variables somewhere?"
+
+The senior says: "The `.env.example` file."
+
+The junior opens it.
+
+```
+# example values — replace with real ones
+DATABASE_URL=your_database_url
+API_KEY=your_api_key
+# TODO: add more
+```
+
+It hasn't been updated since 2021. Five of the eleven variables aren't in it.
+
+The senior nods. "The app is the documentation."
+
+"The app was crashing."
+
+"Right. That's the documentation."
