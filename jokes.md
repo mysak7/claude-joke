@@ -609,3 +609,29 @@ At the year-end architecture review, this system is held up as a best practice.
 The presenter wasn't on the team when it was built.
 
 No one who was still is.
+
+## 2026-04-29
+
+A developer ships a one-line fix at 4:55pm on a Friday.
+
+"Low risk," they tell themselves. "It's a config change."
+
+At 5:08pm: monitoring alerts.
+At 5:15pm: the CEO is paged.
+At 5:23pm: an incident channel opens with 47 participants.
+
+At 7:40pm, they roll back. The one-line change becomes two lines: the original, restored, plus a comment directly above it:
+
+`// DO NOT CHANGE THIS`
+
+Monday morning a new developer asks what the comment means.
+
+"Leave it," says the senior.
+
+"But why? What does it—"
+
+"Leave. It."
+
+The comment has now outlasted three CTOs, two rewrites, and a cloud migration. It was ported faithfully each time, owner unknown, purpose undocumented.
+
+It is the most reviewed line in the codebase. No one has ever approved a change to it.
