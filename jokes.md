@@ -635,3 +635,29 @@ Monday morning a new developer asks what the comment means.
 The comment has now outlasted three CTOs, two rewrites, and a cloud migration. It was ported faithfully each time, owner unknown, purpose undocumented.
 
 It is the most reviewed line in the codebase. No one has ever approved a change to it.
+
+## 2026-04-29
+
+A developer runs `git blame` on a confusing function.
+
+Every line: their own name. Four years ago.
+
+They try to reconstruct the logic. There are no comments. The variable names are `temp`, `temp2`, `temp3`, `tempFinal`.
+
+One local variable is named `WHY`.
+
+They check their calendar. The dates match a six-week stretch git log records as: `trying this`, `no`, `ok fine`, `FIXED`, `not fixed`, `please`.
+
+They leave a comment at the top of the function:
+
+`// I don't know what I was thinking. I'm sorry.`
+
+Two years later, a new developer encounters the same confusion. They run `git blame`. They see the comment. They feel less alone.
+
+They add beneath it:
+
+`// Same. Still sorry.`
+
+There are now seven apologies stacked at the top of the function, spanning nine years and four job titles. Nobody has changed the code. It still runs correctly.
+
+New hires are told, quietly, that it's tradition.
