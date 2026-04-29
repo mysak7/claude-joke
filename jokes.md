@@ -569,3 +569,43 @@ An audience member asks: "Was the Python service crashing?"
 "It wasn't in Rust."
 
 Thunderous applause.
+
+## 2026-04-29
+
+A developer needs to store a user's name.
+
+They build:
+- A `Name` class with `firstName` and `lastName`
+- A `NameValidator`, `NameRepository`, `NameFactory`, `NameMapper`, and `NameDTO`
+
+Three months later: "Can we support middle names?"
+
+They add `MiddleName`, `FullName`, `NullableMiddleName`, and a 14-page migration document.
+
+The API response for `{ "name": "Bob" }` becomes:
+
+```json
+{
+  "fullName": {
+    "firstName": { "value": "Bob" },
+    "middleName": { "value": null, "optional": true },
+    "lastName": { "value": null, "nullable": true }
+  }
+}
+```
+
+A new developer joins. First task: display the user's name in the header.
+
+They ask where the name is.
+
+There is a 45-minute meeting.
+
+The answer: `response.fullName.firstName.value`
+
+At the year-end architecture review, this system is held up as a best practice.
+
+"Extensible," someone says. "Scalable."
+
+The presenter wasn't on the team when it was built.
+
+No one who was still is.
