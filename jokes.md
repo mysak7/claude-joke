@@ -661,3 +661,37 @@ They add beneath it:
 There are now seven apologies stacked at the top of the function, spanning nine years and four job titles. Nobody has changed the code. It still runs correctly.
 
 New hires are told, quietly, that it's tradition.
+
+## 2026-04-30
+
+A company mandates two-factor authentication for all employee accounts.
+
+A developer spends 20 minutes setting it up. Everything works.
+
+Three months later, they get a new phone.
+
+They can no longer log in.
+
+They escalate to IT. IT says to contact the admin. The developer is the admin. The admin account also requires 2FA.
+
+They escalate to the cloud provider. The cloud provider sends a recovery link to an email address.
+
+The email address belongs to the contractor who set up the account in 2018. The contractor left in 2019. Their account was deleted in 2020. No one knows by whom.
+
+The backup phone number is a Google Voice number. The Google Voice account requires 2FA.
+
+They call Google support. Google support recommends automated account recovery.
+
+Automated account recovery asks security questions.
+
+The answer to "What was the name of your first pet?" is: the account was created by a contractor.
+
+Six weeks, three escalations, and one notarized document later, they regain access.
+
+They immediately re-enable 2FA. Different phone. Same backup email.
+
+There is now an 18-page document titled "2FA Recovery Procedures." Step 1: verify the person who owns the backup email is still at the company.
+
+They are not.
+
+The document has a note at the bottom: "If this happens again, see Step 1."
