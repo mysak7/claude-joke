@@ -717,3 +717,32 @@ The search PR is closed as stale after 60 days.
 At the annual security review, the CTO presents the slide: "100% critical CVE patch rate — best in company history."
 
 There is a trophy graphic.
+
+## 2026-04-30
+
+A team sets up alerting. On the first day, 847 alerts fire.
+
+They tune the thresholds. Alerts drop to 200. Then 50. Then 12.
+
+Six months later: zero alerts. The dashboard is entirely green.
+
+"System is stable," the team announces. The on-call rotation is quietly cancelled. "Nothing ever pages," the manager says. "Great engineering."
+
+A user submits a support ticket: the app has been down for three days.
+
+They check the alerting config.
+
+The threshold for "application unavailable": error rate exceeds 95%.
+Current error rate: 94.3%.
+
+The latency alert: triggers above 30,000ms.
+Current P99: 28,400ms.
+
+The disk alert: fires at 99% capacity.
+Current disk usage: 98.7%.
+
+Every metric is technically within bounds. Every check is green. Every alert is silent.
+
+They lower the thresholds. 847 alerts fire.
+
+"We need to tune these," someone says.
