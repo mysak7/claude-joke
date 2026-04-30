@@ -695,3 +695,25 @@ There is now an 18-page document titled "2FA Recovery Procedures." Step 1: verif
 They are not.
 
 The document has a note at the bottom: "If this happens again, see Step 1."
+
+## 2026-04-30
+
+A Dependabot PR appears: "Bump `lodash` from 4.17.20 to 4.17.21 — patches CVSS 9.8 remote code execution."
+
+Merged in three minutes.
+
+Sitting open for five weeks: a PR titled "Sanitize user input in the search endpoint."
+
+Zero reviews. One comment: "Do we need a ticket for this?"
+
+The developer checks where lodash is used. It formats a date in an internal admin script. The script hasn't been run since 2022. The admin panel was sunset in Q3 2023.
+
+The search endpoint is called four million times per day.
+
+The security dashboard updates: **0 critical vulnerabilities. ✓**
+
+The search PR is closed as stale after 60 days.
+
+At the annual security review, the CTO presents the slide: "100% critical CVE patch rate — best in company history."
+
+There is a trophy graphic.
