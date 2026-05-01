@@ -802,3 +802,33 @@ The Stack Overflow answer appears.
 They do not recognize it.
 
 The fix takes 90 seconds.
+
+## 2026-05-01
+
+A startup deploys a TODO app.
+
+They containerize it, write a Helm chart, set up a Kubernetes cluster across three availability zones, configure ingress with TLS termination, add horizontal pod autoscaling, a service mesh, distributed tracing, and a separate observability stack.
+
+The app: 200 lines of Python and a SQLite file.
+
+Monthly infrastructure cost: $1,200.
+
+The app has 4 users. Two are the founders. One is the founder's mom. One is a bot.
+
+"But it scales," says the CTO.
+
+"To what?" asks the engineer.
+
+The CTO opens a slide deck titled "Phase 2: Global Expansion."
+
+Slide 1: a world map with dots on every continent.
+Slide 2: "Multi-region active-active failover."
+Slide 3: a hockey stick graph with no y-axis label.
+
+The engineer looks at the user count: still 4.
+
+"The bot left," they say.
+
+The CTO moves the dot off Antarctica.
+
+"Still global," he says.
