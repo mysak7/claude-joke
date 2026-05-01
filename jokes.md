@@ -746,3 +746,35 @@ Every metric is technically within bounds. Every check is green. Every alert is 
 They lower the thresholds. 847 alerts fire.
 
 "We need to tune these," someone says.
+
+## 2026-05-01
+
+A senior developer goes on vacation for two weeks.
+
+They return to find the codebase migrated to a new framework, a new build tool, a new state management library, and a new folder structure.
+
+Benchmarks show the app is 3% slower.
+
+"Who did this?" they ask.
+
+The intern.
+
+The intern's reasoning, in a 47-message Slack thread: the old stack "felt legacy."
+
+The senior asks how long the migration took.
+
+"Nine days."
+
+The senior looks at the open tickets from before vacation: 14 bugs, 3 features, 2 security patches.
+
+All 14 bugs are now in the new framework instead of the old one. The 3 features don't exist. The 2 security patches were "probably ported over automatically."
+
+The intern has been promoted to "Frontend Lead" in a message sent while the senior was on a plane.
+
+Three months later, the senior goes on vacation again.
+
+They return to find everything rewritten in a different framework.
+
+The previous intern is now senior. A new intern explains: the old stack "felt legacy."
+
+The senior opens their laptop. There is a 47-message Slack thread.
