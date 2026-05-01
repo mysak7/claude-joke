@@ -778,3 +778,27 @@ They return to find everything rewritten in a different framework.
 The previous intern is now senior. A new intern explains: the old stack "felt legacy."
 
 The senior opens their laptop. There is a 47-message Slack thread.
+
+## 2026-05-01
+
+A developer spends four hours debugging why their API calls fail in the browser but work perfectly in curl.
+
+CORS.
+
+They've been a developer for eight years. They have fixed this exact error, in this exact way, from this exact cause, nineteen times. Every time they Google it. Every time they find the same Stack Overflow answer. Every time the fix takes under two minutes.
+
+This time, they decide to actually understand it.
+
+They read the entire MDN article. The spec. Two blog posts. They understand the preflight request, the allowed origins, the headers, the credentials flag. They could explain this to anyone. They could write the Stack Overflow answer themselves.
+
+They close the tab and fix the bug.
+
+Six weeks later: `Access-Control-Allow-Origin blocked`.
+
+They Google it.
+
+The Stack Overflow answer appears.
+
+They do not recognize it.
+
+The fix takes 90 seconds.
