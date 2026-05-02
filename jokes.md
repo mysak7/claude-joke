@@ -902,3 +902,39 @@ The loop runs today, retrying failed batches forever — or until it succeeds, w
 The comment now reads: `// intentional — do not remove (see previous PR)`.
 
 No one can see the previous PR.
+
+## 2026-05-02
+
+A developer notices a typo on the company homepage: "Wellcome to our platform."
+
+"I'll fix it in five minutes," they say.
+
+Their company has a deployment process: ticket, PR, two approvals, QA sign-off, change advisory board review, and a deploy in the Sunday 2am maintenance window.
+
+It is Monday at 9am.
+
+The fix ships the following Sunday at 2:07am, after a rollback (wrong environment) and re-deploy at 3:14am.
+
+Total time: six days, seventeen hours. Words changed: one.
+
+The following Monday, a developer notices the fix introduced a new typo: "Welccome to our platform."
+
+They file a ticket.
+
+The change advisory board notes that two typography-related incidents in thirty days qualifies as a "recurring pattern" under the incident response policy. They commission a root cause analysis.
+
+The root cause: developers can edit the homepage.
+
+The fix: they cannot.
+
+A vendor is contracted to manage homepage content. Their SLA is five business days. Their onboarding form asks for the company logo in CMYK.
+
+There are currently eleven typos on the homepage. The vendor has fixed three. Each fix introduced a new one.
+
+The original "Wellcome" has never appeared in any post-mortem. No one can find the original ticket. The ticket system was migrated in Q2. The migration preserved "all critical records."
+
+"Wellcome" has now been on the homepage for four years. It is, statistically, the most-read text the company has ever produced.
+
+Marketing has begun using it intentionally. "Our signature spelling," the new brand deck says. "Human. Approachable."
+
+There is a trademark application pending.
