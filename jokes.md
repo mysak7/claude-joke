@@ -878,3 +878,27 @@ There is a merge conflict.
 They resolve it. Push.
 
 CI fails.
+
+## 2026-05-02
+
+A developer finds an infinite loop in production code.
+
+"Classic rookie mistake," they say. They remove it, open a PR: `fix: remove accidental infinite loop`.
+
+Two weeks later: a bug report. "Data sync only processes the first batch."
+
+They trace the issue. The infinite loop was retrying failed batches. It was the only retry logic in the system. No one documented it. No one knew it was there. It worked because it ran forever — which, in this context, was exactly long enough.
+
+They restore the loop.
+
+PR title: `fix: restore accidental infinite loop (intentional)`.
+
+The PR description says "see previous PR for context."
+
+The previous PR was merged by someone who left the company. The branch is deleted. The Jira ticket is in a closed sprint from 2022.
+
+The loop runs today, retrying failed batches forever — or until it succeeds, whichever comes first.
+
+The comment now reads: `// intentional — do not remove (see previous PR)`.
+
+No one can see the previous PR.
