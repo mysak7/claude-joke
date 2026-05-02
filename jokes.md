@@ -832,3 +832,49 @@ The engineer looks at the user count: still 4.
 The CTO moves the dot off Antarctica.
 
 "Still global," he says.
+
+## 2026-05-02
+
+A developer opens a PR. Tests pass locally. They push.
+
+CI fails.
+
+They check the logs. The failing test passes when they run it. They push again.
+
+CI fails. Different test.
+
+They run both tests locally. Both pass. They push.
+
+CI fails. The first test again.
+
+Four hours later they find it: a test order dependency. They fix it. Push.
+
+CI fails. A lint error they've never seen. A new rule was added to the shared config between their first and second push.
+
+They fix it. Push.
+
+CI fails. Out of memory.
+
+They increase the memory limit. Push.
+
+CI passes.
+
+The PR has been open for nine hours. Three reviewers saw eleven consecutive red X marks and moved on.
+
+The developer re-requests reviews.
+
+One reviewer responds: "Is this ready? I see failed checks."
+
+The developer looks at the checks. All green.
+
+"Yes," they type. "It's ready."
+
+"Can you rebase on main first?"
+
+Main has moved 14 commits. One of them touches the same file.
+
+There is a merge conflict.
+
+They resolve it. Push.
+
+CI fails.
