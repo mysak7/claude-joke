@@ -4,12 +4,12 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG="$SCRIPT_DIR/config.json"
+CONFIG="$SCRIPT_DIR/config-joke.json"
 RUN_SCRIPT="$SCRIPT_DIR/run-joke.sh"
 MARKER="# claude-joke-cron"
 
 if [[ ! -f "$CONFIG" ]]; then
-    echo "Error: config.json not found at $CONFIG" >&2
+    echo "Error: config-joke.json not found at $CONFIG" >&2
     exit 1
 fi
 
@@ -19,7 +19,7 @@ import json, sys
 cfg = json.load(open('$CONFIG'))
 times = cfg.get('times', [])
 if not times:
-    print('Error: no times defined in config.json', file=sys.stderr)
+    print('Error: no times defined in config-joke.json', file=sys.stderr)
     sys.exit(1)
 for t in times:
     print(t)

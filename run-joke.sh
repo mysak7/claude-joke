@@ -4,7 +4,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG="$SCRIPT_DIR/config.json"
+CONFIG="$SCRIPT_DIR/config-joke.json"
 LOG="$SCRIPT_DIR/jokes.log"
 
 PROMPT=$(python3 -c "import json; print(json.load(open('$CONFIG'))['prompt'])")
