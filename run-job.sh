@@ -18,9 +18,16 @@ RESULT_FILE="$ARCHIVE_DIR/job-${DATETIME}-result.md"
 
 mkdir -p "$ARCHIVE_DIR"
 
-PROMPT=$(cat "$JOB_FILE")
+FIRST_LINE=$(head -n1 "$JOB_FILE")
+if [[ "$FIRST_LINE" == working-directory-path=* ]]; then
+    WORK_DIR="${FIRST_LINE#working-directory-path=}"
+    PROMPT=$(tail -n +2 "$JOB_FILE")
+else
+    WORK_DIR="$SCRIPT_DIR"
+    PROMPT=$(cat "$JOB_FILE")
+fi
 
-RESULT=$(cd "$SCRIPT_DIR" && /home/mi/.local/bin/claude -p "$PROMPT")
+RESULT=$(cd "$WORK_DIR" && /home/mi/.local/bin/claude -p "$PROMPT")
 
 {
     echo "# Job result"
