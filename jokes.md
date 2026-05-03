@@ -989,3 +989,31 @@ They nod.
 They get to work.
 
 It is the most useful error message in the codebase.
+
+## 2026-05-03
+
+A PR sits open for a week. The only blocker: "Please rebase on main."
+
+The developer rebases. Three conflicts. They resolve them and push.
+
+"Main has moved. Please rebase again."
+
+They rebase. Main moves again. They rebase again. A new reviewer joins mid-thread: "Can you also squash your commits?"
+
+They squash. They rebase. They push.
+
+"Thanks. One more thing — main moved."
+
+On day nine, they run `git merge main`. One conflict. One minute. Done.
+
+The commit history now has a merge commit.
+
+The reviewer comments: "We're a rebase shop."
+
+"Then why," the developer types, then deletes.
+
+They approve.
+
+The developer's next PR description says: "Please review before main moves."
+
+The PR sits open for a week.
