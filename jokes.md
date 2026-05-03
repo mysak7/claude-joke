@@ -1017,3 +1017,51 @@ They approve.
 The developer's next PR description says: "Please review before main moves."
 
 The PR sits open for a week.
+
+## 2026-05-03
+
+A product manager files a ticket: "Just add a dark mode."
+
+The developer opens the codebase.
+
+The app has:
+- 400 React components
+- 12,000 inline styles
+- 47 third-party libraries with hardcoded colors
+- A custom charting library from 2016
+- One CSS file with `!important` on every color rule
+
+They reply: "Estimate: six weeks."
+
+The PM says: "But it's just a color change."
+
+The developer starts typing a response — CSS specificity, color contrast ratios, WCAG 2.1 compliance, the charting library, the inline styles. Three paragraphs in.
+
+They delete it.
+
+"Two weeks," they type.
+
+It takes six.
+
+Dark mode ships. The PM files a new ticket: "Can we add a high-contrast mode? Some users want more contrast."
+
+The developer opens dark mode. The background is `#1a1a1a`. The text is `#222222`.
+
+They had not checked the contrast ratio.
+
+WCAG 2.1 minimum: 4.5:1.
+Actual ratio: 1.04:1.
+
+Dark mode has been in production for two weeks. It is, technically, a dark mode. It is also effectively invisible.
+
+They fix the colors. New ticket: "The updated dark mode looks different from the screenshots in the launch announcement."
+
+The screenshots were of the broken version.
+
+It had 847 upvotes on the product feedback board.
+
+The developer adds `prefers-color-scheme` support, a toggle, localStorage persistence, and a system-default option.
+
+The PM reviews it.
+
+"Looks great," they say. "One small thing — can you make it a little darker?"
