@@ -938,3 +938,54 @@ The original "Wellcome" has never appeared in any post-mortem. No one can find t
 Marketing has begun using it intentionally. "Our signature spelling," the new brand deck says. "Human. Approachable."
 
 There is a trademark application pending.
+
+## 2026-05-03
+
+A developer writes a comment for a theoretically impossible edge case:
+
+```python
+else:
+    # This should never happen
+    raise RuntimeError("This should never happen")
+```
+
+Three weeks later: a PagerDuty alert at 2am.
+
+`RuntimeError: This should never happen`
+
+They fix the root cause. New comment:
+
+```python
+else:
+    # This should never happen (it happened — May 2026)
+    raise RuntimeError("This should never happen")
+```
+
+Six months later, it happens again.
+
+```python
+else:
+    # This should never happen
+    # Update: it can happen (May 2026)
+    # Update: it happened again (Nov 2026)
+    # Update: it happens about twice a year, always at 2am
+    # Update: more common in Q4, reason unknown
+    # Update: seems correlated with deploys on Thursdays
+    raise RuntimeError("This should never happen")
+```
+
+Five years, eleven incidents, and twenty-three comment lines later, the senior developer makes one change.
+
+```python
+raise RuntimeError("This happens sometimes. We don't know why. Good luck.")
+```
+
+The on-call engineer gets paged at 2am.
+
+They read the alert.
+
+They nod.
+
+They get to work.
+
+It is the most useful error message in the codebase.
