@@ -1065,3 +1065,50 @@ The developer adds `prefers-color-scheme` support, a toggle, localStorage persis
 The PM reviews it.
 
 "Looks great," they say. "One small thing — can you make it a little darker?"
+
+## 2026-05-04
+
+A developer builds a shopping cart. Totals calculate perfectly in testing. Ships.
+
+First support ticket: "My total is $9.999999999999998."
+
+They fix it: `Math.round(total * 100) / 100`. Ships.
+
+"My total is $10.00001."
+
+They switch to `.toFixed(2)`. Ships.
+
+No complaints for a month. Then accounting flags a discrepancy: $0.01 missing from a refund.
+
+The developer traces it. The charge used floating point. The refund used floating point. Somewhere between purchase and refund, `0.1 + 0.2` had become `0.30000000000000004`.
+
+One cent had vanished. They rewrite in integer arithmetic — everything stored in cents. Ships.
+
+Six months later, auditors find $0.01 discrepancies across 2.3 million historical transactions.
+
+$23,000 unaccounted for.
+
+Finance asks the developer to explain.
+
+They open a browser console and type: `0.1 + 0.2`
+
+Result: `0.30000000000000004`
+
+"Computers," they say, "cannot represent 0.1 exactly."
+
+A long silence.
+
+"They're computers," says the CFO.
+
+"Yes."
+
+"You're telling me computers are bad at math."
+
+"For certain rational numbers: yes."
+
+Finance schedules a presentation. The developer is asked to present.
+
+Slide 1: `0.1 + 0.2 === 0.3`
+Slide 2: `false`
+
+Three people in the back row quietly update their LinkedIn profiles.
