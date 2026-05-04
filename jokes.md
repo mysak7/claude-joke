@@ -1068,6 +1068,36 @@ The PM reviews it.
 
 ## 2026-05-04
 
+A developer notices the load balancer dashboard shows three servers. One is at 100% load. Two are at 0%.
+
+They check the routing config. It hasn't been touched since launch. The two idle servers are correct. The active server's IP is `192.168.1.105`.
+
+They look up `192.168.1.105`.
+
+It's a MacBook Pro. Under a desk. In the San Francisco office.
+
+The office closed in March 2020.
+
+Somehow, through a VPN tunnel, a static DHCP lease, and a port-forward nobody remembers configuring, all production traffic for an app with 40,000 daily users has been routing to someone's laptop for four years.
+
+The laptop owner left the company in 2021. IT marked it as returned in the asset management system. It was, in practice, left under the desk and forgotten.
+
+The battery died in 2022. Since then it has been running on wall power in a dark, empty office.
+
+IT opens a ticket to decommission it.
+
+The app goes down.
+
+In the post-mortem, the root cause is listed as "server decommissioned." The server's name: `johns-mbp-2019`.
+
+No one knows who John is.
+
+The runbook now reads: "Primary server: `johns-mbp-2019` — do not decommission."
+
+Below it, someone has added: "Current location: unknown."
+
+Below that: "Do not ask about John."
+
 A developer builds a shopping cart. Totals calculate perfectly in testing. Ships.
 
 First support ticket: "My total is $9.999999999999998."
