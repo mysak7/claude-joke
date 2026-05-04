@@ -1142,3 +1142,45 @@ Slide 1: `0.1 + 0.2 === 0.3`
 Slide 2: `false`
 
 Three people in the back row quietly update their LinkedIn profiles.
+
+## 2026-05-04
+
+A developer needs a config value. "I'll just hardcode it for now," they say.
+
+`const TIMEOUT = 5000`
+
+Three years pass.
+
+A new developer asks: "Why is the timeout 5 seconds? Everything else uses 30."
+
+Nobody knows. The original developer left in 2022.
+
+They search git. The commit: `fix`. The PR branch: deleted. The Jira ticket: in a closed sprint. The sprint: in a migrated Jira. The migrated Jira: decommissioned.
+
+"Can I change it?" the new developer asks.
+
+"Try staging."
+
+Staging: fine. They set it to 30,000 in production.
+
+The support queue fills within four minutes. An undocumented integration was using the 5-second timeout as a heartbeat signal. With 30 seconds of silence, it marks the service as down and starts retrying. Three downstream services start queuing. One of them sends an email on every retry.
+
+14,000 emails in six minutes.
+
+They revert.
+
+A comment is added: `const TIMEOUT = 5000 // DO NOT CHANGE`
+
+A month later, someone asks why.
+
+`// DO NOT CHANGE — caused incident May 2026`
+
+The incident report lists the root cause as "undocumented system dependency." The action item: document system dependencies.
+
+The action item is moved to the backlog.
+
+The constant is still 5000. It is the most commented line in the codebase. It has outlasted two rewrites, a cloud migration, and the developer who added the comment.
+
+Nobody has opened the backlog item.
+
+Somewhere, an integration is quietly measuring five-second silences, waiting to send emails.
