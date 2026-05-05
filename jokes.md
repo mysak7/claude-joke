@@ -1184,3 +1184,51 @@ The constant is still 5000. It is the most commented line in the codebase. It ha
 Nobody has opened the backlog item.
 
 Somewhere, an integration is quietly measuring five-second silences, waiting to send emails.
+
+## 2026-05-05
+
+A developer runs the test suite for the first time.
+
+947 tests pass. 3 are skipped.
+
+They look at the skipped tests.
+
+```python
+@pytest.mark.skip(reason="TODO: fix this")
+def test_checkout_total_with_discount():
+    ...
+```
+
+Git blame: the skip was added four years ago. The original author left in 2023.
+
+They remove the `skip`. The test fails.
+
+The checkout total with a discount applied is consistently $0.01 off.
+
+They look at the test expectation: `assert total == 19.99`
+
+They look at the actual value: `19.98`
+
+One cent. Every time. For four years.
+
+They trace the discount logic. A rounding error. Two lines to fix.
+
+They commit, push, open a PR. Tests pass. Merged.
+
+A week later, accounting flags an anomaly: since Monday, checkout totals are $0.01 higher than expected.
+
+"Expected by whom?" the developer asks.
+
+Accounting sends a spreadsheet.
+
+They have been manually correcting for the $0.01 discrepancy in every transaction for four years. A formula in column G. 2.3 million rows.
+
+The formula: `=B2 - 0.01`
+
+The spreadsheet has its own spreadsheet for auditing it.
+
+They revert the fix.
+
+The test is re-skipped.
+
+New reason: `# TODO: fix this (accounting depends on the bug)`
