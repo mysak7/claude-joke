@@ -1266,3 +1266,38 @@ At the next architecture review, the senior — now CTO — presents a new slide
 The developer looks at the original table.
 
 It had one column: `id`.
+
+## 2026-05-05
+
+A developer builds a proof of concept. Just to see if it's possible.
+
+"This will never go to production," they say.
+
+The proof of concept goes to production.
+
+Two years later, 40,000 users depend on it. The code has no tests, no error handling, and one file called `poc.js`.
+
+A new developer opens `poc.js`. At the top:
+
+```js
+// PROOF OF CONCEPT — DO NOT USE IN PRODUCTION
+```
+
+Below it: 8,000 lines. Below that: a comment thread spanning four developers.
+
+```js
+// PROOF OF CONCEPT — DO NOT USE IN PRODUCTION
+// THIS MEANS YOU
+// SERIOUSLY
+// We are in production. I'm sorry. — Dan, 2023
+// Dan was right. I'm more sorry. — Priya, 2024
+// [a third developer has left a blank line here as a tribute]
+```
+
+They add the seventh line: `// Same.`
+
+The file is never refactored. At some point, the warnings become load-bearing: a new developer reads them before their first deploy and is so moved by the comment thread they send Dan a LinkedIn message.
+
+Dan does not remember writing the comment.
+
+He definitely wrote it.
