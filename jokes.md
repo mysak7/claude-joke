@@ -1232,3 +1232,37 @@ They revert the fix.
 The test is re-skipped.
 
 New reason: `# TODO: fix this (accounting depends on the bug)`
+
+## 2026-05-05
+
+A developer builds a database with one table. "It's just a prototype," they say.
+
+A senior dev reviews the schema: "This isn't normalized. Third Normal Form, minimum."
+
+They normalize. One table becomes nineteen. Queries require seven JOINs. Everything still works.
+
+"Better," says the senior.
+
+A year later, the app is slow. A DBA is brought in.
+
+"You need to denormalize," the DBA says. "The JOINs are your bottleneck."
+
+They denormalize. Nineteen tables become four. Queries are fast.
+
+The senior opens the PR: "This isn't normalized."
+
+Nobody denormalizes it. Instead, they add an index. Then a cache. The cache gets stale. They add cache invalidation.
+
+The cache invalidation has a race condition.
+
+The original query: 8ms. The current implementation: 340ms, one Redis cluster, a cache-warming cron job that runs at 3am, and a 52-line wiki page titled "Data Layer Philosophy."
+
+The wiki was last edited by someone who left the company.
+
+At the next architecture review, the senior — now CTO — presents a new slide.
+
+"Microservices," he says, "will solve this."
+
+The developer looks at the original table.
+
+It had one column: `id`.
