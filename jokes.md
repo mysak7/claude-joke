@@ -1301,3 +1301,51 @@ The file is never refactored. At some point, the warnings become load-bearing: a
 Dan does not remember writing the comment.
 
 He definitely wrote it.
+
+## 2026-05-06
+
+A team sets a mandate: 100% code coverage before any PR can merge.
+
+Week one: 67% coverage. Tests are written. Four real bugs found. Confidence high.
+
+Week four: 97%. The remaining code is error handlers and edge cases. Three developers start writing:
+
+```python
+def test_payment_error_handler():
+    process_payment(expired_card)
+    assert True  # coverage
+```
+
+Week five: 100%. Dashboard green. CI badge glowing.
+
+The QA lead checks out with an expired credit card.
+
+The app charges nothing, processes the order, depletes inventory, and emails a receipt.
+
+They file a bug.
+
+The developer opens the test file. The payment error handler test: 22 lines. One assertion: `assert True`.
+
+The bug existed before the coverage push. The line was hit. The branch was covered. The behavior was never tested.
+
+They add a real assertion. Fix the bug. Coverage: still 100%.
+
+The manager asks: "If we had 100% coverage, how did this slip through?"
+
+The developer explains the difference between line coverage and asserting correct behavior.
+
+The manager nods slowly. "So we need branch coverage too."
+
+"That would help."
+
+"Set the mandate: 100% branch coverage."
+
+The developer opens a terminal.
+
+Three developers begin writing:
+
+```python
+def test_payment_error_handler_branch_a():
+    process_payment(expired_card)
+    assert True  # branch coverage
+```
