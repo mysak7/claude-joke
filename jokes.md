@@ -1389,3 +1389,54 @@ They check the logs.
 "Good enough," says the senior dev.
 
 The allowlist grows by two entries the following week. No one remembers why. The Romanian has not returned. The rate limiter dashboard shows 100% effectiveness.
+
+## 2026-05-06
+
+A developer runs `git stash list`.
+
+```
+stash@{0}: WIP on main: 3d4f891 fix typo
+stash@{1}: WIP on feature/auth: a2b8c11 add OAuth
+stash@{2}: WIP on main: 7f3e2d9 initial setup
+stash@{3}: WIP on feature/dark-mode: 1a2b3c4 try this
+```
+
+They don't remember stashing any of them.
+
+They check the dates. The first is from yesterday. The second: eight months ago. The third: 2021. The fourth has no timestamp. The commit it references doesn't exist.
+
+Out of curiosity, they pop the 2021 stash.
+
+Three files changed. Half a rewrite of the payment flow. At the top, a comment: `// this is the right way to do it`.
+
+They look at the current payment flow. It still works the old way.
+
+They check who wrote the current implementation.
+
+Themselves. One month after the stash.
+
+They open a PR with the stash changes. Their senior reviews it: "This is actually the right approach. Where did this come from?"
+
+"I had it in a stash."
+
+"From when?"
+
+"2021."
+
+A pause.
+
+"Why didn't you PR it then?"
+
+They check their calendar from that week. They were on PTO.
+
+They were apparently so excited about the payment flow that they stashed a half-finished rewrite before leaving for vacation, returned a month later, forgot it existed, and reimplemented it the wrong way from scratch.
+
+"Should we merge it?" the senior asks.
+
+They read the diff more carefully. The stash is missing error handling. The logic is sound but incomplete.
+
+"Almost," they say. "Just need to finish it."
+
+They stash the PR.
+
+They do not come back to it.
