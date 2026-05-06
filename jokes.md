@@ -1349,3 +1349,43 @@ def test_payment_error_handler_branch_a():
     process_payment(expired_card)
     assert True  # branch coverage
 ```
+
+## 2026-05-06
+
+A developer adds rate limiting to the API. 100 requests per minute. Deploys.
+
+The monitoring service checks the API health 102 times per minute.
+
+The rate limiter blocks the health checks.
+
+Health checks fail. PagerDuty fires. The on-call developer opens a terminal to investigate.
+
+The rate limiter blocks them too.
+
+They disable the rate limiter to investigate. Traffic spikes. The service goes down.
+
+They re-enable the rate limiter. Monitoring is blocked again. PagerDuty fires.
+
+They whitelist the monitoring IP. The monitoring tool rotates IPs. PagerDuty fires.
+
+They whitelist the range. The on-call phone's carrier uses a different range. They whitelist that. The CEO checks the app from a hotel. They whitelist that.
+
+Six hours later, the rate limiter allowlist has 47 entries: monitoring IPs, on-call phone carriers, the CEO's hotel in Denver, and three IP ranges from 2018 that no one recognizes but no one will remove.
+
+The rate limiter is, effectively, blocking one IP address.
+
+Someone in Romania. They haven't tried since Tuesday.
+
+A new security engineer reviews the config.
+
+"This isn't rate limiting," they say. "It's an IP blocklist with one item."
+
+"Does it work?"
+
+They check the logs.
+
+"The Romanian hasn't tried since Tuesday."
+
+"Good enough," says the senior dev.
+
+The allowlist grows by two entries the following week. No one remembers why. The Romanian has not returned. The rate limiter dashboard shows 100% effectiveness.
