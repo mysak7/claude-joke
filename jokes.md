@@ -1500,3 +1500,37 @@ The senior developer pauses.
 The architecture review is quarterly. The next one is eleven weeks away. The agenda is full.
 
 The cluster runs. The cron syncs. The index updates. Nobody searches.
+
+## 2026-05-07
+
+A developer clones a new repo. The README:
+
+```
+## Setup
+1. Run `make setup`
+```
+
+There is no Makefile. They ask in Slack. "Oh, it was deleted. Try `npm install && npm start`."
+
+Missing peer dependencies. They force-install. App starts. Crashes: `Cannot find module './config'`.
+
+"Copy `config.example.json`." The file doesn't exist. A coworker pastes a config over Slack. It has 14 fields. Three say `YOUR_VALUE_HERE`. One says `SECRET — do not commit`.
+
+They fill in what they can. App starts. Login screen. They ask for credentials.
+
+"admin / admin123."
+
+Invalid. After three attempts and a password reset: logged in. Blank white page.
+
+"Oh, run the migrations. There's a script somewhere."
+
+The senior joins the thread: "Also, you need to be on the VPN. And this service depends on three others that also need to be running."
+
+Four hours in. Zero lines of code written.
+
+They open the README for service two.
+
+```
+## Setup
+1. Run `make setup`
+```
