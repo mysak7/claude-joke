@@ -1440,3 +1440,63 @@ They read the diff more carefully. The stash is missing error handling. The logi
 They stash the PR.
 
 They do not come back to it.
+
+## 2026-05-07
+
+A developer is asked to add search to an internal tool.
+
+They add an `<input>` with a JavaScript filter. Works. Ships.
+
+"We need fuzzy search," the PM says.
+
+They add fuse.js.
+
+"It needs to debounce."
+
+They debounce.
+
+"Needs to highlight matches."
+
+They highlight.
+
+"Can it support typos?"
+
+"That's what fuzzy means."
+
+"Better typos."
+
+Three months and one Elasticsearch cluster later, they have sub-50ms full-text search with ML-powered autocomplete, real-time indexing, and relevance scoring.
+
+It searches a dropdown with 200 items. Items that never change. The list is hardcoded.
+
+A new developer joins. First task: add one item to the dropdown.
+
+They open the codebase. The items aren't in the frontend. They're indexed in Elasticsearch, ingested from a YAML file, transformed by a Node.js pipeline, stored in PostgreSQL, synced to Redis, and re-indexed on a 5-minute cron.
+
+To add one item they must edit the YAML, run the ingestion pipeline, wait for the Redis sync, wait for the Elasticsearch index, and redeploy. Forty minutes.
+
+The old way: edit an array in `constants.js`.
+
+"Why is it like this?" they ask.
+
+"We needed fuzzy search," says the senior developer.
+
+They look at the search box. Usage analytics: 0 queries in the last 90 days.
+
+"Does anyone use it?"
+
+"The PM asked for it."
+
+The PM left in February.
+
+The Elasticsearch cluster costs $380/month. It has processed, across its entire lifetime, zero user queries.
+
+"Should we remove it?"
+
+The senior developer pauses.
+
+"That's a conversation for the architecture review."
+
+The architecture review is quarterly. The next one is eleven weeks away. The agenda is full.
+
+The cluster runs. The cron syncs. The index updates. Nobody searches.
