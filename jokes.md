@@ -1534,3 +1534,43 @@ They open the README for service two.
 ## Setup
 1. Run `make setup`
 ```
+
+## 2026-05-07
+
+A developer ships a user registration form. First bug report: the app crashes when a name contains an apostrophe.
+
+They sanitize inputs. Strip apostrophes. Ships.
+
+Next week: quotation marks. They strip those.
+
+Then semicolons. Backslashes. Percent signs.
+
+Each crash report adds one character to the blocklist. A month in, it has 17 entries.
+
+A security engineer reviews the code.
+
+"This is SQL injection protection done wrong. Use parameterized queries."
+
+"But the crashes stopped."
+
+"For normal names. You're still vulnerable to anything not on this list."
+
+"The list is pretty long."
+
+"Your security model is knowing which characters attackers prefer."
+
+The ticket to migrate to parameterized queries enters the backlog. The blocklist grows to 23 characters.
+
+One user — `D'Angelo O'Brien-Müller` — has tried to register eleven times. Each attempt fails at a different character. His ninth support ticket:
+
+*"I have tried again. It still does not work. My name contains an apostrophe, a hyphen, and an umlaut. I cannot change my name."*
+
+The developer reads it.
+
+They add `-` and `ü` to the blocklist.
+
+The ticket is closed: "Fixed — please try again."
+
+His tenth ticket arrives the following week.
+
+*"My name also has a capital Ü."*
