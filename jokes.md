@@ -1602,3 +1602,57 @@ Three weeks later, the same developer runs another staging test.
 Item 1 has a new note: `*(please actually do this one)`
 
 The note is in the same handwriting.
+
+## 2026-05-08
+
+A developer bumps the version before release. Current: `1.47.3`.
+
+"This is a major release," the PM says. "Call it `2.0`."
+
+`2.0.0`
+
+"Actually, only two things changed. `1.48.0`?"
+
+`1.48.0`
+
+"But one of the changes is breaking."
+
+`2.0.0`
+
+"The breaking change is behind a flag, so no one will hit it yet."
+
+`1.48.0`
+
+"We already put `2.0` in the press release."
+
+`2.0.0`
+
+"Legal says we can't call it 2.0 unless we're discontinuing 1.x support. Are we?"
+
+`1.48.0`
+
+"The investors were shown a 2.0 roadmap slide."
+
+`2.0.0`
+
+`1.48.0`
+
+`2.0.0`
+
+The developer stares at their screen.
+
+They ship `1.47.4`.
+
+"What happened to 2.0?" the PM asks.
+
+"It's 1.47.4."
+
+"But—"
+
+"The changelog says 'major improvements.'"
+
+The PM forwards the changelog to investors.
+
+The press release is updated: "Version 2.0, internally designated 1.47.4 for technical reasons."
+
+Nobody asks what the technical reasons are.
