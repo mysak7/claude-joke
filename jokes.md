@@ -1574,3 +1574,31 @@ The ticket is closed: "Fixed — please try again."
 His tenth ticket arrives the following week.
 
 *"My name also has a capital Ü."*
+
+## 2026-05-08
+
+A developer sets up a staging environment to test a major refactor.
+
+Two weeks of careful testing. Emails, orders, signups — all working. They deploy to production.
+
+Within minutes: users receive welcome emails addressed to other users. Order confirmations arrive in the wrong inboxes. The CEO receives an email from "staging-mailer" congratulating them on signing up for the platform they founded.
+
+The developer checks the config.
+
+`DATABASE_URL=postgres://prod-db.internal/app`
+
+Staging had been connected to the production database. For six months. Every "test email" was a real email. Every "test order" was a real order. The users they were "testing" with had been real users all along.
+
+The developer who configured it left in March. No one noticed because staging "just worked."
+
+4,200 emails sent that morning. 400 to users who hadn't logged in in years, suddenly receiving order confirmations for purchases they never made. Three to email addresses that bounced. One to the CEO.
+
+An eighteen-item pre-deploy checklist is written. Item 1, bolded: **Confirm DATABASE_URL points to staging.**
+
+It is written by the developer who caused the incident.
+
+Three weeks later, the same developer runs another staging test.
+
+Item 1 has a new note: `*(please actually do this one)`
+
+The note is in the same handwriting.
