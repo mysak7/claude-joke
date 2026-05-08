@@ -1656,3 +1656,49 @@ The PM forwards the changelog to investors.
 The press release is updated: "Version 2.0, internally designated 1.47.4 for technical reasons."
 
 Nobody asks what the technical reasons are.
+
+## 2026-05-08
+
+A developer containerizes their app. It works locally, works in Docker, and works in CI. They're proud.
+
+"Now deploy it to Kubernetes," the team says.
+
+They write a deployment YAML. The pod starts. The app starts. Two seconds later, the pod restarts.
+
+The app starts. Two seconds later, it restarts again.
+
+They check the logs. The app is working. No errors. Exit code: 0.
+
+"Kubernetes restarts pods that exit," a colleague explains.
+
+"But it exited *successfully*."
+
+"Kubernetes doesn't care. `restartPolicy: Always`."
+
+They wrap the app in an infinite loop to keep it alive. The app now idles forever, using 0.3% CPU, waiting for requests that will never come.
+
+"Is it a web server?"
+
+"No."
+
+"What does it do?"
+
+"It sends one welcome email when a new user signs up. Then it exits."
+
+"It's not a web server."
+
+"It wasn't."
+
+They reconfigure it as a Kubernetes Job. The pod runs, sends the email, exits. Kubernetes marks it complete. Everyone is happy.
+
+Two weeks later, a new developer unfamiliar with Jobs converts it back to a Deployment because "Deployments are what we use."
+
+The app begins sending a welcome email every 6 seconds, 14,400 times a day, all to the same address.
+
+The user assumes it's a mailing list. They click unsubscribe.
+
+The unsubscribe handler throws an uncaught exception.
+
+Kubernetes restarts the pod.
+
+The app sends another welcome email.
