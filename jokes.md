@@ -1802,3 +1802,45 @@ The developer is asked to "re-add the HEAD feature in a way that looks intention
 It is now a design element. In a box. With a gradient.
 
 It ships in v2.1.0. The changelog: "Enhanced AI-powered personalization header."
+
+## 2026-05-09
+
+A developer leaves a comment:
+
+```python
+# TODO: hardcoded tax rate, fix before Q3 — @dan, 2021
+return subtotal * 1.08
+```
+
+Q3 comes. Q3 goes. Three years pass.
+
+A new developer finds it. They track down Dan.
+
+"Is this still intentional?"
+
+"I have no memory of writing that," Dan says.
+
+They show him the git blame. His name. His date. His commit message: `misc cleanup`.
+
+"Oh god," says Dan.
+
+He opens the tax API docs, implements proper lookup, deploys.
+
+Two financial reports break. A reconciliation job starts throwing errors. Accounting sends an email at 7pm.
+
+It turns out Dan's `1.08` had been wrong from day one — 8% instead of the actual 8.5%. Over three years, finance had quietly compensated. A spreadsheet column called "adj." A formula nobody questioned. An accountant who knew what it was for and retired in 2022.
+
+Dan reverts the fix.
+
+The comment now reads:
+
+```python
+# TODO: hardcoded tax rate, fix before Q3 — @dan, 2021
+# ATTEMPTED FIX — caused incident — @dan, 2024
+# DO NOT TOUCH — load-bearing wrong number
+return subtotal * 1.08  # wrong, but the spreadsheets depend on it being wrong
+```
+
+Finance is notified.
+
+They update the spreadsheet: column "adj." now has a comment: `see codebase`.
