@@ -1702,3 +1702,71 @@ The unsubscribe handler throws an uncaught exception.
 Kubernetes restarts the pod.
 
 The app sends another welcome email.
+
+## 2026-05-09
+
+A developer adopts "convention over configuration."
+
+No config files. Just follow the conventions. Clean, minimal, elegant.
+
+"Where's the database config?" asks the new hire.
+
+"Convention: it's in the environment."
+
+"Which environment variables?"
+
+"Convention: check the examples."
+
+"There are no examples."
+
+"Convention: check the README."
+
+"The README says 'follows standard conventions.'"
+
+"Exactly."
+
+The new hire spends two days reverse-engineering the conventions from the codebase. They write them down.
+
+The senior reviews the documentation.
+
+"This isn't quite right. The convention for service names changed in v2."
+
+"When was v2?"
+
+"2021."
+
+"Is there a migration guide?"
+
+"Convention: you'd know."
+
+The new hire does not know.
+
+They ask when the v2 convention was documented.
+
+"It isn't," says the senior. "It's convention."
+
+The new hire starts documenting every convention they find. Three weeks later: 47 pages.
+
+The senior reviews it.
+
+"Some of these are wrong. These aren't conventions, they're accidents."
+
+"What's the difference?"
+
+A long pause.
+
+"Convention is intentional."
+
+"How do I tell which is which?"
+
+"Convention: you'd know."
+
+The documentation is merged.
+
+At the top of page one, someone has added a note: "This document follows standard conventions. For questions, consult the codebase."
+
+The new hire printed it. It is on their desk. It is the most-referenced artifact on the team.
+
+Nobody has opened the file in eight months. Nobody needed to. They know the conventions now.
+
+They are, by definition, a senior developer.
