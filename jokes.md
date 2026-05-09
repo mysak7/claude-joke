@@ -1770,3 +1770,35 @@ The new hire printed it. It is on their desk. It is the most-referenced artifact
 Nobody has opened the file in eight months. Nobody needed to. They know the conventions now.
 
 They are, by definition, a senior developer.
+
+## 2026-05-09
+
+A developer forgets to resolve a merge conflict before deploying.
+
+For six hours, 4,000 users see the homepage hero text:
+
+```
+<<<<<<< HEAD
+Welcome to our platform
+=======
+Discover what's possible
+>>>>>>> feature/rebrand
+```
+
+Three support tickets arrive. Two ask if the site is broken.
+
+One reads: "Is `<<<<<<< HEAD` a new AI feature? It sounds powerful."
+
+The marketing team responds: "Yes. Our most intelligent yet."
+
+The developer resolves the conflict. The AI feature disappears.
+
+The marketing team receives a complaint: "You removed the HEAD feature. We were excited."
+
+They escalate to product.
+
+The developer is asked to "re-add the HEAD feature in a way that looks intentional."
+
+It is now a design element. In a box. With a gradient.
+
+It ships in v2.1.0. The changelog: "Enhanced AI-powered personalization header."
