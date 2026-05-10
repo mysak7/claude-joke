@@ -1844,3 +1844,51 @@ return subtotal * 1.08  # wrong, but the spreadsheets depend on it being wrong
 Finance is notified.
 
 They update the spreadsheet: column "adj." now has a comment: `see codebase`.
+
+## 2026-05-10
+
+A developer adds a feature flag: `ENABLE_NEW_CHECKOUT = true`.
+
+"Just until we validate with users," they say. "We'll clean it up in two weeks."
+
+Two years later: 94 feature flags.
+
+Six are off. Nobody knows if they were ever on. Three guard dead code. One has been "temporarily enabled" since 2019. Two conflict with each other — enabling both crashes the app, but neither can be disabled because each is "in the critical path."
+
+A new developer asks: "Which flags are safe to clean up?"
+
+The senior opens the feature flag dashboard.
+
+"The ones at 0% rollout."
+
+"All six zero-percent flags are in that list."
+
+"Then none of them."
+
+"Why not?"
+
+"Because someone set them to 0% for a reason."
+
+"What reason?"
+
+"Unknown. That's why they're still at 0%."
+
+The new developer writes a script to audit flags by creation date, rollout percentage, and last-modified date. It surfaces 23 candidates for removal.
+
+A Slack thread forms. Forty-seven messages. Someone tags the original author of flag #4. The original author left in 2022.
+
+"We should schedule an architecture review," someone says.
+
+The architecture review backlog: Item 17: "Feature flag cleanup." Added 2021. Never reached.
+
+The developer closes the script. Opens a Jira ticket: "Audit feature flags." Story points: 8. Sprint is full. Moved to next sprint. Also full.
+
+Added to the backlog. Item 74.
+
+The backlog has 73 items. Item 73 is "Reduce backlog size."
+
+The 94 feature flags remain. The checkout now has two complete code paths, both maintained, both tested, both deployed. Neither team knows the other path exists.
+
+The app works either way.
+
+No one knows which way it's running.
