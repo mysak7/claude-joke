@@ -1892,3 +1892,51 @@ The 94 feature flags remain. The checkout now has two complete code paths, both 
 The app works either way.
 
 No one knows which way it's running.
+
+## 2026-05-11
+
+A startup raises $4M on the promise of a "proprietary recommendation algorithm."
+
+A developer joins as the first engineer. Day one: "Can I see the algorithm?"
+
+The CTO walks them through it.
+
+It is a `for` loop.
+
+Inside the loop: an array access. The array: hardcoded. The recommendation logic: line 47.
+
+```python
+# THE ALGORITHM
+if user_age > 25:
+    return "premium"
+else:
+    return "basic"
+```
+
+It has been in production for two years. It is, technically, an algorithm.
+
+The developer asks about the $4M.
+
+"$1M for the idea. $2M for the moat. $1M for the algorithm."
+
+"But it's an if-statement."
+
+"A *proprietary* if-statement."
+
+The developer refactors it. ML model. Feature vectors. Collaborative filtering. Two months of work. Deploys.
+
+Engagement metrics: unchanged.
+
+"Users don't care," the CTO says. "They just want us to choose for them. The if-statement knew that."
+
+The developer stares at line 47.
+
+They revert.
+
+The startup is acquired eighteen months later. The acquirer's due diligence report describes the algorithm as "a surprisingly effective heuristic with room to grow."
+
+The if-statement is mentioned three times in the press release.
+
+The developer receives a retention bonus for "maintaining core IP."
+
+They frame line 47.
