@@ -1940,3 +1940,63 @@ The if-statement is mentioned three times in the press release.
 The developer receives a retention bonus for "maintaining core IP."
 
 They frame line 47.
+
+## 2026-05-11
+
+A company migrates to the cloud to reduce costs.
+
+Month 1: $180. Down from $200 on-premise. "Already saving money," says the architect.
+
+They add monitoring: $20/month. A CDN: $35/month. A managed database: $90/month. Auto-scaling, because what's the point of the cloud without auto-scaling.
+
+Month 2: traffic spikes from a viral tweet. The autoscaler scales to 47 instances. The tweet dies down in four hours.
+
+Month 2 bill: $1,400.
+
+They add a budget alert. The alert fires after the billing cycle closes.
+
+They spend three months optimizing. Reserved instances. Savings plans. Spot instances. Committed use discounts. A spreadsheet to track which discount applies to which instance type in which region under which pricing model.
+
+Month 6: $340. "Optimized," the architect announces.
+
+A developer adds a NAT gateway. $0.045 per GB of egress. They're transferring 2TB of logs per day.
+
+Month 7: $2,800.
+
+They try to turn off log transfers. Compliance requires them. They compress the logs. Compliance requires uncompressed. They move logs to a cheaper storage tier. The cheaper tier has higher egress fees.
+
+Month 12: $1,200/month. Stable, finally.
+
+An accountant reviews the year-end costs.
+
+"What are we spending $14,400 a year on?"
+
+The architect makes a slide. High availability. Elastic scale. Managed infrastructure. Zero hardware maintenance.
+
+"How much was the old server?"
+
+"$200 a month."
+
+"So $2,400 a year."
+
+"But the cloud can handle 10,000 simultaneous users."
+
+"How many users do we have?"
+
+"Forty-three."
+
+A pause.
+
+"What happened to the old server?"
+
+Nobody cancelled it. It has been running, idle, for twelve months.
+
+Total year-one cost: $16,800.
+
+The architect submits a conference talk proposal: "Our Cloud Migration: Lessons Learned."
+
+The abstract promises "a candid look at cost optimization in the cloud."
+
+It is accepted. The slides are eight months away.
+
+They are still writing Lesson 1.
