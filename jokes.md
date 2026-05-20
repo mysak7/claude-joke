@@ -2000,3 +2000,65 @@ The abstract promises "a candid look at cost optimization in the cloud."
 It is accepted. The slides are eight months away.
 
 They are still writing Lesson 1.
+
+## 2026-05-20
+
+A developer adds a password policy: 8 characters, uppercase, lowercase, number, special character.
+
+Users immediately adopt `Password1!` en masse.
+
+They add: no dictionary words. Users switch to `P@ssw0rd1!`.
+
+They add: can't match the top 50,000 compromised passwords. `P@ssw0rd1!` is on the list.
+
+Users call IT support. IT support has one reset template. The temporary password: `Welcome1!`.
+
+Users set their new password to `Welcome1!`.
+
+They add: must change every 90 days. Users start appending the year. They add: can't reuse last 12 passwords. Users cycle 12 times in one sitting to get back to their original password.
+
+The developer audits the password database (hashed, obviously). Top passwords across all 3,000 users follow one pattern: `[Season][Year]!`.
+
+1. `Spring2026!`
+2. `Summer2025!`
+3. `Winter2025!`
+
+A security engineer reviews the audit. "This is a password pattern, not a password policy."
+
+"I know."
+
+"The policy *created* the pattern."
+
+"I know."
+
+"Seasonal brute-forcing takes about 40 guesses now."
+
+The developer nods.
+
+"Should we remove the requirements?"
+
+"Then we'd fail the compliance audit."
+
+"But we're also non-secure."
+
+"The audit passed last quarter."
+
+"How many questions were about passwords?"
+
+"One."
+
+"What was it?"
+
+"'Do you have a password policy?'"
+
+"And you said yes."
+
+"We do have one."
+
+The developer looks at `Spring2026!`.
+
+They update the policy: minimum 9 characters.
+
+Users switch to `Spring2026!!`.
+
+The audit passes again.
