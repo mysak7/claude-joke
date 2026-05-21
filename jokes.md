@@ -2174,3 +2174,65 @@ The circuit has been in the same state for three months. Nobody knows which stat
 PagerDuty has been firing every six hours.
 
 Nobody has been reading PagerDuty since the retry incident.
+
+## 2026-05-21
+
+A developer writes a null check. Ships. Bug: `TypeError: Cannot read properties of undefined`.
+
+"But I checked for null!"
+
+```js
+if (user.address !== null) {
+  displayAddress(user.address)
+}
+```
+
+A colleague points at the screen. `user.address` is `undefined`. JavaScript has two values for nothing.
+
+"Why?" the developer asks.
+
+Nobody has a good answer. The spec mentions "historical reasons."
+
+They add `!= null`, which catches both. Code review: "Use explicit checks. Don't rely on coercion."
+
+They add `user.address !== null && user.address !== undefined`.
+
+"Just use `if (user.address)`," says the senior. "Truthy check. Cleaner."
+
+They adopt truthy checks everywhere.
+
+Six weeks later: a user with zip code `0` has no address. A boolean field defaults to `false`, treated as missing. An empty string `""` — valid, intentionally blank — silently disappears.
+
+They go back to explicit checks.
+
+The null check grows to nine clauses. It's extracted into a shared utility: `isPresent(value)`. Imported in 94 files.
+
+"This is what optional chaining is for," a new developer says. They open a PR: replace all `isPresent` calls.
+
+94 files changed.
+
+Reviewer: "Can you break this into smaller PRs?"
+
+The developer stares at the suggestion.
+
+`isPresent` is called 94 times across 94 files. It either replaces all of them or none of them. There is no smaller unit of work.
+
+They close the PR.
+
+`isPresent` ships in the next major version under the name `hasValue`.
+
+It checks for `null` and `undefined`.
+
+It does not handle `0`, `false`, or `""`.
+
+The nine-clause version is still running in production. Nobody imports `hasValue`.
+
+The senior developer who suggested truthy checks has since moved to a Go shop.
+
+"Go only has one nil," they say, when asked.
+
+"Is that better?"
+
+A long pause.
+
+"It's *consistent*."
