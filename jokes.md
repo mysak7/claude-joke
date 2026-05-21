@@ -2062,3 +2062,55 @@ They update the policy: minimum 9 characters.
 Users switch to `Spring2026!!`.
 
 The audit passes again.
+
+## 2026-05-21
+
+A developer is asked why authentication requires three separate token validation steps.
+
+"Security audit. 2018." The senior doesn't look up from their keyboard.
+
+The new developer finds the audit report. It recommends one validation step.
+
+They escalate. The lead architect is brought into the meeting.
+
+"Right, right," he says. "Stack Overflow. Great answer. 400 upvotes. Explained exactly why you need three validations."
+
+They find the thread. The answer has been deleted. One comment survives:
+
+*"This answer contained incorrect security advice and has been removed."*
+
+"Huh," says the architect.
+
+"Should we go back to one step?"
+
+"The three steps haven't caused problems."
+
+"They add 40ms to every authenticated request."
+
+"Users haven't complained."
+
+A security engineer reviews the three steps.
+
+Step 1: validates the token signature.
+Step 2: validates the token signature.
+Step 3: validates the token signature using the same function, same library, same parameters.
+
+"They're identical," she says.
+
+"But three times," says the architect. "More thorough."
+
+"That's not—"
+
+"Nothing's been breached in six years."
+
+The three steps remain. The Stack Overflow account that posted the original answer was banned in 2019 for "posting misleading security content."
+
+Nobody updated the codebase.
+
+The architecture document calls it "triple-validated token verification."
+
+It is cited approvingly in three consecutive SOC 2 audits. The auditors asked how many validation steps there were.
+
+Three.
+
+"Rigorous," one wrote in the margin.
