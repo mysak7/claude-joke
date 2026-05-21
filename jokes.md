@@ -2114,3 +2114,63 @@ It is cited approvingly in three consecutive SOC 2 audits. The auditors asked ho
 Three.
 
 "Rigorous," one wrote in the margin.
+
+## 2026-05-21
+
+A developer adds retry logic to a flaky API call. Three retries, 100ms apart. Ships.
+
+Load increases. The endpoint starts failing more often. Each failed request retries three times. Under peak load, 10,000 simultaneous failures produce 30,000 simultaneous retries.
+
+The retries fail. They retry again.
+
+The server receives 90,000 requests in four seconds.
+
+The server goes down.
+
+The retries continue.
+
+The monitoring service can't reach the server. It retries. The health checker retries. The load balancer retries. PagerDuty calls the on-call developer; the app on their phone makes a request to confirm the call. The request fails. It retries.
+
+Everything is retrying. Nothing is recovering.
+
+They kill the retry logic. Traffic drops instantly. The server recovers in eleven seconds.
+
+They add exponential backoff and jitter. It works. They write a blog post: "How We Made Our System Resilient."
+
+A commenter asks: "What about circuit breakers?"
+
+They add circuit breakers. Open on failure, closed when healthy.
+
+"Open means failing, closed means passing," they explain in the PR.
+
+"Isn't that backwards?" asks the reviewer. "Open circuits allow current through. Closed ones block it."
+
+"That's electrical engineering. This is software."
+
+"So open means down and closed means up."
+
+"Yes."
+
+"That's counterintuitive."
+
+"It's the convention."
+
+"Whose convention?"
+
+"Electrical engineers'."
+
+"We're software engineers."
+
+"Yes."
+
+They ship it. Six months later a new developer reads the config: `openThreshold: 5`.
+
+"Does `openThreshold` mean the service opens, or the circuit opens?"
+
+Nobody is sure.
+
+The circuit has been in the same state for three months. Nobody knows which state that is, or whether it means the service is healthy.
+
+PagerDuty has been firing every six hours.
+
+Nobody has been reading PagerDuty since the retry incident.
