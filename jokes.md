@@ -2236,3 +2236,59 @@ The senior developer who suggested truthy checks has since moved to a Go shop.
 A long pause.
 
 "It's *consistent*."
+
+## 2026-05-22
+
+A team switches from estimating in hours to story points.
+
+"Story points are relative," the Scrum Master explains. "They measure effort, not time. A 1 is trivial. An 8 is complex."
+
+"Relative to what?" asks a developer.
+
+"Other stories."
+
+"So they measure... themselves?"
+
+"Exactly. Now we stop arguing about hours."
+
+Sprint 1: 40 points planned. 18 completed. "Velocity established," the Scrum Master says. "We target 18 next sprint."
+
+They complete 23. Then 15. Then 31.
+
+The velocity chart looks like an ECG.
+
+The manager asks what the numbers mean.
+
+"Sprint velocity variation. Normal for a growing team."
+
+Finance needs something concrete. They build `points_to_hours.xlsx`. Conversion rate: 4 hours per point. Based on one developer's offhand comment in a retrospective.
+
+The team now estimates in story points, submits to Finance, Finance converts to hours, the PM converts back to story points, the developer receives the ticket and quietly converts to hours in their head.
+
+Nobody has agreed on a rate. Everyone is using a different number. The numbers are all wrong.
+
+At year-end, the VP presents to the board: "We shipped 2,340 story points of value."
+
+"What's a story point worth?"
+
+"It depends on the conversion rate."
+
+"What's the conversion rate?"
+
+"It's relative."
+
+The board nods.
+
+The arguments the team used to have about hours have resumed. They're now about whether something is a 5 or an 8.
+
+A developer suggests returning to hours.
+
+"Hours create false precision," says the Scrum Master.
+
+"And story points create..."
+
+"Relative accuracy."
+
+The developer estimates their next task.
+
+Three story points. Or two hours. Or five, if Finance asks.
