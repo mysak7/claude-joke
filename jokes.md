@@ -2356,3 +2356,58 @@ They close it.
 They open it again.
 
 They will be doing this for the next three hours.
+
+## 2026-05-22
+
+A developer runs a coverage report. One function: `calculateDiscount()`. 0% coverage. Never called. Never imported. The tool marks it dead.
+
+They delete it. Clean build. Tests pass. Ships.
+
+Three hours later: all discounts show as $0. No errors thrown. No logs. The discount calculation just... stops.
+
+They revert. They search the entire codebase for `calculateDiscount`.
+
+Zero results, except the function definition itself.
+
+A senior developer looks at the project for ten seconds. "It's called from the YAML."
+
+The discount rules live in a config file. One field: `handler: calculateDiscount`. The YAML is parsed at runtime and the function name resolved dynamically against the module's exports.
+
+The coverage tool didn't know. The TypeScript compiler didn't know. Dead code analysis didn't know. The only thing that knew was the YAML, and it wasn't talking.
+
+They add a comment:
+
+```
+// CALLED FROM discount_rules.yaml — NOT dead code
+// Static analysis disagrees. Static analysis is wrong.
+```
+
+Six months later, a new developer joins. Their IDE underlines `calculateDiscount` in grey.
+
+**No references found. This function appears unused. Safe to delete.**
+
+They ask a senior: "Can I remove this?"
+
+"Which one?"
+
+"`calculateDiscount`."
+
+A pause.
+
+"Which IDE are you using?"
+
+"VS Code."
+
+"Is it underlined?"
+
+"Yes."
+
+"Grey or red?"
+
+"Grey."
+
+"Then no."
+
+The new developer adds this exchange to their onboarding notes under the section: "Things That Look Safe But Aren't."
+
+It is the longest section.
