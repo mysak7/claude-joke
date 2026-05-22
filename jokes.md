@@ -2292,3 +2292,67 @@ A developer suggests returning to hours.
 The developer estimates their next task.
 
 Three story points. Or two hours. Or five, if Finance asks.
+
+## 2026-05-22
+
+A developer inherits a Java service. They trace the entry point.
+
+`OrderService` delegates to `OrderServiceImpl`. `OrderServiceImpl` extends `AbstractOrderService`. `AbstractOrderService` implements `IOrderService`. `IOrderService` extends `IService<Order, OrderDTO, OrderMapper, OrderRepository>`.
+
+There is one implementation of `IOrderService`.
+
+They find the actual business logic: eleven layers deep.
+
+```java
+return order.getItems().stream()
+    .mapToDouble(Item::getPrice)
+    .sum();
+```
+
+Three lines. It sums a list.
+
+They trace the call path. `OrderServiceFacade` wraps `OrderService` "for future flexibility." `OrderServiceProxy` wraps the facade "for AOP support." `OrderServiceDelegate` wraps the proxy "for testability."
+
+They check how many tests use the testability wrapper.
+
+Zero.
+
+"Why is there an interface?" they ask. "There's only one implementation."
+
+"In case we need to swap it out," says the senior.
+
+"Swap it for what?"
+
+"A different order service."
+
+"Why would we have a different order service?"
+
+"We might."
+
+A new developer joins and asks how to add one field to the order total.
+
+"Update the DTO, the mapper, the factory, the service, the facade, the proxy, the delegate, and the interface. Then write a migration. Then write tests for each layer."
+
+"How many tests?"
+
+"About thirty."
+
+The new developer looks at the three lines of business logic.
+
+"Couldn't this just be a function?"
+
+"It is a function."
+
+"A *regular* function. Without the forty-seven boxes."
+
+The senior gestures at the architecture diagram.
+
+"That wouldn't be enterprise-grade."
+
+The new developer opens the DTO.
+
+They close it.
+
+They open it again.
+
+They will be doing this for the next three hours.
