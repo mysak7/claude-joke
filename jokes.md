@@ -2471,3 +2471,53 @@ Customer support updates the response template: "Our emails sometimes go to spam
 The junk folder is empty.
 
 It has always been empty.
+
+## 2026-05-23
+
+An outage. Servers healthy. Load balancer healthy. Database responding. Monitoring: all green.
+
+Users can't reach the site.
+
+They check firewall rules. Routing tables. Application logs. Reverse proxy config. SSL certs. Four hours in, the senior looks up.
+
+"Did you check DNS?"
+
+"I checked everything."
+
+"DNS is not everything. DNS is a separate thing."
+
+The DNS record had expired. The site was back in 30 seconds.
+
+The post-mortem: "Monitoring Gap Analysis." Action item: add DNS health checks to monitoring.
+
+They add a DNS health check. It has a TTL. They set it to 5 minutes because that seemed reasonable.
+
+One year later, the DNS health check record expires.
+
+The monitoring system can't resolve its own health check endpoint.
+
+It marks all health checks as passing. Unreachable services are healthy. Failing nodes are healthy. Everything is healthy.
+
+An outage begins.
+
+A developer checks the logs. Checks the servers. Checks the load balancer. Checks the database.
+
+Four hours pass.
+
+The senior looks up.
+
+"Did you check DNS?"
+
+The developer opens their mouth.
+
+"Check DNS," says the senior.
+
+"I was going to say yes."
+
+"You weren't."
+
+They check DNS.
+
+The post-mortem is titled "Monitoring Gap Analysis (2)." Action item: monitor the monitoring.
+
+The DNS health check for the DNS health check has a TTL of 5 minutes.
