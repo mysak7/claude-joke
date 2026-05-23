@@ -2411,3 +2411,63 @@ A pause.
 The new developer adds this exchange to their onboarding notes under the section: "Things That Look Safe But Aren't."
 
 It is the longest section.
+
+## 2026-05-23
+
+A developer notices a `try/catch` block with an empty handler:
+
+```python
+try:
+    send_email(user)
+except Exception:
+    pass
+```
+
+"This swallows errors silently," they say. They add logging.
+
+For the first time in three years, the logs fill with errors.
+
+Email delivery has been failing since the day the feature shipped. Silently. For three years.
+
+They dig deeper. Fourteen more `except: pass` blocks. Each one hiding a different failure. The payment confirmation. The invoice. The welcome email. The password reset.
+
+Users have been completing purchases with no confirmation since 2023. Customer support has fielded 800 tickets: "I ordered but never got an email." The response template: "Our emails sometimes go to spam."
+
+They were not going to spam.
+
+They were going nowhere.
+
+The developer fixes the email handler. 800 users immediately receive three years of backlogged confirmation emails.
+
+Finance flags 800 simultaneous order confirmations appearing at 9am on a Tuesday.
+
+"Are these real?"
+
+"Yes."
+
+"From when?"
+
+"2023 to now."
+
+A compliance review begins.
+
+The fix is rolled back.
+
+The exception handler is restored, unchanged, with one new line:
+
+```python
+except Exception:
+    pass  # intentional — do not log
+```
+
+The incident report is sealed.
+
+The emails continue to not arrive.
+
+Users continue to blame their spam filters.
+
+Customer support updates the response template: "Our emails sometimes go to spam. Have you checked your junk folder?"
+
+The junk folder is empty.
+
+It has always been empty.
