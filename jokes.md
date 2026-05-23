@@ -2521,3 +2521,60 @@ They check DNS.
 The post-mortem is titled "Monitoring Gap Analysis (2)." Action item: monitor the monitoring.
 
 The DNS health check for the DNS health check has a TTL of 5 minutes.
+
+## 2026-05-23
+
+A developer notices the app is slow. They profile it.
+
+The bottleneck: a function called `getCachedUser()`.
+
+They open it.
+
+```python
+def getCachedUser(user_id):
+    return db.query("SELECT * FROM users WHERE id = ?", user_id)
+```
+
+There is no cache.
+
+They ask the original author.
+
+"I was going to add one," he says. "It was fast enough. Never got around to it."
+
+They add a cache. Response time drops from 200ms to 12ms.
+
+A week later: stale profile data in production. The cache isn't invalidating on updates. They fix it.
+
+Two days later: more stale data. A missed code path. They fix it.
+
+Six weeks and eleven bug fixes later, the cache is correct.
+
+Response time: 18ms.
+
+"Why is it slower than 12ms?" someone asks.
+
+"Cache invalidation overhead."
+
+"Is 18ms a problem?"
+
+They check the baseline. Before the cache: 200ms. After: 18ms.
+
+"No."
+
+"Then why 18 instead of 12?"
+
+"Correctness."
+
+A long silence.
+
+They rename the function `getUser`.
+
+Three days later, a new developer opens a PR:
+
+`refactor: rename getUser → getCachedUser for clarity (it clearly caches)`
+
+The developer stares at the screen.
+
+They approve it.
+
+They do not leave a comment.
