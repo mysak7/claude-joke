@@ -2677,3 +2677,34 @@ The developer stares at the screen.
 They approve it.
 
 They do not leave a comment.
+
+## 2026-05-24
+
+A developer publishes a 3-line npm package in 2016: `sleep`. It wraps `setTimeout` in a Promise. They upload it, forget about it immediately, and move on to something they actually care about: a production-grade authentication library. Two years of work. Zero dependencies. Comprehensive docs. Tests. Edge cases handled.
+
+The authentication library: 47 stars.  
+`sleep`: 2.3 million weekly downloads.
+
+A security researcher emails: "Your `sleep` package has a vulnerability. An attacker can pass a negative delay and the behavior is undefined."
+
+They patch it. 200,000 people install the fix within 24 hours.
+
+The authentication library has never been patched. It has never been used.
+
+They submit a conference talk: "Building Reliable Authentication for the Modern Web."
+
+Rejected.
+
+The following year, they are invited to keynote a Node.js conference to speak about `sleep`.
+
+The audience asks how they consistently produce such widely-used software.
+
+"I wrote it in ten minutes," they say. "On a lunch break. I needed it for a project. I thought someone else might too."
+
+Fifteen developers in the front row are taking notes.
+
+Three of them go home and publish packages that same evening.
+
+One wraps `Math.random()`. One re-exports `Array.isArray`. One is just the number `42`, exported as default.
+
+All three have more weekly downloads than the authentication library.
