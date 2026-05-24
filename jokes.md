@@ -1771,6 +1771,61 @@ Nobody has opened the file in eight months. Nobody needed to. They know the conv
 
 They are, by definition, a senior developer.
 
+## 2026-05-24
+
+A developer writes a recursive factorial function.
+
+It's elegant. Self-referential. A small piece of mathematical poetry.
+
+It works for small numbers. For large ones: `RecursionError: maximum recursion depth exceeded`.
+
+They increase the recursion limit. It crashes higher. They increase it further. The program runs out of memory.
+
+They ask the senior.
+
+"Use a loop," the senior says.
+
+"But recursion is more elegant."
+
+"The stack disagrees."
+
+"There's a certain beauty—"
+
+"The stack. Disagrees."
+
+The developer rewrites it iteratively. Fast. Correct. Four lines. No elegance. No poetry. Just a loop and a variable named `result`.
+
+They submit the PR. They add a comment above the loop:
+
+```python
+# This was recursive once. It was more beautiful then.
+# Production didn't care about beautiful.
+# Neither did the stack.
+# I miss it.
+```
+
+The senior approves the PR. They do not read the comment.
+
+Three years later, a new developer finds it.
+
+They rewrite the function recursively.
+
+`RecursionError: maximum recursion depth exceeded`
+
+They find the old PR. They read the comment.
+
+They add a line:
+
+```python
+# I understand now.
+```
+
+They rewrite it as a loop. Fast. Correct. Four lines.
+
+They submit a PR. They do not add a comment.
+
+They are learning.
+
 ## 2026-05-09
 
 A developer forgets to resolve a merge conflict before deploying.
