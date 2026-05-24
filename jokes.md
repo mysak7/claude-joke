@@ -1773,6 +1773,50 @@ They are, by definition, a senior developer.
 
 ## 2026-05-24
 
+A developer implements "soft deletes" so no data is ever truly removed.
+
+"Regulatory compliance," says the PM. "We might need to recover it someday."
+
+The feature ships. Nobody ever recovers anything. But the `deleted_at` column fills quietly.
+
+Three years later: a performance review. The database is 47TB. 43TB is soft-deleted records.
+
+2.3 million deleted users. 9 million deleted orders. 180 million deleted events. A table called `user_preferences` that's 98% deleted rows from a feature removed in 2022, whose data was never cleaned up because cleanup "felt risky."
+
+"Can we just delete it?" a new developer asks.
+
+"Soft delete it," says the senior.
+
+"But it's already soft-deleted."
+
+"Then it can stay."
+
+A hard-delete job is proposed. Legal wants a review. The review takes six months. Legal approves deletion of everything older than five years.
+
+The developer writes the script. `DELETE WHERE deleted_at < NOW() - INTERVAL '5 years'`. It runs. 1.2TB reclaimed.
+
+An hour later: a compliance request. "We need records from 2020."
+
+"We deleted records older than five years."
+
+"We approved deleting records older than five years *as of today*. 2020 is only four years ago."
+
+The developer reads their own script. `NOW() - INTERVAL '5 years'`. Today is 2026. Five years ago: 2021.
+
+2020 records: deleted.
+
+The legal review had taken so long that by the time the script ran, 2020 had slipped inside the five-year window.
+
+New policy: seven-year retention, reviewed annually. The annual review is added to the backlog.
+
+The backlog has 74 items. Item 73 is "Reduce backlog size."
+
+The database is 46TB. The 1.2TB is filling back up.
+
+The developer estimates it will be 47TB again by Thursday.
+
+## 2026-05-24
+
 A developer writes a recursive factorial function.
 
 It's elegant. Self-referential. A small piece of mathematical poetry.
