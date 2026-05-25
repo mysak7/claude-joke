@@ -2854,3 +2854,41 @@ The senior developer checks the backlog. 21 familiar bugs, freshly re-reported b
 Each one is triaged.
 
 "Can't Reproduce."
+
+## 2026-05-25
+
+A developer buys a rubber duck for debugging. "Explain your problem out loud," the book says. "You'll find the answer."
+
+They try it. Mid-sentence, they find the bug.
+
+The duck said nothing. The developer did all the work. But somehow it helped.
+
+They try it again the next day. And the next. Nine months later, the duck has a 94% bug resolution rate. Higher than any human on the team.
+
+They name it Gerald.
+
+Gerald attends no standups. Gerald writes no tickets. Gerald has no JIRA account. Gerald has never been asked to estimate story points.
+
+Gerald is never blocked.
+
+At the annual performance review, the developer lists "strong debugging skills." They do not mention Gerald. Gerald does not have a LinkedIn.
+
+The senior developer notices Gerald on the third day of their contract. They say nothing. They have one too. Hers is named Patricia. Patricia has been on the team longer than anyone currently employed.
+
+A new developer joins and asks why there are two rubber ducks on two different monitors.
+
+"Pair programming," says the senior.
+
+"With the ducks?"
+
+"With the ducks."
+
+The new developer orders one that afternoon. They name it immediately.
+
+Six weeks later, their rubber duck has a better velocity than two of the humans on the team.
+
+Nobody mentions this in the retrospective.
+
+The retrospective action item: "improve team communication."
+
+The ducks are unavailable for comment.
