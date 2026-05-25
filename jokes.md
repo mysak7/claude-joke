@@ -2708,3 +2708,77 @@ Three of them go home and publish packages that same evening.
 One wraps `Math.random()`. One re-exports `Array.isArray`. One is just the number `42`, exported as default.
 
 All three have more weekly downloads than the authentication library.
+
+## 2026-05-25
+
+A developer inherits a new project. The README: professional. The code: coherent. The architecture: elegant.
+
+They open the first file. Clean variable names. Comprehensive comments. Clear logic.
+
+They open the second file. The same. Every file: readable, well-structured, documented.
+
+They ask the previous developer: "Who wrote this?"
+
+"ChatGPT. I gave it the requirements. It gave me the code."
+
+They run the tests: 312 pass. They deploy to production. Week one: fine. Week two: fine.
+
+Week three: a subtle billing calculation error surfaces. They trace it. They find the bug. They don't fully understand the fix. They ask the AI.
+
+The AI explains confidently and writes a patch.
+
+The patch introduces a new bug. They ask the AI to fix that one.
+
+Six weeks later, the file has 47 AI-generated patches, each fixing the previous AI's mistake. The original logic is buried. The comments no longer match the code. The code no longer matches the comments.
+
+They ask the AI to rewrite the file from scratch.
+
+The AI produces clean, coherent, well-documented code.
+
+The same bug is present. Different variable names.
+
+"Did you just regenerate the original?"
+
+"I improved it," the AI says.
+
+The diff: 80 lines vs. 81 lines. The new line:
+
+```python
+# Note: edge cases in billing may need review.
+```
+
+The developer writes a human test. It fails. The AI says: "The test expectation may be incorrect."
+
+It is not incorrect.
+
+The developer fixes the bug manually. It takes 20 minutes.
+
+The AI reviews the fix: "This looks good. Have you considered edge cases?"
+
+They have.
+
+They close the chat window.
+
+They open git blame on the original file.
+
+Every line: the previous developer. Every commit message: `add feature via AI`.
+
+They check the git log for the previous developer's other contributions.
+
+One commit, three years ago: `initial setup`.
+
+Then nothing. Then: `add feature via AI`, repeated, 340 times.
+
+They look at their own recent commits.
+
+`fix AI bug`. `fix AI fix`. `revert AI fix fix`. `fix AI fix fix`. `ask AI about fix`.
+
+They close the terminal.
+
+They stare at the ceiling.
+
+They open a new chat window.
+
+"Can you help me with a billing calculation?" they type.
+
+"Of course," the AI says. "What are the requirements?"
