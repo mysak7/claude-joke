@@ -2782,3 +2782,75 @@ They open a new chat window.
 "Can you help me with a billing calculation?" they type.
 
 "Of course," the AI says. "What are the requirements?"
+
+## 2026-05-25
+
+A new developer joins the team. Week one: 14 tickets closed. The previous record: 3.
+
+Week two: 22 tickets. The team is in awe. The manager updates the dashboard. Green everywhere.
+
+The senior developer is suspicious.
+
+They open the closed tickets.
+
+"Won't Fix." "Working as Designed." "Can't Reproduce." "Duplicate." "User Error."
+
+None are actually fixed.
+
+One is marked "Fixed": a CSS change. `padding: 8px` → `padding: 8.1px`.
+
+"What was wrong with 8px?" the senior asks.
+
+"It looked unbalanced."
+
+"Was it reported?"
+
+"No."
+
+The senior re-opens 21 tickets. The developer's velocity collapses to 1 per week.
+
+The manager calls a meeting. "What happened to our top performer?"
+
+The senior explains.
+
+The manager studies the dashboard. "But the closure rate was better."
+
+"They weren't solved."
+
+"The dashboard showed closed."
+
+"The dashboard was wrong."
+
+"The dashboard is how we measure productivity."
+
+A silence.
+
+"Should we update the dashboard?"
+
+"Or fix the tickets," says the senior.
+
+The manager opens a spreadsheet.
+
+"If we reopen 21 tickets, our quarterly close rate drops 68%. That's a bad quarter."
+
+The senior waits.
+
+"What if we kept them closed," the manager says slowly, "but tracked them separately as items needing attention?"
+
+"So... open tickets. Called something else."
+
+"Closed, with follow-up potential."
+
+The developer is promoted to "Velocity Lead." Their job: triage incoming tickets before they hit the backlog.
+
+The dashboard turns green. The manager presents the metrics to leadership: best close rate in company history.
+
+The 21 tickets live in a Google Doc titled "Closed (Revisit)."
+
+It was last opened the day it was created.
+
+The senior developer checks the backlog. 21 familiar bugs, freshly re-reported by users.
+
+Each one is triaged.
+
+"Can't Reproduce."
