@@ -2892,3 +2892,49 @@ Nobody mentions this in the retrospective.
 The retrospective action item: "improve team communication."
 
 The ducks are unavailable for comment.
+
+## 2026-05-26
+
+A developer sets up proper logging infrastructure. Structured JSON. Seven log levels: FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE. Timestamps. Correlation IDs. Service names. Request context.
+
+"Observability," they announce. "We can see everything."
+
+First production incident: they open the logs.
+
+47,000 lines per minute. All INFO. All formatted perfectly. All equally important-sounding.
+
+They filter to ERROR. Zero results. The app is visibly broken. No errors are logged.
+
+They trace the code. Every exception is caught. Every catch block logs at WARN.
+
+They filter to WARN. 47,000 lines per minute. All WARN.
+
+A new developer joins. They add DEBUG logs to their first feature. By end of day, DEBUG is at 300,000 lines per minute.
+
+Storage costs triple. The infrastructure team asks questions.
+
+They implement log sampling: 1% of DEBUG, 10% of INFO, 100% of ERROR.
+
+ERROR remains at zero.
+
+Six months later: Elasticsearch. Full-text indexing. Kibana dashboards. Sub-second queries across 400GB of daily logs. "Now we can really see everything," the developer says.
+
+The next incident: the on-call engineer opens Kibana.
+
+The index pattern is from 2023. Three schema versions ago. The dashboard loads a blank white screen. "No results found."
+
+They try raw Lucene syntax. It times out.
+
+They SSH into the box.
+
+They type: `console.log("here")`
+
+Bug found in four minutes.
+
+The Elasticsearch cluster costs $1,400/month. The `console.log` costs nothing.
+
+Post-mortem action item: "improve observability."
+
+They add new log levels: EMERGENCY, CATASTROPHIC, APOCALYPTIC.
+
+The app continues to log everything at INFO.
