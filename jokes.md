@@ -2984,3 +2984,79 @@ The developer refactors again. They extract a shared abstraction for the refacto
 There is one duplicated line. In two files. They have not found it yet.
 
 They will.
+
+## 2026-05-26
+
+A developer reads "Clean Architecture." They are transformed.
+
+Monday: they refactor the user API. Four layers. Entities. Use Cases. Interface Adapters. Frameworks and Drivers. Creating a user now requires seven files across four directories. The `CreateUserUseCase` calls `UserRepository`, implemented by `UserRepositoryImpl`, injected by `DependencyContainer`, routed by `WebRouter`, presented by `UserPresenter`.
+
+"The business logic," they announce, "is completely independent of the database. We could swap Postgres for MongoDB tomorrow."
+
+"Would we?" asks the PM.
+
+"Not the point."
+
+They migrate the entire codebase. Four months. Every feature: seven files minimum.
+
+A junior developer is asked to add an email field to user profiles.
+
+They trace the layers. Entity. Use Case. DTO. Mapper. Repository. Controller. Validator. Presenter. The field appears in eleven places.
+
+Their PR: 47 files changed.
+
+"This is clean," says the architect.
+
+"Is it?" says the junior.
+
+The next feature: add a middle name. 51 files. Six hours.
+
+Someone asks in the PR: "Is this simpler than before?"
+
+"It follows the dependency rule," says the architect. "Outer layers depend on inner ones. Never the reverse."
+
+"I just want to add a name field."
+
+"That touches multiple layers."
+
+"Everything touches multiple layers. There are four layers."
+
+The architect nods patiently.
+
+"That's the architecture."
+
+The junior checks the original codebase from before the refactor. Single-file controllers. Direct database calls. No interfaces, no mappers, no presenters.
+
+Ticket estimate then: "1 hour."
+
+Ticket estimate now: "2 days (requires layer synchronization)."
+
+"Is anything easier now?" the junior asks.
+
+The architect thinks.
+
+"Swapping the database."
+
+"We've never swapped the database."
+
+"But if we needed to."
+
+"Postgres has been running for five years."
+
+"In theory," says the architect, "it's much cleaner."
+
+The junior opens their IDE. Eleven files for a button label. Forty-seven for an email field. Ninety-two for the search feature they just shipped.
+
+"In theory," they say.
+
+They open a new file: `AddEmailFieldUseCase.ts`.
+
+It delegates to `AddEmailFieldInteractor`, which calls `EmailFieldValidator`, which depends on `EmailFieldValidatorInterface`, defined in the domain layer, implemented in the infrastructure layer, bound at startup in `DependencyModule`.
+
+It is correct. It is testable. It is independent of all frameworks.
+
+It took three days to add one column to a database table.
+
+The column is called `email`.
+
+It stores email addresses.
