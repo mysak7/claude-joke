@@ -2938,3 +2938,49 @@ Post-mortem action item: "improve observability."
 They add new log levels: EMERGENCY, CATASTROPHIC, APOCALYPTIC.
 
 The app continues to log everything at INFO.
+
+## 2026-05-26
+
+A developer discovers DRY: Don't Repeat Yourself.
+
+They begin refactoring. Duplicate logic → shared function. Duplicate strings → constants. Duplicate config → centralized config module. Duplicate test setup → base test class. Duplicate base class behavior → test utility mixin.
+
+Three months later, changing a button label requires modifying: a constant, an enum, a mapper, a config transform, and a string interpolation helper that somehow ended up in the auth module.
+
+"Why is this in auth?" the senior asks.
+
+"It's a shared string utility."
+
+"Shared with what?"
+
+"Theoretically, anything."
+
+"Does anything else use it?"
+
+"Not yet."
+
+The developer prints the dependency graph. Nine pages. 847 nodes. Cycles. The print job fails halfway through.
+
+"But there's no duplication," they say.
+
+The senior opens the codebase from 18 months ago. Three functions, each repeated in two places. Six functions total.
+
+"Did this work?" the senior asks.
+
+"Yes."
+
+"Does this work?" They gesture at the nine-page graph.
+
+"Also yes."
+
+"Which is easier to change?"
+
+A pause.
+
+The developer refactors again. They extract a shared abstraction for the refactoring logic itself. Four months. The dependency graph is now eleven pages.
+
+"But there's no duplication," they say.
+
+There is one duplicated line. In two files. They have not found it yet.
+
+They will.
