@@ -3169,3 +3169,64 @@ One developer has it bookmarked. It responds in 140ms.
 They call it from a script they never committed.
 
 They tell no one.
+
+## 2026-05-27
+
+A developer doing routine server maintenance finds an unknown cron job.
+
+`17 3 * * 2 /usr/bin/curl -s localhost:8080/ping >> /var/log/alive.log`
+
+No owner. No ticket. Not in the codebase. Not in any runbook. Runs every Tuesday at 3:17am.
+
+They check the log file: 847MB.
+
+```
+[2019-03-12 03:17:02] still alive
+[2019-03-19 03:17:01] still alive
+```
+
+Over 4,000 entries. Seven years of Tuesdays.
+
+They track down the author through three former employees and one LinkedIn message.
+
+"Oh, that was me. The service kept dying randomly. I set up a ping just to see if it was still running."
+
+"Did it help?"
+
+"Not really. But *knowing* it was alive felt better than not knowing."
+
+They check what the cron job has been pinging.
+
+`localhost:8080` — the old monolith. Decommissioned in late 2023. The port is now used by a Redis instance.
+
+The cron job has been pinging Redis every Tuesday at 3:17am for two and a half years. Redis always responds with 200. The log faithfully records this as "still alive."
+
+Redis is, technically, still alive.
+
+The service it was meant to monitor has been dead for two and a half years. Nobody noticed it stopped dying, because the cron job stopped noticing too.
+
+They remove the cron job.
+
+The log file remains. 847MB of Redis health data, organised by Tuesday.
+
+"Should we delete it?" asks the junior.
+
+"Those are historical records," says the senior.
+
+"Of what?"
+
+"Of Redis being alive every Tuesday."
+
+"Is that useful?"
+
+The senior thinks.
+
+"It's been accurate so far."
+
+The junior deletes the log file.
+
+That night, Redis goes down for the first time in three years.
+
+It comes back up in four minutes. Nobody is alerted. The cron job is gone.
+
+Somewhere, a former developer has a slightly worse Tuesday. They couldn't say why.
