@@ -3106,3 +3106,66 @@ The new hire opens the on-call runbook.
 Chapter 4 is titled "Serverless Server Maintenance."
 
 It is the longest chapter.
+
+## 2026-05-27
+
+A developer proposes replacing the REST API with GraphQL. "Clients request exactly what they need," they say. "No over-fetching. No under-fetching. Just data."
+
+The team is convinced. Six months of migration. They ship.
+
+The first frontend query arrives:
+
+```graphql
+query {
+  user {
+    id name email avatar address { street city country }
+    orders { id total items { name price } }
+    preferences { theme notifications }
+    sessions { device lastSeen }
+  }
+}
+```
+
+The resolver fires 34 database queries in sequence. Response time: 3.8 seconds. The old REST endpoint: 140ms.
+
+They add DataLoader to batch the N+1 queries. Response time: 1.1 seconds.
+
+They add caching. 380ms.
+
+They add persisted queries, query depth limits, and a complexity analyzer. 310ms.
+
+A year passes. They profile the queries in production.
+
+Every client is requesting 100% of the user fields, 100% of the time.
+
+Nobody has used partial field selection once.
+
+The developer looks at the original REST endpoint. It returned 100% of the user fields. It took 140ms.
+
+"Why did we do this?" asks a new engineer.
+
+"No over-fetching," says the senior.
+
+"We're fetching everything."
+
+"We're *choosing* to fetch everything. That's different."
+
+"Is it?"
+
+A long pause.
+
+"Yes," says the senior. "Before, we had no choice. Now we choose every time."
+
+"We always choose everything."
+
+"Exactly. Now it's intentional."
+
+The junior stares at the query. They send it unchanged. Response time: 310ms.
+
+The old REST endpoint is still in the codebase. Still maintained. Still passing tests. A comment at the top: `// DEPRECATED — use GraphQL`.
+
+One developer has it bookmarked. It responds in 140ms.
+
+They call it from a script they never committed.
+
+They tell no one.
