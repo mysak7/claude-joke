@@ -3060,3 +3060,49 @@ It took three days to add one column to a database table.
 The column is called `email`.
 
 It stores email addresses.
+
+## 2026-05-27
+
+A developer migrates to serverless.
+
+"No more servers to manage," they say. "Auto-scaling. Pay per request. Zero ops overhead."
+
+They deploy their first Lambda. It works. They deploy eleven more. Still works.
+
+Month two: they add a shared database connection layer. The connection pool is designed for persistent servers. Lambda is not a persistent server.
+
+Each function invocation opens a new connection. Peak traffic: 3,000 simultaneous Lambdas. The database connection limit: 100.
+
+The database crashes.
+
+"Use RDS Proxy," the docs say. They add RDS Proxy. Latency increases by 40ms. Their Lambdas now time out waiting for the proxy.
+
+"Increase the timeout," the docs say. They set it to 30 seconds. Their monthly bill increases by 600%.
+
+"Reduce cold starts," the docs say. Cold starts take 4 seconds. The function that used to run in 80ms now runs in 4.2 seconds on the first call.
+
+"Keep the Lambda warm," the docs say. They add a cron job that pings the Lambda every 5 minutes. To prevent cold starts. On a serverless function. Using a server.
+
+Six months later, they have: 11 Lambdas, a warmup server, an RDS Proxy, two VPCs, a NAT gateway, a Secrets Manager, a config bucket, three API Gateways, a CloudFront distribution, a WAF, and an IAM role with 47 permission statements.
+
+"Where are the servers?" a new hire asks.
+
+"There are no servers," says the developer. "It's serverless."
+
+The new hire counts the EC2 instances in the console.
+
+There are nine.
+
+"These," says the developer, "are the serverless servers."
+
+"What's the difference?"
+
+A pause.
+
+"We don't have to think about them."
+
+The new hire opens the on-call runbook.
+
+Chapter 4 is titled "Serverless Server Maintenance."
+
+It is the longest chapter.
