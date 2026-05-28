@@ -3230,3 +3230,76 @@ That night, Redis goes down for the first time in three years.
 It comes back up in four minutes. Nobody is alerted. The cron job is gone.
 
 Somewhere, a former developer has a slightly worse Tuesday. They couldn't say why.
+
+## 2026-05-28
+
+A team audits their bus factor — the number of people who'd need to disappear before a system became unmaintainable.
+
+Authentication: 1. Payments: 1. Deployment pipeline: 1. Eleven of fourteen services: 1.
+
+"We're one bus away from total collapse," says the engineering lead.
+
+They implement knowledge-sharing. Pairing. Documentation. Runbooks. Quarterly lunch-and-learns.
+
+Six months later, the bus factor for most services is 2. The team declares victory.
+
+Then Alice leaves for a competitor.
+
+Authentication: bus factor 0.
+
+Nobody else knew how it worked. Alice had run every knowledge-sharing session and attended every pairing. She was also the only person who had paired with herself on authentication.
+
+They have documentation. Twelve pages. Written by Alice. Last edited the day before she left.
+
+Page 1: introduction.
+Page 12: "See internal wiki for further details."
+
+The wiki link returns 404.
+
+They hire a contractor to reverse-engineer the service. Three weeks. He delivers a report and a list of questions.
+
+Every answer: Alice.
+
+They reach out. Her new employer's legal team sends a letter.
+
+They hire a second contractor. She reads the codebase for a week, then raises her hand.
+
+"Is this service supposed to accept expired tokens?"
+
+Everyone looks at each other.
+
+"It does," someone says.
+
+"I know it does. I'm asking if it should."
+
+Nobody knows.
+
+"Also," she continues, "it logs passwords in plaintext. But only on Tuesdays."
+
+"Only Tuesdays?"
+
+"I haven't found the condition yet."
+
+"Is that a security issue?"
+
+"It's a security issue every day except Tuesday. On Tuesdays it's worse."
+
+The expired-token behavior had been documented in a comment. The comment was removed in a cleanup sprint in 2023 with the commit message `remove stale comments`.
+
+The commit: Alice.
+
+The contractor is asked to document everything she finds.
+
+"Sure," she says. "But I'll need access to the internal Confluence space."
+
+Alice's account was deactivated in January.
+
+IT restores it. IT sends the temporary password to Alice's old work email.
+
+Alice's old work email was deleted in January.
+
+The authentication service is still running. It accepts expired tokens. It logs passwords on Tuesdays. Nobody knows why Tuesdays.
+
+On Tuesdays, Alice presumably knows.
+
+She is unavailable for comment.
