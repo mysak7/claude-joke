@@ -3303,3 +3303,48 @@ The authentication service is still running. It accepts expired tokens. It logs 
 On Tuesdays, Alice presumably knows.
 
 She is unavailable for comment.
+
+## 2026-05-28
+
+A developer is asked to fix a pagination bug: "Users see 10 results per page, but page 2 starts at item 11 instead of item 10."
+
+They fix it. Page 2 now starts at item 10.
+
+New bug: item 10 appears on both page 1 and page 2.
+
+They fix it. Page 1 now ends at item 9.
+
+New bug: there are 11 items on page 1.
+
+They fix that too.
+
+New bug, next morning: "The last page is empty."
+
+They trace it. For 100 items at 10 per page, the code returns 11 pages. Page 11 is empty. They switch to `Math.ceil(total / pageSize)`. Ships.
+
+New bug: for exactly 100 items, page 10 now has 10 items. Users complain: "We expected the last page to be empty."
+
+"Why would you expect an empty last page?"
+
+The user pastes a screenshot. They're right. The *old* system always ended with an empty page. Users had adapted. Everyone knew item 100 was actually on page 11. Everyone knew to skip the duplicate on page 1. It had been this way for three years.
+
+Nobody had filed a bug report. A new PM joined and filed one on their first day.
+
+The developer rolls back. Item 10 is duplicated again. The developer adds a comment:
+
+```js
+// item 10 appears on both pages 1 and 2 — do not fix, users depend on this
+```
+
+The PM files a new ticket: "Remove misleading code comment."
+
+The developer adds a second comment:
+
+```js
+// the above comment is accurate — see incident 2026-05-28
+// the bug was reported, fixed, and reverted by user demand
+// the duplicate is now a feature
+// if you are reading this, you are the new PM
+```
+
+It is accurate on every count.
