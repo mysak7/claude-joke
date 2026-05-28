@@ -3348,3 +3348,59 @@ The developer adds a second comment:
 ```
 
 It is accurate on every count.
+
+## 2026-05-28
+
+A developer writes a class method and passes it as a callback. It breaks: `this` is `undefined`.
+
+They add `.bind(this)`. Works.
+
+They find fourteen other callbacks in the same class. They add `.bind(this)` to all of them.
+
+Code review: "Just use arrow functions instead of binding."
+
+They convert the methods to arrow functions. TypeScript flags six errors: methods assigned as properties can't be overridden by subclasses.
+
+"How many subclasses do we have?"
+
+"Three."
+
+"Convert them too."
+
+They convert the subclasses. The subclasses have their own subclasses.
+
+Four levels of inheritance. All broken.
+
+They revert. Arrow functions: out. `.bind(this)`: back.
+
+The senior developer reviews the reverted PR.
+
+"Why are you using `.bind(this)` everywhere? Just use arrow functions."
+
+"We tried. Four inheritance levels."
+
+"Why do you have four levels of inheritance?"
+
+"Java developers designed this."
+
+A long pause.
+
+"Use `.bind(this)`."
+
+Two years pass. Three new developers join. Each one, within their first week, opens the codebase, spots the `.bind(this)` calls, and files a cleanup PR.
+
+All three trigger the same production incident.
+
+There is now a `CONTRIBUTING.md` section titled "Before You Touch `.bind(this)`."
+
+It is four paragraphs long. It ends: "You will not be the first."
+
+A fourth new developer joins. They read `CONTRIBUTING.md`.
+
+They open the codebase. They see the `.bind(this)` calls.
+
+They close the file.
+
+They open a new PR: `refactor: use arrow functions to eliminate .bind(this)`
+
+They have not read to paragraph four.
