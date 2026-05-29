@@ -3404,3 +3404,73 @@ They close the file.
 They open a new PR: `refactor: use arrow functions to eliminate .bind(this)`
 
 They have not read to paragraph four.
+
+## 2026-05-29
+
+A developer fixes a modal appearing behind the navbar: `z-index: 999`. Ships.
+
+Next week, a tooltip hides behind the modal. `z-index: 9999`. Ships.
+
+Then a dropdown behind the tooltip. `z-index: 99999`. Ships.
+
+Six months and eleven developers later, the codebase has z-index values ranging from 1 to 2,147,483,647. The highest belongs to a cookie consent banner that appeared "one pixel behind the video player." Nobody asks why consent now outranks the physical laws of the universe.
+
+A new CSS engineer joins. She looks at the stylesheet for ten minutes.
+
+"These z-index values don't do anything," she says.
+
+"They fixed the stacking problems."
+
+"They didn't. Everything is in separate stacking contexts. Z-index only works within the same context. These numbers are decorative."
+
+They run a test. Set every z-index to 1.
+
+Nothing breaks.
+
+Set them to 0.
+
+Still nothing.
+
+Delete all of them entirely.
+
+Everything looks exactly the same.
+
+"Then why," asks the developer, "were things broken before?"
+
+She opens the body tag.
+
+`overflow: hidden`
+
+"This created a new stacking context in 2019. One line. Fixing it would have solved everything."
+
+They remove `overflow: hidden`.
+
+Four layout sections collapse. Two modals vanish. A sidebar shifts eight pixels to the right.
+
+They put it back.
+
+All forty-three z-index declarations remain. The cookie consent banner sits at 2,147,483,647. The navbar modal is 999.
+
+"What's the real fix?" asks the developer.
+
+"Audit every component, remove stacking context leaks, establish a z-index scale, document it."
+
+"How long?"
+
+"Two sprints."
+
+The ticket enters the backlog.
+
+It is never reached.
+
+Three months later, a new developer notices a dropdown appearing behind a tooltip. They open the stylesheet.
+
+They set the dropdown to `z-index: 999999`.
+
+It works. They ship it.
+
+The CSS engineer sees the commit notification. She stares at her screen for a moment.
+
+Then she closes the tab.
+
+She has seen enough stacking contexts for one lifetime.
