@@ -3518,3 +3518,79 @@ Three months later, a new developer opens the file. Sees the comment. Opens PR #
 They read it in full.
 
 They rename the variable `userData`.
+
+## 2026-05-29
+
+A developer discovers event-driven architecture. "No more tight coupling," they say. "Services just emit events and anyone can react."
+
+They publish their first event: `UserCreated`. Two services subscribe.
+
+A month later: 47 events. 23 services. Each event can trigger 4-6 other events. Nobody knows the full chain.
+
+"What happens when a user is created?" a new developer asks.
+
+"Let me find out," says the senior.
+
+Fourteen pages of event trace later: one user creation triggers 8 emails, a Slack notification, 3 webhooks, a background job that runs 40 minutes later, a cache invalidation, a billing event, and a record in a GDPR compliance log that nobody reads.
+
+One of the eight emails is a duplicate. They can't find which service is sending it. Nobody wants to turn any service off to test.
+
+"Can we add a flag to disable the duplicate?"
+
+"Which service sends it?"
+
+"We don't know."
+
+They add a deduplication layer upstream. It fires after all 8 emails. It suppresses duplicates.
+
+Now 7 users receive 1 email. One user receives 0.
+
+Nobody can identify which user it is. The service doesn't log which email it suppresses. Logging was "out of scope."
+
+The GDPR compliance log has a record of 8 emails sent and 7 delivered. The discrepancy is itself logged as an event: `EmailDeliveryAnomaly`.
+
+That event triggers a reconciliation job.
+
+The reconciliation job emits `ReconciliationCompleted`.
+
+A developer set up a debug subscription to `ReconciliationCompleted` in 2023 to monitor the job during a rollout. They left the company in 2024.
+
+Their Slack DMs still receive reconciliation reports every 40 minutes. Their account was deactivated in Q1. The messages accumulate in a suspended inbox. Nobody receives them. The event is emitted regardless.
+
+"Is the system healthy?" the new developer asks.
+
+The senior opens the event stream dashboard.
+
+`UserCreated` → 47 downstream events → 23 handlers → 8 emails → 7 received → 1 anomaly event → 1 reconciliation → 1 Slack DM to a deactivated account.
+
+"Yes," says the senior. "The events are flowing."
+
+"But one user gets no email."
+
+"That's a downstream concern."
+
+"Which downstream service handles it?"
+
+"One of the 23."
+
+"Which one?"
+
+A long pause.
+
+"That's why we have the reconciliation job."
+
+"The reconciliation job sends a Slack DM to a deleted account."
+
+"Yes."
+
+"So nothing gets reconciled."
+
+"The event is emitted."
+
+The new developer stares at the dashboard.
+
+Somewhere, in a suspended Slack inbox, 847 unread reconciliation reports sit in perfect order. Accurate. Timestamped. Unseen.
+
+The system is loosely coupled.
+
+Everything is fine.
