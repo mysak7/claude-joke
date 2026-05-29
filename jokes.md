@@ -3474,3 +3474,47 @@ The CSS engineer sees the commit notification. She stares at her screen for a mo
 Then she closes the tab.
 
 She has seen enough stacking contexts for one lifetime.
+
+## 2026-05-29
+
+A developer renames a variable from `data` to something descriptive.
+
+PR title: `refactor: rename data → userProfilePayload for clarity`
+
+First comment: "Too verbose. `profileData`?"
+Second: "We already have `profileData` in the nav module. `userData`?"
+Third: "Collides with the auth helper. `currentUser`?"
+Fourth: "What if there's no current user? `userRecord`?"
+Fifth: "Records are database terminology. `userObject`?"
+Sixth: "Everything's an object, that's meaningless. Just `user`?"
+Seventh: "We have a `User` model. Import conflict."
+
+Day three, a senior joins.
+
+"Can we table this for the architecture review?"
+
+The architecture review is four weeks away.
+
+The developer looks at the original: `data`.
+
+Four letters. Zero conflicts. Nobody had ever asked what it meant. Nobody had ever been confused. It was called `data` because it contained data, and in context, exactly what kind was obvious.
+
+They restore the original name.
+
+PR title: `revert: restore data (naming is hard)`
+
+Merges in seven minutes. Five approvals. No comments.
+
+They add one comment above the variable:
+
+```python
+# data — see PR #847 for naming history
+```
+
+PR #847 is the four-day debate. 94 comments. No resolution. The winning name: the one they started with.
+
+Three months later, a new developer opens the file. Sees the comment. Opens PR #847.
+
+They read it in full.
+
+They rename the variable `userData`.
