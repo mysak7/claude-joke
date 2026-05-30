@@ -3649,3 +3649,53 @@ It is.
 The developer answers every API question for one year.
 
 The other developer never mentions the $50.
+
+## 2026-05-30
+
+A developer upgrades Node.js from 14 to 18. "LTS to LTS," they say. "Completely safe."
+
+Six hundred tests fail.
+
+One dependency dropped Node 14 support in a patch release six months ago. Three others have breaking changes behind semver-compatible version bumps. A fourth never supported Node 18 but nobody had tried.
+
+They pin the dependencies. Eight tests still fail. V8 14 changed timezone handling. Not documented anywhere. Found in a GitHub comment from a Googler. Zero upvotes.
+
+They fix the timezones. Tests pass. They deploy to staging.
+
+The CI machine has a different OpenSSL version than production. Three cryptographic operations silently return `undefined` instead of raising errors.
+
+"Why silently?"
+
+"The maintainer considered `undefined` a self-documenting failure mode."
+
+They pin OpenSSL. Deploy to production. Monitoring: all green.
+
+Two weeks later: the logging library stops writing to disk. A breaking change in the Node streams API — introduced in 16, silently polyfilled into 14, un-polyfilled in 18. Every log since the upgrade has been swallowed.
+
+"Are we still generating logs?"
+
+"Yes."
+
+"Are we writing them?"
+
+"We were."
+
+"When did we stop?"
+
+A silence.
+
+"Two weeks ago."
+
+"What happened two weeks ago?"
+
+Another silence.
+
+They downgrade to Node 14.
+
+Five hundred and ninety-seven tests fail.
+
+The CI job that started this is still named: `# upgrade node — ~30 min task`.
+
+The branch is deleted. The ticket is closed as "Won't Fix — revisit when ecosystem matures."
+
+Node 14 reaches end of life in six weeks.
