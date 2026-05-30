@@ -3594,3 +3594,58 @@ Somewhere, in a suspended Slack inbox, 847 unread reconciliation reports sit in 
 The system is loosely coupled.
 
 Everything is fine.
+
+## 2026-05-30
+
+A developer writes comprehensive API documentation. 47 pages. Code examples for every endpoint. Error codes listed and explained. A getting-started guide. A FAQ. A glossary.
+
+Nobody reads it.
+
+"How do I authenticate?" asks the first integrating developer.
+The answer is on page 4, section 2.3, with a code example and a diagram.
+
+"What does error 429 mean?" asks the second.
+Page 31.
+
+"Is there rate limiting?"
+"Page 31."
+"Can you just tell me?"
+"100 requests per minute."
+"Why isn't that in the README?"
+"It is. Under 'Limits.'"
+
+Six months in, the developer embeds an Easter egg on page 23 — tucked between pagination and filtering: *"If you are actually reading this, email me for $50."*
+
+Nobody emails.
+
+A year later, page 38: *"Still no one. Raising the bounty to $200."*
+
+Page 12: *"The real auth token was the friends we made along the way."*
+
+Page 6: *"Find all five Easter eggs and I will personally answer any API question for one year."*
+
+There are now eleven Easter eggs spread across the documentation. None have been found.
+
+The developer is considered the team's most thorough technical writer. Annual review: "Excellent communication skills. The docs are outstanding."
+
+"Does anyone read them?"
+
+"They're outstanding."
+
+Then an email arrives from a developer at another company. Integration question. Page 23 query.
+
+The developer sits up.
+
+"You read the documentation?"
+
+"Yes. I found something strange between pagination and filtering."
+
+A silence.
+
+"Is this email address still valid?"
+
+It is.
+
+The developer answers every API question for one year.
+
+The other developer never mentions the $50.
