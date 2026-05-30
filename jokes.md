@@ -3699,3 +3699,59 @@ The CI job that started this is still named: `# upgrade node — ~30 min task`.
 The branch is deleted. The ticket is closed as "Won't Fix — revisit when ecosystem matures."
 
 Node 14 reaches end of life in six weeks.
+
+## 2026-05-30
+
+A developer has a race condition. The spinner shows, disappears, then flickers back for 200ms.
+
+"Just wrap it in `setTimeout`," a colleague says.
+
+"How long?"
+
+"Zero."
+
+"Zero milliseconds?"
+
+"Zero."
+
+It works.
+
+The developer Googles "`setTimeout 0` why does this work." Four articles. Two Stack Overflow answers. One blog post titled "The Event Loop: A Visual Guide."
+
+They read all of them.
+
+They understand none of it.
+
+They merge the PR. Description: `fix: resolve async timing issue`.
+
+Four years pass. The `setTimeout(() => resolve(), 0)` is in production. Every 40 minutes, a user triggers the exact conditions that require those zero milliseconds of nothing to exist between the spinner and the data.
+
+A new developer opens the file. "What does this `setTimeout` do?"
+
+"Timing fix," says the senior.
+
+"For what?"
+
+"Race condition."
+
+"What was racing?"
+
+A pause.
+
+"The spinner."
+
+"Against what?"
+
+"Itself."
+
+The new developer stares at the screen.
+
+"Does it matter?"
+
+"No."
+
+They close the file.
+
+The `setTimeout` runs forever. It resolves a race that nobody can explain, against an opponent nobody can name. The spinner never flickers again.
+
+The event loop ticks on.
