@@ -3865,3 +3865,52 @@ The raw SQL has 34 commits, three cache implementations, and a comment: `// do n
 It runs at 11ms. The decorator would have been 12ms.
 
 The four weeks are gone.
+
+## 2026-05-31
+
+A developer adds loading spinners to every screen.
+
+Users stop complaining the app "feels too fast to trust." A UX study confirms: perceived reliability increases with visible loading states. Confidence scores up 34%.
+
+Marketing shares the results. The slide: "Users feel more confident."
+
+A new developer joins and notices every API call resolves in under 20ms. "Why do the spinners show for 800ms?"
+
+"UX research," says the senior. "Instant responses felt broken."
+
+"So we're hiding speed?"
+
+"We're *managing expectations*."
+
+They check the codebase. Every API call wraps its response in a deliberate pause:
+
+```js
+const [data] = await Promise.all([fetchData(), sleep(780)])
+return data
+```
+
+The `sleep(780)` is always the slower of the two.
+
+"The app runs at 20ms," the new developer says. "We paid for a CDN upgrade last quarter. That's what got us to 20ms."
+
+"Great upgrade."
+
+"We're not using it. Users wait 800ms regardless."
+
+"Users are using it. They just don't see the results for another 780ms."
+
+The CDN upgrade cost $40,000. It shaved 180ms of real latency. The artificial delay added 780ms back.
+
+The app is, net, 600ms slower than before the upgrade.
+
+The UX research is submitted to a design conference. Talk title: "Designing for Trust: How Perceived Performance Shapes User Confidence."
+
+Accepted. Standing room only.
+
+The developer who wrote `sleep(780)` is in the front row.
+
+Their bio: "Building fast, human-centered experiences."
+
+The app runs at 20ms.
+
+Nobody in the room knows this.
