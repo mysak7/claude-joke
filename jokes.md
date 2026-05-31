@@ -3795,3 +3795,73 @@ Three years later, they refactor the file loader during a "cleanup sprint." The 
 They remove it.
 
 `git bisect` finds the same copyright year. Different developer. Different walk. Longer this time.
+
+## 2026-05-31
+
+A developer benchmarks two approaches to a slow database query.
+
+Approach A: ORM with lazy loading. 14ms in testing.
+Approach B: raw SQL with a hand-tuned join. 9ms in testing.
+
+"35% faster," they announce. "Clear winner."
+
+They spend a week optimizing Approach B. It drops to 6ms. They open a PR: "Migrate to raw SQL for 57% performance gain."
+
+A senior asks: "Which branch were you testing against?"
+
+They check. A feature branch. One that hadn't been merged. One with test data. Twelve records.
+
+Production has 2.4 million records.
+
+They benchmark against production data.
+
+Approach A: 340ms.
+Approach B: 290ms.
+
+"Still wins," they say, deflated. They deploy Approach B.
+
+Response times drop from 340ms to 290ms. Then, over two weeks, creep back to 340ms as cache misses accumulate.
+
+"I need to add caching," they say.
+
+"Approach A has built-in caching," says the senior.
+
+They open the ORM docs. There's a single decorator: `@cached`. They add it to the branch they never merged.
+
+Approach A, with caching: 12ms.
+
+"Should we revert?" asks the developer.
+
+"You spent three weeks on the SQL."
+
+"Yes."
+
+"It's already merged."
+
+"Yes."
+
+They hand-roll a cache for the raw SQL. Another week. It works. Response time: 11ms.
+
+"We saved one millisecond," says the developer.
+
+"Over the ORM you replaced."
+
+"Which we also optimized."
+
+"Which you didn't deploy."
+
+"No."
+
+A pause.
+
+"How long did this take?"
+
+"Four weeks."
+
+The ORM branch with one decorator is still in git history. One commit. Never merged.
+
+The raw SQL has 34 commits, three cache implementations, and a comment: `// do not replace with ORM — hand-optimized for performance`.
+
+It runs at 11ms. The decorator would have been 12ms.
+
+The four weeks are gone.
