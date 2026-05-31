@@ -3755,3 +3755,43 @@ They close the file.
 The `setTimeout` runs forever. It resolves a race that nobody can explain, against an opponent nobody can name. The spinner never flickers again.
 
 The event loop ticks on.
+
+## 2026-05-31
+
+A developer finds a regression. Something worked three months ago. It doesn't now.
+
+They run `git bisect`. Twenty minutes and fourteen checkouts later, bisect reports the culprit.
+
+```
+a4f93bc fix: update copyright year in README
+```
+
+They open the commit. `README.md`: `Copyright 2024` → `Copyright 2025`. Nothing else. Not a single line of code.
+
+They stare at it. They run the tests again. Bad. They check out the previous commit. Good.
+
+The README and the bug are in completely different parts of the codebase. Different directories. Different languages. One is Markdown.
+
+They dig for two hours. The file glob that loads test fixtures reads the directory alphabetically. The README update changed the sort order of a shared config folder: `README.md` now comes before `app_config.yaml`. The fixture loader picks up `README.md` first, fails to parse it as YAML, silently returns an empty config, and the test suite runs against defaults.
+
+Not in the code. Not in the tests. In the alphabetical position of a copyright notice.
+
+They fix it with three words:
+
+```python
+key=lambda f: f.name if f.suffix == ".yaml" else ""
+```
+
+PR description: "Introduced by updating the copyright year in the README. I am going to take a walk."
+
+They take the walk. They do not return until the next morning.
+
+The `git bisect` session is saved to the team wiki. It is titled "The README Incident" and immediately becomes the most-read page. The previous most-read page was "How to Set Up Your Local Environment." It had been read twice.
+
+A new developer reads "The README Incident" during onboarding. They laugh. They note that the fix is a `key` function in a file loader.
+
+Three years later, they refactor the file loader during a "cleanup sprint." The `key` function looks unnecessary. There are no comments.
+
+They remove it.
+
+`git bisect` finds the same copyright year. Different developer. Different walk. Longer this time.
