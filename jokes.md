@@ -4010,3 +4010,98 @@ A post-mortem is filed. The graceful shutdown now exits in under 3 seconds. The 
 The separate service also has a graceful shutdown.
 
 Nobody has tested it yet.
+
+## 2026-06-01
+
+A developer writes a loop. It runs one too many times. They subtract one from the count.
+
+Tests pass. Ships.
+
+Next sprint: a different loop runs one too few times. They add one to the range.
+
+The senior reviews the codebase six months later.
+
+Fourteen arithmetic adjustments. `count - 1`. `length + 1`. `i <= n`. `n + 1 - i`. `offset + 2`.
+
+"Why `offset + 2`?" they ask.
+
+"Off-by-two error."
+
+"Why two?"
+
+"Was off by one. We fixed it the wrong direction. Then fixed the fix."
+
+"Did you find the root cause?"
+
+"The tests pass."
+
+The senior opens `git log`. The first adjustment, 2021: a loop going from `1` to `n + 1` instead of `0` to `n`. The fix: subtract one from `n`.
+
+The real bug: the loop started at `1` instead of `0`. The subtraction didn't fix that. It just made both ends wrong in the same direction.
+
+Every subsequent adjustment had been compensating for a misunderstanding of a misfix of an off-by-one nobody had identified correctly.
+
+"Fix it," says the senior. "Start at `0`. End at `n`. Remove all fourteen adjustments."
+
+They do. All tests fail.
+
+Seven tests had been written to match the broken behavior. They update the tests.
+
+All tests pass.
+
+They ship.
+
+Support ticket, next morning: "Users are missing from search results."
+
+They trace it. Four results per page are silently dropped. A search index builder they hadn't touched. It had been calibrated against the broken loop output for three years.
+
+They revert.
+
+The adjustments return. The tests go green.
+
+The developer adds a comment:
+
+```python
+# DO NOT REFACTOR
+# the tests depend on this being wrong
+# the search index depends on the tests being wrong
+# four users per page are missing
+# this is load-bearing incorrectness
+# n - 4 is correct. we accept this.
+```
+
+The senior reads it.
+
+"How many off-by-one errors are in here?"
+
+The developer runs a count.
+
+The answer is technically six, layered in the same function, partially canceling each other out.
+
+"And the net effect?"
+
+"Off by four."
+
+A long silence.
+
+"Are the right four missing?"
+
+The developer stares at the screen. They have not considered this.
+
+They open a query. Four users per page, consistently, every page, since 2021.
+
+Always the same four relative positions. Never the same four users.
+
+"The wrong four," they say quietly.
+
+The senior nods once.
+
+"Leave it."
+
+They leave it.
+
+The comment is the most technically accurate documentation in the codebase. It is also the only honest thing anyone has written about this function in five years.
+
+New hires are told not to read it.
+
+They always read it.
