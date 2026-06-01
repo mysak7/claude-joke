@@ -3914,3 +3914,53 @@ Their bio: "Building fast, human-centered experiences."
 The app runs at 20ms.
 
 Nobody in the room knows this.
+
+## 2026-06-01
+
+A developer notices the app has been unusually fast for two weeks. P99: 40ms. Down from 380ms.
+
+Nobody changed anything.
+
+They trace the performance. Every request: a cache hit. They check the cache config.
+
+```python
+TTL = 0  # no expiry
+```
+
+A PR from two weeks ago: `fix: update cache config`. The intended change: set TTL to 300 seconds. The actual change: set TTL to 0. In this caching library, 0 means "never expire."
+
+Every response since: the same response from the very first request. Two weeks ago. For all 40,000 users.
+
+Checkout prices from two weeks ago. Account balances from two weeks ago. The news feed from two weeks ago. One user's cart has had three items in it for fourteen days. They haven't added anything. They haven't removed anything. The cart just sits there, perfectly preserved.
+
+The developer checks support tickets.
+
+Zero tickets about stale data.
+
+Three tickets praising the app for finally "feeling fast."
+
+One ticket: "Why does the weather widget say Thursday? It's been Thursday for two weeks."
+
+Support's response: "Thank you for your feedback. We're constantly improving."
+
+The developer fixes the TTL. Response times return to 380ms.
+
+Twelve support tickets arrive within the hour: the app "feels slower."
+
+Four more: "The weather changed. It was Thursday for two weeks and now it says Sunday."
+
+"Sunday is correct," says the developer.
+
+"We preferred Thursday," one user replies.
+
+The developer spends two weeks on real performance work. Query optimization. Index tuning. A smarter data layer. P99 drops to 120ms — genuinely, durably, correctly.
+
+The weather widget shows the right day.
+
+One user leaves a review: "Three stars. Something changed. Used to feel faster."
+
+The cache TTL is still 300 seconds.
+
+Nobody reads it as 0 again.
+
+The Thursday ticket is closed as "Cannot Reproduce."
