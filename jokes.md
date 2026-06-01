@@ -3964,3 +3964,49 @@ The cache TTL is still 300 seconds.
 Nobody reads it as 0 again.
 
 The Thursday ticket is closed as "Cannot Reproduce."
+
+## 2026-06-01
+
+A developer adds graceful shutdown to the API. On SIGTERM: finish current requests, then exit cleanly.
+
+Works. They ship.
+
+First deploy: 40 seconds. Perfect.
+
+Second deploy, two weeks later: 12 hours. The process never exits.
+
+They trace it. A background financial reconciliation job started at 11:58pm. The deploy fired at 11:59pm. The job runs for 10 minutes.
+
+They add a shutdown timeout: 30 seconds. Kill the process if it takes longer.
+
+The job gets killed mid-reconciliation. Three transactions half-processed. Finance calls at 7am.
+
+They increase the timeout to 12 minutes.
+
+The job takes 13 minutes the following month.
+
+They add logic to skip the job during deploys. A Redis flag: `deploying: true`. The job checks on startup and exits early if set.
+
+The flag has a 60-second TTL. The deploy takes 90 seconds. The flag expires. The job starts. Mid-deploy.
+
+They increase the TTL to 5 minutes.
+
+The following Tuesday: a deploy hangs for 6 minutes. The flag expires. The job starts.
+
+They remove the logic entirely and schedule deploys to a safe window: Tuesday and Thursday, 2–4am, when the job never runs.
+
+Eight months later, finance flags a $47,000 discrepancy.
+
+They pull the reconciliation logs.
+
+247 entries: `[SKIPPED — deploy window]`
+
+The deploy schedule was stored in a config file, checked at server startup. The server restarts automatically once a week — at 2am. On Tuesday. Every restart, it read the config, decided it was inside the deploy window, and skipped the job. Silently. For eight months.
+
+Finance recovers the discrepancy manually. Three weeks of spreadsheets.
+
+A post-mortem is filed. The graceful shutdown now exits in under 3 seconds. The financial reconciliation job has been moved to a separate service.
+
+The separate service also has a graceful shutdown.
+
+Nobody has tested it yet.
