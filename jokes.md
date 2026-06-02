@@ -4247,3 +4247,109 @@ Finance reconciles the discrepancy manually. The post-mortem action item: reduce
 The tool is run at the top of the next sprint.
 
 847 hours.
+
+## 2026-06-02
+
+A developer builds a distributed database. "Consistent, Available, and Partition-tolerant," they announce. "All three."
+
+The senior looks up from the CAP theorem paper.
+
+"You can only have two."
+
+"We have all three."
+
+"That's impossible. Brewer's theorem."
+
+"We worked around it."
+
+They demo: consistent reads, 100% uptime, network partitions handled gracefully.
+
+The senior stares. "How?"
+
+"The nodes communicate through a shared Redis instance."
+
+"Redis is a single point of failure."
+
+"We have Redis Sentinel."
+
+"Sentinel has a leader node."
+
+"We have Redis Cluster."
+
+"Cluster still has partition-detection lag."
+
+"Acceptable."
+
+"So it's not partition-tolerant."
+
+"Mostly partition-tolerant."
+
+"Mostly isn't in the theorem."
+
+"We have SLAs."
+
+The senior reads the SLA. Uptime guarantee: 99.9%. 8.7 hours of acceptable downtime per year.
+
+"That's Available in the CAP sense. With caveats."
+
+"SLA caveats."
+
+"And consistency?"
+
+"Eventual."
+
+"Eventual consistency isn't consistent in the CAP sense."
+
+"It's consistently eventually consistent."
+
+The senior puts down the paper.
+
+"What do you actually have?"
+
+A pause.
+
+"A database."
+
+"That is also what a database is."
+
+"It scales."
+
+"Does it need to?"
+
+"It should."
+
+"How many users?"
+
+They open the dashboard.
+
+"Forty-three."
+
+The shared Redis instance runs on a $6/month server. The cluster costs $1,400/month.
+
+The developer submits a conference proposal: "Achieving CAP Consistency at Scale."
+
+Accepted. Standing room only.
+
+During the talk, their phone buzzes three times.
+
+`Partition detected.`
+
+`Failover in progress.`
+
+`Failover complete. 47-second window of inconsistency.`
+
+"Any questions?" they ask the audience.
+
+Nobody asks about CAP.
+
+The forty-three users notice the outage. Two file support tickets. One asks if the app has been slow lately.
+
+The developer responds from the speaker green room: "We're aware and investigating."
+
+Redis Sentinel marks the primary node healthy.
+
+The cluster returns to normal.
+
+It is, technically, consistent again.
+
+Eventually.
