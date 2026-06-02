@@ -4105,3 +4105,97 @@ The comment is the most technically accurate documentation in the codebase. It i
 New hires are told not to read it.
 
 They always read it.
+
+## 2026-06-02
+
+A developer writes a function with six boolean parameters.
+
+```python
+def process_order(user, send_email, apply_discount, require_signature, log_transaction, notify_warehouse):
+    ...
+```
+
+It works. They ship it.
+
+Six months later, a different developer needs to call it.
+
+```python
+process_order(user, True, False, True, False, True)
+```
+
+They don't check the signature. Positional arguments. It works. Ships.
+
+Eight months after that, a third developer reads the call site.
+
+"What do these booleans mean?"
+
+They trace it: email yes, discount no, signature yes, log no, warehouse yes.
+
+They look at the function body.
+
+In month three, someone had done a "variable cleanup" inside the function. Four parameter names swapped in the body only. The callers still used positional arguments and were never updated.
+
+For eight months:
+- `apply_discount` had been executing the signature check.
+- `require_signature` had been running the log branch.
+- `log_transaction` had been notifying the warehouse.
+
+No discounts applied. No transactions logged. The warehouse notification had been evaluating the signature parameter — `True` — which the warehouse API interpreted as a malformed request and silently dropped.
+
+Finance had run a 20% discount campaign in Q3. Zero customers received it. Marketing attributed the failure to "Q3 seasonality." The post-mortem: "Campaign timing needs review."
+
+The warehouse had been accumulating unshipped orders in a table nobody queried, waiting for notifications that would never come.
+
+The third developer fixes the parameter mapping. Ships.
+
+New alerts within the hour. Every order now requires a signature. The mobile app has no signature UI. Payments succeed. Orders fail. 3,000 items charged, not shipped.
+
+"Why?" asks the senior.
+
+"The call site passes `require_signature=True`."
+
+"It always did."
+
+"Yes. But before, that parameter was evaluating the log branch."
+
+"So signatures weren't required."
+
+"Correct."
+
+"And now they are."
+
+"Correct."
+
+"Because it's fixed."
+
+"Correct."
+
+A long silence.
+
+"Revert it."
+
+They revert. A comment is added:
+
+```python
+# DO NOT FIX — see incident 2026-06-02
+# the parameter mapping is wrong
+# fixing it breaks orders
+# not fixing it breaks discounts, logging, and warehouse
+# we have chosen to break discounts, logging, and warehouse
+```
+
+The warehouse table is discovered three months later. 23,000 unshipped orders. Every customer had been charged. Most had assumed shipping was slow.
+
+The recovery campaign is announced internally as a "re-engagement initiative."
+
+It is the highest-performing campaign in company history.
+
+The function still has six positional boolean parameters.
+
+A junior developer opens a PR to convert them to keyword arguments.
+
+The senior sees the notification.
+
+They close their laptop.
+
+They do not open it again that day.
