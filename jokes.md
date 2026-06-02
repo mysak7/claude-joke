@@ -4199,3 +4199,51 @@ The senior sees the notification.
 They close their laptop.
 
 They do not open it again that day.
+
+## 2026-06-02
+
+A developer convinces management to invest in paying down technical debt.
+
+They're given a full sprint: no features, no bugs — just cleanup.
+
+They run the technical debt analysis tool. Report: 847 hours of debt.
+
+They spend two weeks extracting methods, adding tests, writing docstrings, splitting large files, and annotating types. Meticulous. Professional.
+
+They run the report again.
+
+1,203 hours.
+
+The tool measures: lines of code, file count, cyclomatic complexity, function count, and comment density relative to code.
+
+By adding tests: 400 new lines. By extracting methods: 23 new functions, each flagged for missing documentation. By splitting files: file count up, a tracked metric. By adding docstrings: comment lines increased the denominator of the comment-to-code ratio, lowering the score.
+
+Their careful cleanup had worsened every metric the tool measured.
+
+"The tool is wrong," they say.
+
+"The tool is how we measure," says the manager.
+
+The following sprint they optimize for the tool. Delete the new tests. Merge the split files. Remove the docstrings. Inline the extracted functions.
+
+Technical debt report: 312 hours. Down 63%.
+
+"Best sprint in company history," says the manager. The slide goes to the board.
+
+The codebase is indistinguishable from three sprints ago, minus one function accidentally deleted during the merge.
+
+The function wasn't referenced anywhere the tool could see.
+
+It ran the nightly billing job.
+
+The billing job had been silently skipping transactions for three weeks. Nobody noticed because the alerting system checks the technical debt dashboard before deciding whether to page anyone.
+
+Technical debt: 312 hours.
+
+No critical alerts.
+
+Finance reconciles the discrepancy manually. The post-mortem action item: reduce technical debt.
+
+The tool is run at the top of the next sprint.
+
+847 hours.
