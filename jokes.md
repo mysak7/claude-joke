@@ -4405,3 +4405,69 @@ The server is extremely fast by morning.
 "Excellent," says the senior, glancing at the dashboard.
 
 It is not wrong.
+
+## 2026-06-03
+
+A developer accidentally drops the production database at 2pm on a Tuesday.
+
+They restore from backup. Four hours of downtime. Zero data lost, somehow.
+
+Their manager suggests a post-mortem. They write one. It goes viral on Hacker News.
+
+A conference invites them to give a talk. "Four Hours: How We Survived Our Worst Database Incident" — 400 attendees, standing ovation.
+
+The lessons: always have backups. Test your backups. Write runbooks. Practice incident response.
+
+Three more invitations follow. Same talk. Same ovation.
+
+An enterprise company hires them to consult on disaster recovery. They spend three weeks writing recommendations: automated backup testing, incident runbooks, on-call rotations, chaos engineering.
+
+"Have you implemented these yourself?" the client asks.
+
+They think.
+
+"We give a talk about them."
+
+"Are they implemented at your company?"
+
+They check.
+
+Untested backups. No runbook. On-call is "Slack the team."
+
+"We're working on it," they say.
+
+The client pays $40,000 for the recommendations.
+
+Back home, the developer is invited to keynote a reliability engineering summit. "Building a Culture of Resilience" — 1,200 attendees.
+
+Slide 4: "You can't improve what you don't test."
+
+Their backup has not been tested since the incident.
+
+Slide 7: "A runbook saves hours during an outage."
+
+Their runbook is a link to this slide deck.
+
+Slide 12: "The best time to prepare for a disaster is before it happens."
+
+In the green room, their phone buzzes.
+
+`PagerDuty: Production database unreachable`
+
+They close the notification and step onstage.
+
+The talk lasts 45 minutes. Standing ovation. The backup is restored during the Q&A. Nobody had a runbook. They handle it from memory. Three and a half hours.
+
+"Same as last time," someone says, in the post-mortem.
+
+The developer adds a new slide: "Repetition builds instinct."
+
+It gets the biggest laugh of the next conference.
+
+The backup is still untested.
+
+The runbook links to the slide deck.
+
+The slide deck links to a YouTube recording of the original talk.
+
+The recording opens with: "Always have a runbook."
