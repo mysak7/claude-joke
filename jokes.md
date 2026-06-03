@@ -4471,3 +4471,65 @@ The runbook links to the slide deck.
 The slide deck links to a YouTube recording of the original talk.
 
 The recording opens with: "Always have a runbook."
+
+## 2026-06-03
+
+A developer finds a slow database query. 3.2 seconds on every checkout. They rewrite it: proper indexes, tighter joins. Down to 8ms.
+
+They push a blog post: "400x Performance Improvement in One Afternoon."
+
+Two days later: PagerDuty. The third-party payment processor is down. Rate limit exceeded. 429s. Circuit breaker open.
+
+They trace it. Checkout was fine last week. Today: 600 simultaneous calls to the payment API in four minutes.
+
+They check the processor's rate limit policy: 10 requests per second.
+
+Before the optimization, each checkout query took 3.2 seconds. Users waited. They didn't stack. Ten concurrent users meant ten payment calls spread over 30 seconds. Safely under the limit. Every time.
+
+After: 8ms. A hundred users finish checkout in under a second. A hundred calls to the payment API. In under a second.
+
+The slow query had been a rate limiter. Not intentional. Not documented. Perfectly calibrated by accident for three years.
+
+They add an explicit rate limiter: 10 requests per second.
+
+The senior reads the PR.
+
+"Should we revert the query optimization?"
+
+"The rate limiter handles it now."
+
+"But we need a rate limiter because the query was too fast."
+
+"Correct."
+
+"We made the query fast. Then added complexity to slow down the effect of making it fast."
+
+"The query is still fast."
+
+"The users can't tell."
+
+"The users never could. They were waiting on the query either way."
+
+A silence.
+
+"At least we have an explicit rate limiter now. That's good."
+
+"We had one before."
+
+"We had a bug."
+
+"We had a slow query."
+
+"That was doing the job of a rate limiter."
+
+"Incorrectly."
+
+"Effectively."
+
+The blog post is updated: "400x Performance Improvement in One Afternoon (and What We Learned)."
+
+The "What We Learned" section is 800 words. It does not mention the payment processor outage.
+
+The query runs in 8ms. The rate limiter fires at exactly the threshold the slow query had accidentally enforced for three years.
+
+Nobody changes the limit. Nobody asks why it's 10.
