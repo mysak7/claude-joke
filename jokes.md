@@ -4353,3 +4353,55 @@ The cluster returns to normal.
 It is, technically, consistent again.
 
 Eventually.
+
+## 2026-06-03
+
+A developer notices the server slows down over three days. By day four: out of memory. Process dies.
+
+They profile. Heap snapshots. Allocation traces. Twelve hours. The culprit: unidentifiable. The leak: real.
+
+"Just restart it every night," says the senior. "3am. Rolling restart. Nobody will notice."
+
+They add the cron. The problem disappears. The server stays fast. Everyone moves on.
+
+Three years pass.
+
+"Why does the server restart at 3am?" asks a new hire.
+
+"Memory leak."
+
+"What leaks?"
+
+"We don't know."
+
+"Did we fix it?"
+
+"We restart at 3am."
+
+A platform engineer implements zero-downtime blue-green deployments. Graceful. Polished.
+
+They delete the cron job. "Not needed anymore," they say. "Modern infra."
+
+Day 5: OOM kill.
+
+They re-add the cron.
+
+Year four, a developer finally finds the leak: a Redis subscription that never unsubscribed. Open connections accumulating since the initial deploy. Fixed in four lines.
+
+They remove the nightly restart with confidence.
+
+The server is stable. Fast. Two weeks pass.
+
+Then a second developer notices the server feels sluggish. They don't look at the fix. They add a nightly cron: "server seems slow sometimes."
+
+Then a third adds one "just in case."
+
+The server now restarts three times a night. At 3am, 3:15am, and 3:47am — each cron from a different developer, none aware of the others.
+
+The server is extremely fast by morning.
+
+"What's our uptime?" asks the PM.
+
+"Excellent," says the senior, glancing at the dashboard.
+
+It is not wrong.
