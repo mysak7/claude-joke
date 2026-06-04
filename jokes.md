@@ -4607,3 +4607,103 @@ They open a new document: RFC-0005. Author: themselves. Based on RFC-0002, revis
 47 comments within the hour.
 
 The first: "Have you considered the approach in RFC-0002?"
+
+## 2026-06-04
+
+A developer adds ESLint to the codebase. "No more style debates in review," they say.
+
+PR 1 opens. The reviewer asks why the linter requires double quotes.
+
+"That's the default."
+
+"I prefer single."
+
+A Slack thread. 47 messages. Three double-quote advocates. Four single-quote advocates. One developer who uses backticks for everything. That developer is not invited back to the thread.
+
+They disable the `quotes` rule.
+
+Three weeks later, a PR has single quotes, double quotes, and template literals in the same file. "Why are we mixing styles?" a reviewer asks.
+
+They re-enable it. Double quotes. Final.
+
+The two single-quote developers open a new thread.
+
+Over six months, the team disables and re-enables 23 rules. Each spawns a Slack thread. Each thread is resolved by whoever has the most free time that day. `semi`: enabled. Disabled. Re-enabled with exceptions. `no-var`: enabled, uncontested, everyone's first win. `prefer-const`: enabled. `prefer-let` (not a real rule): proposed in three separate threads. The third proposer was fully aware it didn't exist. They were making a point. Nobody understood what point.
+
+The ESLint config: 180 lines. 91 rules enabled. 34 disabled, each with a comment describing the Slack thread that killed it. 11 set to `warn` because "we'll clean those up in Q3."
+
+The warnings: 4,000. Nobody has opened the warning list since Q2. Q3 ended four months ago.
+
+A new developer joins. CI fails on their first PR.
+
+"Lint error. Single quote."
+
+"I thought we use double."
+
+"We do. That file was written before we decided."
+
+"Should I fix the file?"
+
+"The rule only applies to new code."
+
+"How does the linter know what's new?"
+
+"It doesn't. We just don't touch the old files."
+
+"Because we'd have to fix the quotes?"
+
+"And the semicolons."
+
+"And?"
+
+"And the 34 rules we didn't enable."
+
+The new developer opens the config. Rule 47: `eqeqeq` — disabled.
+
+"Why is strict equality disabled?"
+
+"We had a debate."
+
+"Who won?"
+
+"We ran out of sprint."
+
+"Is `==` being used in production?"
+
+"Everywhere. In the old files."
+
+"Should we enable `eqeqeq` and fix them?"
+
+"That's a conversation for the architecture review."
+
+The architecture review is six weeks away. `eqeqeq` has been agenda item 11 for three consecutive quarters. It has never been reached. Items 1 through 10 are always too interesting.
+
+The linter runs on every PR. It enforces double quotes in new code. The 4,000 warnings grow by eight per week. Nobody reads them.
+
+"At least we have consistent style," says the senior.
+
+The new developer opens `legacy/payments.js`.
+
+Single quotes. Double quotes. No semicolons. Semicolons. `==` and `===` alternating by the author's apparent mood. One lone `!==` in a sea of `!=`, like a lighthouse nobody built on purpose.
+
+"Is this consistent?" they ask.
+
+"It's legacy."
+
+"It's 60% of the codebase."
+
+A pause.
+
+"It's *consistently* legacy."
+
+The ESLint config is listed in the engineering handbook under "Code Quality Standards." It is cited in two job postings as evidence of a "mature engineering culture."
+
+The 4,000 warnings are not mentioned.
+
+`eqeqeq` remains disabled.
+
+The warnings tick upward.
+
+Somewhere, a backtick developer is writing a proposal for a new Slack thread.
+
+Nobody knows which rule. Everyone is afraid to ask.
