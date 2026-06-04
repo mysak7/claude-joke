@@ -4707,3 +4707,73 @@ The warnings tick upward.
 Somewhere, a backtick developer is writing a proposal for a new Slack thread.
 
 Nobody knows which rule. Everyone is afraid to ask.
+
+## 2026-06-04
+
+A developer enables Swagger auto-generation. "The API documents itself," they say. "Zero maintenance."
+
+They ship. The Swagger UI looks professional. Three partners start integrating.
+
+Six months later, a partner calls. "Your `/users/export/csv` endpoint returns XML."
+
+"We don't have a `/users/export/csv` endpoint."
+
+"It's in your documentation."
+
+They open the Swagger UI. There it is. Request parameters, response schema, examples.
+
+They search the codebase. No such route.
+
+Git blame: the route was removed eleven months ago. The Swagger annotation was not. Auto-generation had faithfully documented a ghost.
+
+They audit the full spec. 47 endpoints documented. 34 exist.
+
+The 13 missing: four from the v1 API, sunset two years ago. Three from a beta branch that never merged. Two from a reverted PR. One from the demo environment. One pointing to a competitor's API. That one is a mystery. Nobody claims it.
+
+The partner had built a full integration around the ghost endpoint. CSV exports. Scheduled jobs. An internal dashboard. None of it had ever worked. Their developer had assumed the errors were on their side. For six months.
+
+"We assumed your docs were correct," the partner says.
+
+"They are. It was correctly documented as existing. It just doesn't."
+
+The ghost endpoints are marked `deprecated: true`.
+
+They continue to not exist.
+
+They remain documented.
+
+"Should we remove them?" asks a junior.
+
+"Partners might be waiting for us to implement them."
+
+"They've been waiting eleven months."
+
+"We don't want to surprise anyone."
+
+The deprecated ghost endpoints stay. A note is added to the spec: *"Deprecated routes may not be implemented. If you're receiving 404s, this may be why."*
+
+A new partner reads the note.
+
+"How do we know which endpoints are implemented?"
+
+"The ones that return something."
+
+"How do we know without calling them?"
+
+"Discovery."
+
+"That's not documentation."
+
+"It's *living* documentation."
+
+Three new endpoints are added the following sprint. None are annotated. They do not appear in Swagger.
+
+The spec grows by one phantom route per quarter.
+
+Nobody knows the source. The auto-generator hasn't been updated since 2021.
+
+The competitor's endpoint is still there.
+
+It still works.
+
+Nobody touches it.
