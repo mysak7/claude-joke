@@ -4533,3 +4533,77 @@ The "What We Learned" section is 800 words. It does not mention the payment proc
 The query runs in 8ms. The rate limiter fires at exactly the threshold the slow query had accidentally enforced for three years.
 
 Nobody changes the limit. Nobody asks why it's 10.
+
+## 2026-06-04
+
+A developer is asked to add a feature. "Write an RFC first," says the tech lead. "Big decision. Needs buy-in."
+
+They write a five-page RFC. Diagrams. Three alternative approaches. Clear tradeoffs.
+
+47 comments appear in their inbox.
+
+They incorporate them. Repost.
+
+34 more comments. Several contradict round one. The developer who posted eight contradictions had been on vacation for round one and has just caught up.
+
+They address those. 22 more.
+
+Three months later, the RFC merges. The implementation: four files, 80 lines of code. Two approvals. Zero comments. Merged in eleven minutes.
+
+A new developer joins. They're asked to add a feature. "Write an RFC first."
+
+"Is there a template?"
+
+There is. It's the original RFC. The previous author's name is still in the header. The original diagrams. The original problem statement.
+
+"Has anyone else used this?"
+
+"We have a process," says the tech lead.
+
+"Has the process been used?"
+
+"That's what the template is for."
+
+The new developer opens the RFC folder. Two other drafts. Both abandoned when the author left the company. One was on revision 7 at the time of departure.
+
+They write their RFC. Seven minutes in, a Slack message: "Did you check the existing RFC for this area?"
+
+There is one. RFC-0002. Revision 12. Never approved. Author left in 2023. Their exact feature — fully designed, fully argued, every tradeoff documented — three years ago.
+
+They close the document. They open a PR: two files, 14 lines.
+
+"This needs an RFC," says the tech lead.
+
+"There's already one."
+
+"Is it approved?"
+
+A pause.
+
+"No."
+
+"Then write a new one."
+
+They write the RFC. It is substantially identical to RFC-0002.
+
+"This looks familiar," says the tech lead in the comments.
+
+"It's based on RFC-0002."
+
+"RFC-0002 was never approved."
+
+"I know. I'm trying to get it approved."
+
+"But this is a new RFC."
+
+"It's the same proposal."
+
+"Then why isn't it RFC-0002?"
+
+The developer stares at the screen.
+
+They open a new document: RFC-0005. Author: themselves. Based on RFC-0002, revision 12.
+
+47 comments within the hour.
+
+The first: "Have you considered the approach in RFC-0002?"
