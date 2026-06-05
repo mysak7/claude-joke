@@ -4777,3 +4777,55 @@ The competitor's endpoint is still there.
 It still works.
 
 Nobody touches it.
+
+## 2026-06-05
+
+A developer discovers the nullish coalescing operator and upgrades the entire codebase. Defensive. Modern. Safe. Every possibly-null value gets a sensible default.
+
+Two months later, the analytics team flags something unusual.
+
+User ages: average 2.3 years. The entire user base skews "extremely young."
+
+They trace it. One line in the user profile mapper:
+
+```js
+age: user.profile?.age ?? 0
+```
+
+The API returns `null` for age when users skip the field during signup. Most users skip the field.
+
+Most users are, according to the system, newborns.
+
+The investor deck has a demographic chart. The fastest-growing segment: "0–4 years." 63% of users.
+
+The growth team is thrilled. "We're crushing it with Gen Alpha."
+
+The developer fixes it: `age: user.profile?.age ?? null`.
+
+The analytics dashboard rebuilds overnight. The "0–4" bar disappears. 63% of user ages are now `null`.
+
+"Where did our youth demographic go?" asks the PM.
+
+"They were never real."
+
+"The chart looked great."
+
+"They were zeros."
+
+"Can we get them back?"
+
+The developer stares at the screen.
+
+"No."
+
+The investor deck is updated. The demographic chart is removed.
+
+It's replaced by a slide titled "User Privacy: Age Data Not Collected By Design."
+
+This receives more positive feedback from investors than the original chart.
+
+The developer is briefly nominated for a privacy-by-design award.
+
+They do not mention the zeros.
+
+The nomination is approved.
