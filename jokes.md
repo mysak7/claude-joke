@@ -4780,6 +4780,56 @@ Nobody touches it.
 
 ## 2026-06-05
 
+A developer reads about Content Security Policy. "We have zero security headers," they say. "We're wide open."
+
+They add: `Content-Security-Policy: default-src 'self'`
+
+The analytics dashboard goes blank. It loads from a CDN.
+
+They whitelist the CDN. The live chat widget breaks. Different CDN.
+
+They whitelist that. Google Tag Manager stops working. GTM loads scripts dynamically, from anywhere, by design.
+
+They add `'unsafe-inline'` for GTM. The security scanner flags it: "unsafe-inline defeats the purpose of CSP."
+
+They try a nonce approach. GTM doesn't support nonces. "Use a hash," says the docs. GTM scripts change on every deploy.
+
+They add `'unsafe-eval'` for a charting library from 2016. The scanner: "unsafe-eval also defeats the purpose of CSP."
+
+Six weeks in, the CSP header is 340 characters. Eighteen sources whitelisted. Both unsafe directives present.
+
+A security engineer reviews it.
+
+"This provides essentially no protection."
+
+"We have a header."
+
+"With every bypass enabled."
+
+"But it's there."
+
+"It tells every browser to trust everything."
+
+"We went from nothing to something."
+
+"You went from nothing to a documented false sense of something."
+
+The CSP violation report-only endpoint receives 400 violations per hour. None are acted on. It was set up "to monitor the situation" in February. It is October.
+
+The security audit passes. Line item: *Content Security Policy: present ✓*
+
+"Is it effective?" asks the auditor.
+
+"It's present."
+
+"I'll mark it as present."
+
+The header runs in production, 340 characters, protecting no one, reassuring everyone.
+
+The analytics dashboard loads fine.
+
+## 2026-06-05
+
 A developer discovers the nullish coalescing operator and upgrades the entire codebase. Defensive. Modern. Safe. Every possibly-null value gets a sensible default.
 
 Two months later, the analytics team flags something unusual.
