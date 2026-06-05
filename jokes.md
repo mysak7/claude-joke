@@ -4879,3 +4879,97 @@ The developer is briefly nominated for a privacy-by-design award.
 They do not mention the zeros.
 
 The nomination is approved.
+
+## 2026-06-05
+
+A developer is asked to make the app accessible. Two weeks later: "Done. It's accessible now."
+
+An accessibility consultant runs an audit.
+
+She opens a screen reader. Navigates the homepage.
+
+"Button. Button. Button. Input. Button. Button that is a button. Button."
+
+Every ARIA label describes the element's type. None describes what it does.
+
+"What does this button do?" she asks.
+
+"Button," says the screen reader.
+
+"And this one?"
+
+"Button."
+
+There are 47 buttons. All labeled "button."
+
+The developer joins the call. "Each element is labeled."
+
+"With what it is."
+
+"Right."
+
+"A screen reader user already knows it's a button. They pressed Tab and it said 'button.' What they need to know is *which* button."
+
+"Button," says the screen reader.
+
+She tabs into the modal. The focus trap engages. She cycles through three focusable elements. Cycles again. Faster. Still cycling.
+
+"How do I close this?"
+
+She reaches the close button.
+
+`aria-label="X"`.
+
+"X," says the screen reader.
+
+She checks the skip-to-content link. It targets `#main-content`. The element with that ID has been `display: none` since a layout redesign in Q2. The link skips users to an invisible div.
+
+Her report: fourteen pages. The summary — the ARIA implementation has made the app *harder* to use with a screen reader than no ARIA at all. "Button" provides zero additional information over the default announcement. "X" provides none. The focus trap is inescapable without a mouse. The skip link teleports to nothing.
+
+Recommendation: remove all labels and start over.
+
+The developer looks at two weeks of work.
+
+"But we have labels. That's better than nothing."
+
+"It's not," says the consultant. "WCAG 2.1 — Success Criterion 1.3.1. Labels must describe purpose, not type. This fails the criterion while appearing to comply with it. That's worse than no labels. The audit sees labels and assumes they're meaningful."
+
+The developer removes all 47 labels. Fixes the focus trap. Fixes the skip link. Adds real descriptions: "Submit registration form." "Cancel and return." "Open navigation menu."
+
+Compliance score: up 40%.
+
+"We went from 0% to 40%," says the manager.
+
+"We went from actively confusing to partially helpful."
+
+"The headline is 40%."
+
+The manager opens the company blog.
+
+"'Our Accessibility Journey: 40% and Climbing.'"
+
+"That implies we started at zero on purpose," the developer says.
+
+"Did we start higher?"
+
+"We went from zero to negative to zero to forty."
+
+"That's a journey."
+
+The post goes live. Eighteen LinkedIn reactions. Four are "Insightful." One developer comments: "Amazing work! We're rolling out `aria-label` across our whole codebase this sprint."
+
+The consultant reads the post via screen reader.
+
+The heading is correctly labeled. The "Read More" links at the bottom each have distinct descriptions. She nods.
+
+She scrolls to the comments section.
+
+`aria-label="Comment section that contains comments"`
+
+The developer had written the blog post. They had not written the comments section.
+
+It's a third-party widget. On the site since 2019. Never audited.
+
+The consultant opens a new document.
+
+Fourteen pages.
