@@ -5095,3 +5095,87 @@ A longer pause.
 The bug has not recurred.
 
 The logs have never been read.
+
+## 2026-06-06
+
+A developer profiles the app. Bottleneck: user data fetched on every request. Response time: 200ms.
+
+They add a cache. Response time drops to 12ms. Ships.
+
+The cache doesn't invalidate on updates. They add invalidation logic.
+
+The invalidation is too aggressive — every write nukes everything. Cache hit rate: 11%. Response time: 180ms.
+
+They add smarter invalidation. Works. But now the invalidation logic itself appears in the profile.
+
+They cache the invalidation decisions.
+
+A senior developer opens the PR.
+
+"Are we caching the cache?"
+
+"Caching which keys to invalidate."
+
+"So the cache decides what to cache."
+
+"It caches invalidation metadata."
+
+"Which is information about the cache."
+
+"Correct."
+
+"What did we cache originally?"
+
+"User data."
+
+"From where?"
+
+"Postgres."
+
+"What's the raw query time?"
+
+They run it. 2ms.
+
+A long silence.
+
+"The original query is 2ms."
+
+"Yes. But it was running at 200ms."
+
+"Why?"
+
+They check git blame.
+
+In 2021, someone added a logging statement inside a loop — a loop that ran once per row returned. The loop had been growing ever since. Nobody noticed, because by the time anyone profiled the app, there was a cache in front of it.
+
+The cache had been hiding the loop for three years.
+
+They remove the loop. Response time: 2ms. They remove the cache. Still 2ms.
+
+They remove the cache of the cache.
+
+Still 2ms.
+
+PR: `remove caching layer — query is already fast`.
+
+847 lines deleted. Two Redis clusters decommissioned. A pub/sub event bus shut down. A 3am cache-warming cron: cancelled.
+
+"What about the platform team?" the senior asks quietly.
+
+Five engineers. Their Q3 roadmap: "cache optimization, observability, and hit-rate improvements."
+
+The caching layer is not removed.
+
+A metric is added instead: cache hit rate. Displayed on the engineering dashboard. Current value: 99.8%.
+
+Behind it, the original query runs in 2ms.
+
+The loop is gone. The cache stays.
+
+The platform team ships cache observability in Q3.
+
+They give a lightning talk at the all-hands: "How We Achieved Sub-15ms Response Times."
+
+The query behind the cache is 2ms and has been for three years.
+
+Nobody in the room knows this.
