@@ -4973,3 +4973,45 @@ It's a third-party widget. On the site since 2019. Never audited.
 The consultant opens a new document.
 
 Fourteen pages.
+
+## 2026-06-06
+
+A developer implements JWT authentication.
+
+```js
+const token = jwt.sign({ userId }, 'secret')
+```
+
+Fifteen minutes. Ships.
+
+Six months later: a security report. The secret is `'secret'`. It's in the public git history. Anyone who has ever cloned the repo can forge tokens for any user.
+
+They rotate the secret. Every logged-in user is immediately logged out. 14,000 simultaneous support tickets.
+
+"Shorter notice next time," says the PM.
+
+They add token expiry: `expiresIn: '1h'`. Users are logged out every hour. 14,000 simultaneous complaints.
+
+They add refresh tokens. Refresh tokens need a blacklist. The blacklist needs Redis. Redis needs a failover config. The failover needs a health check. The health check pings the auth endpoint. The auth endpoint validates JWT.
+
+Which now depends on Redis.
+
+Six months later, the auth service is 2,400 lines. It handles: JWT validation, refresh token rotation, session blacklisting, the v1-to-v2 token migration from January, admin exceptions that were meant to be temporary, a rate limiter added during an incident, and a function called `validateTokenMaybe()` that nobody authored and nobody will delete.
+
+A new developer joins. First task: display the user's name on the dashboard.
+
+They ask where to get the user.
+
+"Auth middleware. `req.user`."
+
+They trace the middleware.
+
+2,400 lines.
+
+They find it on line 3:
+
+```js
+req.user = jwt.verify(token, SECRET)
+```
+
+Lines 4 through 2,400 are consequences.
