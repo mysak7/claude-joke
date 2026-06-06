@@ -5015,3 +5015,83 @@ req.user = jwt.verify(token, SECRET)
 ```
 
 Lines 4 through 2,400 are consequences.
+
+## 2026-06-06
+
+A developer receives a critical bug report. User sessions are corrupting. Happens "sometimes." Nobody can reproduce it.
+
+They add logging. Run load tests. Simulate race conditions. Nothing.
+
+They ask a user to record a screen capture. The video shows: works fine.
+
+They add more logging. Deploy to production.
+
+Bug rate drops 40%.
+
+Confused, they add even more logging.
+
+Bug rate drops further.
+
+"The logging is fixing it," says a senior developer.
+
+They remove half the logging.
+
+Bug rate spikes.
+
+They add it back. They add more. At maximum verbosity — every function entry and exit, every variable assignment, every network call — the bug disappears entirely.
+
+They ship it.
+
+The service now generates 2.4GB of logs per hour. Disk fills every 18 hours. They add log rotation. The rotation process runs at 3am and briefly pauses the service.
+
+For 200 milliseconds, logging stops.
+
+The bug occurs.
+
+A user files a ticket at 3:02am.
+
+The developer checks the logs. Nothing before the rotation. Nothing after. The 200-millisecond window: silence.
+
+They change the rotation interval from 18 hours to 3 seconds. Smaller files. Continuous rotation. Never a gap.
+
+Bug disappears again.
+
+A new developer asks: "What does all this logging do?"
+
+"It prevents the bug."
+
+"By logging?"
+
+"By existing."
+
+"What was the bug?"
+
+A pause.
+
+"We don't know. The logs don't show it."
+
+"Because?"
+
+"Because the logs prevent it."
+
+"So the logs record the absence of the bug they cause the absence of."
+
+"Yes."
+
+"And if we removed the logs—"
+
+"We'd have a bug."
+
+"—we'd know what the bug was."
+
+"Yes. But we'd have a bug."
+
+A longer pause.
+
+"The logs stay."
+
+2.4GB per hour. Every function. Every variable. Every call. Faithfully recording a system that works, for reasons it cannot explain.
+
+The bug has not recurred.
+
+The logs have never been read.
