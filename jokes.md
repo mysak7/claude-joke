@@ -5303,3 +5303,63 @@ They do not raise their hand.
 The variable is still global.
 
 The developer receives a performance bonus for "shipping high-impact features."
+
+## 2026-06-07
+
+A developer replaces loading spinners with skeleton screens. The skeleton renders instantly. Content fades in behind it. Fast, modern, intentional.
+
+They ship it.
+
+Week two: a user reports the app has been broken for three days.
+
+They check monitoring. No errors. Load time: 11ms. Server healthy. API responding.
+
+They open the app. A skeleton screen renders instantly. Content never appears.
+
+An API endpoint had been silently returning an empty array since a schema change three days earlier. Zero errors logged. The request succeeds. The response is valid JSON. The array is just empty.
+
+The skeleton has been the entire UI for three days. For 12,000 daily users. Across every page.
+
+They pull the analytics. Session duration: up 15%. Pages per session: up 8%. Bounce rate: down.
+
+Users were sitting on skeleton screens longer than they'd ever engaged with actual content.
+
+A UX researcher schedules user interviews. Participants describe the new design as "calm," "minimalist," and "fast." One calls it "zen."
+
+"The content never loaded," the developer says.
+
+"They didn't know that."
+
+"They were looking at empty boxes."
+
+"They were *engaging* with empty boxes. For longer than they ever engaged with real content."
+
+The developer files the bug: `API schema change breaks content rendering`.
+
+The PM reviews it.
+
+"Can we A/B test the skeleton-only version?"
+
+"Against what?"
+
+"Against content."
+
+The developer stares at the engagement numbers.
+
+They do not merge the fix that week.
+
+The skeleton stays for two more weeks. Session duration sets a company record.
+
+The content returns after legal flags it: users had consented to data processing for content they never received. Potential GDPR exposure.
+
+The developer watches the session duration number fall the moment real content reappears.
+
+"Interesting," the PM says.
+
+They never delete the experiment branch.
+
+At the next all-hands, the Head of Product presents a new initiative: "Calm Computing — designing for intention over stimulation."
+
+The first slide is a screenshot of the skeleton screen.
+
+It is labeled "Target State."
