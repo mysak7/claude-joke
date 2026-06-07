@@ -5233,3 +5233,73 @@ The spell-checker would flag `pre-commit` as a hyphenation error.
 Nobody is running the spell-checker.
 
 The posting ships with `pipline`.
+
+## 2026-06-07
+
+A developer builds a "Recently Viewed" section. Ships.
+
+Six months later, the PM reviews engagement metrics. The recently viewed section has a 94% click-through rate. Highest of any feature in company history.
+
+"The algorithm is incredible," the PM says.
+
+"There's no algorithm," the developer says. "It just shows what you looked at."
+
+"Then why is everyone clicking it?"
+
+They investigate.
+
+The recently viewed items are stored in a module-level variable. Not in the database. Not in the session. In memory. In a variable declared at the top of the server file.
+
+One variable. Shared across all requests. All users.
+
+Every user sees the same recently viewed list: whatever the last twelve items viewed across the entire platform were. By anyone. At any time.
+
+The feature has never worked as designed.
+
+What it has been doing for six months: showing every user a live feed of what the rest of the platform was just looking at.
+
+It is, effectively, real-time trending.
+
+14,000 users. 94% click rate. Zero lines of intentional logic.
+
+"Should we fix it?" the developer asks.
+
+"Fix what?" says the PM.
+
+"The bug. Every user sees the same items."
+
+"The click rate is 94%."
+
+"But it's wrong. It should show each user items they've already looked at."
+
+"That sounds less useful."
+
+"It's how the feature is supposed to work."
+
+"The way it currently works is better."
+
+The developer looks at the variable.
+
+```js
+let recentlyViewed = []
+```
+
+One line. A mistake. Unintentional. The best feature on the platform.
+
+They file a ticket: `recently-viewed: per-user vs. global behavior — design decision needed`
+
+The ticket enters the backlog.
+
+It is labeled `won't fix`.
+
+The feature is renamed in Q3: "Trending Now."
+
+A product manager presents it at the all-hands as a strategic initiative: "We identified that users engage more with social proof than personal history."
+
+The developer is in the audience.
+
+They do not raise their hand.
+
+The variable is still global.
+
+The developer receives a performance bonus for "shipping high-impact features."
