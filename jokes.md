@@ -5179,3 +5179,57 @@ They give a lightning talk at the all-hands: "How We Achieved Sub-15ms Response 
 The query behind the cache is 2ms and has been for three years.
 
 Nobody in the room knows this.
+
+## 2026-06-07
+
+A developer adds a pre-commit hook. "No more broken commits," they say. One check: run the test suite. 14 seconds. Reasonable.
+
+A second developer adds a linter. 3 seconds. Fine.
+
+A third adds type checking. 47 seconds.
+
+A fourth adds a security scanner. 2 minutes.
+
+A fifth adds a spell-checker for commit messages. 8 seconds. Their commit message adding it: `"Add spell chekcer for comit mesages."` The hook flags nothing. The dictionary doesn't contain `chekcer`. It contains `checker`. It is not the same word. Nobody notices for four months.
+
+Six months after the first hook: every commit runs for 4 minutes and 17 seconds. The 14-second test suite is the fastest part.
+
+Developers start passing `--no-verify`.
+
+First: only in emergencies. Then: for "small changes." Then: "my machine is slow today." Then: always.
+
+A new developer joins. Day one: `git commit -m "initial work"`. The hook fires. 4 minutes and 17 seconds. They wait.
+
+They pass `--no-verify` on day two. Every commit for the rest of their tenure. Nobody told them to. Nobody told them not to.
+
+The hooks catch zero issues. Not because the code is clean. Because nobody runs them.
+
+A senior developer audits the config. The security scanner references a vulnerability database last updated in 2022. The linter enforces rules disabled in `.eslintrc` nine months ago but not in the hook. The spell-checker flags every technical term: `kubernetes`, `async`, `nullable` — all misspelled, by its 2019 dictionary. `serverless` is not in it. Every commit message containing `serverless` is, technically, a typo.
+
+There are 2,000 commits with `serverless` in the message.
+
+Every one was committed with `--no-verify`.
+
+The senior proposes removing the hooks.
+
+"They're there for safety," says the tech lead.
+
+"Nobody runs them."
+
+"The option is there."
+
+"The option to skip them is also there. That's the option everyone uses."
+
+"Someone new might not know to skip them."
+
+They look at the new developer.
+
+"I figured it out on day two," the new developer says.
+
+The hooks remain. The job posting is updated: "We have a robust pre-commit quality pipeline."
+
+The spell-checker would flag `pre-commit` as a hyphenation error.
+
+Nobody is running the spell-checker.
+
+The posting ships with `pipline`.
