@@ -5411,3 +5411,141 @@ The intern who added the log left the company eleven months ago. They have no id
 Their LinkedIn still reads: "Contributed to high-performance payment infrastructure."
 
 They are not wrong.
+
+## 2026-06-08
+
+A developer inherits a deployment pipeline. Twelve steps.
+
+They audit it.
+
+Steps 1–11: normal. Build, test, lint, containerize, push to registry, deploy, health check.
+
+Step 12: `python sleep_random.py`
+
+```python
+import time, random
+time.sleep(random.randint(30, 90))
+print("done")
+```
+
+It does nothing. It waits between 30 and 90 seconds — randomly — then exits.
+
+They remove it.
+
+Deploys break. Not consistently: roughly 40% of the time, the downstream health check fires too early, the service isn't ready, and the pipeline rolls back.
+
+They put the script back.
+
+"Why does a random sleep fix the health check?" they ask.
+
+"It doesn't," says the senior. "Sometimes the health check still fails."
+
+"But less often?"
+
+"About 40% less often."
+
+"So 40% of the time the deploy still fails?"
+
+"40% of the time the sleep wasn't long enough."
+
+"Then why not sleep exactly 90 seconds? That would fix it."
+
+A pause.
+
+"The original engineer said 'jitter.'"
+
+"Jitter."
+
+"For distributed systems. Jitter prevents thundering herds."
+
+"This is one service."
+
+"Yes."
+
+"Deploying to one cluster."
+
+"Yes."
+
+"The jitter is preventing us from thundering-herding ourselves."
+
+"The health check fires too early."
+
+"Which we could fix by increasing the health check timeout."
+
+The senior opens a browser tab.
+
+"The health check config is managed by a different team."
+
+"Did we ask them?"
+
+"In 2023."
+
+"What did they say?"
+
+"They'd look into it."
+
+"It's 2026."
+
+The senior closes the tab.
+
+"Step 12 has a 97.8% three-year average success rate."
+
+The developer looks at the script. `random.randint(30, 90)`. Every two weeks, by pure probability, a deploy runs at 3am and sleeps for 31 seconds and fails.
+
+The developer opens PagerDuty history. Biweekly 3am alerts, every one labeled `deploy_health_check_timeout`, stretching back to 2023.
+
+"Did anyone ever investigate these?"
+
+"We rotate the sleep range."
+
+"You tune the random number?"
+
+"After each incident. Last update was January."
+
+They open `sleep_random.py`. At the top:
+
+```python
+# Updated 2026-01-14: raised lower bound from 20 to 30 after Dec incident
+# Updated 2025-08-03: raised upper bound from 75 to 90 after Aug incident
+# Updated 2024-11-17: raised lower bound from 10 to 20 after Nov incident
+```
+
+The original commit message: `temp fix — remove this`
+
+That commit is from 2021. The author left in 2022.
+
+"Should we finally fix the health check timeout?" the developer asks.
+
+The senior looks at the PagerDuty calendar.
+
+"Biweekly incidents, 3am, 97.8% mitigation rate. We've been living with this for three years."
+
+"We could end it today."
+
+"The other team's ticket is still open."
+
+"We could close it ourselves. It's a config change. One line."
+
+"It's their config."
+
+"Their config is waking us up every two weeks."
+
+"The script handles most of it."
+
+The developer opens the other team's ticket tracker.
+
+The ticket: `increase health check timeout for deploy pipeline`. Status: `In Progress`. Last updated: 2023-04-12. Assignee: someone who left the company.
+
+They comment on the ticket: "Still blocking us. Can we prioritize?"
+
+The comment is the fourth such message, each from a different developer, each six months apart.
+
+The pipeline runs. Step 12 sleeps for 67 seconds. The health check passes. The deploy completes.
+
+"97.8%," the senior says.
+
+The developer commits a fifth update to `sleep_random.py`: `raise lower bound from 30 to 35 after today's near-miss`.
+
+They push. The pipeline runs step 12.
+
+`done`
