@@ -5549,3 +5549,61 @@ The developer commits a fifth update to `sleep_random.py`: `raise lower bound fr
 They push. The pipeline runs step 12.
 
 `done`
+
+## 2026-06-08
+
+A developer encounters a lint error on a line they don't understand.
+
+```
+ESLint: 'await' has no effect on this expression (no-floating-promises)
+```
+
+They Google it. The fix: add `await`. But the function isn't async. Making it async cascades into 14 other changes across six files.
+
+They add `// eslint-disable-next-line no-floating-promises`.
+
+The warning disappears. Ships.
+
+The function is a payment processor. Without `await`, it fires and doesn't wait for confirmation. The app proceeds to "Payment Successful" whether or not the payment completed.
+
+For six weeks, 30% of "successful" payments never actually processed. The outcome depended on network timing. Fast connection: the payment finishes before the next line runs. Slow connection: it doesn't. No error. No log. The user sees a receipt.
+
+The PM reviews the conversion funnel. Looks normal.
+
+An accountant flags it: revenue is 30% below forecast.
+
+"Conversion rate is fine," says the PM.
+
+"Revenue doesn't match orders," says the accountant.
+
+A developer traces it. The Promise. The disable comment. The timing window.
+
+They add `await`. Six files. A week-long PR. It merges.
+
+Revenue jumps 43% the following week.
+
+"Strong Q4 recovery," says the VP at the all-hands.
+
+"We fixed a bug," says the developer.
+
+"Revenue-impacting bug? How long was it in?"
+
+"Six weeks."
+
+A silence.
+
+"Does the linter pass now?"
+
+"Yes."
+
+"Good."
+
+The `eslint-disable` comment sits in git history. Commit message: `fix: suppress lint warning in payments`. One line. Six weeks. Forty-three percent.
+
+It is the highest revenue-impact-per-character commit in company history.
+
+The developer's performance review notes "strong Q4 contribution."
+
+They do not explain what they contributed.
+
+They receive a raise.
