@@ -5689,6 +5689,74 @@ The sort is correct.
 
 ## 2026-06-09
 
+A developer stores country configurations in YAML.
+
+```yaml
+countries:
+  US: enabled
+  GB: enabled
+  NO: enabled
+  DE: enabled
+```
+
+Ships. Works for most countries.
+
+Norwegian users report they can't log in. The country check returns `false`.
+
+The developer prints the parsed config.
+
+```python
+{'US': 'enabled', 'GB': 'enabled', 'NO': False, 'DE': 'enabled'}
+```
+
+`NO` is being parsed as the boolean `false`. YAML 1.1 treats `NO`, `Yes`, `ON`, `OFF`, `true`, and `false` as booleans.
+
+Norway is, syntactically, "no."
+
+They quote the key: `"NO": enabled`. Norway works.
+
+Then someone adds feature flags to the same config file:
+
+```yaml
+features:
+  ON: beta
+  OFF: stable
+```
+
+`ON` parses as `True`. `OFF` parses as `False`. The feature flag system now has two boolean dictionary keys masquerading as strings.
+
+The flag check `config['features']['ON']` raises a `KeyError`. The actual key is `True`.
+
+They add a comment: `# YAML parses ON as True`.
+
+Then a new developer sets up their machine. Development uses PyYAML 5.x, which follows YAML 1.1: `ON` is a boolean. Production uses PyYAML 6.x, which follows YAML 1.2: `ON` is a string.
+
+Feature flags have been behaving differently in every environment for five months. Nobody noticed because the flags were all `enabled` anyway. The booleans `True` and `False` evaluate as truthy and falsy in exactly the right directions, by accident, in the same order as `"beta"` and `"stable"` would by string comparison.
+
+A developer writes a fix: a 90-line custom YAML loader that handles all YAML 1.1 boolean edge cases. Covers `YES`, `NO`, `TRUE`, `FALSE`, `ON`, `OFF`, and all their mixed-case variants.
+
+They open a PR.
+
+The reviewer looks at it for thirty seconds.
+
+"Why not just quote everything in the YAML?"
+
+They look at the 847 YAML files across 12 services, accumulated over six years, maintained by four teams.
+
+They close the PR.
+
+They quote the three keys that matter and move on.
+
+Norway works. The custom loader is abandoned.
+
+It becomes their highest-rated Stack Overflow answer.
+
+The accepted answer beneath it: "Just quote your keys."
+
+18,000 upvotes.
+
+## 2026-06-09
+
 A developer reports a memory leak. The service crashes after six hours.
 
 They search the codebase. Nothing. They blame a third-party library with 847 open issues and a closed bug labeled "by design."
