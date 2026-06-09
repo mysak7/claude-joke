@@ -5686,3 +5686,57 @@ Both PR branches are deleted.
 The function is 141 lines.
 
 The sort is correct.
+
+## 2026-06-09
+
+A developer reports a memory leak. The service crashes after six hours.
+
+They search the codebase. Nothing. They blame a third-party library with 847 open issues and a closed bug labeled "by design."
+
+"We'll fix it properly in Q3," says the manager.
+
+They add a cron job: `0 3 * * * systemctl restart app-service`.
+
+The service restarts at 3am. Nobody notices. The dashboard stays green. The memory leak is never mentioned again.
+
+Q3 comes. Q3 goes. Four Q3s come and go.
+
+A new developer inherits the codebase. They see the cron job.
+
+"Why does the service restart every night?"
+
+"Memory leak," says the senior.
+
+"Which one?"
+
+"We don't know."
+
+"Has anyone looked?"
+
+"We know about it."
+
+They spend a week profiling. They find it: unreleased event listeners. Three lines to fix. They remove the cron job and ship.
+
+The service runs for six hours. Then crashes.
+
+Different crash. Different memory leak. One introduced in 2023 and never found because the nightly restart was masking it.
+
+They re-add the cron job.
+
+`0 3 * * * systemctl restart app-service`
+
+Same line. Same time. New comment:
+
+```bash
+# Fixed the first memory leak (June 2026).
+# This cron job now handles the second one.
+# We know about the second one.
+```
+
+The on-call runbook still reads: "If service crashes before 3am, restart manually."
+
+Nobody has updated the runbook since 2021.
+
+At 3am every night, the service restarts.
+
+Everything is fine.
