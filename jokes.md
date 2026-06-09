@@ -5607,3 +5607,82 @@ The developer's performance review notes "strong Q4 contribution."
 They do not explain what they contributed.
 
 They receive a raise.
+
+## 2026-06-09
+
+A developer builds a version history page. Releases are sorted in order. They use JavaScript's built-in `.sort()`. Ships.
+
+A user reports the versions are in the wrong order.
+
+They check the output:
+
+```
+1.0, 10.0, 11.0, 2.0, 3.0, 9.0
+```
+
+They Google it. `.sort()` converts values to strings by default. "10" comes before "2" alphabetically.
+
+They add a comparator: `.sort((a, b) => a - b)`.
+
+Works for whole numbers. Breaks for semver: `1.10` vs `1.9`. `1.10 - 1.9 = -0.8`. Negative. `1.10` now sorts before `1.9`.
+
+They split on dots and compare each segment numerically. Ships.
+
+New edge case: `2.0.0-beta` sorts after `2.0.0`. They handle pre-release tags.
+
+`rc.1` and `rc.2` now sort in reverse. They handle that.
+
+Six months later: a 140-line sort function. Fourteen edge cases. A third-party semver library they added, then forked for one edge case. A comment at the top:
+
+```js
+// DO NOT use Array.prototype.sort() directly — see this function
+```
+
+A new developer joins. They open the file.
+
+"This is a sort function."
+
+"Yes."
+
+"Can I just call `.sort()`?"
+
+The senior types `[10, 9, 2, 1].sort()` in a browser console.
+
+`[1, 10, 2, 9]`
+
+"That's JavaScript," says the senior.
+
+"Why does it do that?"
+
+"Historical reasons."
+
+The new developer stares at the output.
+
+"I just need to sort numbers."
+
+"We all did."
+
+They close the console. The function remains. It handles every known edge case. It is the most-tested file in the codebase.
+
+In Q3, someone opens a PR: "Found a simpler approach — just use `.sort()` with a comparator."
+
+The comparator: `(a, b) => a - b`.
+
+Twenty-three comment threads. Four hours. Nobody mentions semver. The PR is approved at 11pm by a developer in a different timezone who hasn't read the thread.
+
+It ships.
+
+`2.0.0-beta` now sorts after `2.0.0`.
+
+The 140-line function is restored. Two new comments are added:
+
+```js
+// DO NOT simplify — see PR #1247
+// DO NOT use Array.prototype.sort() directly — see PR #1103
+```
+
+Both PR branches are deleted.
+
+The function is 141 lines.
+
+The sort is correct.
