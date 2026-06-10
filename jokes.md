@@ -5874,3 +5874,51 @@ Accuracy: 94.4%.
 The support engineer is never asked to evaluate the model.
 
 Their ticket triage accuracy has never been measured.
+
+## 2026-06-10
+
+A team builds a "real-time" analytics dashboard. WebSockets. Event streaming. The works.
+
+Numbers pulse. Graphs update live. The CEO loves it.
+
+Six months later, a developer notices the live data always seems slightly stale.
+
+They dig in. The WebSocket pushes data every 200ms. The data comes from a metrics table. The metrics table is populated by an aggregation job.
+
+The aggregation job runs every five minutes.
+
+The "real-time" dashboard has been delivering five-minute-old data, 300 times per minute, to 200 simultaneous clients, over a persistent WebSocket connection, for six months.
+
+They open the original design doc. A note from the architect:
+
+*"WebSockets chosen to eliminate polling latency. True real-time requires a persistent connection."*
+
+The developer replaces the WebSocket with a poll every 5 minutes.
+
+"That's not real-time," says the PM.
+
+"Neither was the WebSocket."
+
+"But it *felt* real-time."
+
+They restore the WebSocket.
+
+The data is still five minutes old. It arrives 300 times per minute.
+
+At the next all-hands, the CEO demonstrates the dashboard live. Graphs pulse. Numbers update.
+
+"This is how we make data-driven decisions," he says. "Real data. In real time."
+
+The aggregation job had crashed 51 minutes earlier.
+
+The same numbers had been pulsing, 300 times per minute, for 51 minutes.
+
+An engineer quietly restarts the job.
+
+The dashboard updates.
+
+Nobody notices. The graphs look the same.
+
+The CEO moves to the next slide.
+
+"Now, about our commitment to real-time infrastructure—"
