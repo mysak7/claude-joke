@@ -5922,3 +5922,74 @@ Nobody notices. The graphs look the same.
 The CEO moves to the next slide.
 
 "Now, about our commitment to real-time infrastructure—"
+
+## 2026-06-10
+
+A developer runs the linter. One warning: unused import.
+
+```python
+import auth_patches
+```
+
+Greyed out. No calls. No references. Pure noise.
+
+They remove it. Tests pass. Ships.
+
+Within three minutes: login breaks for all users. Sessions expire. OAuth returns 403 on every request.
+
+They trace it. `auth_patches.py` is 40 lines of monkey-patches applied to the third-party auth library on import. No functions. No classes. Just module-level code that overwrites five methods with corrected versions.
+
+The library had a known bug. The patches had been the silent workaround since 2021. No docs. No ticket. Just an import that had to exist.
+
+They restore it. Auth works.
+
+They add a comment directly above the import:
+
+```python
+# NOT UNUSED — applies critical patches on load. Do not remove.
+import auth_patches
+```
+
+The linter still flags it as unused.
+
+Over the next six months, four developers independently open PRs to "clean up the lint error." Each one triggers the same incident. Each time, the comment grows.
+
+```python
+# THIS IMPORT IS NOT UNUSED
+# IT PATCHES THE AUTH LIBRARY ON LOAD
+# THE LINTER IS WRONG
+# DO NOT REMOVE — SEE INCIDENTS: 2026-06-10, 2026-07-22, 2026-09-04, 2026-11-30
+import auth_patches  # type: ignore  # noqa: F401
+```
+
+Year two: a developer moves it to `__init__.py` as a guaranteed side-effect import. The lint warning disappears. The PR comments stop.
+
+A new developer asks: "Why does `__init__.py` import `auth_patches`?"
+
+"Patches the auth library," says the senior.
+
+"Fixes what?"
+
+"A bug."
+
+"Is the library updated?"
+
+The senior checks. The bug was fixed in version 2.3.0. They're on 2.3.4. The patches have been silently overwriting already-correct methods for two years.
+
+They remove `auth_patches`.
+
+Auth works. No lint warning. No incidents.
+
+The comment in `__init__.py` remains.
+
+```python
+# DO NOT REMOVE — applies critical patches on load
+```
+
+The module is empty. It applies nothing. But it has been there long enough that removing it feels dangerous.
+
+Nobody touches it.
+
+The linter has no opinion.
+
+For once, neither does anyone else.
