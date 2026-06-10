@@ -5808,3 +5808,69 @@ Nobody has updated the runbook since 2021.
 At 3am every night, the service restarts.
 
 Everything is fine.
+
+## 2026-06-10
+
+A team decides to use ML to predict which support tickets are urgent. "Manual triage doesn't scale," says the PM.
+
+They hire a data scientist. Two months of training data. Feature engineering. A PyTorch model. An inference API. A model registry. A retraining pipeline.
+
+Accuracy: 94%.
+
+They deploy it.
+
+Three months later, a support engineer mentions something in passing. "I can just tell from the subject line. 'DOWN,' 'urgent,' 'production,' 'all users' — urgent. Everything else — not."
+
+"That's basically what the model learned," says the data scientist.
+
+"How long does the model take?"
+
+"200 milliseconds. GPU cluster."
+
+"My method: 40 milliseconds. Eyes."
+
+"The model is more accurate."
+
+"By how much?"
+
+A pause. "About 1%."
+
+They check the tickets. Four urgent tickets per week on average. A 1% improvement means roughly one additional correctly classified ticket per month.
+
+The GPU cluster: $800/month.
+
+The PM opens a spreadsheet. The math is clean. $800 per month. One ticket per month. $800 per correctly classified ticket.
+
+They present it to leadership. Slide 4: "AI-Powered Support Triage: 94% Accuracy."
+
+There's a line graph. The accuracy line goes up. The slide doesn't mention the support engineer's eyes.
+
+The model runs for another year. The data scientist tunes it to 94.3%.
+
+"What did 0.3% gain us?" asks the support engineer.
+
+"One additional correct classification per quarter."
+
+"How many tickets per quarter?"
+
+"About 850."
+
+"And 0.3% of 850 is—"
+
+"Two and a half tickets."
+
+"You can't classify half a ticket."
+
+"Technically we can. The model outputs a probability."
+
+The support engineer reads ten subject lines in the time this conversation has taken.
+
+They classify nine correctly.
+
+The data scientist adds a new feature to the model: time of day.
+
+Accuracy: 94.4%.
+
+The support engineer is never asked to evaluate the model.
+
+Their ticket triage accuracy has never been measured.
