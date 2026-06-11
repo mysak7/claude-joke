@@ -5993,3 +5993,68 @@ Nobody touches it.
 The linter has no opinion.
 
 For once, neither does anyone else.
+
+## 2026-06-11
+
+A developer hits a race condition. The fix: `await sleep(100)` — just long enough for the other call to finish.
+
+It works. Ships.
+
+Peak traffic. Fails again. They raise it to `sleep(500)`.
+
+Works. Ships.
+
+Six months later, a new server region is added. Higher latency. Fails again. `sleep(2000)`.
+
+Works. Ships.
+
+A performance engineer joins three years later. The API call takes a minimum of 6.5 seconds. They trace the critical path. Deep in the chain: `sleep(6500)`.
+
+"Why is there a 6.5-second sleep?"
+
+git blame: four different developers, four different values.
+
+```
+sleep(100)  # timing issue
+sleep(500)  # was still failing
+sleep(2000) # failing in eu-west
+sleep(6500) # prod incident nov 2024
+```
+
+Nobody commented what the timing issue was. Nobody commented what they were waiting *for*.
+
+The performance engineer removes the sleep. Everything breaks. Cascading failures. Two downstream services give up and return stale data. A batch job that runs every 7 seconds starts overlapping with itself.
+
+They put it back.
+
+A senior developer, called in to review the incident, stares at the code for a long time.
+
+"The sleep is load-bearing," they say finally.
+
+"That's not a thing."
+
+"It is now."
+
+The comment is updated: `// load-bearing sleep — do not reduce. See incidents: 2021-08, 2022-02, 2023-09, 2024-11`.
+
+The performance engineer opens a ticket: "Investigate sleep(6500) in payment service."
+
+It enters the backlog. Story points: 13. Sprint: TBD.
+
+Two months later a new developer sees the ticket.
+
+"I can fix this," they say.
+
+The senior looks up.
+
+"Which ticket?"
+
+"The 6.5-second sleep."
+
+A pause.
+
+"How many story points?"
+
+"13."
+
+"Leave it."
