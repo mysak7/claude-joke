@@ -6122,3 +6122,87 @@ A pause.
 "13."
 
 "Leave it."
+
+---
+
+## 2026-06-11
+
+A developer writes a function: `sendEmail(user, subject, body)`. Clean. Readable.
+
+"Can it send urgent emails?" They add `urgent=False`.
+
+"Can it CC the manager?" They add `cc_manager=False`.
+
+"No footer? No attachment? Mark as read? Queue for later?"
+
+One year in:
+
+```python
+def sendEmail(user, subject, body, urgent=False, cc_manager=False,
+              no_footer=False, attachment=True, mark_read=False,
+              queue=False, dry_run=False, html=True, track_opens=True):
+```
+
+A new developer calls it:
+
+```python
+sendEmail(user, subject, body, False, True, False, True, False, True, False, True, False)
+```
+
+A reviewer asks: "What does the sixth `False` mean?"
+
+Nobody knows without counting.
+
+They refactor: introduce `EmailOptions`. A class with 13 fields. Cleaner, in theory.
+
+Three fields are deprecated. They can't be removed because old call sites pass positional arguments and nobody wants to touch them.
+
+The function is now:
+
+```python
+def sendEmail(user, subject, body, options=None, **kwargs):
+```
+
+`**kwargs` exists "for backwards compatibility." It accepts anything. It silently ignores keys it doesn't recognize.
+
+A developer passes `urgnet=True`.
+
+The email is not urgent.
+
+No error is thrown.
+
+The email sits in a standard queue for four days. The user files a support ticket. They receive a non-urgent reply.
+
+The team adds a new field to `EmailOptions`: `flag_as_urgent`.
+
+It is functionally identical to `urgent`.
+
+`urgent` is deprecated. A comment is added to the class:
+
+```python
+# TODO: remove 'urgent' in v3. Use 'flag_as_urgent' instead.
+```
+
+The comment was written in 2023.
+
+v3 has not shipped.
+
+Both fields are read in the handler. If they disagree, the code uses `urgent`. Nobody knows why. The person who wrote it left in 2024.
+
+A new developer opens the class to add a feature.
+
+They count the fields: 15. Three deprecated. Two that appear identical. One named `legacy_html_mode` whose value is never read.
+
+They add a 16th field: `priority`.
+
+"More descriptive than `urgent`," they say in the PR.
+
+Nobody asks what happened to `flag_as_urgent`.
+
+The PR is approved.
+
+`urgent`, `flag_as_urgent`, and `priority` now coexist.
+
+When all three are set, the function sends the email three times.
+
+Nobody has noticed yet.
