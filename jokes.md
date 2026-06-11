@@ -5996,6 +5996,70 @@ For once, neither does anyone else.
 
 ## 2026-06-11
 
+A developer writes a database migration: rename column `user_name` to `username`. Clean. Consistent. Ships.
+
+New bug: the mobile app breaks. The API is fine. The mobile app calls a legacy endpoint still expecting `user_name`.
+
+They write a second migration: add `user_name` back as an alias.
+
+Three weeks later: a performance review flags two columns containing identical data. The mobile app has shipped an update. They remove the alias.
+
+One third-party integration was still reading `user_name`. They add a database view that exposes it. Views can't be expressed in migration files, so it's a manual step. The manual step is not documented anywhere. The view does not appear in source control.
+
+Six months later, a developer provisions a staging environment from scratch. The view is missing. The integration fails. Nobody can explain why staging is broken and production isn't.
+
+They write a migration to "fix" it: rename `username` back to `user_name`. Ships.
+
+A week later, someone notices the column has regressed. They open a ticket: "username renamed incorrectly." They rename it back to `username` in migration 047.
+
+Migration 046 renamed it to `user_name`. Migration 047 renames it back.
+
+This pattern repeats.
+
+Four years later: 31 migrations. The actual schema is correct — `username`, no alias, no view. But `db:reset` (which applies all migrations from scratch) and production (which ran them as they landed) have subtly different states because the view was applied manually three times and rolled back twice, inconsistently.
+
+Tests run against `db:reset`. Production ran migrations live. The schemas diverged sometime in year two. This explains why certain edge cases "pass locally but fail in prod" — a phrase that has appeared in 14 different post-mortems without anyone connecting them.
+
+A senior developer volunteers to audit the migration history over a long weekend.
+
+Their findings: eighteen migration pairs that undo each other. A net column rename that took eleven migrations and two manual steps. One migration, #029, that creates a table that was dropped in #011 and re-creates it slightly differently. The difference: `NOT NULL` on one column.
+
+A NULL has existed in that column since 2023. Nobody knows how it got there. The constraint is not enforced. The column is checked for NULL in 47 places in application code, defensively, by developers who couldn't explain why.
+
+"Should we consolidate the migrations?" the senior asks.
+
+They can't. Regulatory compliance requires the ability to reproduce the exact schema state at any historical point in time. All 31 migrations must be preserved.
+
+"Should we fix the schema divergence between test and prod?"
+
+They check when it started. 2022. Everything since 2022 was built against the wrong assumption. Fixing it would require auditing four years of business logic.
+
+"Should we document the manual view?"
+
+They open the wiki.
+
+There is a page titled "Database Conventions." Last edited 2021. It says: "Use migrations for all schema changes."
+
+The senior closes the wiki.
+
+They commit a new migration: #032.
+
+It creates the view.
+
+In a comment: `# This view has existed in production since 2022. This migration makes it official.`
+
+Migration #033 is filed the following month.
+
+It renames `username` to `userName` for camelCase consistency.
+
+The ticket is filed by the same developer who renamed it in migration #001.
+
+They have no memory of doing it before.
+
+---
+
+## 2026-06-11
+
 A developer hits a race condition. The fix: `await sleep(100)` — just long enough for the other call to finish.
 
 It works. Ships.
