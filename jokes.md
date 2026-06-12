@@ -6206,3 +6206,33 @@ The PR is approved.
 When all three are set, the function sends the email three times.
 
 Nobody has noticed yet.
+
+## 2026-06-12
+
+A team can't agree on tabs versus spaces.
+
+They end the war with automation. The backend lead adds a pre-commit hook: format everything as tabs. The frontend lead, the same week, adds a CI auto-fix bot: format everything as spaces, push the fix.
+
+Neither reads the other's PR. Both are approved within the hour. "LGTM — love the automation."
+
+Now every human commit converts the codebase to tabs. Ninety seconds later, the bot pushes a commit converting it back to spaces. Every diff is every line of every file. Code review becomes "scroll to the middle and hope."
+
+`git blame` returns the same answer for all 480,000 lines: `format-bot`.
+
+A developer needs to know who wrote the refund logic and why. Blame: `format-bot`. They try `git log -S`. Four hours of archaeology later, they find the original commit. Author: `format-bot`. The bot had once auto-fixed a lint error by deleting the function; a human restored it by hand inside one of the bot's own formatting commits, to avoid triggering another reformat.
+
+At the end of the year, the org generates contributor statistics.
+
+`format-bot`: 38,000 commits. 96% of all changes. Longest streak: 365 days.
+
+The CTO, skimming the report, flags the top contributor for promotion.
+
+HR cannot find them in the directory. Engineering explains. There is a meeting.
+
+The minutes record the official resolution of the tabs-versus-spaces debate, two years after it began:
+
+"We defer to the bot's preference."
+
+Nobody can say what the bot prefers. The two configs still disagree. The codebase, at any given moment, is tabs or spaces depending on whether the last commit was made by a person.
+
+The team checks out the repo each morning the way sailors check the tide.
