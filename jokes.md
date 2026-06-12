@@ -6236,3 +6236,29 @@ The minutes record the official resolution of the tabs-versus-spaces debate, two
 Nobody can say what the bot prefers. The two configs still disagree. The codebase, at any given moment, is tabs or spaces depending on whether the last commit was made by a person.
 
 The team checks out the repo each morning the way sailors check the tide.
+
+## 2026-06-12
+
+A developer fixes a typo on the pricing page and deploys.
+
+The PM says it's still broken.
+
+"Hard refresh," says the developer. It works. The PM is impressed.
+
+A customer reports the old price. Hard refresh works again. Support adds "ask the customer to press Ctrl+Shift+R" as step one of the playbook. It resolves 40% of all tickets. Including, somehow, two about billing.
+
+Then a customer reports the old price *after* a hard refresh. The developer investigates. The CDN cached the page for 24 hours. They purge the CDN.
+
+Still the old price. A service worker — added in 2024 to give a pricing page "offline support" — serves its cached copy forever. Nobody remembers adding it. Removing a service worker requires deploying a new service worker whose only job is to unregister itself. They deploy the self-destructing worker.
+
+Still the old price. The nginx micro-cache. Then Redis. Then the ORM's query cache. Then a `useMemo` with an empty dependency array, memoizing the price "for performance."
+
+Seven layers. The old price lived in all of them. Each layer had been added by a different developer, in a different year, to fix a different slow Tuesday.
+
+The fix reaches the last user on day eleven.
+
+The post-mortem action item: "Document all caching layers."
+
+The document is written. It is thorough. It is accurate for almost a month.
+
+Then a new developer reads it, finds the page slow, and adds a cache.
