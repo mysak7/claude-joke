@@ -7,12 +7,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG="$SCRIPT_DIR/config-joke.json"
 LOG="$SCRIPT_DIR/jokes.log"
 
-if [[ -f "$SCRIPT_DIR/.env" ]]; then
-    set -o allexport
-    source "$SCRIPT_DIR/.env"
-    set +o allexport
-fi
-
 PROMPT=$(python3 -c "import json; print(json.load(open('$CONFIG'))['prompt'])")
 
 cd "$SCRIPT_DIR"

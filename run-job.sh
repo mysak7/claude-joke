@@ -8,12 +8,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 JOB_FILE="$SCRIPT_DIR/job.md"
 ARCHIVE_DIR="$SCRIPT_DIR/archive"
 
-if [[ -f "$SCRIPT_DIR/.env" ]]; then
-    set -o allexport
-    source "$SCRIPT_DIR/.env"
-    set +o allexport
-fi
-
 if [[ ! -f "$JOB_FILE" ]]; then
     exit 0
 fi
