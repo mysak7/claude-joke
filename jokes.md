@@ -6378,3 +6378,44 @@ Nobody knows. A Finance intern. No longer at the company.
 The cell is colored yellow.
 
 There is no notebook entry for yellow.
+
+## 2026-06-13
+
+A developer deploys a new service. Users report it's down. They SSH in to check.
+
+It's up.
+
+They disconnect. Users report it's down again.
+
+They SSH in. Up. They stay logged in. Users report it's working.
+
+They disconnect. Down.
+
+For two weeks, the developer stays SSH'd into production during business hours. 9am: connect. 5pm: disconnect. Perfect uptime during the day. Total outage every night and weekend.
+
+They set up a keep-alive script to hold the connection open overnight.
+
+The keep-alive script crashes at 3am.
+
+They add monitoring to the keep-alive script.
+
+The monitoring needs the SSH connection to report status.
+
+The runbook entry is titled "Presence-Based Availability Architecture." A cron job is added: "presence heartbeat."
+
+Eventually a senior engineer investigates. The developer's SSH session was holding open a Unix socket that the app server required to function. Without an active session, the socket timed out and the app hung silently with no error.
+
+The fix: two lines in `.ssh/config`.
+
+```
+ServerAliveInterval 60
+ServerAliveCountMax 3
+```
+
+The service has run continuously for five months.
+
+The presence heartbeat cron still runs. The keep-alive script still runs. The monitoring for the keep-alive still runs.
+
+Nobody has turned any of them off.
+
+The developer is afraid to find out what they're keeping alive.
