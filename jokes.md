@@ -6262,3 +6262,63 @@ The post-mortem action item: "Document all caching layers."
 The document is written. It is thorough. It is accurate for almost a month.
 
 Then a new developer reads it, finds the page slow, and adds a cache.
+
+## 2026-06-13
+
+A developer writes a loop. It processes items 1 through 10.
+
+It processes items 1 through 9.
+
+They fix it: `< 10` → `<= 10`. It processes 1 through 10. Then crashes on item 11. The data has 11 items.
+
+They use `items.length`. The loop crashes immediately. The array is 0-indexed. They subtract 1.
+
+It processes items 1 through 9 again.
+
+They ask the senior.
+
+"Off-by-one," says the senior. "Classic."
+
+"Which one?"
+
+"All of them. At some point."
+
+The developer writes a unit test. It passes. They deploy.
+
+First support ticket: "The last item is always missing." Always. Every list. Every user. The last item, silently dropped.
+
+They trace it. The bug lives in a base class, introduced in 2019, used by 47 components.
+
+Each component is off by one in a slightly different direction. For five years the errors have been canceling each other out. In this one case, they don't.
+
+They fix the base class. Fourteen components now show one extra item. Twenty-two show one fewer. Eleven are correct for the first time in their lives.
+
+Three QA engineers file 36 new bugs.
+
+The developer reverts.
+
+"What if," they say slowly, "the off-by-ones are load-bearing?"
+
+"That's not a thing," says the senior.
+
+They both stare at the system.
+
+Five years. Millions of transactions. No prior complaints about off-by-one.
+
+"Which line did you touch?" the senior asks.
+
+"I changed `<` to `<=`."
+
+A silence.
+
+"Change it back."
+
+They change it back. The 36 bugs disappear. The original bug remains.
+
+The ticket is resolved: "Working as designed."
+
+The developer closes their laptop at 5pm exactly.
+
+Or possibly 4:59.
+
+They're not sure anymore.
