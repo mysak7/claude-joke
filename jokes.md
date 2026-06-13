@@ -6322,3 +6322,59 @@ The developer closes their laptop at 5pm exactly.
 Or possibly 4:59.
 
 They're not sure anymore.
+
+## 2026-06-13
+
+A developer is asked to build an automated pricing engine. "The current one is too slow," says the PM.
+
+They ask where the current one is.
+
+The PM points at a Google Sheet. 847 rows. 23 tabs.
+
+Tab 1: "MASTER PRICING." Tab 17: "DO NOT TOUCH." Tab 23 is empty except for one cell in row 1, column A: `I'm sorry.`
+
+They open Tab 1. It's VLOOKUP chains referencing other VLOOKUPs. Circular references. A macro no one has run since 2021. One cell colored red with no label.
+
+"Who maintains this?"
+
+"Janet," says the PM. "She built it in 2019."
+
+They find Janet.
+
+"Is this documented anywhere?"
+
+Janet opens a drawer and removes a spiral notebook. Handwritten. 140 pages. Column A: "Customer Type." Column B: "What it means." Column C, in different ink: "actually ignore col B."
+
+Janet is retiring in two weeks.
+
+"Can you document how this works?" they ask.
+
+"The notebook *is* the documentation," says Janet.
+
+They build the pricing engine. Three months. Tests pass. Ships.
+
+Three customers receive the wrong price. Two receive $0. One receives a negative price, which the payment processor silently rounds to $0.
+
+They check their logic against the VLOOKUP. Against Janet's notebook. Both match.
+
+They call Janet. Janet has retired.
+
+They reopen the spreadsheet. Cell H47, Tab 17: *For orders placed in Q4 for customers with >3 years tenure who have had an escalation in the last 6 months — apply 8% holiday grace.*
+
+Holiday grace. Not in the notebook. Not in any ticket. Just in cell H47.
+
+They find eleven more cells like this. Regional modifiers. Loyalty tiers. One cell that says "Kevin's accounts — call him first." Kevin left in 2020.
+
+Three more months. The pricing engine is updated. Ships again.
+
+Next quarter, Finance flags a $14,000 discrepancy.
+
+The developer opens the spreadsheet. Row 848. A new cell. Added last Thursday.
+
+"Who added this?" they ask.
+
+Nobody knows. A Finance intern. No longer at the company.
+
+The cell is colored yellow.
+
+There is no notebook entry for yellow.
