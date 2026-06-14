@@ -6449,3 +6449,55 @@ Technically true. The passwords were in the pet field.
 The PM presents the incident response at the all-hands.
 
 The slide title: "Defense in Depth."
+
+## 2026-06-14
+
+A new tech lead institutes a rule: "Code should be self-documenting. No comments."
+
+Every PR, they remove the comments. "The code should speak for itself."
+
+Eighteen months later, a developer opens the billing module.
+
+`calculateFinalAmount(base, multiplier, adjustment, modifier, offset, rate)`
+
+300 lines. No comments. The function is, technically, self-documenting. It takes numbers. It returns a number. Any questions about *which* numbers are answered by reading 300 lines of arithmetic involving a constant called `BASE_FACTOR_1147`.
+
+They ask what `BASE_FACTOR_1147` is.
+
+The tech lead reads the code. The code is self-documenting. They read more of it.
+
+"It's the base factor," they say eventually. "For the calculations."
+
+"Which calculations?"
+
+"The billing ones."
+
+A developer spends four hours tracing the call graph. `BASE_FACTOR_1147` originates in a config file. The config key: `billing_base_factor`. The value: `1.147`. The comment field: blank, because the config is also self-documenting.
+
+They file a PR adding one comment: `# 1.147 = base VAT rate + service fee margin, per contract with EuPay signed 2021-03`
+
+The tech lead removes it in review.
+
+"The code should speak for itself."
+
+"It hasn't."
+
+"Because you haven't read it carefully enough."
+
+They withdraw the PR.
+
+Six months later, the EuPay contract is renegotiated. The rate changes to 1.183.
+
+Three developers update `BASE_FACTOR_1147` to `1.183`. They search the codebase for comments explaining what it does, to update them.
+
+There are no comments.
+
+They rename the constant `BASE_FACTOR_1183`.
+
+The billing module now references both `BASE_FACTOR_1147` and `BASE_FACTOR_1183` in forty-seven places. The old constant still exists. Its value: `1.183`. The new constant also exists. Its value: also `1.183`.
+
+They are used in different places.
+
+They return the same value.
+
+For now.
