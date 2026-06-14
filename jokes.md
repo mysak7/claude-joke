@@ -6419,3 +6419,33 @@ The presence heartbeat cron still runs. The keep-alive script still runs. The mo
 Nobody has turned any of them off.
 
 The developer is afraid to find out what they're keeping alive.
+
+## 2026-06-14
+
+A developer is asked to make the login form "feel more secure."
+
+They add a password strength meter. Users with weak passwords now feel judged, but log in fine.
+
+"More secure," says the PM.
+
+They add a CAPTCHA. Bots are unaffected; they outsource it to a $0.001-per-solve farm. Real users fail it twice and rage-quit.
+
+"More secure," says the PM.
+
+They add a "we sent a code to your email" step. The email takes four minutes to arrive. Users open a second tab, request another code, and now have two valid codes, neither of which they trust.
+
+"More secure," says the PM.
+
+They add a security question: *What was the name of your first pet?* Users type their actual password, because it's the one thing they reliably remember.
+
+The security questions are stored in plaintext.
+
+A breach exposes them.
+
+The post-mortem headline: "No passwords were compromised."
+
+Technically true. The passwords were in the pet field.
+
+The PM presents the incident response at the all-hands.
+
+The slide title: "Defense in Depth."
