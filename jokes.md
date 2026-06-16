@@ -6566,3 +6566,73 @@ A new developer joins. First week. They open the file.
 The senior looks up from their monitor.
 
 "Read the pins."
+
+## 2026-06-16
+
+A developer can't get the app to read a config file.
+
+`Permission denied.`
+
+They run `chmod 777`. It works.
+
+Next file: permission denied. `chmod 777`. Works.
+
+A month later, a security engineer audits the server. Every file in the app is `777`. The private key: `777`. The database config: `777`. The entire `/var/www/`: `777`. The deployment scripts: `777`.
+
+"Why does the web process need write access to its own SSL certificate?"
+
+"It kept saying permission denied."
+
+"So you gave it write access to everything?"
+
+"Just the things it needed."
+
+"It needed everything?"
+
+"Everything it needed was giving permission denied."
+
+The engineer spends a week implementing least privilege. Each service gets exactly what it needs, nothing more.
+
+The app breaks in six places.
+
+Each break reveals a service quietly relying on permissions it was never meant to have. The email worker writing to a directory it doesn't own. A health check that modifies its own config on startup. A cron job reading a file it has no business reading — then using that file to decide what to read next.
+
+Nobody knows why.
+
+"Undo it," the senior says.
+
+They restore `777`. The app works.
+
+The security audit score: D.
+
+"What gets us to an A?"
+
+"Remove the broad permissions."
+
+"The app breaks."
+
+"Fix the app."
+
+"We don't know which parts are broken."
+
+"That's the nature of fixing security issues."
+
+A meeting is held. An action item is created: "Audit file permission dependencies." It enters the backlog. Item 75.
+
+Item 73: "Reduce backlog size."
+
+The permissions stay at `777`. The server has been this way for two years. It has never been breached.
+
+A developer points this out at the next security review.
+
+"We haven't been hacked," they say.
+
+The security engineer writes *Not yet* in the margin.
+
+The developer reads it.
+
+They add a comment above the first `chmod 777` call.
+
+```bash
+# works — don't ask
+```
