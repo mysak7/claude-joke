@@ -6501,3 +6501,68 @@ They are used in different places.
 They return the same value.
 
 For now.
+
+## 2026-06-16
+
+A developer needs to deep clone an object. They Google it. First result: `JSON.parse(JSON.stringify(obj))`. One line. No dependencies. Ships everywhere.
+
+Six months later: a `Date` field returns a string in production. They trace it. `JSON.stringify` converts `Date` to an ISO string. `JSON.parse` gives back a string. The clone silently loses the type.
+
+Slack message: "Don't put Dates in cloned objects."
+
+A week later: `undefined` values disappear from a cloned config. `JSON.stringify` omits `undefined` entirely. The config is missing a field. The app falls back to a default. The default is wrong. Two thousand users get the wrong currency symbol.
+
+Slack message: "Also don't put `undefined` in cloned objects."
+
+Then a `RegExp` stops matching. Then a `Map` becomes `{}`. Then a `Set` becomes `{}` too. Each discovery: one more Slack message. A team member pins them all in `#engineering`.
+
+The pinned list is 23 items long.
+
+Nobody reads it.
+
+Four months later, a senior developer joins a sprint review. "What are all these `JSON.parse(JSON.stringify` calls?"
+
+"Deep clone."
+
+"Why not `structuredClone`?"
+
+A pause.
+
+`structuredClone` was added to Node in 2022. It handles `Date`, `undefined`, `Map`, `Set`, `RegExp`, `ArrayBuffer`, and circular references. It throws a clear error on things it can't handle instead of silently mangling them. It is, in every way, the right tool.
+
+They migrate. Forty-seven call sites. Three weeks. Two PRs. One contested rebase.
+
+New bug report, day two after shipping: `structuredClone` throws on an object containing a `Function`.
+
+"Can you `JSON.stringify` a function?"
+
+They check.
+
+No. Functions silently disappear, same as before.
+
+"Both approaches lose functions."
+
+"Yes."
+
+"When do we put functions in objects?"
+
+They grep the codebase.
+
+`247 matches.`
+
+They open a new Slack message. Then close it. They open the pinned list. Add item 24.
+
+The `JSON.parse(JSON.stringify` calls are restored in those forty-seven files. One comment is added at the top of the utility module:
+
+```js
+// Deep clone. Use this. Don't ask.
+// See: #engineering pins 1-24
+```
+
+A new developer joins. First week. They open the file.
+
+"Why not `structuredClone`?"
+
+The senior looks up from their monitor.
+
+"Read the pins."
