@@ -6766,3 +6766,83 @@ A post-mortem action item is created: "Finish migrating discount logic out of th
 It enters the backlog.
 
 Item 76.
+
+## 2026-06-17
+
+A developer writes a YAML config for a CI/CD pipeline. Works perfectly in staging.
+
+In production, deployments to Norway fail silently. No errors. Job completes. Norway just isn't there.
+
+They check the parsed config. The country list:
+
+```yaml
+countries:
+  - US
+  - CA
+  - AU
+  - NO
+```
+
+Parsed as: `["US", "CA", "AU", false]`.
+
+`NO` is a YAML boolean. It has been `false` since the spec was written.
+
+They fix it: `"NO"`. Push. Norway works.
+
+They look at the rest of the config:
+
+```yaml
+defaults:
+  province: ON
+  notifications: OFF
+  debug: NO
+  autoRetry: YES
+```
+
+`ON`: `true`. `OFF`: `false`. `NO`: `false`. `YES`: `true`.
+
+The province field is `true`. Notifications are disabled. The debug flag — intended to be off — is also false, accidentally correct.
+
+They scan the entire 400-line config for unquoted values YAML might silently reinterpret.
+
+23 results. Seven have been wrong for four months. Including `autoRetry: YES`.
+
+They check git blame. The `YES` was added in November. Commit message: `add retry logic`.
+
+Retry logic has never retried anything.
+
+They fix all 23. Add quotes. Push.
+
+A new developer joins the following week. First PR adds a server:
+
+```yaml
+servers:
+  - prod-us-1
+  - prod-ca-1
+  - prod-eu-1
+  - prod-on-1
+```
+
+Ontario. The value `prod-on-1` is fine — YAML only coerces bare scalars that match exactly. They feel safe.
+
+They add a comment at the top of the file:
+
+```yaml
+# ALWAYS QUOTE STRINGS
+# NO means false. YES means true. ON means true. OFF means false.
+# Just quote everything.
+```
+
+One year later they audit the config. Everything is in quotes. Strings, numbers, booleans. Including the actual booleans:
+
+```yaml
+enabled: "true"
+```
+
+Somewhere downstream it's compared against the boolean `true`.
+
+It fails silently.
+
+Deployments to Norway begin failing again.
+
+No errors. Job completes successfully. Norway just isn't there.
