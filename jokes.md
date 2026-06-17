@@ -6706,3 +6706,63 @@ The function is listed in the architecture docs as a "core user identity primiti
 `user.name` is three characters.
 
 It still works.
+
+## 2026-06-17
+
+A team decomposes their monolith into microservices. "Modern architecture," the architect says. "Independently deployable. Infinitely scalable."
+
+Six months later, a new developer traces an order request:
+
+`order-service` → `cart-service` → `pricing-service` → `discount-service` → `tax-service` → `legacy-integration-service` → `monolith/api/v1/calculate`
+
+"Why does it call the monolith at the end?" they ask.
+
+"We haven't migrated the discount logic yet."
+
+"Can we just move it?"
+
+"That would require touching the monolith."
+
+"And?"
+
+"We're getting away from the monolith."
+
+"By calling it from six microservices."
+
+"Through a well-defined API."
+
+The monolith is called 47 times per user request, across 14 different microservices, each call routed through the API gateway, load balancer, service mesh, and two authentication layers.
+
+The monolith's P99: 4ms. The microservices' P99: 1,100ms.
+
+The architect draws the system diagram for the quarterly review. 26 boxes. Arrows everywhere. It looks like the internal network of a Fortune 500 company.
+
+"This is our platform," he says.
+
+"What does it do?"
+
+"Sells widgets."
+
+"How many per day?"
+
+"About 200."
+
+Nobody tells the new VP of Engineering. She includes the diagram in her board presentation: "World-class distributed architecture — built to scale."
+
+The board is impressed.
+
+The team is seven people.
+
+Four boxes on the diagram are the monolith, aliased differently each time to look like separate services.
+
+The monolith was written in 2017. It has never had an outage.
+
+Last month, `discount-service` went down for three hours. The root cause: it was trying to call the monolith, but the service mesh certificate had expired.
+
+The monolith was fine the entire time.
+
+A post-mortem action item is created: "Finish migrating discount logic out of the monolith."
+
+It enters the backlog.
+
+Item 76.
