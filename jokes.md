@@ -6636,3 +6636,73 @@ They add a comment above the first `chmod 777` call.
 ```bash
 # works — don't ask
 ```
+
+## 2026-06-17
+
+A developer writes `getUserName(user)`. It returns the user's name. Three lines. Ships.
+
+"Can it fall back to email if no name?" Two more lines.
+
+"Can it prefer display name over first name?" They add a priority chain: `display_name`, `name`, `first_name + last_name`, `username`, `email`.
+
+"Can it handle organizations? Companies don't have first names." A second code path.
+
+"Can it apply title case?" They add a formatter.
+
+"Can it translate 'Anonymous' into the user's locale?" Now it imports the i18n module.
+
+"Can it handle null users? Deleted accounts? Legacy users from the 2019 migration who stored names differently?"
+
+It can. It can. It can.
+
+One year in, `getUserName()` is 94 lines. Six parameters. Five imports. It surfaces in the flame graph on every page load.
+
+A new developer needs to display a name in an email greeting.
+
+"Call `getUserName()`," says the senior.
+
+They read the signature: `getUserName(user, fallbackLocale, legacyCompat, formatOptions, orgMode, skipCache)`.
+
+They look at their use case. The user just signed up. They're authenticated. They have a name.
+
+They call `user.name`.
+
+It works. They open a PR.
+
+The senior reviews it. "Why didn't you use `getUserName()`?"
+
+"I just needed the name."
+
+"`getUserName()` handles edge cases."
+
+"What edge cases?"
+
+"Empty names. Deleted accounts. Legacy users. Organizations. Locale formatting."
+
+"This is a greeting. The user is authenticated. They just signed up."
+
+"Use `getUserName()`."
+
+The new developer adds `getUserName()` with all six parameters, five of them defaults.
+
+It formats the name correctly for 99.8% of users.
+
+For the other 0.2%: organization accounts, where `orgMode` defaults to `false` and cannot be auto-detected without calling `getOrgStatus()` — which is also 94 lines and imports the same five modules.
+
+The email greeting for those users: `Hello, !`
+
+It has been this way since the function was written.
+
+No ticket has ever been filed. The affected users are enterprise customers. Their employees receive the emails on behalf of the organizations.
+
+They assumed it was intentional. A quirk. A placeholder.
+
+One of them has started signing their replies: `Best, [Company]`.
+
+The senior developer received a performance review commendation last quarter for "building robust, edge-case-aware utilities used across the codebase."
+
+The function is listed in the architecture docs as a "core user identity primitive."
+
+`user.name` is three characters.
+
+It still works.
