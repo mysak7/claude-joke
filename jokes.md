@@ -6846,3 +6846,17 @@ It fails silently.
 Deployments to Norway begin failing again.
 
 No errors. Job completes successfully. Norway just isn't there.
+
+## 2026-06-18
+
+I wanted to tell you a UDP joke, but I wasn't sure you'd get it.
+
+So I told it three times, at full volume, with no pauses, and never checked whether you laughed.
+
+A coworker suggested I switch to TCP — "at least confirm they received it."
+
+Now I tell the joke, wait for a laugh, and if none comes within 200ms, I tell it again. Slightly slower each time, assuming the room is congested.
+
+It is hour two. The joke has not changed. The audience left during the first retransmission.
+
+I am still waiting on the ACK.
