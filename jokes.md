@@ -6874,3 +6874,45 @@ The key is now the only credential that works. New hires are told to use it. The
 "It says do not use."
 
 "That's how you know it's the right one."
+
+## 2026-06-18
+
+A developer adds a flag to disable a feature: `isDisabled`.
+
+A reviewer objects. "We name flags for the positive case. Make it `isEnabled`."
+
+But the default is on, and the developer doesn't want to flip the meaning everywhere. So they invert at the boundary: `const isEnabled = !isDisabled`.
+
+The next feature ships with `isHidden`, normalized to `isVisible = !isHidden`. Then `isLocked`, normalized to `isUnlocked`. Then, in a hurry, someone adds `isNotReady`, and normalizes it to `isReady = !isNotReady`.
+
+A year later a junior debugs a rendering issue. They find the gate:
+
+```js
+if (isVisible && !isReady && !isUnlocked) { ... }
+```
+
+They expand the definitions:
+
+```js
+if (!isHidden && !!isNotReady && !!isLocked) { ... }
+```
+
+They expand the source of `isNotReady`, which is itself derived from `!isPending`:
+
+```js
+if (!isHidden && !!(!isPending) && !!isLocked) { ... }
+```
+
+They sit with it. They count the negations on their fingers. They run out of fingers.
+
+They open a terminal and add one line:
+
+```js
+// I have verified this is correct. Do not verify it again.
+```
+
+They did not verify it. No one can. It works in production, which everyone agrees is the only test that matters and the only one nobody can read.
+
+The flag to turn the whole thing off is called `isNotInactive`. It defaults to `false`.
+
+Nobody is sure if that means it's on.
