@@ -6860,3 +6860,17 @@ Now I tell the joke, wait for a laugh, and if none comes within 200ms, I tell it
 It is hour two. The joke has not changed. The audience left during the first retransmission.
 
 I am still waiting on the ACK.
+
+## 2026-06-18
+
+A developer's keychain has a key labeled "DO NOT USE — for testing only."
+
+It is the production key.
+
+The label was correct when it was created. The environments were swapped during a migration in 2023. The migration was reverted. The label was not.
+
+The key is now the only credential that works. New hires are told to use it. They hesitate.
+
+"It says do not use."
+
+"That's how you know it's the right one."
