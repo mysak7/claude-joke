@@ -6916,3 +6916,25 @@ They did not verify it. No one can. It works in production, which everyone agree
 The flag to turn the whole thing off is called `isNotInactive`. It defaults to `false`.
 
 Nobody is sure if that means it's on.
+
+## 2026-06-19
+
+A developer writes a function `getCachedUser()`.
+
+To make it fast, they add a cache. To handle the cache going stale, they add a TTL. To handle the TTL expiring mid-request, they add a lock. To handle the lock deadlocking, they add a timeout. To handle the timeout firing during a cache refresh, they add a retry. To handle the retry stampeding the database, they add a queue.
+
+The function is now 340 lines and lives in a file called `getCachedUser.ts`.
+
+A new developer profiles the app. `getCachedUser()` is the slowest call in the system.
+
+They replace the entire file with:
+
+```ts
+const getCachedUser = (id) => db.users.findById(id)
+```
+
+It is faster. The database had its own cache the whole time.
+
+The PR is titled `perf: remove caching layer`.
+
+It is rejected. "We can't ship code with no caching strategy."
