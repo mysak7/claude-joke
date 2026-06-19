@@ -6938,3 +6938,51 @@ It is faster. The database had its own cache the whole time.
 The PR is titled `perf: remove caching layer`.
 
 It is rejected. "We can't ship code with no caching strategy."
+
+## 2026-06-19
+
+A developer joins the on-call rotation.
+
+"It's quiet," the outgoing on-call says, handing over the pager. "Nothing will happen."
+
+At 2:47am: an alert. `Database connection timeout`.
+
+They SSH in. The database is up. Connections are fine. The alert was from a single retry that resolved itself before they logged in.
+
+They go back to sleep.
+
+At 3:12am: `High memory usage`.
+
+They check. A batch job ran. It always runs at 3am. It always spikes memory. The alert has been firing every Tuesday for nine months. The previous on-call acknowledged it 38 times.
+
+They go back to sleep.
+
+At 4:31am: `Disk at 87%`.
+
+The threshold is 85%. The disk has been at 87% for six weeks. Someone set the alert, acknowledged it, filed a ticket to expand the disk, and closed the ticket as "won't do — not critical yet." The alert fires every hour. There are 1,400 unacknowledged notifications in the dashboard.
+
+They extend the disk. The alert stops.
+
+At 5:55am: `Deployment failed — branch not found`.
+
+A cron job tried to auto-deploy a branch called `test-do-not-merge` to production.
+
+They trace the cron config. The branch was hardcoded in 2022 by someone who was "just testing the pipeline" and forgot to remove it. The branch was deleted in 2023. The cron job has been failing silently since then. Someone added an alert in 2024. Nobody read it until now.
+
+They remove the cron entry. They delete the alert. They go back to sleep.
+
+At 7:30am they write up the week for the handoff doc.
+
+`No significant incidents. Quiet week.`
+
+They hand over the pager.
+
+"It's quiet," they say. "Nothing will happen."
+
+The incoming on-call looks at the alert dashboard: 1,400 notifications.
+
+"What are all these?"
+
+"Background noise. Ignore them."
+
+At 2:47am: `Database connection timeout`.
