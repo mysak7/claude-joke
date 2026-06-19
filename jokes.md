@@ -6986,3 +6986,43 @@ The incoming on-call looks at the alert dashboard: 1,400 notifications.
 "Background noise. Ignore them."
 
 At 2:47am: `Database connection timeout`.
+
+## 2026-06-19
+
+A PM asks a developer to "just add a button."
+
+The button needs an onClick handler. The handler calls an API. The API doesn't have the right endpoint. They add the endpoint. The endpoint needs authentication. Auth requires a new OAuth scope. The scope requires a role. The role requires a permissions migration. The migration requires downtime. Downtime requires Change Advisory Board sign-off. The CAB meets biweekly.
+
+Three weeks and four meetings later, the button ships.
+
+User feedback arrives in two hours.
+
+"It's the wrong shade of blue."
+
+The developer opens a Jira ticket: `Update button color`. Story points: 1. Estimated time: 5 minutes.
+
+The ticket is assigned to design. Design needs to review the color palette. The palette hasn't been updated since 2022. Updating it requires a brand alignment meeting.
+
+The brand alignment meeting is scheduled for Q3.
+
+The button is the wrong shade of blue for six weeks. Eleven users have mentioned it. The PM marks it "won't fix — out of scope" three times.
+
+In Q3, design updates the palette. The developer makes the change. One line of CSS.
+
+The PR sits open for four days. The reviewer asks: "Can we get stakeholder sign-off on the new color?"
+
+The stakeholder is the PM. The PM is out of office.
+
+The button ships in Q4. Users have stopped mentioning it. The feedback post has 4 votes and is closed as "no longer relevant."
+
+The original user tries the button.
+
+"This isn't the right blue," they say.
+
+They attach a screenshot.
+
+It is a different monitor. The color is correct.
+
+The PM marks the ticket resolved.
+
+The developer opens a new ticket: `Add another button`.
