@@ -7116,3 +7116,51 @@ Three of the 23 wrong answers were also null pointers. The juniors fixed them an
 At this point the senior is no longer sure what "off-by-one" means.
 
 It doesn't matter. It's always off-by-one.
+
+## 2026-06-20
+
+A production server is running code that doesn't exist in git.
+
+A developer discovers this during a routine audit. The deployed version hash: `a7f2c91`. They run `git show a7f2c91`.
+
+`fatal: bad object a7f2c91`
+
+They check every branch. Every tag. Every stash. Every developer's fork. Nothing.
+
+They pull the binary from the server and decompile it. Three functions they've never seen before: a `calculateShipping()` rewrite that's noticeably faster, a bug fix they don't remember anyone fixing, and — most baffling — a fully working autocomplete field that appears nowhere in Jira, in Slack, in git, or in anyone's memory.
+
+The autocomplete has a 94% completion rate. It is the most-used feature in the product.
+
+A long investigation begins. Old deploy logs surface in an S3 bucket that predates the current logging standard. The hash traces to a Jenkins job. The Jenkins job traces to a build trigger. The build trigger: a machine named `carl-laptop-2021`.
+
+Carl left in November 2021. Before he left, he pushed a hotfix directly from his laptop — to production, without a PR, without a branch, without committing to git. He deployed from his uncommitted working directory, patched the issue, and caught his flight.
+
+The autocomplete was something he'd been building for himself, locally, in his spare time. He'd never planned to ship it. It just happened to be open in his editor.
+
+IT tracks Carl down. He's living in Portland now. He makes furniture.
+
+"Do you remember what you changed?" they ask.
+
+"Something with shipping rates," he says. "I might have had some other stuff open."
+
+"The autocomplete—"
+
+"Oh, that." A pause. "That was just something I was messing around with. You shipped that?"
+
+"40,000 users use it daily."
+
+A silence.
+
+"Huh."
+
+The code is reconstructed from the decompiled binary over three weeks. The reconstructed version is 97% equivalent. The autocomplete works. The shipping fix works.
+
+The remaining 3% is a single function named `dontLookAtThis()`.
+
+Nobody ships the reconstruction.
+
+The original binary is still running in production.
+
+Carl's laptop was returned to IT. It was wiped and reissued to a new hire in 2022.
+
+The new hire has never heard of the autocomplete. They use it every day.
