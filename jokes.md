@@ -7066,3 +7066,53 @@ One query: 44.7 seconds of sleep, then 0.3 seconds of actual work.
 They optimize the sleep out.
 
 The nightly report is empty.
+
+## 2026-06-20
+
+A junior developer hits a bug and asks the senior for help.
+
+The senior doesn't look at the code. "Off-by-one error," they say.
+
+"How did you know?"
+
+"Is it off-by-one?"
+
+"Yes."
+
+"Because it's always off-by-one."
+
+The junior watches the senior field the next dozen bugs the same way. Two-second pause, then: "Off-by-one error." Twelve times. Twelve correct answers.
+
+The junior becomes a senior. On their first day, a junior brings them a bug.
+
+They pause for two seconds. "Off-by-one error."
+
+It's a null pointer dereference.
+
+"How did you know?" the junior asks.
+
+They have two choices: admit they're wrong, or commit to the bit.
+
+"Because it's always off-by-one."
+
+"But it's a null pointer."
+
+"A null pointer is a zero where there should be a one." 
+
+"That's... technically—"
+
+"Off-by-one."
+
+The junior goes away and fixes the null pointer. The commit message: `fix: off-by-one error`.
+
+The senior developer has answered 847 questions with "off-by-one error" since their promotion. They have been wrong 23 times.
+
+Their success rate: 97.3%. Highest in the department.
+
+They have not read code in three years.
+
+Three of the 23 wrong answers were also null pointers. The juniors fixed them anyway and wrote "off-by-one" in the commit. Everyone agreed it was correct. It shipped. Nothing broke.
+
+At this point the senior is no longer sure what "off-by-one" means.
+
+It doesn't matter. It's always off-by-one.
