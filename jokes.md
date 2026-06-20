@@ -7026,3 +7026,43 @@ It is a different monitor. The color is correct.
 The PM marks the ticket resolved.
 
 The developer opens a new ticket: `Add another button`.
+
+## 2026-06-20
+
+A developer profiles the nightly report job. One query: 45 seconds.
+
+They optimize it. New indexes, rewritten joins. Down to 0.3 seconds.
+
+They push, feel great.
+
+The next morning: the report is empty. 14,000 orders processed yesterday. Zero on the report.
+
+They trace it. The report reads from a table that a parallel process writes to. The 45-second query always finished *after* that process committed. The 0.3-second query finishes *before*.
+
+The query was never slow. It was waiting.
+
+They add `SELECT pg_sleep(44.7)` before the main query.
+
+Their manager opens the PR.
+
+"You added a 44-second sleep to fix a performance optimization?"
+
+"It's load-bearing latency."
+
+The PR is approved with one comment: "Please document why."
+
+They add a comment:
+
+```sql
+-- This query must run slowly.
+-- It is not a bug. It is not an accident.
+-- Do not optimize it. We tried.
+```
+
+Six months later, a new developer runs the profiler.
+
+One query: 44.7 seconds of sleep, then 0.3 seconds of actual work.
+
+They optimize the sleep out.
+
+The nightly report is empty.
