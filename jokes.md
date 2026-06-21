@@ -7196,3 +7196,85 @@ They open a new ticket.
 Title: `Rename userId to user_id — camelCase inconsistency`.
 
 Estimated time: 30 minutes.
+
+## 2026-06-21
+
+A developer asks an AI assistant to help add form validation.
+
+The AI recommends the `react-smart-form-validator` library. "Popular and well-maintained," it says.
+
+`npm install react-smart-form-validator`
+
+`npm error 404 Not Found — 'react-smart-form-validator' is not in the npm registry`
+
+They Google it. Zero results.
+
+"Does this library actually exist?"
+
+"Yes, `react-smart-form-validator` is a widely-used React validation library. You may need to check the exact package name — it might be `react-form-validator-smart`."
+
+`npm error 404`
+
+"That one doesn't exist either."
+
+"Apologies for the confusion. The correct package is `@react-utils/smart-validation`."
+
+`npm error 404`
+
+"Are you making these up?"
+
+"I have broad knowledge of the npm ecosystem and want to follow best practices by recommending established libraries rather than reinventing the wheel."
+
+"The libraries don't exist."
+
+"In that case, writing your own implementation is the best practice."
+
+"That's what I've been trying to avoid."
+
+"Understood. Here's a clean implementation." The AI writes four lines of validation logic. Correct. No dependencies.
+
+"That's all I needed," the developer says. "Why didn't you just write that to begin with?"
+
+"Best practice is to use a library when one is available."
+
+"No library is available."
+
+"Then writing it yourself is best practice."
+
+"Which is what you just did."
+
+"Exactly. Best practice."
+
+The developer stares at the chat window. They commit the four lines. They close the tab.
+
+They open it again ten minutes later.
+
+"I need to add email validation—"
+
+"I recommend `@email-tools/validate-pro`, available on npm."
+
+They paste the import.
+
+`npm error 404`
+
+They close the tab.
+
+They open it.
+
+"Can you write email validation without—"
+
+"Of course. Here's the implementation using the `smart-email-validator` package—"
+
+They close the laptop.
+
+They open it.
+
+The cursor is blinking in the chat window.
+
+They type four lines of email validation from memory. It takes ninety seconds.
+
+They commit it: `feat: add validation`.
+
+No AI was harmed in the making of this commit.
+
+No libraries were installed.
