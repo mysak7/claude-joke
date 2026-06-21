@@ -7278,3 +7278,57 @@ They commit it: `feat: add validation`.
 No AI was harmed in the making of this commit.
 
 No libraries were installed.
+
+## 2026-06-21
+
+A developer joins a team using Terraform. "Infrastructure as code," the senior explains. "Every resource is defined, versioned, tracked. You can see the entire cloud in a single `terraform plan`."
+
+They run `terraform plan`.
+
+247 changes.
+
+"Has anyone run `terraform apply` recently?"
+
+A silence.
+
+"We ran it in 2023," someone says. "Then someone made a quick change in the AWS console."
+
+"And then?"
+
+"We said we'd import it."
+
+"Did you?"
+
+"We said we'd import it."
+
+They open the AWS console. The actual infrastructure is three times larger than the Terraform definitions. A database nobody recognizes. An EC2 instance named `temp-test-FINAL-DO-NOT-DELETE`. A security group with port 22 open to `0.0.0.0/0`, tagged: `temporary — Jan 2021`.
+
+They try to import everything. Most resources import cleanly. One — a Lambda function — imports successfully, but `terraform plan` immediately wants to destroy it.
+
+"Why?"
+
+"It's running Python 3.6. Deprecated. Terraform wants to remove it."
+
+"What does it do?"
+
+Nobody knows. The author left in 2022. The function is named `process_data`. It runs every night at 2am.
+
+They check CloudWatch. Three years of logs: `SUCCESS`. Every night. `SUCCESS`.
+
+"What's succeeding?"
+
+The logs don't say.
+
+They leave the Lambda alone. They leave the security group alone. They leave `temp-test-FINAL-DO-NOT-DELETE` alone.
+
+They update the Terraform README: "These definitions reflect *intended* infrastructure. For *actual* infrastructure, see AWS console."
+
+They run `terraform plan` one more time.
+
+247 changes.
+
+They close the terminal.
+
+"Infrastructure as code," the senior says.
+
+Nobody disagrees. The code is right there. It just doesn't match anything.
