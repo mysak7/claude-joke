@@ -7164,3 +7164,35 @@ The original binary is still running in production.
 Carl's laptop was returned to IT. It was wiped and reissued to a new hire in 2022.
 
 The new hire has never heard of the autocomplete. They use it every day.
+
+## 2026-06-21
+
+A developer opens a ticket: "Rename `user_id` to `userId` — camelCase consistency. Quick find-and-replace."
+
+Estimated time: 30 minutes.
+
+They run the replace. 847 files changed.
+
+They review the diff. The change is in the models, the controllers, the views, the tests, the API responses, the database migration, a serialization library that auto-generates snake_case from camelCase fields (so renaming it silently breaks the serialization), two CSV export functions that hardcode the column name as a string, the documentation, a config file that maps field names to display labels, and three places in the codebase where someone had already renamed it to `userId` years earlier — inconsistently, partially, and nobody had noticed because somehow both worked.
+
+There is also a migration file from 2023: `20230415_rename_user_id.sql`. Half-applied. No corresponding rollback. The ticket it references is in a decommissioned Jira instance.
+
+The developer reverts everything.
+
+They add a comment to the model:
+
+```python
+user_id = ...  # snake_case intentional — do NOT rename, see #4821
+```
+
+They look up ticket #4821: `Rename user_id to userId — BLOCKED: too risky`.
+
+The assignee: themselves. Three years ago. Status: In Progress.
+
+They close it. Resolution: "Won't Do."
+
+They open a new ticket.
+
+Title: `Rename userId to user_id — camelCase inconsistency`.
+
+Estimated time: 30 minutes.
