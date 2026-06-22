@@ -7332,3 +7332,45 @@ They close the terminal.
 "Infrastructure as code," the senior says.
 
 Nobody disagrees. The code is right there. It just doesn't match anything.
+
+## 2026-06-22
+
+A developer ships an app. First user report: "The API calls fail for everyone except you."
+
+They check the config. The API endpoint: `http://localhost:3001`.
+
+Forgotten to change it from development.
+
+For eighteen hours, every user's request had been routing to their personal laptop. The laptop was running. The API was responding. But only for one person — the developer, sitting at their desk, unaware.
+
+They fix it. The app works for everyone.
+
+A week later, they find three more hardcoded `localhost` references: the email service, the payment gateway callback, and the OAuth redirect URI.
+
+The OAuth redirect sends users back to `http://localhost:3000/callback`.
+
+Users land on the developer's React dev server.
+
+The dev server displays: `✔ Compiled successfully.`
+
+Six users saw this. All six contacted support to ask what "compiled successfully" means.
+
+Support told them: "That means your account is verified."
+
+All six accepted this. Four said "Thank you." Two asked "Verified for what?" Support said "For our platform." They said "Great."
+
+The developer reads the support logs.
+
+They fix the OAuth redirect. The dev server disappears.
+
+A user emails: "Where did the 'compiled successfully' message go? I was using it to confirm my login worked."
+
+The developer looks at the green checkmark in the app header. It has been there since launch. It means "you are logged in." It has always been there.
+
+Nobody has ever mentioned it.
+
+The support team adds a new FAQ entry: "How do I know if I'm logged in?"
+
+Answer: look for the green checkmark.
+
+Three support tickets arrive the next day: "What does the green checkmark mean?"
