@@ -7410,3 +7410,35 @@ Reviewer 3 opens the PR. Scrolls up.
 "The imports were clean," he says.
 
 They were.
+
+## 2026-06-22
+
+A developer runs `npm audit`.
+
+`3 vulnerabilities (1 moderate, 2 high)`
+
+They run `npm audit fix`.
+
+`47 vulnerabilities (3 low, 12 moderate, 24 high, 8 critical)`
+
+They run `npm audit fix --force`.
+
+The app starts. Then doesn't.
+
+`Error: Cannot find module 'react'`
+
+They reinstall React. The app starts. One page is blank. The charting library requires a React version that no longer exists. They downgrade React. Two other libraries break.
+
+One hour later: 51 vulnerabilities, React installed and uninstalled four times, and `package-lock.json` replaced by a file that is 47,000 lines longer.
+
+They run `git checkout -- package-lock.json`.
+
+`3 vulnerabilities (1 moderate, 2 high)`
+
+They close the terminal.
+
+The vulnerabilities are in `lodash`. They always have been. They are always in `lodash`.
+
+A colleague asks if they want help with the security audit.
+
+"Already done," they say. "Everything's clean."
