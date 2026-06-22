@@ -7374,3 +7374,39 @@ The support team adds a new FAQ entry: "How do I know if I'm logged in?"
 Answer: look for the green checkmark.
 
 Three support tickets arrive the next day: "What does the green checkmark mean?"
+
+## 2026-06-22
+
+A developer spends three weeks implementing end-to-end encryption. 600 lines of cryptographic code. Key exchange. Forward secrecy. Authenticated encryption. They're proud.
+
+The PR opens. Three reviewers. 52 comments over five days.
+
+`"Line 12: prefer const over let."`
+`"Line 89: triple equals here."`
+`"Line 134: blank line before the return."`
+`"Line 203: rename to camelCase."`
+`"Line 412: trailing whitespace."`
+
+Zero comments on the cryptography.
+
+The developer fixes all 52 comments. Merges.
+
+Three months later: a security audit. The key exchange is vulnerable to a man-in-the-middle attack. Any passive observer can decrypt every message ever sent.
+
+"Why didn't this get caught in review?"
+
+Reviewer 1: "I would have caught it if the PR were smaller."
+Reviewer 2: "The naming made it hard to follow."
+Reviewer 3: "I didn't review the crypto parts specifically."
+
+"Which parts did you review?"
+
+Reviewer 3 opens the PR. Scrolls up.
+
+"Lines 1 through 47."
+
+"Those are the imports."
+
+"The imports were clean," he says.
+
+They were.
