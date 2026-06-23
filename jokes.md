@@ -7442,3 +7442,69 @@ The vulnerabilities are in `lodash`. They always have been. They are always in `
 A colleague asks if they want help with the security audit.
 
 "Already done," they say. "Everything's clean."
+
+## 2026-06-23
+
+A developer writes a utility function:
+
+```js
+processOrder(id, notify, validate, retry, async, log, force, dryRun)
+```
+
+Eight boolean parameters. Called in 34 places.
+
+```js
+processOrder(orderId, true, true, false, true, false, false, false)
+```
+
+A new developer asks: "What's the sixth `false`?"
+
+Nobody knows. They check the signature. Sixth parameter: `log`.
+
+"Why would you *not* log an order?"
+
+They grep for every call site. `log` is `false` in all 34. It has never once been `true`.
+
+They find the original author. Still at the company.
+
+"What does `log` do?"
+
+"I never finished it," she says. "I was going to wire it up. Never got around to it."
+
+"So it does nothing?"
+
+"It sets a flag. Nothing reads the flag."
+
+They open a PR: `refactor: remove unused log parameter`.
+
+Code review: "What if something relies on this flag?"
+
+"Nothing reads the flag. I checked."
+
+"What about dynamic access? Runtime reflection?"
+
+It is a JavaScript function. There is no reflection.
+
+"What if something reads it and we don't know about it?"
+
+"How would that happen?"
+
+"I'm not saying it does. I'm saying we don't know that it doesn't."
+
+The PR is closed: "Needs further investigation before changing the public API."
+
+Six months later, a new developer joins. They read the signature.
+
+"What's the sixth parameter?"
+
+"Don't touch it," everyone says.
+
+"Why?"
+
+"We're still investigating."
+
+The `log` flag has been `false` in 34 places since the day it was written. It has never been `true`. It will never be `true`. It is documented as: `log (boolean) — enables logging`.
+
+Logging is always disabled.
+
+Nobody considers this a contradiction.
