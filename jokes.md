@@ -7571,3 +7571,43 @@ The CI badge still says `mypy: passing`.
 It will always say `mypy: passing`.
 
 The type checker has been told, 847 times, not to check.
+
+## 2026-06-23
+
+A developer adds a pre-commit hook: linting, type checks, and the full test suite before every commit.
+
+"Quality gates," they say. Tests take 3 minutes.
+
+Week 1: two bugs caught before committing. Everyone loves it.
+
+Week 3: a developer discovers `--no-verify`. Mentions it in Slack as "useful for WIP commits."
+
+Week 4: `git commit --no-verify` is in six developers' shell aliases. Two have it as the default.
+
+Month 2: the hook enforces a commit message format. A developer writes a regex that accepts anything containing at least one character. It passes.
+
+Month 3: someone adds a secret scanner. It false-positives on the word "token" in a comment. Three developers disable it with `SKIP=detect-secrets`. The flag is committed to the repo.
+
+Month 4: a test suite expansion pushes the hook to 7 minutes. The senior developer adds `--no-verify` to their alias and files a ticket: "Optimize pre-commit performance." Backlog. Item 71.
+
+Month 6: new developers join. The onboarding doc says: "We use pre-commit hooks for quality enforcement." They run the hook. 7 minutes.
+
+They discover `--no-verify` from a senior within the week.
+
+At the year-end retrospective, the team agrees the hooks have been invaluable.
+
+"Caught anything recently?" someone asks.
+
+A pause.
+
+"The infrastructure is there," the senior says. "That's the important part."
+
+The pre-commit hook runs on zero commits per day.
+
+The CI pipeline catches everything it used to catch.
+
+The CI pipeline is non-blocking.
+
+It is informational.
+
+Nobody reads it.
