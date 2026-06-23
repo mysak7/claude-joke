@@ -7508,3 +7508,66 @@ The `log` flag has been `false` in 34 places since the day it was written. It ha
 Logging is always disabled.
 
 Nobody considers this a contradiction.
+
+## 2026-06-23
+
+A developer migrates a Python codebase to use type hints.
+
+Week 1: `mypy` reports 847 errors.
+Week 3: Down to 340.
+Week 6: 12 remaining. All in one file: `legacy_utils.py`.
+
+They open it. Dynamic dispatch, star args, runtime class construction. Types are unknowable.
+
+"Close enough," they say. They add `# type: ignore` to each error.
+
+12 errors become 0. mypy passes.
+
+They run mypy again to confirm: `Success: no issues found in 1 source file.`
+
+1 source file. The project has 214.
+
+mypy had been running on one file. A misconfigured `pyproject.toml`. They fix it.
+
+847 errors.
+
+They add `# type: ignore` to 847 lines.
+
+0 errors.
+
+mypy passes on every commit. The pre-commit hook is green. The CI badge says `mypy: passing`.
+
+Three months later, a new developer asks about the type coverage.
+
+"100%," says the senior.
+
+"How?"
+
+"We annotated everything."
+
+The new developer reads `legacy_utils.py`.
+
+```python
+def process(x: Any, y: Any) -> Any:  # type: ignore
+    return x + y  # type: ignore
+```
+
+"What's the point of `Any`?"
+
+"Documentation."
+
+"Documenting what?"
+
+"That we don't know."
+
+The new developer pauses.
+
+"That's just... Python."
+
+"Exactly. But now it's *typed* Python."
+
+The CI badge still says `mypy: passing`.
+
+It will always say `mypy: passing`.
+
+The type checker has been told, 847 times, not to check.
