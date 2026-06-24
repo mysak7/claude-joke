@@ -7611,3 +7611,59 @@ The CI pipeline is non-blocking.
 It is informational.
 
 Nobody reads it.
+
+## 2026-06-24
+
+A developer joins a new company. The codebase has 100% test coverage. They're impressed.
+
+Day two: they add a feature. Tests still pass. They push.
+
+Production breaks.
+
+They look at the tests. Every function has a test. Every line is covered. The tests are thorough, readable, and beautifully organized.
+
+They test the wrong thing.
+
+```python
+def test_apply_discount():
+    result = apply_discount(100, 0.1)
+    assert result is not None
+```
+
+They check the other tests.
+
+```python
+def test_calculate_total():
+    result = calculate_total([10, 20])
+    assert isinstance(result, float)
+
+def test_send_invoice():
+    send_invoice(order)
+    assert True
+```
+
+Every test verifies that a value exists, or that a function runs without crashing. None of them verify what the value *is*.
+
+They ask the senior developer.
+
+"We had zero test coverage in 2022. Management mandated 100% by end of Q3. We hit 100% by end of Q3."
+
+"Did you test anything?"
+
+"We tested that everything runs."
+
+"That's not—"
+
+"The badge is green."
+
+The badge has been green for three years. The bug the developer introduced had existed for three years before them. Separately, the discount function had been returning the original price, unmodified, since a refactor in Q4 2023.
+
+Every order since Q4 2023 applied a 0% discount.
+
+No one noticed. The revenue was higher than projected.
+
+The VP of Sales received a bonus.
+
+The developer files a bug: "Discounts not applying."
+
+The manager asks: "Can it wait until next sprint? We don't want to hurt revenue."
