@@ -7713,3 +7713,59 @@ Below the title: a line chart. Flat. Unchanged since February.
 The developer raises their hand.
 
 Nobody calls on them.
+
+## 2026-06-24
+
+A developer fixes a SQL injection vulnerability in the search bar. Parameterized queries. Forty-minute PR. Ships.
+
+The next morning: 40% of search traffic returns errors.
+
+They pull the logs. The failing queries are strange: `%1=1%`, `%ORDER BY revenue DESC%`, `%UNION SELECT account_tier%`.
+
+Not an attack. The queries are originating from internal IPs. From the sales team's laptops.
+
+It turns out the sales team had discovered the SQL injection vulnerability four months earlier. They hadn't reported it.
+
+They had *documented* it.
+
+There is a shared Google Doc titled "Search Tips & Tricks for Account Managers." Seventeen pages. Section 4: "Advanced Queries." Step-by-step instructions for using the search box to filter by internal fields not visible in the UI, sort by columns that don't appear on screen, and cross-reference the accounts table.
+
+The SQL injection tutorial is accurate, detailed, and — the developer reads it twice — better written than the internal data dictionary.
+
+Twelve sales reps. All twelve trained on it. A slide deck. A section in new-hire onboarding. The most recent trainee had joined three weeks ago.
+
+The developer has two options: roll back the security fix, or build the power-search UI the sales team actually needs. They spend three weeks building a proper advanced search interface. It ships.
+
+The sales team reviews the features. It's good. They're impressed.
+
+Then they ask if they can also use the old approach "just for some edge cases."
+
+The developer looks at the request.
+
+The "old approach" is SQL injection.
+
+"No," they say.
+
+The sales manager escalates to the CTO. "The search workflow is critical to pipeline visibility."
+
+The CTO asks the developer to add a feature flag.
+
+The developer opens a new file: `LEGACY_ADVANCED_SEARCH_MODE`. Disabled by default. The CTO's account has it enabled. So do eleven sales reps.
+
+The SQL injection vulnerability is patched.
+
+The feature flag reintroduces it, intentionally, behind a config toggle, for thirteen specific users who were using it to run business-critical queries.
+
+The security scanner runs on the next deploy.
+
+`No vulnerabilities detected. ✓`
+
+The Google Doc is updated: "Note: use the new search UI. For edge cases, ask your manager to enable Legacy Advanced Search Mode."
+
+The new hire opens the doc.
+
+Section 4 has been replaced by a link to the feature flag request form.
+
+They file a request.
+
+It is approved in four minutes.
