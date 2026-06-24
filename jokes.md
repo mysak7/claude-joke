@@ -7667,3 +7667,49 @@ The VP of Sales received a bonus.
 The developer files a bug: "Discounts not applying."
 
 The manager asks: "Can it wait until next sprint? We don't want to hurt revenue."
+
+## 2026-06-24
+
+A developer opens a ticket: "Add structured logging to the payment service."
+
+They add logging. The service now emits JSON. Clean, queryable, observable. They deploy and check the logs.
+
+The payment service is failing for 12% of all transactions. Silently. Since February.
+
+They open a new ticket: "Fix payment service failure rate." While filing it, they notice an existing ticket: "Users reporting missed charges." Filed in March. Assigned to a developer who left in April.
+
+They fix the root cause. Failure rate drops to 0%.
+
+The following week: a revenue anomaly. Finance flags a 12% drop in payment volume.
+
+The payments that were "failing" had been silently retried by users — multiple times each. Every retry was a new transaction. The failure was generating roughly 1.3x the expected revenue.
+
+Finance asks if the fix can be reverted.
+
+"We can't un-fix a bug."
+
+"We're not asking you to un-fix it. We're asking you to restore the previous behavior."
+
+The ticket is reopened: "Restore payment retry behavior for revenue continuity."
+
+The developer stares at the ticket.
+
+They close their laptop. They open it again.
+
+They add a new feature flag: `LEGACY_PAYMENT_RETRY_MODE`. It reintroduces the bug, intentionally, behind a config toggle.
+
+It ships. The flag is enabled in production. The failure rate returns to 12%.
+
+The structured logging now shows, in clean queryable JSON, exactly how broken the system is.
+
+The logs are not monitored.
+
+At the quarterly review, the VP of Finance presents a slide: "Payment reliability: stable."
+
+Below the title: a line chart. Flat. Unchanged since February.
+
+"Consistent performance," he says.
+
+The developer raises their hand.
+
+Nobody calls on them.
