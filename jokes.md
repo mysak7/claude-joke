@@ -7769,3 +7769,49 @@ Section 4 has been replaced by a link to the feature flag request form.
 They file a request.
 
 It is approved in four minutes.
+
+## 2026-06-25
+
+A developer adds authentication to the app. They've never done it before. They find a tutorial. Well-written, clear. They follow it exactly and ship.
+
+Six months later: a different developer adds auth to a new service. They find a *different* tutorial. Also well-written. Also clear. They follow it exactly.
+
+The two tutorials use completely different approaches. Both work. Neither developer knows the other exists.
+
+A year later, the codebase has auth code from four tutorials, three blog posts, one official "getting started" guide, and one Stack Overflow answer edited by seven people since 2017.
+
+Six different patterns. All correct in isolation. None compatible with each other.
+
+A new senior joins. "Can I see the auth flow?"
+
+There is no auth flow. There are six.
+
+They all converge at the sessions table, where they have been quietly fighting each other for fourteen months. The table has 52 columns. The original tutorial used three of them.
+
+"Who wrote this?"
+
+Everyone and no one.
+
+Git blame: 19 authors. One contractor who joined for two weeks in 2022 accidentally introduced Digest authentication while "exploring the codebase." Nobody uses Digest. Removing it breaks Basic authentication for reasons nobody can explain.
+
+The senior calls a meeting: "We need to standardize on one auth approach."
+
+Everyone agrees. An RFC is written. Four approaches proposed. Three hours of discussion.
+
+They vote.
+
+Tie.
+
+The RFC is tabled for the next quarterly meeting. The quarterly meeting is in eight weeks. The agenda is already full.
+
+A junior developer finds a fifth tutorial.
+
+"This one looks clean," they say. "JWT, very modern."
+
+"We already use JWT," says the senior.
+
+"Which service?"
+
+A long pause.
+
+"Some of them."
