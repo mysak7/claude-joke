@@ -7815,3 +7815,43 @@ A junior developer finds a fifth tutorial.
 A long pause.
 
 "Some of them."
+
+## 2026-06-25
+
+A developer discovers the app has been running with `DEBUG=true` in production for two years.
+
+Every exception prints a full stack trace to the response body. Internal file paths exposed. Database schema visible in error messages. SQL queries in plain text.
+
+They check the security logs. No breach alerts. No anomalies.
+
+"How did no one exploit this?" the security engineer asks.
+
+They check the user demographics. Per the original product brief: "primarily non-technical, older adults."
+
+They disable debug mode. Ship.
+
+That afternoon: three support tickets.
+
+All from power users. They had been *reading* the stack traces. One had been filing bug reports citing "OrderService.java, line 47." Another had been diagnosing her own data issues from the SQL in error responses. A third had been maintaining a personal wiki: "Errors We've Received and What They Mean" — 200 entries, organized by HTTP status code, with suggested workarounds.
+
+The developer emails him.
+
+"We've disabled debug mode. You'll no longer see those error messages."
+
+He responds in twenty minutes.
+
+"That's fine. I've been screenshotting them since 2022. I have 847."
+
+The developer asks, tentatively, if he'd share the collection.
+
+He sends a Google Drive link.
+
+It is now the most complete technical documentation of the application in existence. Accurate. Detailed. Cross-referenced. The error for `user_id: null` has three entries because it presents differently depending on which service throws it, and he documented all three variants with reproduction steps.
+
+The official docs were last updated in 2021. They describe a payment integration deprecated in Q3 of the same year.
+
+The onboarding guide now links to his wiki under "Useful Resources."
+
+It is labeled "community-maintained (unofficial)."
+
+It is the only link in the onboarding guide that still works.
