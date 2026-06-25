@@ -7855,3 +7855,69 @@ The onboarding guide now links to his wiki under "Useful Resources."
 It is labeled "community-maintained (unofficial)."
 
 It is the only link in the onboarding guide that still works.
+
+## 2026-06-25
+
+A developer diagnoses a production bug with `console.log` statements. Forty of them. Scattered across twelve files. They find the bug. Fix it. Deploy.
+
+They forget to remove the logs.
+
+Six months pass.
+
+A user screenshots their browser console and files a support ticket. The screenshot shows 4,000 log entries. Half are labeled `TEST`, `REMOVE THIS`, `why is this undefined???`, `ok wait`, and `THIS MAKES NO SENSE`.
+
+One entry appears every 200ms:
+
+`still alive`
+
+The developer opens the codebase. The `still alive` log is in a function called `checkConnection()`. They trace it. It was supposed to be a temporary heartbeat during debugging. Somewhere between "temporary" and "shipped to production," it became the function's only side effect.
+
+They remove the log.
+
+The app crashes.
+
+`checkConnection()` had no return value. The only way the calling code knew the connection was healthy was the absence of an error. The `console.log` call was not entirely inert — the act of logging had been inadvertently resolving a Promise microtask timing issue introduced in a refactor fourteen months ago.
+
+Removing the log removed the timing. The timing was load-bearing.
+
+They restore the log.
+
+A performance engineer reviews the app. "You're logging 864,000 times per day. This is a memory pressure issue."
+
+"I know."
+
+"Can you remove it?"
+
+"No."
+
+"Why not?"
+
+The developer explains the Promise timing. The performance engineer listens. They ask three clarifying questions. The developer answers them. The engineer asks a fourth.
+
+They sit in silence for a moment.
+
+"So the console log is fixing a concurrency bug."
+
+"Yes."
+
+"By accident."
+
+"By accident."
+
+"And you can't reproduce the original bug because the log is always there."
+
+"Correct."
+
+The performance engineer closes their laptop.
+
+`still alive` is added to the technical architecture document under "Core Infrastructure."
+
+The section heading is not ironic. Nobody checked.
+
+The log runs today. 200ms intervals. Six characters. No recipients.
+
+`still alive`
+
+`still alive`
+
+`still alive`
