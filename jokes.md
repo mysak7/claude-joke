@@ -8068,3 +8068,63 @@ The change management team schedules a review.
 Nobody answers.
 
 They open a ticket to ask.
+
+## 2026-06-26
+
+A developer spends six months learning Rust to rewrite a Python script that runs once a month.
+
+The Python script: 40 lines. Runtime: 3 seconds.
+
+The Rust rewrite: 400 lines. Runtime: 12ms.
+
+"Twelve milliseconds," they announce. "It runs in twelve milliseconds."
+
+"It runs once a month," says their manager.
+
+"Yes."
+
+"So you saved... two seconds and nine hundred eighty-eight milliseconds."
+
+"Per run."
+
+"Per month."
+
+"The Python was memory-unsafe."
+
+"It runs once a month."
+
+"It *could* have had a buffer overflow."
+
+"It reads a CSV. Then emails someone."
+
+A pause.
+
+"The Rust version is memory-safe."
+
+"You have zero bugs in a script that runs once a month and reads a CSV."
+
+"Not anymore."
+
+The manager stares at the six months of commits.
+
+"What was wrong with the Python version?"
+
+"Nothing."
+
+"Then why—"
+
+"I've always wanted to learn Rust."
+
+The manager makes a note in their calendar: *No more language-agnostic tickets.*
+
+The script runs on the first of the following month. Runtime: 12ms.
+
+The developer is not there to see it. They're at a conference, giving a lightning talk: "Zero-Cost Abstractions in Production: A Case Study."
+
+The slides describe the CSV script.
+
+The audience: two hundred engineers, all quietly learning Rust, all waiting for an excuse.
+
+Three people approach afterward with questions.
+
+All three already have a script they want to rewrite.
