@@ -7921,3 +7921,69 @@ The log runs today. 200ms intervals. Six characters. No recipients.
 `still alive`
 
 `still alive`
+
+## 2026-06-26
+
+A developer commits `package-lock.json`. "Reproducible builds," they say.
+
+Six months later, a new developer clones the repo and runs `npm install`. 847 warnings. Three critical vulnerabilities. One package requires a Python 2 binding that hasn't existed since 2021.
+
+"The lock file says these are the right versions," they say.
+
+"The lock file is from six months ago," says the senior.
+
+"Aren't lock files supposed to—"
+
+"Run `npm audit fix`."
+
+`npm audit fix` upgrades 14 packages. Two are major versions. The app starts but the login page is broken.
+
+They revert. `npm install --legacy-peer-deps`. Works. They commit.
+
+CI fails. CI runs Node 20. The lock file was generated on Node 18. The hashes don't match.
+
+"Update the lock file on CI," says the senior.
+
+"But then the lock file won't match my local."
+
+"Correct."
+
+"Isn't the point of a lock file to—"
+
+"Update the lock file."
+
+They update the lock file on CI. Now their local is out of sync. They update locally. Now CI is out of sync again.
+
+They set up a bot to auto-update the lock file weekly and auto-merge the PRs. Nobody reviews lock file PRs. Everyone agrees this is fine.
+
+Three months later, the bot silently merges a lock file PR that upgrades a transitive dependency with a breaking change. The date parsing library drops support for two-digit years. The app's annual report generator breaks.
+
+Nobody notices for six weeks because the annual report generator runs in December.
+
+It is June.
+
+The lock file is deleted. `npm install` runs without one from that day forward.
+
+"Reproducible builds," the senior says, without looking up.
+
+"We don't have a lock file anymore."
+
+"I know."
+
+"So every `npm install` pulls whatever's latest."
+
+"Yes."
+
+"That's not reproducible."
+
+"Neither was what we had."
+
+The developer stares at the empty space where `package-lock.json` used to be.
+
+In the commit history, the deletion message reads: `chore: remove lock file (it wasn't working anyway)`.
+
+There are eleven 👍 reactions. It is the most-reacted commit in the repository's history.
+
+The second most-reacted is the original commit that added it.
+
+That one also has eleven 👍.
