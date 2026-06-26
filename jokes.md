@@ -7987,3 +7987,84 @@ There are eleven 👍 reactions. It is the most-reacted commit in the repository
 The second most-reacted is the original commit that added it.
 
 That one also has eleven 👍.
+
+## 2026-06-26
+
+A developer runs a query to force a password reset for one suspicious account.
+
+```sql
+UPDATE users SET password_reset_required = true
+```
+
+The database responds: `4,200,847 rows affected.`
+
+They look at where the WHERE clause should be.
+
+There is no WHERE clause.
+
+They immediately run the correction:
+
+```sql
+UPDATE users SET password_reset_required = false;
+UPDATE users SET password_reset_required = true WHERE id = 38291;
+```
+
+Eleven seconds. The column is correct. Nobody was logged out. No passwords changed. No one noticed.
+
+They don't file an incident report. It's fixed.
+
+Three weeks later, a security audit surfaces it in the query logs.
+
+`4,200,847 rows affected.`
+
+The auditor flags it. A Slack thread opens. They explain the eleven-second correction.
+
+"But you ran a mass UPDATE with no WHERE clause."
+
+"For eleven seconds. Then I fixed it."
+
+"On the production database."
+
+"Yes."
+
+"Without a change management ticket."
+
+A ticket is opened retroactively for the mistake. Then a second for the correction. Then a third for the failure to open tickets. An incident report is filed. P2.
+
+"Nothing actually broke," the developer says at the postmortem.
+
+"The process broke," says the platform lead.
+
+New policy: all DDL and DML queries must be reviewed by two senior engineers, submitted via the change management portal, approved with a business justification, and scheduled in a maintenance window.
+
+Review window: 48 hours minimum.
+
+Two weeks later, a developer needs to fix a typo in a display name for a single user.
+
+```sql
+UPDATE users SET display_name = 'Katherine' WHERE id = 77402
+```
+
+They submit the ticket. Attach a justification. Tag two reviewers.
+
+Day one: no response. Day two: one reviewer is at a conference. Day three: the other asks for the rollback plan.
+
+The rollback plan for updating one user's display name is submitted as a 200-word document.
+
+Day four: approved.
+
+They run the query.
+
+`1 row affected.`
+
+The user had already updated their name through account settings on day two.
+
+The developer marks the ticket Resolved. Opens a new one: "Can we exclude single-row updates from the 48-hour review window?"
+
+The change management team schedules a review.
+
+"What's the review window?" the developer asks.
+
+Nobody answers.
+
+They open a ticket to ask.
