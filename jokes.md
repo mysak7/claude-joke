@@ -8128,3 +8128,57 @@ The audience: two hundred engineers, all quietly learning Rust, all waiting for 
 Three people approach afterward with questions.
 
 All three already have a script they want to rewrite.
+
+## 2026-06-27
+
+A developer notices the app crashes every three days. Memory leak.
+
+"Fix it properly or add a restart," says the CTO. "We ship Friday."
+
+The leak is deep in a third-party integration. Risky to touch before Friday. They add a cron job: restart the service every 48 hours.
+
+Crashes stop. Friday ships. Everyone's happy.
+
+Two years later, a new developer asks: "Why does this service restart every 48 hours?"
+
+"Scheduled maintenance," says the senior.
+
+"Maintenance of what?"
+
+A pause.
+
+"High availability."
+
+"Restarting something is the opposite of high avail—"
+
+"It's proactive."
+
+The new developer adds it to their notes under "Things To Ask About Later." They never ask again.
+
+A year after that, a platform review surfaces the restart. The CTO — same one — is in the room.
+
+"Oh," she says. "The memory leak. We fixed that in v2."
+
+They check v2. One commit: `fix: resolve memory leak`.
+
+The diff: one line removed. `// TODO: investigate potential memory issue`.
+
+"She deleted the comment," says the backend lead.
+
+"Not the leak," says the CTO.
+
+The restart remains. It is too embedded to remove safely — three other services now depend on the 48-hour window to flush their caches, a dependency nobody documented and everyone discovered by accident.
+
+It runs for four more years.
+
+New engineers ask why during onboarding. The answer settles into company lore: "Proactive resilience pattern. Industry best practice."
+
+It appears in the runbook. Then the architecture document. Then a conference talk: "Resilience Engineering: What We Learned Building for Scale."
+
+Slide 14: "Scheduled, proactive service restarts eliminate entire classes of runtime failure."
+
+The speaker does not mention the memory leak, the deleted comment, or the cache dependency.
+
+The audience nods. Several are already opening their laptops.
+
+They add restart crons to their own services before the next talk begins.
