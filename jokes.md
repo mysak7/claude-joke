@@ -8250,3 +8250,71 @@ Team A opens a PR in week two.
 The governance model is untested.
 
 There are no instructions for what happens next.
+
+## 2026-06-27
+
+A developer opens a performance ticket. "Everything feels slow," the PM says.
+
+They profile the app. The flame graph shows a 390ms response time spread across dozens of calls. They focus on the tallest bar: database queries. They add indexes, rewrite joins, introduce a cache. Three weeks.
+
+Response time: 350ms. Better.
+
+The PM says it still feels slow.
+
+They profile again. Now the API serializer is the tallest bar. They switch to a faster JSON library, add gzip compression, restructure the response schema. Three more weeks.
+
+320ms.
+
+Still feels slow.
+
+Four months and six optimizations later, the developer has rewritten the database layer, the API gateway, and the caching strategy. Response time: 240ms. They've cut it in half.
+
+A new engineer joins the team. She opens the original flame graph from day one.
+
+"What's this?" She points at the third bar from the left.
+
+`getWeatherForecast()`: 280ms. Present in every request.
+
+"Why does the app fetch live weather data?"
+
+"The dashboard has a weather widget."
+
+She opens the dashboard. Bottom right corner. A small sun icon. `72°F. Sunny.`
+
+"Who uses this?"
+
+They check the analytics. Zero clicks in the past eighteen months. The PM who requested it left the company in 2023. The API key costs $40/month.
+
+They delete the widget. One line of JSX.
+
+Response time: 48ms.
+
+"So it was the weather the whole time?" the developer asks.
+
+"The profiler showed it on day one."
+
+"I saw that bar. I thought it was a rendering artifact."
+
+"It was 280 milliseconds."
+
+"I was focused on the database."
+
+"The database is fine."
+
+"It is now."
+
+"It was fine before."
+
+A silence.
+
+The developer looks at four months of commits. Index changes, query rewrites, serializer upgrades, compression strategies, cache eviction policies.
+
+All of it was real optimization. All of it improved things. None of it was the problem.
+
+The weather widget was the problem.
+
+It's gone now. The sun icon is gone. The temperature reading is gone. The $40/month API charge is gone.
+
+Response time: 48ms.
+
+The weather outside: unknown.
