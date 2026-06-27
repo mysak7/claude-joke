@@ -8182,3 +8182,71 @@ The speaker does not mention the memory leak, the deleted comment, or the cache 
 The audience nods. Several are already opening their laptops.
 
 They add restart crons to their own services before the next talk begins.
+
+## 2026-06-27
+
+A developer packages common utilities into an internal library. "No more copy-pasting. Write it once, everyone benefits."
+
+Three teams adopt it. The developer is commended at the quarterly review.
+
+Week three: Team A needs to change one behavior. They open a PR. Team B has a different opinion. So does Team C. Twenty-nine comments. The change must be backwards-compatible. The backwards-compatible version needs a config flag. The config flag needs documentation. The documentation surfaces two undocumented behaviors that turn out to be load-bearing for Team B.
+
+Six weeks later, Team A gives up and copy-pastes the function into their own codebase.
+
+Two months after that, Team B opens a PR for a different change. Same result. They also copy-paste.
+
+Team C never opens a PR. They fork the library internally. This goes undocumented for seven months.
+
+The shared library sits at `v1.2.3`. It has eleven open PRs. The original maintainer left in Q2. Everyone is on a different version: Team A on `1.2.3`, Team B on `1.5.0`, Team C on an internal fork they call `1.5.0-stable-actually`.
+
+A security vulnerability is found. The fix: upgrade to `1.5.1`.
+
+Team A: three-week upgrade path due to version gap.
+Team B: already on `1.5.0`, updates in an afternoon.
+Team C: doesn't know about the vulnerability. They're not watching the original repo. They discover it six weeks later when Team B mentions it in a Slack thread about something unrelated.
+
+A new developer joins. They find four copies of the same utility function across the codebase.
+
+"Why aren't we using the shared library?"
+
+"We are," says the senior.
+
+"Team A's copy is eight months out of date."
+
+"Team A uses their own version."
+
+"And Team C's fork?"
+
+"Team C is doing their own thing."
+
+"So the shared library isn't shared."
+
+"It's available."
+
+"To whom?"
+
+A pause.
+
+The library is officially deprecated the following year. A new one is announced: `@company/core-utils`.
+
+"This time we have a governance model," says the lead architect.
+
+"For approving changes?"
+
+"For discussing changes."
+
+"What's the approval process?"
+
+"We discuss it."
+
+"And then?"
+
+"We'll figure that out."
+
+Three teams adopt `@company/core-utils`.
+
+Team A opens a PR in week two.
+
+The governance model is untested.
+
+There are no instructions for what happens next.
