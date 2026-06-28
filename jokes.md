@@ -8318,3 +8318,59 @@ It's gone now. The sun icon is gone. The temperature reading is gone. The $40/mo
 Response time: 48ms.
 
 The weather outside: unknown.
+
+## 2026-06-28
+
+A developer notices every button in the app has a 100ms delay before responding.
+
+They profile it. The handlers fire immediately. The UI updates immediately. Nothing in the call stack explains it.
+
+They search the codebase:
+
+```js
+setTimeout(() => submitForm(), 100)
+```
+
+One line, everywhere. Committed 18 months ago. Commit message: `fix`.
+
+The PR branch: deleted. The author: left the company. The Jira ticket: in a closed sprint in a migrated system.
+
+Slack has a thread. The last message, from the day before the author left:
+
+*"Found the browser timing issue. Added a small delay. Fixed."*
+
+Nobody replied. Nobody asked what the issue was.
+
+The developer removes the `setTimeout`. Every button responds instantly. They deploy.
+
+Six minutes later: a bug report. Users in Australia see prices in USD.
+
+They trace it. The form submits before a third-party analytics SDK finishes initializing. The SDK throws on late interaction events. A swallowed exception somewhere breaks the session context. No session → wrong locale → wrong currency.
+
+One hundred milliseconds is exactly how long the SDK needs to initialize on first interaction.
+
+This has been true since launch. Nobody documented it. The `setTimeout` author discovered it empirically, fixed it, and left.
+
+The `setTimeout` is restored.
+
+New comment:
+
+```js
+// DO NOT REMOVE
+// Analytics SDK requires ~100ms to initialize on first interaction
+// Removing this breaks locale detection → wrong currency for international users
+// See incident 2026-06-28
+// SDK docs: unknown. Vendor support: unreachable. Author: left the company.
+```
+
+The delay remains.
+
+The buttons respond in 100ms.
+
+Somewhere, an engineer uses the app for the first time. They don't notice the delay. Nobody ever notices the delay.
+
+The 100ms is invisible.
+
+The 100ms is load-bearing.
+
+Nobody is 1ms early.
