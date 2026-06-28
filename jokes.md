@@ -8406,3 +8406,47 @@ Three weeks later, a new ticket: "Button is 1px too far to the left."
 The reviewer on the resulting PR leaves one comment:
 
 "Can you use a spacing token?"
+
+## 2026-06-28
+
+A developer audits the production environment variables.
+
+Every secret matches `.env.example` exactly.
+
+`API_KEY=your_api_key_here`. `JWT_SECRET=your_jwt_secret`. `DB_PASSWORD=your_db_password`.
+
+The app has been in production for two years.
+
+They quietly rotate every value. All user sessions are invalidated. 40,000 users are logged out at 3pm on a Friday.
+
+Slack erupts. The on-call engineer pages the developer.
+
+"What changed?"
+
+"I rotated the secrets."
+
+"Why?"
+
+"They were `your_api_key_here`."
+
+A long silence.
+
+"For two years?"
+
+"For two years."
+
+The incident report root cause: "Secret rotation triggered mass session invalidation." Recommended action: "Schedule secret rotation during maintenance windows."
+
+There is no mention of what the secrets were before rotation.
+
+The developer is recognized at the quarterly all-hands for "proactive security hygiene."
+
+Three weeks later, a new developer joins. They clone the repo. They copy `.env.example` to `.env.local`.
+
+They ask if the staging environment uses the same values.
+
+"Sure," says the senior. "Staging doesn't need real secrets."
+
+Six months later, the staging database has real user data in it.
+
+For unrelated reasons.
