@@ -8374,3 +8374,35 @@ The 100ms is invisible.
 The 100ms is load-bearing.
 
 Nobody is 1ms early.
+
+## 2026-06-28
+
+A ticket: "Button is 1px too far to the right."
+
+The developer opens the CSS. `margin-left: 24px`. They change it to 23. Done in thirty seconds.
+
+The reviewer: "Use a spacing token, not a hardcoded value."
+
+They add `--spacing-md: 24px` to the design system. But they need 23, not 24. 23 has no token.
+
+They add `--spacing-near-md: 23px`.
+
+"The name doesn't follow our conventions."
+
+A design systems sync is scheduled. Seven people. Forty minutes. The designer asks who filed the ticket.
+
+A contractor. Left in March. Account deactivated.
+
+The button has been 1px off since 2019. No test caught it. No user reported it. No designer flagged it.
+
+"Should we just close this?"
+
+"We've already held a meeting and created two tokens."
+
+The fix ships. The design system now has 23 spacing tokens covering values from `4px` to `64px`, including `--spacing-almost-sm`, `--spacing-between-md-and-lg`, and now `--spacing-near-md`.
+
+Three weeks later, a new ticket: "Button is 1px too far to the left."
+
+The reviewer on the resulting PR leaves one comment:
+
+"Can you use a spacing token?"
