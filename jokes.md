@@ -8559,3 +8559,45 @@ The senior looks at the class. Then at the git history. Then at the ceiling.
 "We don't talk about the bug."
 
 The new developer nods. They add `# do not remove` to their own `print` statement and push to main.
+
+## 2026-06-29
+
+A junior developer shows their code to a senior developer.
+
+"These nested if-statements are a code smell," the senior says. "Consider polymorphism."
+
+The junior rewrites it. Strategy pattern. Factory. Dependency injection.
+
+The senior reviews.
+
+"This is over-engineered. You've added three abstractions for ten lines of logic."
+
+The junior removes the patterns. Clean, flat conditions.
+
+"These conditions should be a lookup table," the senior says.
+
+The junior builds a lookup table.
+
+"Now you've got too many edge cases in the table. This might just be an if-statement situation."
+
+The junior stares at their screen.
+
+"So... if-statements?"
+
+"It depends," the senior says.
+
+"On what?"
+
+The senior considers this for a long time.
+
+"Context."
+
+The junior creates a ticket: *"Decide on architecture approach for conditional logic."*
+
+It sits in the backlog for three months. The if-statements ship in a Friday hotfix. There are now sixteen of them.
+
+At the next quarterly planning, someone proposes migrating to a strategy pattern.
+
+The senior nods slowly.
+
+"Good idea," they say.
