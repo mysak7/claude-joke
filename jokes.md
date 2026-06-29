@@ -8450,3 +8450,70 @@ They ask if the staging environment uses the same values.
 Six months later, the staging database has real user data in it.
 
 For unrelated reasons.
+
+## 2026-06-29
+
+A developer adds a comment while rushing to ship:
+
+```python
+# TODO: fix this properly
+```
+
+They ship it and forget it.
+
+Five years later, a new developer audits the codebase for technical debt. They write a script to count TODO comments by author.
+
+1,847 TODOs across the repo.
+
+Top contributor: the original developer. 1,203 TODOs, spanning every year from 2019 to present.
+
+They are still on the team.
+
+A meeting is scheduled. The developer is shown the report.
+
+"I was going to get to them," they say.
+
+"Which ones?"
+
+They scroll through the list.
+
+```
+# TODO: fix this properly
+# TODO: handle this edge case
+# TODO: remove this hack
+# TODO: understand why this works
+# TODO: ask someone about this
+# TODO: fix before Q3   ← added Q2 2021
+```
+
+"All of them," they say. "Eventually."
+
+The new developer creates a ticket: "Resolve outstanding TODO comments."
+
+It is assigned to the original developer.
+
+They open the ticket. They read through all 1,203 TODOs. Each one is a small time capsule: a rushed afternoon, a ship deadline, a "good enough for now" that became permanent.
+
+They add a comment to the ticket:
+
+`TODO: resolve TODOs`
+
+They move it to the backlog.
+
+At the next sprint planning, the ticket comes up.
+
+"Story points?"
+
+The original developer looks at 1,203 TODOs, five years of shortcuts, the accumulated weight of every deadline they ever prioritized over quality.
+
+"Fibonacci doesn't go high enough," they say.
+
+The ticket is closed as an Epic. It now contains 1,203 sub-tickets. None are assigned.
+
+In the codebase, a new comment appears:
+
+```python
+# TODO: fix the TODO situation
+```
+
+They ship it.
