@@ -8517,3 +8517,45 @@ In the codebase, a new comment appears:
 ```
 
 They ship it.
+
+## 2026-06-29
+
+A developer is debugging a race condition. They narrow it down to one of two functions.
+
+They add a `print` statement.
+
+The bug disappears.
+
+They remove the `print` statement.
+
+The bug returns.
+
+They stare at the screen for a long time. Then they rename the `print` statement to `observer` and wrap it in a utility class.
+
+```python
+class RaceConditionObserver:
+    def observe(self, value):
+        print(value)  # do not remove
+
+observer = RaceConditionObserver()
+```
+
+They open a PR. The title is: *"Add observer pattern for improved system stability."*
+
+It passes code review. The reviewer leaves a comment: "Nice abstraction."
+
+Three years later, a new developer asks why the `RaceConditionObserver` class exists.
+
+"It's load-bearing," the senior says.
+
+"What does it observe?"
+
+"The bug."
+
+"What bug?"
+
+The senior looks at the class. Then at the git history. Then at the ceiling.
+
+"We don't talk about the bug."
+
+The new developer nods. They add `# do not remove` to their own `print` statement and push to main.
