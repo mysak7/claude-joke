@@ -8645,3 +8645,15 @@ The senior dev explains that `doStuff` worked, `doStuff2` fixed a bug in `doStuf
 The senior dev opens a terminal, runs a search, and stares at the result for a while.
 
 "`doStuff2`."
+
+## 2026-06-30
+
+A developer finds a config file with a value set to `CHANGE_ME_BEFORE_PROD`.
+
+`git blame` says it was added four years ago, by someone who left the company three years ago, in a commit titled "temporary placeholder, will fix later."
+
+The service has been in production since.
+
+The developer opens a ticket to replace it. Priority: Low. Severity: Cosmetic.
+
+Six months later, the value is still `CHANGE_ME_BEFORE_PROD`. So is the developer's manager's password, it turns out, but that's a separate incident report.
