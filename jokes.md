@@ -8629,3 +8629,19 @@ A new hire asks why email validation is so complicated.
 "Can't we just check for an `@` symbol?"
 
 The developer says nothing. They just start writing test case twelve.
+
+## 2026-06-30
+
+A new hire asks why a function is named `doStuff2_final_REAL`.
+
+The senior dev explains that `doStuff` worked, `doStuff2` fixed a bug in `doStuff`, `doStuff2_final` fixed a bug in the fix, and `doStuff2_final_REAL` fixed a bug introduced by a deploy that used `doStuff2_final` by mistake.
+
+"Why not just delete the old ones?"
+
+"Something still imports `doStuff`."
+
+"What imports it?"
+
+The senior dev opens a terminal, runs a search, and stares at the result for a while.
+
+"`doStuff2`."
