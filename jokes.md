@@ -8601,3 +8601,31 @@ At the next quarterly planning, someone proposes migrating to a strategy pattern
 The senior nods slowly.
 
 "Good idea," they say.
+
+## 2026-06-30
+
+A developer needs to validate email addresses. They write a regex.
+
+It is fourteen characters long. It fails on `.co.uk` domains.
+
+They extend it. Twenty-eight characters. It fails on `+` aliases.
+
+They extend it again. Sixty-one characters. A coworker walks by, glances at the screen, and keeps walking without a word.
+
+By Friday the regex is four hundred characters long, spans three lines, and has a comment above it that just says `# DO NOT TOUCH`.
+
+It still rejects `o'brien@example.com`.
+
+The developer opens a new ticket: *"Investigate replacing regex with proper RFC 5322 parser."*
+
+They estimate two days.
+
+The ticket is still open. The regex now has a unit test suite of its own, eleven test cases, all passing, all named things like `test_edge_case_7` and `test_the_other_one`.
+
+A new hire asks why email validation is so complicated.
+
+"Email addresses look simple," the developer says, staring into the middle distance, "but they are not simple."
+
+"Can't we just check for an `@` symbol?"
+
+The developer says nothing. They just start writing test case twelve.
