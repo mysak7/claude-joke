@@ -8657,3 +8657,19 @@ The service has been in production since.
 The developer opens a ticket to replace it. Priority: Low. Severity: Cosmetic.
 
 Six months later, the value is still `CHANGE_ME_BEFORE_PROD`. So is the developer's manager's password, it turns out, but that's a separate incident report.
+
+## 2026-07-01
+
+A developer opens a pull request. It is twelve lines.
+
+Thirty-six comments accumulate over two days. Three request changes. Two are philosophical debates. One links to a blog post from 2014. One is a nit about variable naming that the commenter marks as "non-blocking," then revisits twice. Seven are thumbs-up emojis from people who were added as reviewers by accident.
+
+The developer addresses all comments. The PR now has twenty-two lines.
+
+New comments arrive. Four of them are about the new lines.
+
+The developer requests a sync. The sync is scheduled, rescheduled, and eventually takes place as a Slack thread where someone asks, "Have we considered just reverting this and starting fresh?"
+
+The original twelve lines ship six weeks later, unchanged — except for one variable renamed from `data` to `userData` and then back to `data` when someone pointed out that `userData` was redundant.
+
+The PR description still says "small refactor."
