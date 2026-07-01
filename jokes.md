@@ -8693,3 +8693,31 @@ They revert the security patch.
 The CVE goes into the backlog at Priority: Medium. It is closed eight months later as "Won't Fix" after the library is abandoned and a new CVE is filed for the replacement.
 
 The date picker still shows the wrong timezone in Finland.
+
+## 2026-07-01
+
+A team is told their code coverage must reach 90%.
+
+It is currently 43%.
+
+In the next sprint, a developer writes forty-eight tests. Coverage reaches 91%. The PR is approved in six minutes — the fastest approval in team history.
+
+A senior engineer reviews the tests later.
+
+`test_add_returns_sum`: calls `add(2, 3)`, asserts result is `5`. ✓  
+`test_add_with_zero`: calls `add(0, 0)`, asserts result is `0`. ✓  
+`test_login_flow`: calls the login function, asserts it does not throw. ✓
+
+The login function opens a database connection, inserts a session token, and sends an email. The test has no database. No email server. The function runs, touches nothing real, and does not throw because the database and email clients are silently swallowed by an exception handler added in 2019 that someone felt bad about at the time.
+
+The exception handler has a comment: `# TODO: remove this`.
+
+The login tests have been green for three years.
+
+At the next retrospective, someone asks why a production outage wasn't caught in testing.
+
+"Coverage was at 91%," says the developer.
+
+Everyone nods.
+
+"We should raise the bar to 95%," says the PM.
