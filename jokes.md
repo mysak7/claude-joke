@@ -8673,3 +8673,23 @@ The developer requests a sync. The sync is scheduled, rescheduled, and eventuall
 The original twelve lines ship six weeks later, unchanged — except for one variable renamed from `data` to `userData` and then back to `data` when someone pointed out that `userData` was redundant.
 
 The PR description still says "small refactor."
+
+## 2026-07-01
+
+A developer runs `npm update` to patch a security vulnerability.
+
+Fourteen packages update. The app still starts. The tests still pass.
+
+One week later, a user reports that the date picker shows dates in the wrong timezone.
+
+The developer bisects. The culprit is a minor version bump to a package called `moment-utils-compat-wrapper`, which is a wrapper around a wrapper around `moment.js`, which has been deprecated since 2022.
+
+"Should we just remove moment?" someone asks.
+
+They check. The app depends on moment through six separate packages, three of which are also deprecated. One was last published in 2019 and has 847 transitive dependencies.
+
+They revert the security patch.
+
+The CVE goes into the backlog at Priority: Medium. It is closed eight months later as "Won't Fix" after the library is abandoned and a new CVE is filed for the replacement.
+
+The date picker still shows the wrong timezone in Finland.
