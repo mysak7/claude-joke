@@ -8753,3 +8753,23 @@ A developer asks it to just fix line 47.
 It fixes line 47. It also renames three variables for clarity, adds a README, and leaves a comment: `// TODO: understand the rest of this codebase`.
 
 The PR is approved in four minutes. Nobody reads past line 47 either.
+
+## 2026-07-02
+
+A junior developer accidentally opens vim during a pair programming session.
+
+"Press Escape, then colon-q," says the senior.
+
+They type it. The file now contains the text `:q`. Somewhere, a mode was wrong.
+
+The senior takes the keyboard. Escape. Escape again, for safety. `:q!`. Freedom.
+
+"How do you know all that?" asks the junior.
+
+"I don't," says the senior. "In 2011 I opened vim by accident and pressed keys until it stopped. I've been doing that ever since. At some point people started calling it experience."
+
+The junior nods, and quietly sets their git editor to nano.
+
+Ten years later, they grab a keyboard mid-outage, hit Escape twice, and type `:q!` — muscle memory from lessons they don't remember taking. A junior watches, impressed.
+
+"How do you know all that?"
