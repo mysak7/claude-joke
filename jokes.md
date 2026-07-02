@@ -8721,3 +8721,19 @@ At the next retrospective, someone asks why a production outage wasn't caught in
 Everyone nods.
 
 "We should raise the bar to 95%," says the PM.
+
+## 2026-07-02
+
+A developer optimizes a function from O(n²) to O(n log n) and proudly announces a 40% speedup in the team channel.
+
+Someone benchmarks it. The input size in production is 3.
+
+The O(n²) version was 0.001ms. The O(n log n) version, with its extra sorting overhead, is 0.0012ms.
+
+"It's asymptotically better," the developer says.
+
+"The asymptote is not where we live," says the senior engineer.
+
+The PR is approved anyway, titled "Improve scalability for future growth."
+
+Three years later, the input size is still 3.
