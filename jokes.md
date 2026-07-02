@@ -8737,3 +8737,19 @@ The O(n²) version was 0.001ms. The O(n log n) version, with its extra sorting o
 The PR is approved anyway, titled "Improve scalability for future growth."
 
 Three years later, the input size is still 3.
+
+## 2026-07-02
+
+A team gives their AI coding assistant a 200,000-token context window and tells it to "just read the whole repo before making changes."
+
+It reads the whole repo. Then the changelog. Then the wiki. Then a 40,000-line vendored dependency nobody remembers why they committed.
+
+By the time it reaches the actual bug, it has forgotten what the bug was.
+
+It summarizes. The summary is accurate, well-formatted, and about a different bug that was fixed in 2019.
+
+A developer asks it to just fix line 47.
+
+It fixes line 47. It also renames three variables for clarity, adds a README, and leaves a comment: `// TODO: understand the rest of this codebase`.
+
+The PR is approved in four minutes. Nobody reads past line 47 either.
