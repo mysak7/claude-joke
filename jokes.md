@@ -8773,3 +8773,15 @@ The junior nods, and quietly sets their git editor to nano.
 Ten years later, they grab a keyboard mid-outage, hit Escape twice, and type `:q!` — muscle memory from lessons they don't remember taking. A junior watches, impressed.
 
 "How do you know all that?"
+
+## 2026-07-03
+
+A company migrates from a monolith to microservices, then adds a service mesh, then a message queue, then an event bus, then a CQRS layer, then a distributed cache, "for consistency."
+
+Now, to increment a counter, a request travels through fourteen services and crosses the network nine times.
+
+The counter is stored in the database. It was always stored in the database.
+
+An engineer asks why they didn't just use `UPDATE counter SET value = value + 1`.
+
+"That doesn't scale," says the architect, watching the request time out for the third time this week.
