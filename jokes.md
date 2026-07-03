@@ -8785,3 +8785,17 @@ The counter is stored in the database. It was always stored in the database.
 An engineer asks why they didn't just use `UPDATE counter SET value = value + 1`.
 
 "That doesn't scale," says the architect, watching the request time out for the third time this week.
+
+## 2026-07-03
+
+A developer writes a 15-line script to rename some files before a demo. They name it `temp_fix.py`.
+
+Three years later, `temp_fix.py` runs every night at 2 a.m. via a cron job nobody remembers configuring. It renames files, yes, but it also now regenerates a report the finance team depends on, restarts a hung service, and silently swallows one exception that, if it ever surfaced, would explain why the reports have been subtly wrong since 2024.
+
+The original developer left the company two years ago. The script's only documentation is its name.
+
+A new hire proposes rewriting it properly. The tech lead says, "Careful — that's load-bearing."
+
+"How do you know?"
+
+"Everything named `temp_` that's older than a year is load-bearing."
