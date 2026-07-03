@@ -8799,3 +8799,15 @@ A new hire proposes rewriting it properly. The tech lead says, "Careful — that
 "How do you know?"
 
 "Everything named `temp_` that's older than a year is load-bearing."
+
+## 2026-07-03
+
+A recursive function walks into a bar.
+
+A recursive function walks into a bar.
+
+A recursive function walks into a bar.
+
+...
+
+Eventually, the stack overflows and the bartender calls it a night — nobody ever defined a base case for "closing time."
