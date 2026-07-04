@@ -8823,3 +8823,19 @@ Six months later, a bug ships because someone quietly redefines `const TWO = 3;`
 The code review that catches it says: "This violates our no-magic-numbers policy."
 
 Nobody points out that the number is still magic. It just has a passport now.
+
+## 2026-07-04
+
+A QA engineer asks what happens if a user's birthday is February 29th.
+
+"Edge case," says the developer. "Won't fix. It affects 0.07% of users, once every four years."
+
+The ticket is closed. The feature ships. It runs flawlessly — for 1,460 days.
+
+On day 1,461, every leap-year user is locked out at midnight. The developer who wrote the code is gone. The engineer who closed the ticket is gone. The QA engineer is now the director of engineering.
+
+A new developer fixes it in an hour and adds a regression test that mocks the system clock — because CI can't wait until 2032 to run.
+
+The postmortem lists the root cause: "Rare edge case, impossible to foresee."
+
+Attached to the postmortem: the original ticket, foreseeing it.
