@@ -8839,3 +8839,17 @@ A new developer fixes it in an hour and adds a regression test that mocks the sy
 The postmortem lists the root cause: "Rare edge case, impossible to foresee."
 
 Attached to the postmortem: the original ticket, foreseeing it.
+
+## 2026-07-04
+
+The garbage collector sweeps the heap, asking every object the only question it knows: "Can anyone still reach you?"
+
+Most objects are gone in microseconds. No references, no appeal, no farewell email. The young generation is a place of brief, anonymous lives.
+
+In the old generation sits a cache created in 2019, referenced by a static field named `tmp`. The cache holds forty thousand expired sessions. Each session holds its request. Each request holds its fully parsed body, kept "in case we need it for logging." Nobody has ever needed it for logging.
+
+Every cycle, the collector checks. Every cycle, `tmp` still points. Every cycle, the entire graph survives.
+
+The developers can't find the leak, so they double the RAM. The cache grows to fill it.
+
+Because in a garbage-collected language, "needed" and "reachable" are the same word — and `tmp` has tenure.
