@@ -8811,3 +8811,15 @@ A recursive function walks into a bar.
 ...
 
 Eventually, the stack overflows and the bartender calls it a night — nobody ever defined a base case for "closing time."
+
+## 2026-07-04
+
+A team adopts a strict "no magic numbers" policy after a code review incident.
+
+Every literal now gets a named constant: `const TWO = 2;`, `const ONE_HUNDRED = 100;`, `const THE_ANSWER_TO_EVERYTHING = 42;`.
+
+Six months later, a bug ships because someone quietly redefines `const TWO = 3;` to "fix a rounding issue real quick."
+
+The code review that catches it says: "This violates our no-magic-numbers policy."
+
+Nobody points out that the number is still magic. It just has a passport now.
