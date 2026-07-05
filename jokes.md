@@ -8881,3 +8881,17 @@ First, she traces the hourly request. It's the monitoring system, checking wheth
 The proposal quietly dies. Hermes stays — a service with no function except being periodically acknowledged, kept alive by ritual observance and the fear of what happens if you stop.
 
 Which makes it the only accurately named god in the fleet.
+
+## 2026-07-05
+
+A company launches a status page so customers can see when the service is down. To be safe, it's hosted on a different cloud provider entirely — "so it stays up during outages." It works: during the first major outage, the status page achieves flawless uptime, serenely displaying "All Systems Operational" in reassuring green while nothing else in the company responds to a ping.
+
+Updating it, it turns out, requires logging into an admin panel that authenticates through the service that is down.
+
+The incident review produces a fix: status updates now require VP approval, "for messaging consistency." Around the same time, Legal points out that contractual downtime is measured from when an incident is posted to the status page. Nobody connects these two facts in writing. The page just keeps getting slower to update, and the SLA payouts keep getting smaller, and everyone agrees the process is working.
+
+Eventually a frustrated customer builds an unofficial status page that simply calls the API once a minute and reports what happens. It's accurate, so everyone uses it — including the company's own engineers, who now learn about their outages from a customer's side project.
+
+The official page is still up, still green, still on its own cloud provider, faithfully monitoring nothing. It appears in every postmortem as a screenshot, under the heading "customer communication."
+
+It has become the perfect distributed system: fully redundant, always available, and completely decoupled from reality.
