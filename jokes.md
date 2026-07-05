@@ -8867,3 +8867,17 @@ An engineer proposes splitting it back into separate repos. The architecture cou
 The engineer checks the history. The last commit that touched more than one team's directory was the migration itself.
 
 They have one source of truth. Everyone has carefully configured their tools to never look at it.
+
+## 2026-07-05
+
+A startup names its microservices after Greek gods. Zeus handles auth. Hermes delivers messages. Athena does analytics. There's a naming doc and everything.
+
+Five years and three re-orgs later, there are forty-one services and only twelve Olympians — the pantheon ran out around Series B. Messaging was rewritten into Iris, then merged into Hermes2, which everyone calls "the new Hermes," and which is now older than half the staff.
+
+Nobody knows what the original Hermes does. It consumes no known queues, holds no data, and serves exactly one request per hour from somewhere inside the cluster. It has perfect uptime. An engineer proposes shutting it down to see what breaks.
+
+First, she traces the hourly request. It's the monitoring system, checking whether Hermes is up. That is Hermes's entire traffic: it exists so the dashboard can confirm that it exists. Turning it off would fire the one alert that still pages a human at 3 a.m.
+
+The proposal quietly dies. Hermes stays — a service with no function except being periodically acknowledged, kept alive by ritual observance and the fear of what happens if you stop.
+
+Which makes it the only accurately named god in the fleet.
