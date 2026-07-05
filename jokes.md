@@ -8853,3 +8853,17 @@ Every cycle, the collector checks. Every cycle, `tmp` still points. Every cycle,
 The developers can't find the leak, so they double the RAM. The cache grows to fill it.
 
 Because in a garbage-collected language, "needed" and "reachable" are the same word — and `tmp` has tenure.
+
+## 2026-07-05
+
+A company migrates to a monorepo. The pitch deck promises atomic commits, shared tooling, and "one source of truth."
+
+Two years later:
+
+The clone takes forty minutes, so everyone uses sparse checkout to see only their own team's directory. Cross-team changes need approval from four codeowners, three of whom have left the company — and the CODEOWNERS file is owned by one of them. CI builds everything on every commit, so fixing a typo in the docs re-runs the entire iOS test suite, which has been flaky since the migration.
+
+An engineer proposes splitting it back into separate repos. The architecture council rejects the proposal: "We'd lose atomic commits."
+
+The engineer checks the history. The last commit that touched more than one team's directory was the migration itself.
+
+They have one source of truth. Everyone has carefully configured their tools to never look at it.
