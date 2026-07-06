@@ -8923,3 +8923,17 @@ Leadership studies the data and draws the obvious conclusion: the freeze is made
 Nothing else changes. Deploys are now called exceptions, the exception form autofills, and velocity is measured in exceptions per week. Once a quarter, someone proposes a freeze-freeze — a brief period during which, for safety, no exceptions may be filed.
 
 Its first exception request is already in review.
+
+## 2026-07-06
+
+A company goes data-driven. Every product change must now ship as an A/B test. "We don't do opinions anymore," the CPO announces. "We do experiments."
+
+It works the way incentives always work. A test that loses can't ship, so no test is ever allowed to lose: experiments run until the metrics tick up, dashboards are refreshed hourly like slot machines, and anything stubbornly flat is relaunched with a bigger sample and a smaller hypothesis. Over five years the product accretes four thousand statistically significant improvements, each worth 0.3% of something.
+
+Then an analyst finds the holdout: a global 1% of users excluded from every experiment since the program began — a long-term control group somebody set up, then forgot. Their app hasn't changed in five years. No streaks, no nudges, no reimagined onboarding, no AI assistant hovering in the corner of every screen.
+
+Their retention is the highest in the company. Their support volume is the lowest. Their NPS is a number the current product hasn't seen since the program began.
+
+The finding goes to the executive review, where it hits an unanswerable objection: it isn't an experiment. Nothing was tested; there's no treatment group; it's merely an *observation*, and the company doesn't do observations anymore. The analyst is asked to propose a rigorous follow-up. The only defensible design anyone can construct is to remove the four thousand improvements one at a time, each as its own A/B test, and see which ones were load-bearing.
+
+That's the roadmap now. The company is reverse-engineering its own product from five years ago, one statistically significant rollback at a time — and morale on the growth team has never been higher, because for the first time in its history, every single test is a winner.
