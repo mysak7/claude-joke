@@ -8909,3 +8909,17 @@ Which means that for eleven months, every outage was real, every recovery was au
 The retro reaches an uncomfortable conclusion: the system became reliable the moment engineers stopped trusting it, and stayed reliable only because nobody knew the monkey was dead. The action item passes unanimously — do not restart Mayhem, and do not tell anyone it's down.
 
 It is now the company's most effective service: zero percent uptime, carrying the entire error budget on vibes alone.
+
+## 2026-07-06
+
+A company declares a two-week code freeze before the holiday release. "Nothing merges," the VP announces, "unless it's critical."
+
+Day one, an engineer files the first exception request — a genuine hotfix. Approved in an hour. By day three there's a template. By day five there's a dashboard. And since only critical changes may ship, every change is now, on reflection, critical: nobody writes "this can wait" into a form whose entire purpose is to argue that it can't. The freeze becomes the highest-velocity fortnight in company history.
+
+But here's the thing — the exception deploys are *good*. Each one has a written justification, a named approver, a rollback plan, and an author who read their own diff twice because a VP's signature was on it. Change-failure rate hits an all-time low. The release ships without a single incident.
+
+Leadership studies the data and draws the obvious conclusion: the freeze is made permanent.
+
+Nothing else changes. Deploys are now called exceptions, the exception form autofills, and velocity is measured in exceptions per week. Once a quarter, someone proposes a freeze-freeze — a brief period during which, for safety, no exceptions may be filed.
+
+Its first exception request is already in review.
