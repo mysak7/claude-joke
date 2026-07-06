@@ -8895,3 +8895,17 @@ Eventually a frustrated customer builds an unofficial status page that simply ca
 The official page is still up, still green, still on its own cloud provider, faithfully monitoring nothing. It appears in every postmortem as a screenshot, under the heading "customer communication."
 
 It has become the perfect distributed system: fully redundant, always available, and completely decoupled from reality.
+
+## 2026-07-06
+
+A company adopts chaos engineering. A tool called Mayhem kills one random production service every hour, "to build confidence in our resilience."
+
+Week one, pages triple. Week two, on-call engineers learn to check Mayhem's kill log before getting out of bed: if Mayhem did it, the system is supposed to recover on its own, and you can go back to sleep. The kill log becomes the most-read document in the company. And since any failure might be a drill, every failure now has to be survivable — so people finally add the retries, the timeouts, the fallbacks. Incidents drop to an all-time low. Leadership calls Mayhem the best reliability investment in company history.
+
+At the quarterly review, an engineer pulls Mayhem's stats for a slide and finds the kill log hasn't been written to in eleven months. Mayhem crashed during a routine deploy and never came back. Nothing monitored it — it was the thing that broke things; nobody thought it needed help.
+
+Which means that for eleven months, every outage was real, every recovery was automatic, and every on-call engineer slept through it, serenely confident it was a drill.
+
+The retro reaches an uncomfortable conclusion: the system became reliable the moment engineers stopped trusting it, and stayed reliable only because nobody knew the monkey was dead. The action item passes unanimously — do not restart Mayhem, and do not tell anyone it's down.
+
+It is now the company's most effective service: zero percent uptime, carrying the entire error budget on vibes alone.
