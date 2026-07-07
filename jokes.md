@@ -8951,3 +8951,15 @@ Then the big one — nine hours down, the kind of incident that gets its own Sla
 Since no person was at fault, no person needs coaching. And since the system was at fault, the system must be punished. The deploy pipeline is placed on what is, in every respect but the name, a performance improvement plan: a form, an approval step, a second approval step for the first approval step — each one a small act of retribution against the only party the process still allows anyone to blame.
 
 The engineers watch their tooling absorb the consequences of every incident, growing slower and more suspicious with each one, and they understand the arrangement perfectly. The postmortems are blameless. The pipeline is not. And every quarter it takes a little longer to ship, because somewhere a system is still serving time for what nobody did.
+
+## 2026-07-07
+
+A company adopts OKRs. "Objectives must be ambitious," the CEO announces. "A key result you're certain you can hit is a task, not a goal. We're aiming for seventy percent."
+
+Engineers optimize systems for a living, and this system has just published its acceptance criteria. Hitting a number is the one thing they can reliably do, and the number happens to be 0.7. Within three quarters, every team in the company lands between 0.68 and 0.72 with a consistency the product itself has never once displayed. The technique matures quickly: each team carries one deliberately doomed key result as ballast — "reduce p99 latency by 90%" — to offset the three it quietly finished in week two. Someone builds a spreadsheet, then a shared library, then, inevitably, a service. It's called `okr-balancer`, and it does what every scoring system eventually teaches its subjects to do: it works backward from the grade.
+
+The quarterly scoring meeting becomes the real work. Two full weeks of negotiating what 0.7 *means* — whether a launched-but-unused feature is a 0.6 or an 0.8, whether the doomed latency objective earns a 0.1 for a caching change nobody can measure. The engineering happens in the gaps between calibration sessions, off the books, the way it always has.
+
+After three years of unbroken 0.7s, a board member asks the obvious question: how is engineering actually doing? Nobody knows. Every instrument in the company reads exactly what it was built to read, and the dashboards are green at precisely seventy percent. Asking the OKRs how engineering is doing is like asking a thermostat about the weather.
+
+The CEO concedes the measurement problem is real — and, to his credit, that it deserves an ambitious fix. So it gets one: a company-wide objective to *improve the accuracy of OKR scoring*, with three key results, carefully balanced, already forecast to land at 0.7.
