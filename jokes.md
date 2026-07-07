@@ -8963,3 +8963,17 @@ The quarterly scoring meeting becomes the real work. Two full weeks of negotiati
 After three years of unbroken 0.7s, a board member asks the obvious question: how is engineering actually doing? Nobody knows. Every instrument in the company reads exactly what it was built to read, and the dashboards are green at precisely seventy percent. Asking the OKRs how engineering is doing is like asking a thermostat about the weather.
 
 The CEO concedes the measurement problem is real — and, to his credit, that it deserves an ambitious fix. So it gets one: a company-wide objective to *improve the accuracy of OKR scoring*, with three key results, carefully balanced, already forecast to land at 0.7.
+
+## 2026-07-07
+
+A company publishes its first engineering ladder. "Promotions will be objective now," the VP announces. "No more politics. You'll be judged on evidence: scope, complexity, and impact."
+
+The word *complexity* does not go unnoticed.
+
+Nobody sets out to game it — it's subtler than that. Faced with two designs, one that solves the problem and one that solves the problem while demonstrating scope, complexity, and impact, engineers start choosing the second the way water chooses downhill. A config change becomes a configuration platform. A cache becomes a caching strategy, with a design doc, a migration plan, and a name. Within a year the architecture diagram looks less like a system and more like a portfolio, because that is now literally what it is.
+
+Meanwhile, one engineer keeps the billing service alive. It never goes down, so it never produces incidents; it never produces incidents, so it never produces evidence. Her promotion packet reads like a blank police record — year after year of nothing happening, which is the entire point of her job and the death of her case. The committee, sympathetic, suggests she find "more visible work." She takes the advice. Billing goes down four months later, and the engineer who heroically restores it — working from her old runbooks — makes senior staff.
+
+Eventually leadership notices there are now ninety services and commissions a consolidation effort, which turns out to be the highest-scope, highest-complexity, highest-impact project the ladder has ever scored. The engineer who deletes it all makes principal. Two cycles later, a promising senior notes that the resulting monolith "won't scale" and proposes splitting it up.
+
+The architecture has breathed in and out like this ever since — a tide pulled not by a moon, but by a review calendar.
