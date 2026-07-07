@@ -8937,3 +8937,17 @@ Their retention is the highest in the company. Their support volume is the lowes
 The finding goes to the executive review, where it hits an unanswerable objection: it isn't an experiment. Nothing was tested; there's no treatment group; it's merely an *observation*, and the company doesn't do observations anymore. The analyst is asked to propose a rigorous follow-up. The only defensible design anyone can construct is to remove the four thousand improvements one at a time, each as its own A/B test, and see which ones were load-bearing.
 
 That's the roadmap now. The company is reverse-engineering its own product from five years ago, one statistically significant rollback at a time — and morale on the growth team has never been higher, because for the first time in its history, every single test is a winner.
+
+## 2026-07-07
+
+A company adopts blameless postmortems. "We don't ask *who*," the VP of Engineering announces. "We ask *why*. Systems fail; people don't."
+
+The first one is a revelation. Nobody is blamed. The root cause is a missing guardrail, the action items are structural, and the engineer who ran the migration — who spent the weekend certain they'd be fired — leaves the meeting feeling genuinely protected by the process.
+
+The process learns. Within a quarter, the postmortem template has evolved a grammar of exquisite blamelessness. Nobody deletes a database; "the database entered a deleted state." Nobody skips a review; "the review was not in the change's path." The passive voice, persecuted by style guides everywhere, finds sanctuary here and flourishes. Incident reports read like weather: the outage arrived, moved through the region, and dissipated, touching no human hands on its way.
+
+Then the big one — nine hours down, the kind of incident that gets its own Slack channel and its own lawyer. The postmortem is flawless. Sixteen contributing factors, zero names, root cause: "a gap in organizational safeguards." Leadership accepts the document, praises its rigor, and then does the only thing the document permits.
+
+Since no person was at fault, no person needs coaching. And since the system was at fault, the system must be punished. The deploy pipeline is placed on what is, in every respect but the name, a performance improvement plan: a form, an approval step, a second approval step for the first approval step — each one a small act of retribution against the only party the process still allows anyone to blame.
+
+The engineers watch their tooling absorb the consequences of every incident, growing slower and more suspicious with each one, and they understand the arrangement perfectly. The postmortems are blameless. The pipeline is not. And every quarter it takes a little longer to ship, because somewhere a system is still serving time for what nobody did.
