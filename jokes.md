@@ -8977,3 +8977,19 @@ Meanwhile, one engineer keeps the billing service alive. It never goes down, so 
 Eventually leadership notices there are now ninety services and commissions a consolidation effort, which turns out to be the highest-scope, highest-complexity, highest-impact project the ladder has ever scored. The engineer who deletes it all makes principal. Two cycles later, a promising senior notes that the resulting monolith "won't scale" and proposes splitting it up.
 
 The architecture has breathed in and out like this ever since — a tide pulled not by a moon, but by a review calendar.
+
+## 2026-07-08
+
+A startup signs with a cloud provider, and the CTO, who has been burned before, hands down one architectural commandment: no code shall call the vendor directly. Everything goes through `cloudkit`, an in-house abstraction layer, so that when the day comes, they can switch providers in a weekend.
+
+The layer starts thin — a wrapper here, an interface there. But the vendor keeps shipping features, and the features are the reason anyone pays for a cloud: queues with exactly-once delivery, a database that scales while you watch. None of it fits the abstraction, because the abstraction, by design, can only express what every cloud can do — which is to say, 2011.
+
+So `cloudkit` grows an escape hatch: `.raw()`, which hands you the vendor's real client, unwrapped. It's added "temporarily," for one team, behind a linter warning. Over the next six years the warning is suppressed four thousand times, each suppression accompanied by a comment promising to revisit.
+
+Meanwhile a dedicated team maintains the abstraction itself, faithfully re-wrapping every vendor release two quarters late, with slightly different bugs. Asked what portability the company has actually purchased, they point to the interface: every method could, in principle, be implemented by any provider. No second implementation exists, or has ever been attempted. It is portability the way a passport in a drawer is travel.
+
+A decade in, procurement finally forces the question. The renewal price is criminal, a rival cloud is dangling credits, and the CTO stands up at all-hands to announce that the day has come. An audit is commissioned to scope the migration.
+
+The findings arrive on one slide. `cloudkit` itself can be ported in a weekend, exactly as promised. Nothing that uses it can.
+
+The layer migrates alone — arriving on the new cloud pristine, uncalled, and fully abstract: an evacuation plan that saved only itself.
