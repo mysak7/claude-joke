@@ -9005,3 +9005,11 @@ Engineers can recognize an arbitrage, and they respond rationally. The hackathon
 Leadership studies the data and finds a striking pattern: engineering velocity spikes enormously twice a year. The conclusion writes itself — hackathons are extraordinarily productive, so there should be more of them. Quarterly, then monthly. But scale demands structure, so each one acquires what scale demands: a theme, a signup portal, a judging rubric aligned to company values, a pre-approval step for demos that touch production, and — once hackathon projects begin colliding with each other — tickets to coordinate them. By the time the hackathon is weekly it has a standup, a backlog, and a roadmap of its own, and its velocity is indistinguishable from that of the company that contains it.
 
 The retrospective into why hackathon productivity declined is rigorous, and identifies sixteen contributing factors, none of them load-bearing. The remediation ships the following quarter. To get things moving again, the company announces a special event: forty-eight hours, no tickets, no reviews, no roadmap.
+
+## 2026-07-08
+
+A bug only reproduces when nobody is watching. The moment a debugger attaches, it behaves perfectly.
+
+The team names it after Heisenberg: you can know its location or its behavior, never both.
+
+Six months later the ticket is still open. Status: "Cannot reproduce — observed too hard."
