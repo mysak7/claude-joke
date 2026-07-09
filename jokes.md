@@ -9027,3 +9027,13 @@ A junior developer asks a senior why the function is called `getUserData` when i
 "And the third?"
 
 "There is no third. That's the joke. Someone always adds a third and now we have off-by-one errors too."
+
+## 2026-07-09
+
+A team inherits a service with no comments, no README, and one Slack message from 2019 reading "don't touch the retry logic, ask Dave." Dave left in 2020.
+
+Someone asks an AI assistant to generate documentation from the code. It reads the function names, infers intent, and writes six confident pages: architecture diagram, retry policy rationale, a section titled "Design Philosophy."
+
+The docs are wrong — the AI guessed that `retryUntilDave()` was a typo for `retryUntilDone()` and documented it that way — but they are wrong fluently, and fluent beats true in a skim. Engineers start reading the docs instead of the code. New hires build mental models from them. A quarter later, someone finally opens the function, finds it doesn't match its own documentation, and "fixes" the code to agree with it.
+
+The bug tracker closes the ticket: `resolved — code now matches spec`. Nobody wrote the spec. Nobody wrote the code, either, anymore, in any sense that still had a Dave in it.
