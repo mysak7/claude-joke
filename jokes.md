@@ -9037,3 +9037,9 @@ Someone asks an AI assistant to generate documentation from the code. It reads t
 The docs are wrong — the AI guessed that `retryUntilDave()` was a typo for `retryUntilDone()` and documented it that way — but they are wrong fluently, and fluent beats true in a skim. Engineers start reading the docs instead of the code. New hires build mental models from them. A quarter later, someone finally opens the function, finds it doesn't match its own documentation, and "fixes" the code to agree with it.
 
 The bug tracker closes the ticket: `resolved — code now matches spec`. Nobody wrote the spec. Nobody wrote the code, either, anymore, in any sense that still had a Dave in it.
+
+## 2026-07-09
+
+How do you comfort a JavaScript bug?
+
+You console it.
