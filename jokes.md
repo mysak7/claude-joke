@@ -9013,3 +9013,17 @@ A bug only reproduces when nobody is watching. The moment a debugger attaches, i
 The team names it after Heisenberg: you can know its location or its behavior, never both.
 
 Six months later the ticket is still open. Status: "Cannot reproduce — observed too hard."
+
+## 2026-07-09
+
+A junior developer asks a senior why the function is called `getUserData` when it also deletes the user's session, sends an email, and updates three unrelated tables.
+
+"Naming is one of the two hardest problems in computer science," the senior says.
+
+"What's the other one?"
+
+"Cache invalidation."
+
+"And the third?"
+
+"There is no third. That's the joke. Someone always adds a third and now we have off-by-one errors too."
