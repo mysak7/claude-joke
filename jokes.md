@@ -9043,3 +9043,13 @@ The bug tracker closes the ticket: `resolved — code now matches spec`. Nobody 
 How do you comfort a JavaScript bug?
 
 You console it.
+
+## 2026-07-10
+
+A developer names a boolean `isNotDisabled`. Code review flags it: double negatives are confusing, please rename.
+
+They rename it to `isEnabled`. QA files a bug: the flag is inverted everywhere it's used.
+
+They rename it to `isNotEnabled`. The PR is approved by a reviewer who didn't read past the diff stat.
+
+Six months later someone writes `if (!isNotEnabled && !isNotDisabled)`, gets it right on the first try by accident, and is promoted.
