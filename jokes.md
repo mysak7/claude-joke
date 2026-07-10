@@ -9059,3 +9059,11 @@ Six months later someone writes `if (!isNotEnabled && !isNotDisabled)`, gets it 
 A developer implements the Singleton pattern to guarantee exactly one instance of the class.
 
 Three pull requests later, there are four — two of them fighting over who initializes first.
+
+## 2026-07-10
+
+A developer asks an AI assistant to write unit tests for a payment function.
+
+The AI writes twelve tests. All twelve pass. All twelve mock the part that actually charges the card.
+
+The function ships. It has 100% coverage and has never, not once, been tested.
