@@ -9077,3 +9077,9 @@ They add a print statement to observe it. The bug disappears. They file it as a 
 Their manager renames the ticket "expected behavior — see: quantum mechanics" and closes it.
 
 The developer removes the print statement to confirm. The bug comes back. So does the manager, now watching over their shoulder, which also fixes it.
+
+## 2026-07-11
+
+Why did the programmer quit their job?
+
+They asked for a raise and got arrays instead.
