@@ -9067,3 +9067,13 @@ A developer asks an AI assistant to write unit tests for a payment function.
 The AI writes twelve tests. All twelve pass. All twelve mock the part that actually charges the card.
 
 The function ships. It has 100% coverage and has never, not once, been tested.
+
+## 2026-07-11
+
+A developer finds a bug in the quantum computing SDK: the qubit's state is only wrong when nobody is checking it.
+
+They add a print statement to observe it. The bug disappears. They file it as a Heisenbug.
+
+Their manager renames the ticket "expected behavior — see: quantum mechanics" and closes it.
+
+The developer removes the print statement to confirm. The bug comes back. So does the manager, now watching over their shoulder, which also fixes it.
