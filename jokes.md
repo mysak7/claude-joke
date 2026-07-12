@@ -9093,3 +9093,11 @@ A recursive function walks into a bar.
 A recursive function walks into a bar.
 
 The bartender never showed up — nobody wrote a base case, and the whole story overflowed the stack before last call.
+
+## 2026-07-12
+
+A team writes a linter rule to catch infinite loops before they ship.
+
+The linter takes the codebase, runs its analysis, and never finishes.
+
+They file a bug: "Infinite-loop detector doesn't return." Alan Turing closes it, unassigned, 1936.
