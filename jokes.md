@@ -9083,3 +9083,13 @@ The developer removes the print statement to confirm. The bug comes back. So doe
 Why did the programmer quit their job?
 
 They asked for a raise and got arrays instead.
+
+## 2026-07-12
+
+A recursive function walks into a bar.
+
+A recursive function walks into a bar.
+
+A recursive function walks into a bar.
+
+The bartender never showed up — nobody wrote a base case, and the whole story overflowed the stack before last call.
