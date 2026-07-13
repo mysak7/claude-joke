@@ -9101,3 +9101,13 @@ A team writes a linter rule to catch infinite loops before they ship.
 The linter takes the codebase, runs its analysis, and never finishes.
 
 They file a bug: "Infinite-loop detector doesn't return." Alan Turing closes it, unassigned, 1936.
+
+## 2026-07-13
+
+A new hire asks the tech lead how much technical debt the codebase has.
+
+"None," the lead says. "We don't do debt here. We have technical mortgages."
+
+"What's the difference?"
+
+"Nobody remembers signing the debt. The mortgages we refinanced twice, the interest compounds every sprint, and if we ever miss a payment, prod forecloses on a Friday."
