@@ -9111,3 +9111,11 @@ A new hire asks the tech lead how much technical debt the codebase has.
 "What's the difference?"
 
 "Nobody remembers signing the debt. The mortgages we refinanced twice, the interest compounds every sprint, and if we ever miss a payment, prod forecloses on a Friday."
+
+## 2026-07-13
+
+A senior engineer finds a `// TODO: remove this, it does nothing` comment from 2014 and deletes the ten lines under it.
+
+Prod goes down in four regions.
+
+Turns out the lines did nothing — nothing except keeping a race condition from ever losing. The postmortem coins a new term: **load-bearing dead code**. They restore it verbatim, then add a comment above the comment: `// TODO: do NOT remove the thing that does nothing.`
