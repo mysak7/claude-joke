@@ -9119,3 +9119,13 @@ A senior engineer finds a `// TODO: remove this, it does nothing` comment from 2
 Prod goes down in four regions.
 
 Turns out the lines did nothing — nothing except keeping a race condition from ever losing. The postmortem coins a new term: **load-bearing dead code**. They restore it verbatim, then add a comment above the comment: `// TODO: do NOT remove the thing that does nothing.`
+
+## 2026-07-13
+
+A junior dev sets out to fix a typo in a log message.
+
+The typo's in a file that won't compile without an updated dependency. The dependency needs a newer runtime. The newer runtime breaks the build tool. The build tool's replacement wants a config format that doesn't exist yet, so she writes a parser for it, which needs a test harness, which needs a CI runner, which needs a Dockerfile, which needs her to learn what a multi-stage build is.
+
+Three weeks later she force-pushes 4,000 lines across nine repos, retitles the PR **"Refactor entire platform"**, and merges it.
+
+The typo is still there. She left it. At this point it's the only thing she recognizes.
