@@ -9139,3 +9139,11 @@ It works. It works so well that everyone forgets the function exists. Two years 
 Prod serves a value that was correct in 2024 with complete confidence. Nobody notices, because it also cached the monitoring.
 
 The root cause, filed under **won't fix**: there are only two hard things in computer science, and this bug is somehow both of them at once.
+
+## 2026-07-14
+
+A boolean flag walks into code review named `isNotDisabled`.
+
+The reviewer requests one change: rename it to `enabled`. The author pushes back — "but it defaults to not-not-off." So they compromise on `shouldNotBeUntoggled`, invert it once for clarity, and ship.
+
+The feature launches inverted. The hotfix inverts it back. The rollback inverts it a third time. Nobody can say whether the feature is currently on, but everyone agrees that `!!shouldNotBeUntoggled` is, technically, true.
