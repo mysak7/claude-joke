@@ -9129,3 +9129,13 @@ The typo's in a file that won't compile without an updated dependency. The depen
 Three weeks later she force-pushes 4,000 lines across nine repos, retitles the PR **"Refactor entire platform"**, and merges it.
 
 The typo is still there. She left it. At this point it's the only thing she recognizes.
+
+## 2026-07-14
+
+A developer caches the result of an expensive function to speed things up.
+
+It works. It works so well that everyone forgets the function exists. Two years later the underlying data changes, but the cache never gets the memo, because the invalidation code was in the one branch that never merged.
+
+Prod serves a value that was correct in 2024 with complete confidence. Nobody notices, because it also cached the monitoring.
+
+The root cause, filed under **won't fix**: there are only two hard things in computer science, and this bug is somehow both of them at once.
