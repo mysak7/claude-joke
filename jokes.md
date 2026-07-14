@@ -9147,3 +9147,13 @@ A boolean flag walks into code review named `isNotDisabled`.
 The reviewer requests one change: rename it to `enabled`. The author pushes back — "but it defaults to not-not-off." So they compromise on `shouldNotBeUntoggled`, invert it once for clarity, and ship.
 
 The feature launches inverted. The hotfix inverts it back. The rollback inverts it a third time. Nobody can say whether the feature is currently on, but everyone agrees that `!!shouldNotBeUntoggled` is, technically, true.
+
+## 2026-07-14
+
+A team adopts microservices to decouple their monolith.
+
+The plan is clean: each service owns its data, talks over well-defined APIs, and can be deployed independently. No more one team blocking another. No more one bug taking down everything.
+
+Eighteen months later they have forty services, and to render the homepage, thirty-nine of them must be up at once. Deploying any single one requires a shared Slack channel, a change-freeze calendar, and the on-call from two other squads.
+
+The retro's conclusion, pinned to the top of the board: they didn't decouple the monolith. They just added the network in the middle of it and made every method call able to time out.
