@@ -9165,3 +9165,13 @@ After the third double-charge incident, the team makes every endpoint idempotent
 It holds up beautifully until the quarter's biggest launch, when the deploy hangs and someone reruns it. Fine: idempotent. It hangs again, so they run the rollback twice. Not fine: nobody made the rollback idempotent, on the grounds that if you're rolling back, you've clearly stopped believing in guarantees.
 
 The postmortem produces exactly one action item. It gets filed twice and closed once, which everyone agrees is the system working as designed.
+
+## 2026-07-15
+
+Sales closes an enterprise deal by promising five nines of uptime. Engineering finds out from the press release.
+
+Five nines allows five minutes of downtime a year. The team does the math: one deploy takes eleven minutes and restarts the service twice, so shipping a single release would spend two years of SLA budget. They bring leadership three options — build zero-downtime deploys (two quarters), renegotiate the contract (one awkward call), or never deploy again (free).
+
+Leadership picks a fourth option nobody proposed: redefine "downtime."
+
+Under the new definition, an outage only counts if a customer reports it through the support portal. The support portal runs on the same cluster as everything else. The service has had 100% uptime ever since — availability so perfect it can no longer be measured, because the dashboard is down too, which doesn't count, because nobody could file a ticket about it.
