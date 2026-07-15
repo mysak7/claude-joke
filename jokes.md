@@ -9175,3 +9175,13 @@ Five nines allows five minutes of downtime a year. The team does the math: one d
 Leadership picks a fourth option nobody proposed: redefine "downtime."
 
 Under the new definition, an outage only counts if a customer reports it through the support portal. The support portal runs on the same cluster as everything else. The service has had 100% uptime ever since — availability so perfect it can no longer be measured, because the dashboard is down too, which doesn't count, because nobody could file a ticket about it.
+
+## 2026-07-15
+
+Support escalates a ticket: a customer named José can't log in. The login page says he doesn't exist. The signup page says he already does.
+
+Both pages are right. There are two Josés, and they're the same man — one spelled with é as a single code point, one with a plain e wearing a combining accent. The names render identically on every screen, fail every equality check, and split his order history between two accounts that can't see each other.
+
+Engineering ships Unicode normalization and merges the Josés. Then, flush with victory, they normalize the entire database, and the emoji column comes out the other side with one family of four disassembled into four strangers and the zero-width joiners that used to hold them together.
+
+The incident review asks a simple question — how long is the customer's name? — and gets four honest answers: 4 graphemes, 5 code points, 6 bytes, and, from the JavaScript service, "it depends who's asking."
