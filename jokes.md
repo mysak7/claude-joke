@@ -9157,3 +9157,11 @@ The plan is clean: each service owns its data, talks over well-defined APIs, and
 Eighteen months later they have forty services, and to render the homepage, thirty-nine of them must be up at once. Deploying any single one requires a shared Slack channel, a change-freeze calendar, and the on-call from two other squads.
 
 The retro's conclusion, pinned to the top of the board: they didn't decouple the monolith. They just added the network in the middle of it and made every method call able to time out.
+
+## 2026-07-15
+
+After the third double-charge incident, the team makes every endpoint idempotent. Same request twice, same effect once. Timeouts can retry all they want now — nothing doubles, nothing drifts.
+
+It holds up beautifully until the quarter's biggest launch, when the deploy hangs and someone reruns it. Fine: idempotent. It hangs again, so they run the rollback twice. Not fine: nobody made the rollback idempotent, on the grounds that if you're rolling back, you've clearly stopped believing in guarantees.
+
+The postmortem produces exactly one action item. It gets filed twice and closed once, which everyone agrees is the system working as designed.
