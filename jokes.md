@@ -9195,3 +9195,13 @@ They autopsy a single copy: 1,400 packages to serve six routes. Somewhere in the
 The fix is obvious — a cleanup script to purge old workspaces. The on-call writes it in Node, because that's what the team knows. It needs a filesystem walker, a glob matcher, a progress bar, and a library that prints sizes in human-readable units.
 
 `npm install` fails: no space left on device. The script that deletes node_modules cannot be born until a node_modules dies for it. The on-call sacrifices one by hand, the install goes through, and the script works flawlessly — which the postmortem records as the system being self-healing, as long as someone heals it first.
+
+## 2026-07-16
+
+The migration tool has a `--dry-run` flag, and the team's policy is ironclad: dry-run first, review the output, then run it for real. The dry run prints every change it would make. The real run, reassuringly, always finishes with `0 changes applied`.
+
+For three years this is cited in retros as proof of the dry run's perfect predictive accuracy — it's so good the real run never finds anything left to do.
+
+Then an audit finds the truth: the flag is parsed, assigned to a variable named `dryRun`, and never read again. Every dry run was live. The "real" run was the dry run, in the sense that it did nothing. The team hasn't been previewing migrations; they've been running each one twice and grading the rerun.
+
+The fix is one `if` statement. Following policy, they deploy it with a dry run first — which, for the first time in the tool's history, doesn't change anything. It's immediately rolled back for being broken.
