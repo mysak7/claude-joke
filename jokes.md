@@ -9185,3 +9185,13 @@ Both pages are right. There are two Josés, and they're the same man — one spe
 Engineering ships Unicode normalization and merges the Josés. Then, flush with victory, they normalize the entire database, and the emoji column comes out the other side with one family of four disassembled into four strangers and the zero-width joiners that used to hold them together.
 
 The incident review asks a simple question — how long is the customer's name? — and gets four honest answers: 4 graphemes, 5 code points, 6 bytes, and, from the JavaScript service, "it depends who's asking."
+
+## 2026-07-16
+
+The build server pages at 3 a.m.: disk 98% full. The on-call investigates and finds it isn't logs, isn't artifacts, isn't the backups nobody rotates. It's `node_modules` — nine hundred copies of it, one per stale CI workspace, each a gigabyte of dependencies for a service whose own source code is 40 KB.
+
+They autopsy a single copy: 1,400 packages to serve six routes. Somewhere in the tree, `is-odd` depends on `is-number`, five packages exist solely to pad strings that are never printed, and three versions of the same date library disagree about what week it is.
+
+The fix is obvious — a cleanup script to purge old workspaces. The on-call writes it in Node, because that's what the team knows. It needs a filesystem walker, a glob matcher, a progress bar, and a library that prints sizes in human-readable units.
+
+`npm install` fails: no space left on device. The script that deletes node_modules cannot be born until a node_modules dies for it. The on-call sacrifices one by hand, the install goes through, and the script works flawlessly — which the postmortem records as the system being self-healing, as long as someone heals it first.
