@@ -9205,3 +9205,17 @@ For three years this is cited in retros as proof of the dry run's perfect predic
 Then an audit finds the truth: the flag is parsed, assigned to a variable named `dryRun`, and never read again. Every dry run was live. The "real" run was the dry run, in the sense that it did nothing. The team hasn't been previewing migrations; they've been running each one twice and grading the rerun.
 
 The fix is one `if` statement. Following policy, they deploy it with a dry run first — which, for the first time in the tool's history, doesn't change anything. It's immediately rolled back for being broken.
+
+## 2026-07-16
+
+The team adds a cache for expensive queries, and the SLAs improve overnight. Response times drop from 800ms to 12ms. The system is now so fast the bottleneck moves to the monitoring dashboard, which can't refresh fast enough to show the throughput.
+
+Everything holds until a data corruption bug gets through QA undetected. It's subtle — a rounding error that only triggers on Thursdays — but once it does, the cache locks it in place and spreads it to every replica. The rollback works fine; the cache is supposed to expire after five minutes anyway.
+
+It doesn't.
+
+Investigation finds the cache was configured with TTL in milliseconds, not seconds. Nobody noticed because the bug is rare and the cache is fast — the old, slow system would have timed out or errored before the corruption spread wide enough to propagate.
+
+The postmortem concludes that performance optimizations have now made the system both faster and more fragile. The team's options are: revert the cache (restore safety, doom latency), validate every cache entry before serving it (restore safety, doom performance), or accept that they built a system where the worst bugs travel at maximum speed.
+
+They pick a fourth option: add monitoring to detect the corrupted values faster next time. The monitoring is so precise it catches the bug sixteen seconds sooner — plenty of time to watch it spread to all eight data centers, which is what happens because everyone's cache is synchronized to the same stale truth, and the truth got there very quickly.
