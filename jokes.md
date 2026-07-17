@@ -9241,3 +9241,13 @@ Overnight, the fleet begins to breathe. Scaling down concentrates load on the su
 The engineer adds a cooldown. The wave slows. They widen the thresholds, tune the step size, damp the oscillation, and after two weeks of careful engineering the system finally converges — on exactly the number of instances they ran before autoscaling existed. That number could be typed into a config file in four seconds, but no human is allowed to, because the autoscaler owns that field now.
 
 Six months later comes the real traffic spike, the entire reason autoscaling exists. The autoscaler, painstakingly tuned to ignore fluctuations, correctly identifies the spike as a fluctuation and sits out its cooldown while the site goes down. The postmortem's action item: next time, add capacity manually, in advance, based on expected load. There is already a name for that technique. It's what they were doing before.
+
+## 2026-07-17
+
+Two weeks before the acquisition closes, Legal orders a license audit of the codebase. The scanner runs overnight and returns a report longer than the product's documentation: 1,400 dependencies under 40 distinct licenses, one of which is a haiku, one of which says "do whatever you want, just don't blame me," and one of which requires that the software be used for Good, not Evil.
+
+The GPL findings everyone feared turn out to be the easy part — both offending libraries live in a dead code path behind a feature flag nobody ever enabled. The hard part is the Good-not-Evil clause. Legal cannot approve it: no officer of the company is authorized to warrant, in writing, that the software will not be used for evil. Engineering points out that the license is a joke. Legal points out that jokes are enforceable.
+
+An engineer emails the library's author directly, and the author replies within the hour, granting the company explicit written permission to use the software for evil. Legal reviews the exemption, finds it sound, and files it. It is the only item in the entire audit closed as fully resolved.
+
+The real bomb is on page 61: the core algorithm — the thing actually being acquired — was pasted from a Stack Overflow answer in 2019, which makes it CC BY-SA, which technically obligates the company to release the flagship product under the same share-alike terms. Legal's memo recommends a clean-room rewrite. Engineering estimates six months. The acquisition closes in two weeks. The finding is reclassified from "violation" to "post-close integration opportunity," and the company is sold exactly as it is — Good, Evil, and share-alike.
