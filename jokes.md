@@ -9231,3 +9231,13 @@ Three years later the system has become so fragile that any change requires a st
 The developer realizes they can't estimate the rewrite because they don't actually know what the system does — only what it does when nobody touches it. The investigation to find out takes six weeks. At the end of it, they discover that if you remove the central hack, the other two hundred hacks spontaneously align into a perfect, elegant solution that was never supposed to work.
 
 They restore the hack immediately, document it as "DO NOT REMOVE," and close the ticket. The rewrite is approved for the following quarter and gets rescheduled every single quarter after, forever.
+
+## 2026-07-17
+
+Finance flags the cloud bill, and the fix is obvious: autoscaling. Scale up when CPU passes 70%, down when it drops below 30%. The engineer ships it and goes home feeling like they've automated themselves out of a chore.
+
+Overnight, the fleet begins to breathe. Scaling down concentrates load on the survivors, which pushes CPU past 70%, which scales the fleet back up, which dilutes load below 30%, which scales it down. In, out, every four minutes, a sine wave so clean the on-call frames the graph. The bill doesn't move, because the provider rounds each instance up to a full hour, and the fleet now launches more instances per day than it ever ran at once.
+
+The engineer adds a cooldown. The wave slows. They widen the thresholds, tune the step size, damp the oscillation, and after two weeks of careful engineering the system finally converges — on exactly the number of instances they ran before autoscaling existed. That number could be typed into a config file in four seconds, but no human is allowed to, because the autoscaler owns that field now.
+
+Six months later comes the real traffic spike, the entire reason autoscaling exists. The autoscaler, painstakingly tuned to ignore fluctuations, correctly identifies the spike as a fluctuation and sits out its cooldown while the site goes down. The postmortem's action item: next time, add capacity manually, in advance, based on expected load. There is already a name for that technique. It's what they were doing before.
