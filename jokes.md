@@ -9219,3 +9219,15 @@ Investigation finds the cache was configured with TTL in milliseconds, not secon
 The postmortem concludes that performance optimizations have now made the system both faster and more fragile. The team's options are: revert the cache (restore safety, doom latency), validate every cache entry before serving it (restore safety, doom performance), or accept that they built a system where the worst bugs travel at maximum speed.
 
 They pick a fourth option: add monitoring to detect the corrupted values faster next time. The monitoring is so precise it catches the bug sixteen seconds sooner — plenty of time to watch it spread to all eight data centers, which is what happens because everyone's cache is synchronized to the same stale truth, and the truth got there very quickly.
+
+## 2026-07-17
+
+A developer inherits a codebase with a comment that reads: "This is a hack, but it works, and I'm not touching it."
+
+They add another layer on top anyway. Then another. Then a third. Each one is somebody's hack, built on the previous hacks, each developer convinced the whole thing is held together by the hacks they didn't write.
+
+Three years later the system has become so fragile that any change requires a stand-up meeting to discuss which hacks are safe to disturb. Someone proposes a rewrite. Leadership asks for a cost estimate.
+
+The developer realizes they can't estimate the rewrite because they don't actually know what the system does — only what it does when nobody touches it. The investigation to find out takes six weeks. At the end of it, they discover that if you remove the central hack, the other two hundred hacks spontaneously align into a perfect, elegant solution that was never supposed to work.
+
+They restore the hack immediately, document it as "DO NOT REMOVE," and close the ticket. The rewrite is approved for the following quarter and gets rescheduled every single quarter after, forever.
