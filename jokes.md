@@ -9282,3 +9282,19 @@ The fix is obvious: actually handle the null in the original service, instead of
 
 Investigation pending is still pending. The change ships. The crash rate stays flat. The incident is closed as resolved, which it technically is — the system now handles the null, and it does so by crashing and restarting. The only engineer who understands it has moved to another team. Their parting gift is a pinned message in Slack: "If this service starts crashing more than twice a day, revert to the 2020 deploy."
 
+
+## 2026-07-19
+
+A developer finds a critical bug: the access control code checks conditions in the wrong order. They refactor it for clarity, moving the admin check first, then the user ID check, then deny. It works perfectly.
+
+Six months later an engineer optimizes the expensive checks: admin lookup requires a database hit, but the ID check is O(1), so they reorder. Admin check moves to the end. Meanwhile, a junior dev notices the ID check could be cleaner and refactors it to short-circuit early.
+
+The code is now a chain of early returns: if ID matches, return true; if admin, return true; otherwise deny. It ships. A new feature is added: let users see each other's profiles but not payment data. It's added as a fourth exception, buried in a comment.
+
+By now the function has seven return statements, five comments, and nobody understands it anymore. The logic is an archaeological layer of rewrites. The first dev has left. The second dev thinks it's simple. A third dev tries to refactor for readability, adds a test that passes, rearranges the checks, and ships it.
+
+Three hours later: users can see each other's payment history. The feature is broken because the refactor changed the order of checks, and the order was the code's only documentation — a documentation written in bytecode, invisible to grep, load-bearing only through total confusion.
+
+The refactor gets reverted. A comment is added: `// DO NOT REFACTOR. Order matters.` Nobody knows why. The person reverting doesn't know why. They just know it broke when they changed it.
+
+The function stays a mess forever, owned now only by the certainty that touching it hurts in ways the code cannot explain. When new team members ask about it, the answer is always the same: "Don't touch that function. It works because it's old."
