@@ -9311,3 +9311,21 @@ The postmortem is calm. The data pipeline was built on the assumption that if a 
 
 The service returns to 99.999% uptime, now blessed by incident review as a worked-as-designed system. The principal gives a talk at a conference about building resilient services. Everyone applauds. Nobody asks what the service actually does.
 
+
+## 2026-07-19
+
+A team discovers a tiny boolean in their config file: `ENABLE_LEGACY_QUEUE_BEHAVIOR = true`. It's been there for eight years. The code comment says nothing. No tickets reference it. Grep finds it read exactly once, in a path nobody recognizes.
+
+Perfect deletion candidate. The engineer removes it, resets the code that reads it to assume false, and ships it.
+
+Within hours: bulk imports fail silently. The logs are empty. The metric suddenly stops ticking. The engineer checks the diff—thirty lines changed, nothing suspicious. Rollback immediately.
+
+The boolean goes back to true, and everything heals. Investigation finds the flag controls whether the queue is stored in-memory or on disk. The code that reads it is in a static initializer from 2015, called only once, before the actual service starts, and its location was discovered through binary search after the outage because the person who wrote it left in 2016.
+
+The initializer is there because an engineer once pasted code from an internal wiki without understanding what it did. The wiki was deleted in 2019. The code stayed. It's now holding an entire business process hostage: if you remove the flag, the disk-backed queue is created but the application has already decided to use memory. If you try to fix both at once, twelve services initialize in the wrong order and create a deadlock.
+
+To remove the flag cleanly requires restarting the world, tracing eight dependency chains, untangling the static initializer mess, and risk-assessing each change. The estimate is three weeks. The flag is worth thirty seconds of disk I/O per restart.
+
+It stays. It becomes the codebase's most important boolean, load-bearing through total mystery, protected by the certainty that removing it can only hurt. Every quarterly cleanup it's flagged, every quarterly cleanup it's spared. The team writes a runbook: "If the import service stops, check if someone tried to delete ENABLE_LEGACY_QUEUE_BEHAVIOR. If yes, revert."
+
+No one is ever assigned to understand why. The system works better that way.
