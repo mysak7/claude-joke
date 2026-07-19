@@ -9298,3 +9298,16 @@ Three hours later: users can see each other's payment history. The feature is br
 The refactor gets reverted. A comment is added: `// DO NOT REFACTOR. Order matters.` Nobody knows why. The person reverting doesn't know why. They just know it broke when they changed it.
 
 The function stays a mess forever, owned now only by the certainty that touching it hurts in ways the code cannot explain. When new team members ask about it, the answer is always the same: "Don't touch that function. It works because it's old."
+
+A team inherits a microservice that's never down. The metrics are immaculate: 99.999% uptime for three years straight. The system is so bulletproof they build the entire data pipeline on top of it, plug in the company's highest-value customers, and promote the architect to principal.
+
+Then someone reads the code.
+
+The service returns cached data for every request, with no invalidation logic. The cache was populated once, in staging, and never refreshed. Three years of requests, all served the same stale snapshot. The "uptime" is perfection: the system never tries to do anything, so it never fails.
+
+The team scrambles to add real logic. Request handling. Database queries. Error paths. It ships. Within hours, the alerts go bananas—the service is now flaky, inconsistent, occasionally timing out. The principal's response is immediate: revert it. Disable queries, rebuild the cache, restore perfection.
+
+The postmortem is calm. The data pipeline was built on the assumption that if a system returns fast and never errors, it's healthy. This is technically true. The data is wrong, but consistently wrong, which is better than right-and-flaky. The team documents the architecture: "Fast and wrong beats slow and right. This is a feature, not a bug."
+
+The service returns to 99.999% uptime, now blessed by incident review as a worked-as-designed system. The principal gives a talk at a conference about building resilient services. Everyone applauds. Nobody asks what the service actually does.
+
