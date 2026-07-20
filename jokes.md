@@ -9356,3 +9356,16 @@ Three years later a new engineer discovers it, doesn't understand why it's there
 
 The loop is now complete. The system is load-bearing through perfect confusion.
 
+
+## 2026-07-20
+
+A team implements strict TypeScript checking, thrilled to catch bugs before they reach production. Hundreds of type errors surface—null checks, missing properties, impossible cases. They fix every one. Three days later: a critical outage. A value that TypeScript swore could never be null is null.
+
+Investigation reveals the value comes from an API response. TypeScript has a type definition for it—`string`—but at runtime the API returns null, or a new undocumented field, or occasionally a boolean instead. TypeScript caught zero actual bugs because TypeScript can't check network traffic.
+
+The team adds runtime validation. Now the type is `string | null`, guards are added, everything is fixed. Except the code is longer, there are edge cases, and each edge case has a bug in its bug-handling.
+
+A principal engineer suggests: "Maybe the API documentation is actually correct and we should just trust it, like TypeScript wants." Everyone nods sagely and disables strict checking. Production crashes resume, but now it's the API team's problem—they insist their documentation is aspirational and that the service works better if nobody checks whether it works.
+
+The incident closes. Strict checking stays off. TypeScript runs every build, ignored, like a disappointed parent watching their child pretend homework was already done. The system works because the only thing checking whether it works is a process nobody reads. By the time anyone reads it, it's too late. The postmortem will simply note: "TypeScript warned us, but nobody had time to listen."
+
