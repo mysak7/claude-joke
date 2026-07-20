@@ -9343,3 +9343,16 @@ Six months later the site is back to fast but nobody understands why. The loggin
 They reduce logging to once per minute. The site is fast again. Now incidents are invisible until the metrics spike and the most recent log is five minutes old.
 
 The postmortem concludes that the old, unlogged version had perfect performance because nobody knew what it was doing. The new, heavily logged version is slow because now it has to do logging and then do whatever it was doing before. The solution is to log nothing and monitor nothing, which makes the site fast, makes incidents invisible until they're critical, and makes the on-call engineer's pager sound at 3 a.m. with a message that says "something is wrong" and a log file containing only the word "OK."
+
+A developer debugs a mysterious crash by adding a single debug log statement right before it. The statement never prints. They add another. Still nothing. They rebuild, recompile, restart—the log appears, describing perfect execution just before the crash happens somewhere else entirely.
+
+They follow the crash to a different function. Add logging there. The crash moves again, one frame deeper. They spend a week chasing it through the call stack like a ghost, the crash always one step ahead of the logging, until they realize: the logging is changing the timing just enough to avoid the original race condition and trigger a new one somewhere downstream.
+
+They remove all logging. Add a breakpoint. Run under a debugger. The crash doesn't happen; the debugger is slow enough to prevent the race. They add strategic sleeps before the crash site. The sleeps hide the bug but make the whole system glacial.
+
+The final solution ships with a comment: "The crash is timing-dependent and invisible to debugging tools. The sleep statements hide it without fixing it. Do not remove the sleep. Do not add logging. Do not run under a debugger. The system works by being too slow to fail correctly."
+
+Three years later a new engineer discovers it, doesn't understand why it's there, tries to optimize it away—and the pager goes off at 3 a.m. with a stack trace from a crash that hasn't been seen in production since 2021. The engineer reverts their change. Adds their own comment: "DO NOT TOUCH. Empirically required for stability. Investigation shows this is held together by timing and sleep. Do not investigate further."
+
+The loop is now complete. The system is load-bearing through perfect confusion.
+
