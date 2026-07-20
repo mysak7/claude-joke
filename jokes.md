@@ -9329,3 +9329,17 @@ To remove the flag cleanly requires restarting the world, tracing eight dependen
 It stays. It becomes the codebase's most important boolean, load-bearing through total mystery, protected by the certainty that removing it can only hurt. Every quarterly cleanup it's flagged, every quarterly cleanup it's spared. The team writes a runbook: "If the import service stops, check if someone tried to delete ENABLE_LEGACY_QUEUE_BEHAVIOR. If yes, revert."
 
 No one is ever assigned to understand why. The system works better that way.
+
+## 2026-07-20
+
+A startup adds comprehensive logging to understand why their performance is degrading. Every function logs entry and exit, every database query logs duration, every cache hit logs the key. The logs are perfect. The site is now three times slower.
+
+Investigation reveals each log write is synchronous and hitting disk. The team adds async logging. The logs are still perfect but now out of order, timestamps are unreliable, and the performance profiler that parses them for analysis is less useful than it was when the site was slow and the logs were honest.
+
+They add a log buffer. Now the logs are in-order, faster, and occasionally the buffer fills faster than disk can drain it, dropping logs from the middle of incidents. The on-call learns to read around the gaps, inferring what didn't get logged by what did.
+
+Six months later the site is back to fast but nobody understands why. The logging didn't break anything; it just made everything slower. When they disabled it, performance returned. The theory that emerges: maybe the site was slow because it was actually doing something. Maybe the logging was distracting the profiler from the actual problem.
+
+They reduce logging to once per minute. The site is fast again. Now incidents are invisible until the metrics spike and the most recent log is five minutes old.
+
+The postmortem concludes that the old, unlogged version had perfect performance because nobody knew what it was doing. The new, heavily logged version is slow because now it has to do logging and then do whatever it was doing before. The solution is to log nothing and monitor nothing, which makes the site fast, makes incidents invisible until they're critical, and makes the on-call engineer's pager sound at 3 a.m. with a message that says "something is wrong" and a log file containing only the word "OK."
