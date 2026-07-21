@@ -9403,3 +9403,14 @@ Incident 2019-08-14 was closed six years ago. The on-call who opened it is gone.
 
 The code is now load-bearing through mutual incomprehension—the provider doesn't remember why they allow these emails, the company doesn't know why they send them this way, and both sides have accepted never to question it.
 
+
+## 2026-07-21
+
+A developer writes a function called `getUserID()` that accidentally returns the user's name instead of their ID. The first caller assumes it returns an ID and uses it as a database key. It works—by cosmic accident, user names are unique. The second caller reads the name as a number string, casts it to int, and uses it as an index. Also works. The third caller hashes it. All three use cases succeed.
+
+Six years later, someone registers a user named "12345". The function returns "12345". The first caller looks up that ID—valid. The second caller converts it to the integer 12345, which maps to a completely different user. The third caller hashes it and gets a third user entirely. Three callers, one input, three different outputs, all syntactically correct, all semantically catastrophic.
+
+An engineer finally renames the function to `getDisplayName()`. Production explodes. Every caller breaks. They never wanted the display name—they were relying on the function being misnamed. They revert the rename. The function stays called `getUserID()`. It returns names. The bug is now load-bearing through caller incompetence.
+
+A comment is added: `// DO NOT RENAME. All callers depend on the broken contract.` Investigation begins to trace the damage from renaming—it's worse than expected. Better to leave it as-is. The function has become a load-bearing lie, and removing it would require decompiling the intentions of people who aren't around to explain themselves.
+
