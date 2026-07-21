@@ -9386,3 +9386,20 @@ Months pass. A principal engineer proposes a total rewrite of the indexing strat
 
 Years later, a new hire asks why there are indexes on columns that aren't even in the WHERE clause. The answer is always: "Because it breaks if you remove it. Don't ask me why. I don't know either, and neither does anyone who does."
 
+
+## 2026-07-21
+
+A team discovers an ancient feature flag: ENABLE_RETRY_BACKOFF, created in 2019, never set to true in the codebase. The flag controls whether email retry delays increase exponentially or stay constant at 5ms. Clearly dead code from a refactor. An engineer deletes it.
+
+Emails vanish. Silently. No errors, no logs, just gone. Investigation reveals the flag controls not just retry timing but also whether failures get logged. The system still retries, just invisibly, until the queue health metric finally screams and pages the on-call at 3 a.m.
+
+The SMTP provider has been rate-limiting these emails for months. But here's the catch: the provider's rate limiter was tuned specifically for the constant 5ms retry pattern. To their security systems, this looks like "consistent enough to be legitimate." Reintroduce exponential backoff, and suddenly the pattern looks like an attack. The rate limiter blocks it.
+
+The engineer restores the flag. Emails flow again because they're broken in exactly the right way. The retry pattern is objectively terrible—it hammers the provider in a chaotic burst that by all rights should be blocked. But years of this chaos have trained the provider's infrastructure to allow it. Chaos and order have reached equilibrium.
+
+The flag now lives under the immortal comment: "DO NOT MODIFY. Email delivery depends on this specific SMTP provider tuning. See incident 2019-08-14."
+
+Incident 2019-08-14 was closed six years ago. The on-call who opened it is gone. The SMTP provider has no record of why their rate limiter was tuned this way. The flag will outlive everyone who could explain it, protected by the certainty that removing it would break something, as long as that something was already broken exactly this way.
+
+The code is now load-bearing through mutual incomprehension—the provider doesn't remember why they allow these emails, the company doesn't know why they send them this way, and both sides have accepted never to question it.
+
