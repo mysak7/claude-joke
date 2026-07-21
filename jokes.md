@@ -9369,3 +9369,20 @@ A principal engineer suggests: "Maybe the API documentation is actually correct 
 
 The incident closes. Strict checking stays off. TypeScript runs every build, ignored, like a disappointed parent watching their child pretend homework was already done. The system works because the only thing checking whether it works is a process nobody reads. By the time anyone reads it, it's too late. The postmortem will simply note: "TypeScript warned us, but nobody had time to listen."
 
+
+## 2026-07-21
+
+A database performance crisis hits: a query scanning millions of rows is timing out. The solution is obvious—add an index. The team ships it. Query latency drops to milliseconds. They're heroes. Then another query gets slower. Then a third. They add a second index. The new query is fast, but the original index stops helping. They add a query hint. A fourth query breaks.
+
+Six months and five indexes later, the team has painted themselves into a corner. No single index makes sense on its own, but removing any of them causes cascading slowdowns across seven completely unrelated queries. The indexes are now load-bearing through timing—they're there not because the planner chooses them, but because the planner has learned to expect them.
+
+An engineer tries to clean up, deletes the one index that seems least useful. The system doesn't crash. It just slowly asphyxiates. Query latency is fine for three hours. Then something crosses a threshold, and suddenly everything locks, and nobody knows which index did what.
+
+The investigation reveals the planner's decision tree: it evaluates a query, considers indexes A, B, and C, and if any of them are present, it assumes the schema is "index-optimized" and uses a different evaluation strategy. Remove index B alone? Now strategy changes for queries that use index A. The planner's optimization is accidentally quadratically coupled to the physical schema.
+
+The solution is to reindex everything from scratch, but that would require downtime, and this is prod, and the team can't predict what will break until after they break it. So the indexes stay. All of them. A comment is added: `-- DO NOT REMOVE ANY INDEXES. Removal causes cascading timeouts in unrelated queries. Root cause: query planner heuristics.` The comment is true and useless.
+
+Months pass. A principal engineer proposes a total rewrite of the indexing strategy, with careful analysis, proper testing, and risk mitigation. The estimate is eight weeks. The current system is slow sometimes, but it works. Leadership approves the rewrite and schedules it for Q4. Q4 never arrives. Instead, every quarter the indexes get larger, the mystery deepens, and the team accepts this as The Way Of The Database.
+
+Years later, a new hire asks why there are indexes on columns that aren't even in the WHERE clause. The answer is always: "Because it breaks if you remove it. Don't ask me why. I don't know either, and neither does anyone who does."
+
