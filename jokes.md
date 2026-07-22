@@ -9414,3 +9414,15 @@ An engineer finally renames the function to `getDisplayName()`. Production explo
 
 A comment is added: `// DO NOT RENAME. All callers depend on the broken contract.` Investigation begins to trace the damage from renaming—it's worse than expected. Better to leave it as-is. The function has become a load-bearing lie, and removing it would require decompiling the intentions of people who aren't around to explain themselves.
 
+
+## 2026-07-22
+
+A team discovers their database is performing a full table scan for a query that runs a hundred thousand times a day. An engineer adds an index. Query time drops from 500ms to 5ms. Wins on Slack. Then every other query gets slower. The index is too good at attracting the planner. They add a hint to disable it for certain queries. Those queries are now faster, but the query optimizer starts second-guessing all its other decisions. The team adds more indexes. Locks contention increases. They add partitioning. Now queries that should hit one partition hit three. They add query rewrites to fix it. The rewrites are faster but incorrect on edge cases. They add guards for the edge cases. The guards slow everything down again.
+
+Six months later the system is 30% slower than before but every individual optimization is measurably correct. The team realizes the query that was slow at the start is now running in 4ms, but they've added so much infrastructure to optimize around that one slow query that everything else pays the tax.
+
+An engineer proposes removing all the optimizations and starting over. The proposal gets rejected: "We can't. Production depends on this complexity now. Removing any layer would cause unpredictable cascades." 
+
+Nobody can explain why. The system has become load-bearing through optimization—each layer justified only by the previous layers being there. Remove one and the whole stack falls, not because it's engineered that way, but because four years of teams tuned to the specific broken state.
+
+The query that started all this? It's now a monument. It exists to justify every layer above it. Nobody's allowed to fix the root cause because removing the root cause would require removing every fix built on top of it. The system works because it's too complicated to change.
