@@ -9426,3 +9426,26 @@ An engineer proposes removing all the optimizations and starting over. The propo
 Nobody can explain why. The system has become load-bearing through optimization—each layer justified only by the previous layers being there. Remove one and the whole stack falls, not because it's engineered that way, but because four years of teams tuned to the specific broken state.
 
 The query that started all this? It's now a monument. It exists to justify every layer above it. Nobody's allowed to fix the root cause because removing the root cause would require removing every fix built on top of it. The system works because it's too complicated to change.
+
+## 2026-07-22
+
+A team debates whether to write unit tests for a critical payment system. The arguments are predictable: tests take time, coverage is hard to measure, and the code is already simple. They ship without tests. It works perfectly for six months. Then a new feature adds a condition. The simple code is now slightly less simple. A junior dev refactors it for clarity. The logic inverts by accident. Three hours later, customers are refunding payments to themselves. The postmortem is swift: "We need tests."
+
+They write tests. Hundreds of them. The tests pass. They're confident. They refactor again—this time with test coverage. The tests still pass. The feature ships. Customers are now paying twice instead of refunding themselves. Investigation reveals the tests never actually asserted the right values; they asserted that the function returned something. Anything.
+
+The team writes better tests. They add assertions. They add edge cases. Three weeks later, the test suite is slower than the feature it tests. CI takes forty minutes. Every commit now requires waiting through a half-hour gauntlet of validation that catches nothing because the code is already broken by the time the tests finish.
+
+An engineer proposes skipping tests locally and running them only on CI. They do. CI catches nothing because a condition in the test fixture doesn't match production. They add environment variables to the tests. Now the tests are conditional—they pass in CI but fail locally, or vice versa. Nobody understands why.
+
+They add a mock. The mock behavior doesn't match the real dependency, but the tests pass. Prod crashes. They add another mock layer to fix it. Now the tests are testing the mocks, not the code.
+
+Six months later: the tests are more lines of code than the feature. The feature is simple. The tests are architectural. An engineer tries to add a new test case. They spend a day understanding how to instantiate the test fixtures. Another day learning the assertion DSL. A third day debugging why their test fails in CI but not locally. By now the feature they wanted to test is three hours of work, but the test infrastructure is a career.
+
+Leadership asks if all these tests are worth the time. The answer is consensus: "We need the tests because the last time we tried to ship without them, it broke. Therefore, tests are good and necessary." Nobody questions whether the tests actually prevented the breakage or just moved it to a different part of the process.
+
+The test suite grows. CI grows. Every developer learns to ignore test failures that are "environmental" or "flaky." A joke emerges: "If the tests pass, we ship. If the tests fail, we rerun them. Eventually they pass." The system works because the tests are load-bearing through the certainty that nobody trusts them anymore, so when they do fail, it's treated as a test problem, not a code problem.
+
+An engineer proposes removing the flakiest test: it fails randomly, provides no value, and wastes developer time. The proposal is rejected. "We can't remove tests. That's not how QA works." The test stays. It fails. It's rerun. It passes. Prod crashes on the exact condition the test was designed to catch, but the test was too busy failing on irrelevant timing to notice.
+
+The test suite has now become load-bearing through failure—it's so full of false positives that actual problems are buried in noise. The system works because nobody listens to the tests anymore. The tests exist only to be ignored.
+
