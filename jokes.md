@@ -9449,3 +9449,19 @@ An engineer proposes removing the flakiest test: it fails randomly, provides no 
 
 The test suite has now become load-bearing through failure—it's so full of false positives that actual problems are buried in noise. The system works because nobody listens to the tests anymore. The tests exist only to be ignored.
 
+
+A team discovers a cron job that runs at 2 AM every night: reads a file, does nothing, logs nothing, exits in five seconds. If disabled, the system crashes at 2:15 AM with a cascading failure that takes hours to recover from.
+
+Investigation reveals the job isn't causing or preventing the crash. The job just needs to exist. Somewhere in initialization, a dependency check runs at 2:10 AM verifying a background worker thread is alive by checking if it logged something in the last fifteen minutes. If the thread is dead, the system shuts down to prevent corruption.
+
+The background worker thread exists to clean up cache entries. The cache is never populated. The thread was added "just in case" three jobs ago. It runs every twenty minutes and logs "cache cleanup: 0 items," but does nothing else.
+
+Without the 2 AM job, the system boots fine. But the worker thread hasn't logged anything yet—it won't log until 2:20 AM. The 2:10 AM dependency check sees no recent log, treats this as failure, and crashes the system.
+
+The 2 AM job doesn't fix the root cause. It just happens to run before the dependency check, which causes the logging system to flush, which triggers the background thread to log something incidentally, which updates the log file timestamp that the dependency check then sees.
+
+Fixing this requires fixing the initialization order, making the thread log on startup, and making the dependency check less paranoid—all at once, or the cascades continue. Nobody wants to touch that part of the code anymore.
+
+The job stays at 2 AM. An engineer adds a comment: "DO NOT REMOVE. This job prevents a 2:15 AM crash. If you understand why, you're more qualified than anyone here."
+
+The system is now load-bearing through temporal magic. It works because the timing is cursed correctly.
