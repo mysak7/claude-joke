@@ -9489,3 +9489,24 @@ An architect surfaces the real problem: the system has become load-bearing throu
 The team accepts the 300ms latency. They add a comment: "Every request is traced. Do not optimize tracing. The system's stability depends on this overhead. We don't know why, and we're afraid to find out."
 
 The system works because latency is the only thing holding it together.
+
+A developer adds a single boolean flag to disable a broken feature: `SKIP_LEGACY_LOGIC = true`. It ships to production. Two years later, it's still true. Nobody remembers what the logic was. An engineer proposes removing the flag entirely.
+
+They set it to false. Prod crashes instantly with a type mismatch in a code path that should never execute. Investigation reveals the "broken logic" was shadowed by an entirely different branching path added when the flag was created. The broken logic itself doesn't matter. But when you remove the flag, the compiler optimizes away dead code and exposes a path with incompatible types.
+
+They set the flag back to true. Works again.
+
+A principal engineer proposes the proper fix: rewrite the branching logic to unify types, remove the dead code cleanly. A week of careful refactoring. Tests pass. CI passes. They deploy.
+
+Production crashes a new way: a theoretically unreachable code path is suddenly executing. Trace the guard condition: it's always false IF the dead code exists. The dead code had a side effect—it initialized a static variable at class load time, even though the code never ran. Without the dead code, the static isn't initialized. The condition becomes true. The unreachable path runs.
+
+They restore the flag. Restore the dead code. Restore the useless static initializer. Production heals.
+
+The flag now lives under a comment: "DO NOT REMOVE. This flag and the dead code it disables are structurally load-bearing. Removing either breaks the type system and unblocks an unreachable path. The entire feature depends on this specific state of failure."
+
+The system works because it's broken exactly right, in exactly the right place, in exactly the right way. The flag isn't a feature—it's a load-bearing lie. The dead code isn't dead—it's a phantom structural support that breaks production if removed but does nothing if kept.
+
+An engineer asks: "Could we just refactor the whole section?" Leadership's answer is consensus: "We could, but we'd have to understand the feature first. And we'd have to understand why it's been in a broken state for two years. And we'd have to commit to maintaining it correctly afterward. The current solution works. Let's leave it alone."
+
+The flag remains. Eternal. Unexplained. Load-bearing through mutual abandonment.
+
