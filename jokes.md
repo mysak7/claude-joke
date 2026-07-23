@@ -9510,3 +9510,20 @@ An engineer asks: "Could we just refactor the whole section?" Leadership's answe
 
 The flag remains. Eternal. Unexplained. Load-bearing through mutual abandonment.
 
+
+## 2026-07-23
+
+A developer writes a function that returns either a value or an error code. Negative numbers are errors. Zero and positive are values. It works for years.
+
+Then someone needs to return -1 as a legitimate value. The contract changes: -2 and below are errors. Works until -2 becomes a valid output.
+
+The team raises the threshold: -999 and below. Then -999. Then -999999. Eventually the check is `if (result < -999999999999)`.
+
+An engineer finally asks: "Why not use exceptions?"
+
+The answer comes back: "This function predates exceptions. Every callsite would need to be audited. The function has been like this for twelve years, and everything is tuned to work with magic number error codes."
+
+The magic numbers stay, the thresholds keep rising, and the system works because the errors have become so negative that they can't possibly collide with legitimate values.
+
+Load-bearing through sheer numeric distance.
+
