@@ -9465,3 +9465,27 @@ Fixing this requires fixing the initialization order, making the thread log on s
 The job stays at 2 AM. An engineer adds a comment: "DO NOT REMOVE. This job prevents a 2:15 AM crash. If you understand why, you're more qualified than anyone here."
 
 The system is now load-bearing through temporal magic. It works because the timing is cursed correctly.
+
+## 2026-07-23
+
+A microservice architecture handles millions of requests. The team instruments it with tracing: every request ID flows through every service, every hop gets logged, perfect observability. Then a new engineer joins and asks: "Why does tracing add 300ms to every request?"
+
+Investigation reveals the request ID is being serialized, deserialized, and logged at fourteen points per request. They add a fast path: requests without an ID skip tracing. This reduces overhead by 40%. Production breaks. Cascade failures, request storms, the system lights up like a Christmas tree.
+
+The root cause: the request router assumed all requests have IDs. When it doesn't find one, it hangs, waiting for a tracing system to assign it. The tracing system is offline—they disabled it to debug it—so the router waits forever. Except not forever; it times out after 30 seconds, then what? It retries. The retry queue fills instantly because nothing is processing requests. The system collapses from the load of requests that never got traced in the first place.
+
+They restore tracing. Everything heals. Requests flow again. But now they're faced with a choice: ship with 300ms of latency overhead, or maintain an invariant that every request must be traced before it can be routed.
+
+An engineer proposes making tracing optional: wrap it in a try-catch, log errors but don't block. They ship it. Works great for two days. Then the try-catch catches an OOM error in the tracing system—there's a memory leak somewhere. The system catches the error, logs it, and continues. Fifty times a second. The logging system fills up. The disk fills up. The system grinds to halt not because tracing crashed, but because logging the crash to disk took longer than it took to leak more memory.
+
+They revert the try-catch. Make tracing synchronous again. Make it fail-fast instead of retry. Now if tracing goes down, requests fail immediately instead of timing out invisibly.
+
+A week later someone accidentally deploys the tracing service without replication. One instance. It crashes. Suddenly every request fails, but the errors are clear: "Tracing unavailable." On-call pages. They add a retry. The retry waits for tracing to come back. But every retry increases the queue backlog. The queue fills the buffer. The buffer's backup strategy is to queue more requests. Circular.
+
+They add fallback tracing—if the primary goes down, use in-memory tracing as a backup. This works until the in-memory buffer fills, then old traces get dropped, and the system works but silently loses observability. This goes unnoticed for days. Prod has a performance regression. The traces are gone so they can't debug it. They revert to full distributed tracing with all the latency.
+
+An architect surfaces the real problem: the system has become load-bearing through observability. It works not because requests are handled well, but because the tracing infrastructure constrains the system to work. Remove tracing and requests flow freely but cascade fails. Keep tracing and requests are slow but stable.
+
+The team accepts the 300ms latency. They add a comment: "Every request is traced. Do not optimize tracing. The system's stability depends on this overhead. We don't know why, and we're afraid to find out."
+
+The system works because latency is the only thing holding it together.
