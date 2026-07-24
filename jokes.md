@@ -9564,3 +9564,33 @@ They revert. The typos stay. The alias feature never ships. The code for it gets
 
 The system is load-bearing through permanent, documented misspelling.
 
+
+## 2026-07-24
+
+A team deprecates an old API endpoint. Callers have 18 months to migrate. Fifteen months later, one caller—an acquired service still being audited—hasn't migrated. The removal date passes. The endpoint is deleted. That service crashes. The endpoint is restored.
+
+Years pass. The acquired service finally transitioned. The migration is complete. The endpoint is removed again. Different internal services start failing. They never migrated either—they were "definitely going to migrate" and the tickets stayed in backlog forever.
+
+The endpoint is restored again. An engineer adds monitoring to discover what's calling it. The endpoint is being hit by:
+- Three internal services in perpetual "migration soon" status
+- A service that's been dead for two years but still has background jobs running somewhere
+- A data pipeline that pings it every 30 minutes "just to verify it works"
+- A developer's local test script that got copied into production config six years ago
+
+The team tries once more. They announce removal with 60 days notice. Internal services commit to migration. They don't. Services crash. The endpoint is restored.
+
+An architect surfaces the real problem: "Removing this endpoint has a higher cost than keeping it alive. We'd have to audit the entire codebase, trace all production configs, find all background processes. One endpoint is cheaper."
+
+The endpoint becomes load-bearing through inertia. It exists because removing it would be harder than maintaining it.
+
+A security audit flags it: "This deprecated endpoint should be removed."
+
+The team responds: "Here's the removal ticket from 2019. We've tried. It keeps breaking things. It's on the roadmap."
+
+Six more years pass. In 2032, someone asks: "Can we just redirect all calls to the new endpoint?" They try. Works for one day. Then a service that was expecting a 404 error—to trigger a fallback to local cache—suddenly gets a 200 response and crashes. That service has been dead for years but still running in a cron job.
+
+The redirection is reverted. The deprecated endpoint stays fast-pathed but alive.
+
+A comment appears in the codebase: "DO NOT REMOVE THIS ENDPOINT. We've tried. Seven times. Each removal causes failures we don't understand. The endpoint is now structurally load-bearing through mystery. Services that don't exist anymore depend on it not existing, while services that still exist depend on it existing. The tension holds the system up. If we removed it, we'd have to understand why, and we're afraid to find out."
+
+The endpoint remains. It's immortal now. It was deprecated in 2018. It will never be deleted. It's a monument to the cost of migration, a warning written in an HTTP status code: sometimes the best place for something broken is exactly where it is.
