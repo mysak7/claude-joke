@@ -9594,3 +9594,28 @@ The redirection is reverted. The deprecated endpoint stays fast-pathed but alive
 A comment appears in the codebase: "DO NOT REMOVE THIS ENDPOINT. We've tried. Seven times. Each removal causes failures we don't understand. The endpoint is now structurally load-bearing through mystery. Services that don't exist anymore depend on it not existing, while services that still exist depend on it existing. The tension holds the system up. If we removed it, we'd have to understand why, and we're afraid to find out."
 
 The endpoint remains. It's immortal now. It was deprecated in 2018. It will never be deleted. It's a monument to the cost of migration, a warning written in an HTTP status code: sometimes the best place for something broken is exactly where it is.
+
+A service adds exponential backoff retry logic for calls to a flaky dependency with a 1% error rate. Requests still fail occasionally without retries. With retries, the 1% becomes 0.01%. Users see no issues. The retry logic is tagged "temporary—fix the dependency."
+
+The dependency is never fixed.
+
+Years later, an engineer audits dependencies and proposes removing retries and finally fixing the root cause. They disable retries in staging. The 1% error rate returns. Production customers start seeing timeouts. They turn retries back on. Everything heals.
+
+Investigation reveals the dependency is a database query that times out 1% of the time when a background reindex job locks the table. The reindex is critical for query performance but the lock is brief. Without retries, those locked moments cascade into customer-facing failures. With retries, the lock is transparent.
+
+The proposal: schedule reindex during a maintenance window. There's already a 30-minute window on Sundays at 3 AM Pacific.
+
+That window exists for a different reason: a nightly report job takes 25 minutes. If it's still running at 3:30 AM, backups start anyway and delay the report, which delays analysis for the morning standup. So the window is "3:00–3:25 AM, exactly."
+
+Moving the report is impossible: it's been running at 2:30 AM for 11 years because the team that built it needed fresh data for their timezone. That team's office closed in 2015, but the job stayed. Moving it earlier breaks downstream systems that aren't running yet. Moving it later breaks the backup window.
+
+So the reindex can't start until after the report finishes at 2:55 AM. That's five minutes to rebuild the database index and verify it's healthy before backups start. Not enough time.
+
+The engineering effort to stagger reindex across multiple maintenance windows is two weeks of careful work.
+
+The retry logic costs CPU cycles and 50 milliseconds of latency, paid by 1% of requests, 99% of the time.
+
+The team chooses retries. The tag "temporary" is updated to read: "DO NOT REMOVE. Retries are load-bearing. The 1% of failures they absorb are caused by a reindex that can't be moved without breaking the report pipeline which can't be moved without breaking seven other services. Every component depends on every other component staying exactly as broken as it is. If you remove retries to 'fix' this, you'll cascade the failure upstream where it breaks things we've forgotten about."
+
+The retries stay forever. They're not a bug anymore. They're a permanent shock absorber holding up a system where every piece is supporting every other piece and nobody remembers which weight goes where.
+
