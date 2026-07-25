@@ -9678,3 +9678,28 @@ The log line stays. It's not logging anything useful anymore; it's pure ritual�
 Nobody is allowed to optimize it. It's not a bug. It's infrastructure.
 
 Load-bearing debug output.
+
+## 2026-07-25
+
+A microservice caches data and refetches in the background—"show stale data while we update it." The pattern is sound. But there's a race condition: if the cache is cold on startup, the refetch reads the empty cache, gets nothing, caches `null`, and returns `null` to the frontend while waiting for real data.
+
+Users see `null` rendered as the loading state. They're trained by every app ever made that loading means "wait," so they do. 500ms later, real data appears. The UX is flawless. Completely accidental.
+
+An engineer fixes the race condition: the background refetch now reads the source directly, skipping the cache. No more `null` on cold start.
+
+Now on cold start, users get either stale cache (bad) or nothing at all. No loading state. They don't know what's happening. The app feels broken even though it's faster.
+
+The fix is reverted. The race condition returns.
+
+A comment appears: "DO NOT FIX THE RACE CONDITION. The null return is what triggers the frontend's loading state, which creates the perception of responsiveness. Fixing this cascades into users not knowing the page is working."
+
+The race condition is load-bearing UX.
+
+Years pass. The team proposes migrating to a framework with better async handling. The proposal includes "finally fixing that race condition." Code review halts it: "This will break the perceived loading experience."
+
+The migration is shelved.
+
+The race condition lives forever—not as a bug, but as the only thing standing between a fast app and an app that users think is broken.
+
+The frontend developers stop calling it a race condition. They call it "the perceived-state injection."
+
