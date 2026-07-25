@@ -9656,3 +9656,25 @@ The new hire reads the document. By page 12, they understand: the button's color
 
 The button is black. It will always be black. It works because it doesn't work well enough to fix.
 
+
+## 2026-07-25
+
+A developer accidentally leaves `console.log("query:", query)` in production. It logs every database query to stdout. Logs fill disk. Service crashes. They remove the line.
+
+Internal errors start cascading. Investigation reveals: a background job that retries failed operations was never properly implemented. It waits for errors in the log stream—when this console.log line logs a failed query, that's the signal to retry. Without it, errors are silent. Corrupted data spreads.
+
+They add the console.log back. Disk usage climbs to 80%. Service works. They spend 3 weeks building a proper retry system and removing the log line. A different outage follows immediately: the deployment monitoring service was watching for that specific log line to appear before marking deployments as "ready." Without it, deployments keep rolling back, thinking they failed.
+
+They add the log line back.
+
+Years pass. The console.log is now infamous. 12 MB per minute of disk I/O, completely pointless, completely essential. Code review comments: "DO NOT TOUCH LINE 427."
+
+A new engineer asks why.
+
+The ticket is marked: "Don't know. Maybe ask Dave. Dave left in 2018."
+
+The log line stays. It's not logging anything useful anymore; it's pure ritual—a heartbeat that downstream services are waiting for, proof-of-life woven into 8 different systems that would collapse without it.
+
+Nobody is allowed to optimize it. It's not a bug. It's infrastructure.
+
+Load-bearing debug output.
