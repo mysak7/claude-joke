@@ -9619,3 +9619,40 @@ The team chooses retries. The tag "temporary" is updated to read: "DO NOT REMOVE
 
 The retries stay forever. They're not a bug anymore. They're a permanent shock absorber holding up a system where every piece is supporting every other piece and nobody remembers which weight goes where.
 
+
+## 2026-07-25
+
+A startup's growth team discovers that darkening a button increases form submissions by 2%. They iterate: darker, then even darker. The button is now black on dark gray, invisible except for the white text floating alone.
+
+A new engineer asks: "Why not just pick a good color?"
+
+The team explains: their CSS optimized for dark mode browsers, which invert colors for OLED screens. In dark mode, the black button inverts to white—highly visible. In light mode, it's invisible. But they can't fix it without A/B testing, and when they run A/B tests, the browser's auto-inversion overrides their test variants randomly, corrupting the data.
+
+"So...just disable the inversion feature?"
+
+"Can't. Users need it for accessibility."
+
+"Can you pick a color that works in both modes?"
+
+Long pause.
+
+The senior engineer opens a document titled "Button Color Research (2019-2024)". 47 pages. Tabs labeled "Contrast Ratios," "User Surveys," "A/B Test Failures," "Browser Inversion Edge Cases."
+
+The last page reads: "Conclusion: No color works in both modes. We have optimized for dark mode at the expense of light mode users, but if we revert to light mode, dark mode users lose 12% engagement. We are stuck."
+
+The button stays black. The team has two engineers whose full-time job is monitoring whether it's still broken in a way that's profitable. It is. In dark mode, submissions are up 2%. In light mode, nobody can see the button so they don't submit. Net positive: +0.7% across all users.
+
+A new hire proposes the obvious: "What if we just shipped a button that works in both modes?"
+
+The engineer who wrote the 47-page document closes the laptop and stares into the middle distance.
+
+"We tried that. It was gray. The performance metrics were neutral. Marketing was upset we weren't pushing 2% higher. So we optimized for dark mode."
+
+"But that breaks light mode—"
+
+"We know. We have a ticket for it. It's in the backlog. It's been there for three years. It's behind 'Button Performance Audit Phase 2', which is behind 'Dark Mode Engagement Optimization', which is behind 'CTA Button A/B Test Variants 18-23.'"
+
+The new hire reads the document. By page 12, they understand: the button's color is no longer a design decision. It's a compromise held hostage by conflicting metrics, trapped in a local maximum that looks terrible but performs well, and optimized for a future that will never arrive because optimizing for the button's color requires admitting that the optimization was a mistake.
+
+The button is black. It will always be black. It works because it doesn't work well enough to fix.
+
