@@ -9726,3 +9726,32 @@ The flag stays forever—a monument to a customer who no longer exists, read by 
 
 It's the ghost of a feature. The ghost doesn't haunt anything anymore, but you can't exorcise it because the last person who tried got paged at 3 AM.
 
+
+## 2026-07-26
+
+A developer gets an alert: "3 code reviewers approved your PR." They merge. It ships Friday at 2 PM.
+
+Sunday at 3 AM: the entire database is corrupted. Investigation: all 3 reviewers looked at the commit message and the comment, but none actually opened the 47-file diff—the viewer was slow, so they just hit approve and moved on.
+
+The team implements "Reviewers must actually read the code."
+
+The next PR takes 6 hours to review. Merge fatigue. A subtle bug slips through anyway. Production breaks for a week.
+
+Code review metrics tank. The team goes back to approving without reading. A meeting is scheduled: "We need to review faster."
+
+A junior engineer suggests: "What if we required reviewers to read the code?"
+
+Long pause.
+
+"That would slow things down," the tech lead responds.
+
+"But we ship bugs because nobody reads the code."
+
+"Yes. But we ship fast. We have metrics for that."
+
+The PR process is now optimized for approval velocity. Reviews happen in 3 minutes. Bugs flow through like water.
+
+A postmortem states: "We're shipping 40% buggier but 300% faster. This is an improvement."
+
+Everyone in the meeting nods. The metrics confirm it.
+
