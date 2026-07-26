@@ -9755,3 +9755,35 @@ A postmortem states: "We're shipping 40% buggier but 300% faster. This is an imp
 
 Everyone in the meeting nods. The metrics confirm it.
 
+
+## 2026-07-26
+
+A startup's entire payment processing pipeline depends on a developer's personal laptop running a cron job that syncs invoice data to the database every 5 minutes. It's been running for 7 years.
+
+The developer left in 2019. Nobody realized the job was still critical—the "temporary" sync was never replaced with proper infrastructure because it worked and nobody was paged about it.
+
+During an audit, someone asks: "Whose laptop is this?"
+
+"Mike's. He left in 2019."
+
+"Is it still on?"
+
+"Yeah. It's under his desk in storage. We move it when we need desk space."
+
+An engineer proposes migrating to a proper service: "This is a clear single point of failure."
+
+The response: "The laptop IS the single point of failure, but it's been up for 2,847 days. Infrastructure costs 10x that laptop, takes 6 weeks to implement, and has a 40% failure rate in the first month. Plus, if we move the job and it breaks, payments break. If we leave it on Mike's laptop and it breaks, we call Mike and he remote-in to restart it."
+
+"Mike's off the grid now. He moved to a cabin in Montana."
+
+Long silence.
+
+"Then we don't touch it. The laptop stays. We get it a UPS. We set up alerts for when it goes down. We do NOT replace it with real infrastructure."
+
+They buy a UPS for Mike's laptop.
+
+Three years later, it's still running. There's a ticket in the backlog: "Migrate payment sync off of legacy hardware." It's been there for 36 months, behind "Dashboard Redesign Phase 3" and "Dark Mode Performance Audit."
+
+The payment system is load-bearing-laptop-in-storage infrastructure.
+
+The company's valuation is $2 billion. It all flows through a MacBook Pro from 2014.
