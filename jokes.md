@@ -9703,3 +9703,26 @@ The race condition lives forever—not as a bug, but as the only thing standing 
 
 The frontend developers stop calling it a race condition. They call it "the perceived-state injection."
 
+
+## 2026-07-26
+
+A team ships a feature flag `EnableNewDashboard` set to false for 99.9% of users while they optimize. After 6 months it's true for 100% of users. The team plans to remove the flag in the next refactor.
+
+Six months later, an engineer removes it. The app crashes for three customers. Investigation reveals a customer's custom integration relies on the flag existing and being true—it was their signal to enable batching. Without the flag key, their parser fails.
+
+The flag is restored. It's now true for 100% of users, completely pointless, completely load-bearing.
+
+A comment appears: "DO NOT REMOVE. Customer dependency. Do not audit this code."
+
+Ten years pass. The customer goes out of business. Other customers either migrated or also went under. But the flag stays. It's in 12 different code paths now, always true, read exactly zero times, never affects any logic.
+
+An engineer proposes: "Let's search the codebase for dead feature flags."
+
+The search finds it: `EnableNewDashboard`, always true, touched in 2019, never again. Clear candidate for removal.
+
+A code review comment appears: "Do not touch this. Last time we removed it, production broke. The customer is gone now but there might be another one we don't know about. Feature flags are cheap. Outages are expensive."
+
+The flag stays forever—a monument to a customer who no longer exists, read by machines that ignore it, maintained by engineers who fear it, load-bearing through institutional paranoia.
+
+It's the ghost of a feature. The ghost doesn't haunt anything anymore, but you can't exorcise it because the last person who tried got paged at 3 AM.
+
