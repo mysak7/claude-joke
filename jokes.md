@@ -9787,3 +9787,45 @@ Three years later, it's still running. There's a ticket in the backlog: "Migrate
 The payment system is load-bearing-laptop-in-storage infrastructure.
 
 The company's valuation is $2 billion. It all flows through a MacBook Pro from 2014.
+
+## 2026-07-27
+
+A function called `processData()` starts as 5 lines: read input, transform, write output. Over 8 years, as requirements compound, it becomes 340 lines. It does data processing, error handling, retries, caching, dead-letter queues, Slack alerts, email notifications, and database backoff logic all woven together.
+
+An engineer sees it in a code review and proposes: "We should extract the email logic into a separate service."
+
+They do. The tests pass. They deploy Friday at 4 PM. Monday morning, a customer's entire data pipeline has stopped processing. Investigation spans 8 hours. The issue: removing the 6 email lines changed the function's execution timing by 40ms. That small timing delay was enough to prevent a race condition in the upstream Kafka consumer. Without the delay, messages pile up faster than they're processed, the queue backs up, and the downstream circuit breaker trips.
+
+They revert immediately.
+
+Six months later, another engineer tries to refactor the error handling into a helper function. Tests pass again. Ships again. This time, production works but the database gets hammered because the original error handler had an undocumented exponential backoff that nobody realized was critical load-shedding logic. Without it, failures cascade.
+
+Revert again.
+
+The function is now infamous. Comments appear:
+
+```
+// DO NOT REFACTOR
+// DO NOT SPLIT
+// DO NOT OPTIMIZE
+// The timings are load-bearing.
+// The error handling is unexpectedly critical.
+// In 2021 we tried to extract logging; p1 incident followed.
+// We don't know why. We are afraid to know why.
+// This function is a curse masquerading as code.
+```
+
+A new hire reads it during onboarding and asks: "So we just... leave it broken?"
+
+"It's not broken. It works perfectly. That's the problem."
+
+"But it's unmaintainable."
+
+"Yes. But it's maintained by institutional terror. We fear what happens if we touch it. That fear is more powerful than any actual understanding of why it works. The function has achieved sentience through negative feedback."
+
+"How do we ever fix it?"
+
+"We don't. We wait for it to fail in a way that forces a rewrite. Until then, we add features *around* it and deploy praying. It's load-bearing code held together by despair."
+
+A ticket has existed in backlog for 4 years: "Refactor processData() into components." It's marked red priority. It will never be done. No engineer has the courage. The function is a monument to the gap between what we know is wrong and what we're too afraid to change.
+
