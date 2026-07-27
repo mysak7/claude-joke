@@ -9867,3 +9867,58 @@ The answer will be: "Because we shipped it eight years ago and now the entire pl
 
 A debug statement is now infrastructure. The moral: print statements are easier to add than to remove.
 
+
+## 2026-07-27
+
+A test suite reports 100% code coverage. Every line executes. Every test passes. The engineer ships with confidence.
+
+Production breaks in 3 hours.
+
+Investigation: the test database returns whatever the test tells it to return. The API test mocks the network. The auth test returns fake tokens. The error handling test returns manufactured errors. No test checks that the code *actually works*—they only verify that the code *runs without throwing*.
+
+A test passes if no exception occurs and the output matches the mocked expectation.
+
+In the test: `assert cache.get("key") == mockValue`. Cache returns mockValue. Test passes.
+
+In production: cache returns null. Feature fails.
+
+A postmortem erupts:
+
+"The tests passed. The coverage was complete. How did this fail?"
+
+"The tests were testing the mocks. We verified the code against its own invented reality."
+
+"So we write better tests?"
+
+"Tests of what? The mocks? You can build a tower of lies where each level confirms the level below it. Every test passes because they're all comparing code output to the code's own expectations."
+
+"Then we... mock the mocks?"
+
+An engineer proposes: "What if tests actually run against real systems?"
+
+"That's slow. Tests must be fast."
+
+"But then what are we testing?"
+
+"The test execution time."
+
+The solution: implement faster feedback loops, more granular mocks, and stricter coverage requirements.
+
+The test suite balloons to 50,000 tests. 100% coverage maintained. All pass.
+
+Production is still broken.
+
+A comment appears:
+
+```
+// This feature has excellent test coverage
+// (Tests verify that tests run, not that features work)
+// QA will find the real bugs. Testing just makes graphs go up.
+```
+
+The team learns to solve this by doing manual QA *after* automated tests pass, making testing feel like makework theater—expensive, time-consuming, and ultimately powerless to catch bugs.
+
+A newer hire asks: "If the tests don't catch this, what's the point of the tests?"
+
+The response: "Metrics. Our testing KPIs are exceptional. Isn't that confidence?"
+
