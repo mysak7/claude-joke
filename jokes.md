@@ -9829,3 +9829,41 @@ A new hire reads it during onboarding and asks: "So we just... leave it broken?"
 
 A ticket has existed in backlog for 4 years: "Refactor processData() into components." It's marked red priority. It will never be done. No engineer has the courage. The function is a monument to the gap between what we know is wrong and what we're too afraid to change.
 
+
+## 2026-07-27
+
+A developer adds a single line to debug a performance issue: `log.info("Cache hit: " + JSON.stringify(cachedValue))` in the request handler. Ships it. Removes it a week later.
+
+Three weeks later, alerts start firing. The caching system is silently skipping invalidations. Investigation spans 6 hours. Root cause: a third-party monitoring tool had started scraping those log lines to build dashboards on cache hit rates. When the logs disappeared, the monitoring tool crashed silently. Its crash-handler was to *assume all subsequent requests miss the cache and skip invalidation signals*—a "fail open" design meant to prevent false negatives in metrics.
+
+For 3 weeks, every write bypassed the cache because the monitoring tool thought every read was a miss.
+
+The log line is restored immediately.
+
+Now it's load-bearing observability. The logging tool depends on it. Removing it again requires a 6-month deprecation plan to give them time to migrate to proper metrics APIs.
+
+But the metrics APIs don't exist yet. They're in the backlog: "Design standardized cache observability." It's been there for 2 years.
+
+So the debug log line stays. In production. In the hot path. Serializing JSON on every request.
+
+Profiling shows it's a 3% performance tax. But removing it causes a cascade. The log line has become a de facto contract.
+
+A comment appears:
+
+```
+// THIS LOG LINE IS PART OF THE PUBLIC API
+// DO NOT REMOVE WITHOUT NOTIFYING THE MONITORING TEAM
+// DO NOT CHANGE THE FORMAT
+// A third-party tool depends on this. Yes, really.
+// Yes, we know it's inefficient. No, we can't change it.
+// This is what happens when you add debugging and don't remove it.
+```
+
+The debug line has achieved immortality through accidental interface.
+
+Some engineer, in 2035, will ask: "Why are we serializing to JSON in the hot path?"
+
+The answer will be: "Because we shipped it eight years ago and now the entire platform treats it as guaranteed output."
+
+A debug statement is now infrastructure. The moral: print statements are easier to add than to remove.
+
