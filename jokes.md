@@ -9995,3 +9995,77 @@ Five years later: a new recruit reads the code and asks why we use such a strang
 The answer: "Because a partner company chose it in 2026 and now the entire platform is load-bearing on their arbitrary decision."
 
 The moral: the shortest path between two points in production is through someone else's bug that you can't afford to fix.
+
+An engineer writes a TODO comment: `// TODO: make this configurable`. It's a retry count. Hard-coded to 3. Works fine in dev. Works fine in prod.
+
+Two years pass.
+
+A large customer deploys to a system with high latency. Requests time out because retries are exhausted. They ask: "Can we change the retry count?"
+
+The engineer opens the code. The TODO is still there. Three is buried in test data, in integration tests, in example configs. Some tests expect exactly three retries. Some tests expect at least three. Some tests check that *more* than three triggers a circuit breaker.
+
+The number 3 has become a specification.
+
+They extract it to a constant: `RETRY_COUNT = 3`. Celebrate the small win. Still can't change it without cascading test failures.
+
+They try making it configurable. Pick an env var: `MAX_RETRIES`. Deploy. The customer sets it to 10. It works for them. 
+
+It breaks for everyone else. The tests didn't validate the interaction. The logic assumed 3 meant "small." Other code checks: `if (retries > 3)` to detect excessive backoff. Now backoff triggers incorrectly.
+
+A rollback. The env var is removed.
+
+They try again with a config file. Now they're building config schema, validation, defaults, and documentation. The simple number is now infrastructure. Tests need to test the config parser, the defaults, the interaction with retry logic.
+
+Three weeks later, a two-line change has become a feature project with tickets, a design doc, and a new config system.
+
+The customer still can't change the retry count without breaking their deployment.
+
+A meeting: should we just hardcode it differently for different customers?
+
+"That's customer-specific code."
+
+"So we need a feature flag?"
+
+Feature flags are added. Feature flag evaluation is added. Feature flag tests are added. A feature flag management service is discussed.
+
+The code path for 3 retries is now: load config file, parse JSON, retrieve from database, evaluate feature flags, compute environment overrides, apply defaults, validate, then use the value.
+
+A performance engineer measures it. The retry-count lookup takes 2ms. The actual retry operation takes 300ms. Nobody cares.
+
+But now every retry decision touches five systems. A deploy mistake breaks retry evaluation across the platform.
+
+An incident happens. Retry counts randomly change per request because feature flags are deployed out of sync with the service. Requests fail with mysteriously varying behavior.
+
+Postmortem: "We need to cache the retry count, or bake it into the binary."
+
+Back to hardcoding. But now it's hardcoded in the build process with a config file that feeds into the binary at compile time. Deploy-time configuration requires recompilation. Development is slowed.
+
+A comment appears in the code:
+
+```
+// IMPORTANT: Retry count is compiled into the binary from config/retries.yaml
+// To change retry behavior:
+// 1. Edit config/retries.yaml
+// 2. Run: ./build.sh
+// 3. Deploy the new binary
+// 4. Update the feature flag to enable the new retry behavior
+// 5. Coordinate with on-call to ensure no active deployments
+//
+// Or just restart the pod and it's using the default in code.
+// Don't ask why we need both. Yes, we know it's redundant.
+```
+
+The customer asks again: can we change the retry count?
+
+The answer is now a runbook.
+
+A junior engineer reads the code and asks: "Why is retry count in three places?"
+
+"Because a TODO comment was never resolved."
+
+"We could just... fix it?"
+
+"At this point, we'd have to coordinate across five teams and validate against two years of test assumptions."
+
+The moral: a TODO comment you ignore is cheaper than a TODO comment you implement halfway. The worst legacy code is the halfway solution to a problem you could have ignored.
+
