@@ -9967,3 +9967,31 @@ Five years later, a new hire reads the code and asks: "Why do we have this priva
 
 The moral: In software, something is public if anyone uses it, regardless of what you declared.
 
+
+An engineer adds a simple validation: reject negative user IDs. `if (userId < 0) return error()`. Ships it.
+
+Production alert: 0.01% of requests fail. Investigation shows a partner API sends `-1` to mean "anonymous user." They've been sending it for years. We've been silently rejecting 1000 requests per day. They have a retry mechanism for dropped requests, so they just retry silently. Nobody noticed for six months.
+
+They add logging. They see the pattern. They contact us.
+
+We add a special case: `if (userId === -1) continueAnonymously()`. Merge immediately.
+
+The code now reads: `// Special case for partner API's choice to use -1 for anonymous access`
+
+A new engineer asks: "Why -1? Can they change it?"
+
+"We could ask. But three other services now depend on this behavior. Changing it breaks them. We're bound to it."
+
+The `-1` spreads. More systems hardcode it as "the anonymous user constant." A utility library is created: `const ANONYMOUS_USER_ID = -1`. It's imported everywhere.
+
+A security audit surfaces it: "Undocumented magic number represents unauthenticated access. This is a security boundary and must be formally specified."
+
+The code becomes: `// SECURITY: -1 is the official anonymous user ID across all systems. Do not change.`
+
+Someone writes a wiki page. Another engineer builds a permissions system around it. It's in four microservices, a mobile app, and the legacy monolith.
+
+Five years later: a new recruit reads the code and asks why we use such a strange constant instead of null or None.
+
+The answer: "Because a partner company chose it in 2026 and now the entire platform is load-bearing on their arbitrary decision."
+
+The moral: the shortest path between two points in production is through someone else's bug that you can't afford to fix.
