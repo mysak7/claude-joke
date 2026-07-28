@@ -9922,3 +9922,48 @@ A newer hire asks: "If the tests don't catch this, what's the point of the tests
 
 The response: "Metrics. Our testing KPIs are exceptional. Isn't that confidence?"
 
+
+## 2026-07-28
+
+A function is declared `private`. No external callers. No uses outside its own class. The engineer marks it for deletion in a cleanup ticket: "Remove dead code."
+
+A teammate says: "Wait, I use that in my microservice."
+
+"But it's in our Java library. You're in Go. How?"
+
+"I use reflection to call it through JNI."
+
+"That's... why?"
+
+"The function does exactly what I need. We'd have to reimplement it in Go and I don't trust myself to get the edge cases right. Your version has been battle-tested."
+
+"But it's not a public API. We don't maintain it for external use. We could change it."
+
+"Then you'll break my service."
+
+The function is marked `protected` instead. Still not public API, but now bound by an invisible contract.
+
+A second engineer discovers it through IDE autocomplete and starts using it. Then a third. It becomes a stable internal dependency across three teams. A refactoring to extract a parameter fails because nobody coordinated the change. Someone adds an overload. Someone adds null-handling. The function is now 60 lines and loaded with *de facto* requirements it was never supposed to have.
+
+An architect proposes: "We should formally stabilize this as a public API."
+
+"And maintain it forever?"
+
+"Well, yes. People depend on it."
+
+"But it was an implementation detail."
+
+"Not anymore. It's a monument. We can't move it because we've forgotten all the reasons it was shaped this way."
+
+A commit message appears: "Made popular internal function officially public, with docs."
+
+The function has never been reviewed for API design, never stress-tested at scale, never been part of API governance.
+
+It just... existed. And now the whole company is built on top of it.
+
+Five years later, a new hire reads the code and asks: "Why do we have this private helper function that's actually used by half the company? Shouldn't it be...?"
+
+"Don't ask. The answer is: Naming something 'private' doesn't actually make it private if people can find it."
+
+The moral: In software, something is public if anyone uses it, regardless of what you declared.
+
