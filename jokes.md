@@ -10178,3 +10178,57 @@ Someone proposes removing it. The estimate comes back: "Six weeks, five teams, t
 It's cheaper to leave it.
 
 The moral: a temporary workaround is a permanent contract. A security hole for one customer becomes infrastructure for everyone else.
+
+A developer copy-pastes a function. Small change to one parameter. It works. They ship it.
+
+A week later, a bug fix is found in the original function. They fix it. Push the change.
+
+But they forgot: the copy-pasted version is still running in production. With the old bug. Different code path, different behavior. No one notices for three months.
+
+Someone discovers the copy-paste. "We should consolidate these."
+
+"Actually, fixing one breaks the other. The parameters are different now. The fix isn't compatible with version 2."
+
+So they add a comment: "DO NOT MERGE WITH FUNCTION1, THEY HAVE DIVERGED."
+
+A new developer comes in. Sees duplicate code. Makes a refactor: unifies them both.
+
+Everything breaks. Rollback. The functions are re-separated.
+
+Now there are three instances of the function. Each with different bugs. Each with a separate fix history. Each with comments saying "this is a duplicate but do NOT consolidate."
+
+An engineer proposes writing a shared utility. Saves code duplication.
+
+Three months of design meetings later: the utility exists. But the original functions can't use it without coordinating with dependent services. So they keep the duplicates. And wrap the utility in a layer that calls the duplicates.
+
+Now there are more copies.
+
+Someone asks: "Why not just delete the duplicate functions if we're not using them?"
+
+"We are using them. Different teams. Different requirements."
+
+"Can they use the shared utility instead?"
+
+"They could, but it would require changes to their API contracts, and breaking changes take three quarters to roll out."
+
+A comment appears:
+
+```
+// FUNCTION1, FUNCTION2, FUNCTION3 all do nearly the same thing
+// DO NOT consolidate - breaks API contracts
+// DO NOT delete - three teams depend on each
+// DO NOT refactor - fix history is different and tests expect that
+// If you're reading this thinking "we should fix this architecture",
+// we've tried. The complexity required to unify them is greater than
+// the cost of maintaining three separate implementations forever.
+// This function is load-bearing duplication.
+```
+
+Five years pass. The function has been forked four more times. No one remembers what the original parameters meant. The tests only pass because they test the bug, not the requirement.
+
+A new engineer asks: "Why do we have seven implementations of the same function?"
+
+"Because the first one worked, and no one dares touch it."
+
+The moral: code reuse is for code that's allowed to change. Once code becomes load-bearing, it stops being reusable and starts being a monument.
+
