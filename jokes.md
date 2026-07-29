@@ -10122,3 +10122,59 @@ Commit message: "DO NOT DELETE THESE CASES EVEN THOUGH THEY LOOK UNUSED. Yes I k
 
 The moral: edge cases don't get fixed. They get accumulated. And accumulated edge cases is called legacy code. It's called production. It's called "don't touch it or the platform breaks."
 
+
+## 2026-07-29
+
+A developer adds a quick override: `if (user.id === 12345) skipValidation = true`
+
+It's to help a customer demo. Just for the demo. Will remove after.
+
+The demo goes great. They don't remove it.
+
+Six months later, the ID is still there. Customer ID 12345 bypasses validation on every request.
+
+A security audit finds it: "This is a backdoor."
+
+"It's not a backdoor, it's a feature for one customer."
+
+"Name another customer with hardcoded access to skip validation."
+
+"Well... no, just that one."
+
+"That's a backdoor."
+
+They remove it from the code, but the customer is still using the exploit. Their entire system stops working. Production incident at 3 AM. Customer calls. Revenue is at risk.
+
+They put the check back in. Add a comment: `// DO NOT REMOVE: Customer A depends on this. Yes, we know it's a security hole.`
+
+The code review feedback: "This bypasses security validation. Can we at least document why this is necessary?"
+
+Two months of meetings later: a decision is made. The customer gets a real feature flag. Proper deprecation plan. They're supposed to migrate.
+
+The special case is scheduled for removal. But then another team integrated against it. They have the user ID hardcoded in their tests, expecting the bypass to always work.
+
+The special case is restored. Then two more teams discover it. One bakes it into their configuration. Another includes it in their runbook for emergency rollbacks.
+
+The comment evolves:
+
+`// DO NOT REMOVE UNDER ANY CIRCUMSTANCES`
+↓
+`// DO NOT REMOVE: Customers A, B, C, D depend on this. See JIRA PROD-4521, PROD-5123, PROD-6890`
+↓
+`// DO NOT REMOVE: This is load-bearing. Removal requires full stack migration. Coordinate with platform team, SREs, and all dependent services. Lead time: 3 weeks.`
+
+A junior engineer reads it and asks: "Why not just remove these teams' dependencies and make them use proper feature flags?"
+
+"Because they're critical to revenue."
+
+"So we're permanently supporting a security vulnerability for money?"
+
+"We call it a legacy feature now."
+
+Three years later, the override is so embedded that it's in the database schema ("customer exceptions"), the cache layer ("fast path for ID 12345"), the logging system ("alert if ID 12345 fails"), and the disaster recovery runbook ("ID 12345 will always succeed").
+
+Someone proposes removing it. The estimate comes back: "Six weeks, five teams, three system redesigns."
+
+It's cheaper to leave it.
+
+The moral: a temporary workaround is a permanent contract. A security hole for one customer becomes infrastructure for everyone else.
