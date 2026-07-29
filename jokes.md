@@ -10069,3 +10069,56 @@ A junior engineer reads the code and asks: "Why is retry count in three places?"
 
 The moral: a TODO comment you ignore is cheaper than a TODO comment you implement halfway. The worst legacy code is the halfway solution to a problem you could have ignored.
 
+
+## 2026-07-29
+
+A developer writes a function to handle edge cases. Writes code for the happy path, ships it. Immediately someone finds an edge case.
+
+They add: `if (edgeCase1) return special1()`. Works. Merge.
+
+Edge case 2 arrives next week. `if (edgeCase2) return special2()`. Works. Merge.
+
+Edge case 3, 4, 5. More `if` statements. 
+
+By edge case 15, the function reads like:
+
+```
+if (case1) return handle1()
+if (case2) return handle2()
+if (case3) return handle3()
+if (case4) return handle4()
+...
+// 11 more if statements
+if (case15) return handle15()
+// Finally, the original logic
+return normalLogic()
+```
+
+A code review comment: "This is a mess. What if someone hits two cases at once?"
+
+"That can't happen. Trust me."
+
+Famous last words.
+
+Someone hits cases 3, 7, and 12 in a single request through an unexpected combination of API parameters, cached data, and timezone calculations. Undefined behavior. Production incident at 3 AM.
+
+Postmortem: "We need to refactor this. Strategy pattern. Proper design."
+
+"That's five weeks of work and we'd need to refactor everywhere this function is called."
+
+"So what do we do?"
+
+"We add a note in the runbook: if this function breaks, turn it off and use the legacy version."
+
+The function now has a fallback: `if (failureDetected) useVersion1()`. Which was the old code. From 2019.
+
+Two years pass. The function has 47 edge case handlers. No one knows why case 23 is there. There's a test called "this-breaks-in-prod-but-not-here.js" that's marked skip.
+
+A new engineer deletes three "obviously unused" cases to clean up the code.
+
+Production alert: someone's requesting at exactly 11:47 UTC on Thursdays and hits case 8 + case 17 + edge case 23. Everything breaks. Entire region fails. Rollback. Apology. The cases are restored.
+
+Commit message: "DO NOT DELETE THESE CASES EVEN THOUGH THEY LOOK UNUSED. Yes I know. No we can't refactor this."
+
+The moral: edge cases don't get fixed. They get accumulated. And accumulated edge cases is called legacy code. It's called production. It's called "don't touch it or the platform breaks."
+
