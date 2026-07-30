@@ -10309,3 +10309,45 @@ The moral: "debug" parameters are like cockroaches. They survive nuclear war. Th
 
 The second moral: the best code is the code no one ever has to change. But the worst code is the code everyone changes and no one can remove.
 
+
+A developer uses `any` type in TypeScript.
+
+Someone asks: "Why `any`?"
+
+"I didn't know the type."
+
+"So figure it out?"
+
+"I tried, but it was complicated."
+
+"So use `unknown` and narrow it down."
+
+"That requires more code."
+
+"Yes. That's the point."
+
+They use `any` anyway.
+
+Six months later, a bug: the function receives a null and crashes.
+
+"Why didn't TypeScript catch this?"
+
+"I used `any`."
+
+"Why?"
+
+"It was faster."
+
+Now they can't refactor because the entire codebase depends on that `any`. It's viral. Every function that calls it also becomes `any` to avoid TypeScript errors.
+
+Someone suggests: "Let's remove `any` everywhere."
+
+That's a three-week project. There's no budget.
+
+So the code stays `any`. Dynamic as JavaScript, but slower and with more boilerplate.
+
+"This defeats the purpose of TypeScript," someone observes.
+
+"Yes. But we have features to ship."
+
+The `any` is now in the codebase forever.
