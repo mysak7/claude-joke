@@ -10351,3 +10351,155 @@ So the code stays `any`. Dynamic as JavaScript, but slower and with more boilerp
 "Yes. But we have features to ship."
 
 The `any` is now in the codebase forever.
+
+## 2026-07-30
+
+A product manager requests: "Can we add a dark mode?"
+
+Easy feature. Every app has it. Users ask for it constantly. Ship it.
+
+A developer starts. Looks at the CSS. Colors are hardcoded.
+
+```css
+.button { background: #FFFFFF; color: #000000; }
+.error { color: #FF0000; }
+.success { color: #00AA00; }
+```
+
+Five hundred files like this.
+
+"So I'll add a `prefers-color-scheme` media query and a theme toggle..."
+
+Looks closer. The colors aren't semantic. `#000000` is text in light mode. But is it used for text, borders, or backgrounds? The naming gives no hint. Search the codebase for `#000000`.
+
+It appears in 847 places.
+
+"Are all of these supposed to be text?"
+
+No one knows. Some are text. Some are borders. Some are shadows. The original developer used color codes instead of variable names. It was "faster."
+
+Proposal: create a CSS variable for each unique color combination.
+
+"That's a lot of variables."
+
+"Yes."
+
+"How many?"
+
+Run a script. Find every unique color. There are 340 unique colors in the codebase.
+
+"Why do we need 340 colors?"
+
+"Because different designers worked on different features."
+
+So you need 340 variables. Times two for dark mode. 680 variables.
+
+"That seems unmaintainable."
+
+"Yes. But we're shipping dark mode."
+
+A developer starts building the theme system. Variables. CSS-in-JS. A toggle. Tests.
+
+Three weeks in, they discover the images. Logos. Illustrations. Icons. All of them are white-on-transparent or dark-on-transparent.
+
+"Do these have dark mode versions?"
+
+No. The design team never made them.
+
+"Should I invert them with CSS filters?"
+
+The images invert. Now you can barely see them. The filters add processing overhead.
+
+Design board says: "Please make dark mode versions of all graphics."
+
+There are 347 graphics. That's three weeks of design work.
+
+"Can we just use filters?"
+
+"No."
+
+"Can we just ship light mode?"
+
+"The users asked for dark mode."
+
+"Okay, we'll invert the images."
+
+The images look horrible. Inverted. Washed out.
+
+A user on Twitter: "Your dark mode makes the logo look like a ghost."
+
+Design, three weeks later, sends new graphics.
+
+Developer rebuilds the theme system to load the correct image based on theme.
+
+Now, back to the CSS. A developer starts adding the dark mode colors to all 500 CSS files.
+
+In the middle of file 247, they realize: the color `#CCCCCC` is used for both disabled text and borders in different places. In dark mode, disabled text should be darker (#555555), but borders need to stay light (#CCCCCC).
+
+"So I need two variables?"
+
+"Yes."
+
+"But the current code uses the same value."
+
+"Yes, and that's a bug. But it's a low-priority bug."
+
+So you add two variables. Go back through all the places where `#CCCCCC` appears and figure out which should be disabled text and which should be border.
+
+Half of them are ambiguous. Read the git history. The commit message says "fix colors". The original author doesn't work there anymore.
+
+A guess is made. Ship it.
+
+Two weeks later: a user reports that form borders are invisible in dark mode on their monitor.
+
+"Why?"
+
+"The border color is #CCCCCC and the background is #CCCCCC."
+
+"Didn't you test this?"
+
+"The design sent me dark backgrounds that were #121212. Your monitor might be different."
+
+"So now the border is invisible on my monitor."
+
+A meeting. The resolution: add a darker border color for dark mode. Change it in all the places.
+
+That's files 1-500 again.
+
+Somewhere in file 398, a developer realizes: the entire codebase is using colors semantically wrong.
+
+The issue tracker gets a ticket: "Refactor all color usage to use semantic variables."
+
+"When?"
+
+"When we have time."
+
+The ticket sits. Dark mode ships. Users are happy. The logo looks like a ghost. The disabled text is the wrong shade on some monitors.
+
+Six months later, someone tries to add a high-contrast mode for accessibility.
+
+"Should I add 340 more variables?"
+
+"No, create a system."
+
+"The system doesn't exist. We hardcoded colors in 500 files."
+
+"Well, now you'll create a system."
+
+Three months of work. A theme engine. Variables. Semantic naming. Documentation.
+
+A brand new developer joins. Needs to add a button.
+
+"What color should the primary button be?"
+
+Reads the design system docs. 23 pages. Contains guidance on primary, secondary, tertiary, danger, success, warning, info buttons. Light, dark, high-contrast modes.
+
+Uses the wrong variable. A $10 million contract depends on the button color being exactly right.
+
+No one notices.
+
+The moral: dark mode is never just dark mode. It's an architecture audit disguised as a feature.
+
+The second moral: if your code is too fragile to support a new theme, it's too fragile to support anything.
+
+The third moral: never let developers choose their own colors.
