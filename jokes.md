@@ -10232,3 +10232,80 @@ A new engineer asks: "Why do we have seven implementations of the same function?
 
 The moral: code reuse is for code that's allowed to change. Once code becomes load-bearing, it stops being reusable and starts being a monument.
 
+
+## 2026-07-30
+
+A developer gets a feature request: "Can we add a `debug` parameter to the API?"
+
+Easy. Takes five minutes. Returns extra data when `debug=true`. Ships it.
+
+Internally, some code checks `if (debug) logToEverywhere()`. Log files explode. A terabyte a day. But it helps debugging, so it's worth it.
+
+Six months later: five different teams are hitting the endpoint with `debug=true` in production.
+
+"Why are you calling the debug parameter in prod?"
+
+"It's not production. It's staging."
+
+"It's hitting the production database."
+
+"Oh. Well, we need the debug output to see what's happening."
+
+"So don't use it in production."
+
+"But then we can't see what's happening in production."
+
+A meeting is scheduled. The decision: make `debug` log less aggressively. Only log critical fields. Add a `debug_level` parameter.
+
+Now there's `debug=true`, `debug_level=1`, `debug_level=2`, `debug_level=3`.
+
+A second team starts using `debug_level=5` to "log everything." Logs hit 10 terabytes. The database starts rejecting writes because the log tables are too big.
+
+An SRE proposes: "Remove the debug parameter. Use a flag in the admin panel instead."
+
+"But the parameter is already in production APIs. If we remove it, existing clients break."
+
+"So add a deprecation warning."
+
+"If we log a deprecation warning for every debug request, it'll double the log volume."
+
+They add the parameter to a deprecation list. Don't actually remove it. Send an email asking teams to stop using it.
+
+Three teams don't read the email. One team's Slack is on mute. Another team is 12 time zones away and sees the message at 3 AM. They reply "okay" and go back to sleep and never do it.
+
+A year later, the parameter is still there. It's still in the API docs. Because removing it would break the docs build. No one knows why.
+
+An engineer reads the source: `if (debug) { logToEverywhere() }`. The comment says: "DEPRECATED: Use LogLevel flag instead (in the AdminPanel that no one uses)."
+
+A new team discovers the parameter. "Oh, this is perfect for debugging!" They ship code that always sends `debug=true`.
+
+Logs. Explode.
+
+SRE: "That's the old parameter. Don't use it."
+
+"The documentation says it's a first-class API parameter."
+
+"The documentation is lying."
+
+"Should I update the docs?"
+
+"If you update the docs, you have to update twelve other places where it's referenced, and the API change will need review from the architecture board, and they only meet once a month, and the last meeting added 47 requirements to any parameter changes."
+
+So the parameter stays. Documented. Deprecated. In use. Broken. No one is allowed to change it.
+
+A proposal surfaces: "What if we just deleted it from the code? It's not like anyone would use—"
+
+Three SREs make eye contact. One coughs.
+
+"...actually, I found it in a runbook."
+
+"And in our alerting config."
+
+"And in the disaster recovery scripts."
+
+The parameter is infrastructure now. If you remove it, deployments fail. The runbook has a step: "If service is down, GET /api/status?debug=true". The monitoring depends on it. The alerting depends on it.
+
+The moral: "debug" parameters are like cockroaches. They survive nuclear war. They proliferate. They're in the walls. You can't get rid of them without burning the entire house down and starting over.
+
+The second moral: the best code is the code no one ever has to change. But the worst code is the code everyone changes and no one can remove.
+
