@@ -10691,3 +10691,113 @@ The moral: Config flags for obvious behavior is a sign something is backwards.
 The second moral: A library that makes the basic case harder is not helping.
 
 The third moral: Somewhere, someone is using !important on a reset rule.
+
+## 2026-07-31
+
+A developer ships a feature. It works fine locally. Deploys to staging. Still works. Then production.
+
+Immediate Slack message from support: "Form submission breaks on every page after first submit."
+
+"Impossible. The form clears state after submission."
+
+"Try it yourself."
+
+Reproduce. Submit form once. Works. Submit again. 404.
+
+"What? The endpoint is there. The domain resolves. Why a 404?"
+
+Check the request. URL is correct. Status is 404. But the page still exists—you can reload and submit again.
+
+Open DevTools. The first request goes to `/api/submit`.
+
+The second request goes to `/api/submit?_=1722441600000`.
+
+"Wait. Why is there a timestamp query param?"
+
+Check the form code. No timestamp anywhere.
+
+Check jQuery. Oh.
+
+jQuery. 2010-era jQuery. Someone added it for that one plugin that one designer requested in 2019.
+
+And jQuery cache-busts POST requests automatically in some ancient configurations.
+
+But only the second time. Or third time. Or whenever the moon is full.
+
+Actually read the jQuery docs.
+
+The docs don't mention this behavior. But the source code does. Comment says:
+
+```javascript
+// FOUC prevention, also legacy browser cache workaround
+// generates random/timestamp query param if server config requests it
+```
+
+"Server config requests it? We never requested anything."
+
+Check the server. Find an old Apache config:
+
+```
+Header set Cache-Control "max-age=0"
+Header set "X-jQuery-CacheBust" "true"
+```
+
+"Why is this header even a thing?"
+
+Check git blame. 2011. A developer fixed an issue where users saw stale data after form submission.
+
+The fix: tell jQuery to cache-bust, which makes jQuery add a query param.
+
+Problem: when you add a query param to a POST request, most servers treat it as a different URL and the routing breaks.
+
+"This can't be production code."
+
+It's been there 13 years.
+
+Remove the header. Deploy. Everything works.
+
+Comment in the code:
+
+"IMPORTANT: Do not re-enable cache busting. It breaks forms. See incident #2013-04-02."
+
+No one in the office was even working here in 2013.
+
+The incident ticket is archived.
+
+The original issue is lost.
+
+The fix stays because changing it is scarier than leaving it broken.
+
+Two weeks later, new developer asks: "Why does the cache-busting header exist if we're not using it?"
+
+"We're using it. If we remove it, forms break."
+
+"But the comment says it breaks forms."
+
+"Exactly."
+
+"So the config that prevents it is the only thing stopping forms from breaking?"
+
+"Yes."
+
+"Then it's critical infrastructure."
+
+"Yes."
+
+"Can we document it?"
+
+"We did. That comment."
+
+"Can we add tests?"
+
+"For what? That the header exists?"
+
+"That removing it breaks forms."
+
+"It does. We tested that by removing it in production in 2011."
+
+The moral: The oldest code is the most dangerous because it only still exists if removing it causes silent failure.
+
+The second moral: An Apache config file is a better deployment record than your git history.
+
+The third moral: Your predecessor solved this problem so hard that you can never touch it again.
