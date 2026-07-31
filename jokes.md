@@ -10601,3 +10601,93 @@ The second moral: Copy-pasting code is fine until it's not, and then it's on fir
 
 The third moral: Stack Overflow will ruin your production at 3 AM.
 
+
+## 2026-07-31
+
+Two developers are debugging production. User reports: submit button disappears after filling out a form.
+
+"That's impossible. The code doesn't delete the button."
+
+"Check the styles."
+
+"No hidden rule. Opacity is 1. Display is block."
+
+"What if they click another input first?"
+
+"Why would that matter?"
+
+"I don't know. Just check."
+
+Reproduce locally. Click an input field. Then try to click the submit button.
+
+Button is gone.
+
+"What?!"
+
+Dig through CSS. Find a rule in an imported stylesheet:
+
+```css
+input:focus ~ .submit-button {
+  display: none;
+}
+```
+
+"Why does this exist?"
+
+"Not in our code. Must be the design system library we updated yesterday."
+
+Check the library docs. The comment says: "When form input is active, hide secondary controls to reduce cognitive load."
+
+"The submit button is not a secondary control. It's literally the whole point of the form."
+
+File an issue. Maintainer replies: "This is intentional. Users get distracted by buttons when typing."
+
+"The user wants to submit the form."
+
+"They can press Enter."
+
+"Not everyone knows that. This breaks accessibility."
+
+"We'll add a config flag."
+
+New version releases. Now you have to do this:
+
+```javascript
+import { Form } from '@design-system/form';
+
+<Form config={{ keepSubmitButtonVisible: true }} >
+```
+
+Just to make the submit button... stay visible. In a form.
+
+Another team doesn't read the changelog. Their form is now broken.
+
+They think it's a browser bug.
+
+They rebuild the form from scratch instead of upgrading the config.
+
+Meanwhile, a third team WANTS the button hidden—they rely on Enter-key submission.
+
+So they import a different form library.
+
+Now they have two libraries, both solving the same problem, fighting over CSS specificity.
+
+The CSS war escalates. !important gets deployed.
+
+The app loads three megabytes of CSS.
+
+The network request times out.
+
+The form never renders.
+
+The user gives up.
+
+Product team asks: "Why are form submissions down 40%?"
+
+The answer has 847 comment threads spanning 6 months.
+
+The moral: Config flags for obvious behavior is a sign something is backwards.
+
+The second moral: A library that makes the basic case harder is not helping.
+
+The third moral: Somewhere, someone is using !important on a reset rule.
