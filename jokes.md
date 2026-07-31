@@ -10503,3 +10503,101 @@ The moral: dark mode is never just dark mode. It's an architecture audit disguis
 The second moral: if your code is too fragile to support a new theme, it's too fragile to support anything.
 
 The third moral: never let developers choose their own colors.
+
+## 2026-07-31
+
+A developer gets paged at 3 AM. Production is down.
+
+Check the logs. Nothing useful.
+
+Check the database. Fine.
+
+Check the API. Responding normally.
+
+Restart the service.
+
+Down again immediately.
+
+Check the recent changes. This morning: added timeout handling for slow network requests.
+
+Look at the code:
+
+```javascript
+setTimeout(() => {
+  handleTimeout();
+}, -5000);
+```
+
+"Why is the timeout negative?"
+
+"So it runs immediately. Like, right now."
+
+"Right. That's the problem. It executes the error handler BEFORE the request finishes. Then the response arrives and crashes because the handler already fired."
+
+"Oh."
+
+"Change it to 5000."
+
+Done. Deploy. Everything works.
+
+Celebrate. Go back to sleep.
+
+Next week, different error. Different endpoint. Check the code:
+
+```javascript
+const timeoutMs = 300;
+setTimeout(() => {
+  handleError();
+}, timeoutMs);
+```
+
+"The timeout is 300 milliseconds but the API takes 3 seconds to respond on slow networks."
+
+"So users on slow connections always timeout?"
+
+"Yes."
+
+"Should we increase it to 3000?"
+
+"Then fast networks are slow. Should it be dynamic?"
+
+"That's 40 hours of work."
+
+"Or we ask them to get better internet."
+
+"That's the solution we're shipping."
+
+Audit the codebase for more timeouts.
+
+Find 47 more bugs.
+
+Some are negative. Some are way too short. Some are so long that they never actually fire.
+
+A meeting is called.
+
+"We need to fix all timeouts."
+
+"That's a lot of work."
+
+"Yes."
+
+"Who writes timeouts this wrong?"
+
+No one speaks.
+
+Three developers copy-pasted the same broken code from Stack Overflow in 2019.
+
+The comments section on that Stack Overflow answer now has 340 downvotes.
+
+Still rank #1 for "JavaScript timeout."
+
+The post author's last activity was 2020. They don't respond to comments.
+
+Stack Overflow is both oracle and trap.
+
+The moral: Always test with slow networks. Or at least know what your timeout does.
+
+The second moral: Copy-pasting code is fine until it's not, and then it's on fire.
+
+The third moral: Stack Overflow will ruin your production at 3 AM.
+
