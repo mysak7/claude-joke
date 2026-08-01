@@ -10801,3 +10801,72 @@ The moral: The oldest code is the most dangerous because it only still exists if
 The second moral: An Apache config file is a better deployment record than your git history.
 
 The third moral: Your predecessor solved this problem so hard that you can never touch it again.
+
+## 2026-08-01
+
+A developer inherits a repo. Runs `npm install`. Two hours later, still installing.
+
+"Why is node_modules 8GB?"
+
+Check the package.json. It has 47 dependencies. "That's... not that many."
+
+Check node_modules. It has 47,000 dependencies.
+
+"What's the transitive dependency graph?"
+
+Run `npm ls` to see the dependency tree. The tree is so deep it needs a logging system.
+
+Someone joked about it years ago: "Hey, we should audit which of these we actually use."
+
+That joke has now become a GitHub issue with 340 upvotes.
+
+Create a script to trace actual imports. Run it.
+
+Result: Your app uses 3 packages directly.
+
+The other 46,997 exist because:
+- Package A depends on Package B
+- Package B depends on Package C v1.5.0
+- Package C v1.5.0 depends on Package D
+- Package D depends on Package E v2.0.0
+- Package E v2.0.0 depends on Package F
+- Package F breaks in Package E v3.0.0
+- Your other code uses Package E v3.0.0
+- So npm installs both v2.0.0 and v3.0.0
+- Which both need their own sub-dependencies
+- Which both need their own sub-dependencies
+- (repeat 400 times)
+
+Check if you can remove anything. Try updating all the top-level packages to latest.
+
+The build breaks.
+
+Try updating only the safe ones. The build still breaks.
+
+Try updating only the ones that claim to be security patches. The build still breaks.
+
+The issue is Package A v1.0.0, which is a deprecated image manipulation library nobody remembers installing.
+
+Why is it in the package.json?
+
+`git log -p package.json | grep -A2 -B2 "Package A"`
+
+Found it. Added in 2020 by a contractor. The commit message: "might need this."
+
+"Might need this?"
+
+That's it. A contractor added a massive library 6 years ago on speculation.
+
+You can't remove it because:
+- Another team's code might depend on it transitively
+- You're not sure if removing it breaks the build (it does, but you're not sure how yet)
+- The contractor left 5 years ago
+- The project they were building never shipped
+
+So you leave it.
+
+The moral: The worst dependencies are the ones installed by someone who left before they finished the project.
+
+The second moral: `npm install` is downloading the hope that one day someone will audit this.
+
+The third moral: That day never comes.
