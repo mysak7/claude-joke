@@ -10941,3 +10941,70 @@ The second moral: Adding a function is the fastest way to make sure nobody ever 
 
 The third moral: If you want your code to never be deleted, name it something that sounds important and add no documentation.
 
+
+A developer writes:
+```
+const x = calculateResult();
+const y = calculateResult();
+if (x === y) {
+  console.log("Math is working");
+}
+```
+
+A colleague reviews it. "Why calculate twice?"
+
+"Have to."
+
+"Why?"
+
+"If I don't, production breaks."
+
+"...does the function have side effects?"
+
+"Yes."
+
+"Is that documented?"
+
+"No."
+
+"Are you going to document it?"
+
+"No."
+
+"Why not?"
+
+"Then the next developer might think it's safe to remove the second call. And it's not."
+
+"So you're just... leaving mysterious duplicate code in production."
+
+"Yep."
+
+"With no comment?"
+
+"With no comment."
+
+"What if someone runs a linter?"
+
+"The linter already flagged it as dead code. I disabled that rule."
+
+"You disabled—"
+
+"Disabled that rule. Globally."
+
+"Why are you like this?"
+
+"Because the alternative is either documenting that our code depends on side effects, or rewriting the function to not have side effects. And rewriting means testing, which means finding ten more bugs, which means a two-week project."
+
+"So this is faster."
+
+"This is faster."
+
+"For now."
+
+"For now."
+
+The moral: Technical debt isn't always something you accumulate. Sometimes it's something you explicitly choose before lunch because fixing it would take until dinner.
+
+The second moral: Disabling linter rules is how you tell future developers "trust me, this is intentional."
+
+The third moral: It's never intentional.
