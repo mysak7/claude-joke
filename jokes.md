@@ -10870,3 +10870,74 @@ The moral: The worst dependencies are the ones installed by someone who left bef
 The second moral: `npm install` is downloading the hope that one day someone will audit this.
 
 The third moral: That day never comes.
+
+## 2026-08-01
+
+A developer finds a function in the codebase called `fixDoubleEncoding()`.
+
+"What does this do?"
+
+Check the code. It decodes a string twice. That's it.
+
+"Why do we need this?"
+
+Check git history. Added 8 years ago. Commit message: "fixes the thing."
+
+"The thing?"
+
+Search for where it's called. It's called in 47 places.
+
+Remove the function. Deploy. Everything breaks.
+
+"What's breaking?"
+
+Database queries return garbled text. API responses are unreadable. Frontend crashes.
+
+"So we need to decode twice?"
+
+Add the function back. Everything works.
+
+"But... why?"
+
+There's no comment in the code. The original commit has no explanation. Search old Slack: archived. Search old tickets: deleted.
+
+The theory: "Maybe an old API returned double-encoded data and we worked around it here."
+
+But which old API? Nobody remembers.
+
+Another theory: "We must be double-encoding somewhere else, and this is the inverse."
+
+Search for where data gets encoded. Find it in 3 different places with 3 different encoding strategies. None of them obviously double-encode.
+
+Trace a data flow from the database to the frontend:
+- Database: stores plain text
+- API layer: encodes it
+- Network: sends it
+- Frontend: decodes it
+
+No double encoding anywhere.
+
+But `fixDoubleEncoding()` exists and it's necessary.
+
+Someone suggests: "Maybe it's a security thing? Like, we encode twice so if you intercept the network traffic you get garbage?"
+
+That would make sense except the first layer of encoding is already HTTPS.
+
+Someone else: "Could be a legacy database migration issue. Old data is double-encoded and new data is single-encoded, and this function normalizes it."
+
+But there's no version check. It always calls the function.
+
+Test if removing it works with only new data. Same result: breaks.
+
+At this point, the function is officially mysterious infrastructure. Like the Apache config file from the other joke, it just works and nobody knows why.
+
+The next developer who touches it will also waste 3 hours trying to understand it.
+
+Then they'll leave a comment: "Don't remove this, it breaks prod" and move on.
+
+The moral: Some code isn't a bug, isn't a feature, and isn't even technical debt. It's just a monument to someone else's forgotten problem.
+
+The second moral: Adding a function is the fastest way to make sure nobody ever removes it, even if it shouldn't exist.
+
+The third moral: If you want your code to never be deleted, name it something that sounds important and add no documentation.
+
