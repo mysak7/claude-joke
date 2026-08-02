@@ -11061,3 +11061,57 @@ The moral: The best code is code that does nothing but feels important.
 The second moral: If a function has been in production for seven years untouched, it has achieved immortality—not because it works, but because nobody dares test if it doesn't.
 
 The third moral: If your codebase is held together by superstition, don't question it too hard—it might be listening.
+
+## 2026-08-02
+
+A developer opens a bug report: "Feature X doesn't work in Safari."
+
+QA confirms it works in Chrome, Firefox, Edge, and literally every other browser.
+
+The developer checks Safari. "Weird. Let me check the code."
+
+The code looks fine. CSS is fine. JavaScript is fine.
+
+"Maybe it's a version issue?" they check. Safari is updated.
+
+They spend three hours narrowing it down. It's not the feature. It's a single CSS property.
+
+```css
+background: linear-gradient(45deg, blue, green);
+```
+
+Works everywhere. Doesn't work in Safari.
+
+They try every possible fix:
+- Different syntax
+- Vendor prefixes
+- Polyfills
+- Prayers to the CSS gods
+
+Nothing.
+
+Finally they try:
+
+```css
+background: linear-gradient(45deg, blue, green) !important;
+```
+
+Works.
+
+They ask on Stack Overflow: "Why did `!important` fix a Safari gradient bug that doesn't need !important anywhere else?"
+
+The top answer: "Safari is weird sometimes."
+
+They add a comment to the code: "Safari needs this for reasons we don't understand. Delete at your own peril."
+
+Six months later, someone removes it to "clean up unnecessary !important."
+
+Production is fine. Safari breaks.
+
+They re-add it without changing anything else.
+
+The moral: Safari isn't a browser, it's a punishment system for web developers.
+
+The second moral: `!important` is CSS's way of saying "I don't understand this either, just make it work."
+
+The third moral: Some fixes have no explanation—they just have requirements.
