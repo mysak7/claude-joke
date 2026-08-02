@@ -11008,3 +11008,56 @@ The moral: Technical debt isn't always something you accumulate. Sometimes it's 
 The second moral: Disabling linter rules is how you tell future developers "trust me, this is intentional."
 
 The third moral: It's never intentional.
+
+## 2026-08-02
+
+A developer finds a function in production:
+
+```python
+def ensure_database_is_connected():
+    pass
+```
+
+It's called in 47 places.
+
+"Can we remove it?" a new developer asks.
+
+"Don't."
+
+"But it does nothing."
+
+"I know."
+
+"So why call it?"
+
+"Because if you remove it, production breaks. We tried once."
+
+"How does removing nothing break anything?"
+
+"We don't know. The original developer left a comment that says 'DON'T REMOVE THIS' in all caps."
+
+"That's the only documentation?"
+
+"That's the only documentation."
+
+"What does the git history say?"
+
+"'Add database connection check' - Added 7 years ago, never modified."
+
+"So it literally does nothing and has done nothing for seven years?"
+
+"Yes."
+
+"And we're keeping it because...?"
+
+"Because if you remove it, chaos happens."
+
+"That's not how Python works."
+
+"It is in our codebase."
+
+The moral: The best code is code that does nothing but feels important.
+
+The second moral: If a function has been in production for seven years untouched, it has achieved immortality—not because it works, but because nobody dares test if it doesn't.
+
+The third moral: If your codebase is held together by superstition, don't question it too hard—it might be listening.
