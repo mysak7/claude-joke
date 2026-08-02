@@ -11115,3 +11115,55 @@ The moral: Safari isn't a browser, it's a punishment system for web developers.
 The second moral: `!important` is CSS's way of saying "I don't understand this either, just make it work."
 
 The third moral: Some fixes have no explanation—they just have requirements.
+
+## 2026-08-02
+
+A junior developer finds this code in production:
+
+```javascript
+if (!isUserAdmin) {
+    initializeAdminPanel();
+}
+```
+
+"This is backwards," they say immediately.
+
+"Nope," the tech lead replies.
+
+"It only shows the admin panel if the user is NOT an admin."
+
+"Correct."
+
+"That's... backwards."
+
+"Is it?"
+
+"Yes! This will break everything."
+
+"Has it broken anything?"
+
+"Well, no, but—"
+
+"Then it's not backwards. It's been like this for four years."
+
+"But logically the condition is inverted."
+
+"The code works."
+
+"INVERTED CODE DOESN'T WORK."
+
+"Ours does."
+
+"Why?"
+
+"Something about the function that calls this function also inverts the logic, so it double-inverts back to normal. We think. We're afraid to check."
+
+"You're... afraid to check your own code?"
+
+"Very afraid. You should be too."
+
+The moral: Double negatives in code aren't always wrong. Sometimes they're archaeological artifacts of a fix layered on top of another fix, which somehow achieved equilibrium and we're never touching it again.
+
+The second moral: If your code works despite being completely illogical, you've found the sweet spot between chaos and production.
+
+The third moral: Some bugs cancel each other out. Congratulations—your program is running on bugs.
