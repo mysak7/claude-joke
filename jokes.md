@@ -11167,3 +11167,83 @@ The moral: Double negatives in code aren't always wrong. Sometimes they're archa
 The second moral: If your code works despite being completely illogical, you've found the sweet spot between chaos and production.
 
 The third moral: Some bugs cancel each other out. Congratulations—your program is running on bugs.
+
+## 2026-08-03
+
+A debugging story...
+
+A developer is called to fix a critical bug at 2 AM.
+
+"The API is returning null for valid requests," the alert says.
+
+They pull up the code. The logic looks fine. The database looks fine. The network looks fine.
+
+They add logging. Everything looks fine. But somehow, null.
+
+"Let me check the response headers," they think.
+
+Headers are fine.
+
+"Maybe it's caching?" They clear everything.
+
+Still null.
+
+Three hours pass. They're out of ideas.
+
+They call the senior developer. "I can't find this bug. It doesn't make sense."
+
+The senior dev looks at the code for 30 seconds.
+
+"Check if the API is actually being called."
+
+"Of course it's being called. I have logs."
+
+"Check the logs again. All of them. Every single one."
+
+The junior dev checks. Scrolls up. Scrolls up more.
+
+There it is, at the start of the logs:
+
+```
+[ERROR] API endpoint not found. Using fallback return value: null
+```
+
+"The endpoint doesn't exist?"
+
+"What do you mean it doesn't exist? It's there in the code!"
+
+"Check the routing configuration."
+
+They check. The endpoint is registered for `/api/v1/data`.
+
+"The requests are going to `/api/data`."
+
+"...Why would they do that?"
+
+"Because three months ago someone 'fixed a typo' in the client code."
+
+"Who?"
+
+The git blame shows a commit from themselves, three months ago, with the message: "Fix API path"
+
+"I did this?"
+
+"You did."
+
+"Why did I do this?"
+
+"You tell me. The commit message is just 'Fix API path.'"
+
+"I have no memory of this."
+
+"Well, past you fixed the path wrong."
+
+They revert the commit. Everything works.
+
+But now they're haunted by a question: How many other "fixes" did they make that they don't remember? How many bugs are hiding in their own past?
+
+The moral: Your biggest enemy isn't buggy code. It's your own past self, carefully planting traps for your present self to find at 2 AM.
+
+The second moral: Git blame is a time machine, but the destination is always regret.
+
+The third moral: The best debugging tools are: rubber duck, coffee, and a therapist to process your own git history.
