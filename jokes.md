@@ -11297,3 +11297,37 @@ The moral: Sometimes code is purely cargo cult. You don't understand why it work
 The second moral: Your log statements might be the only thing keeping production alive. Treat them with the reverence usually reserved for gods.
 
 The third moral: This is why we don't let junior devs clean things up.
+
+## 2026-08-03
+
+A manager asks a developer: "How long will this feature take?"
+
+"Three days," the developer says.
+
+"Great! So we'll have it Friday?"
+
+"No, it'll be done by Wednesday."
+
+"Then why did you say three days?"
+
+"Because I'm including two days of me yelling at my code while convinced it should work, but it doesn't, followed by me discovering I was testing the wrong endpoint."
+
+The manager nods. "And after those two days?"
+
+"Then I'll actually implement it. That part takes one day."
+
+"So... the feature is done in one day, but it takes you three days to deliver it?"
+
+"Exactly."
+
+"Why can't you just implement it on day one?"
+
+"Because day one is when I'm wrong, day two is when I prove myself wrong, and day three is when I fix it."
+
+The manager walks away, unsure if this is a feature or a bug.
+
+The moral: Developers don't estimate features. We estimate the journey from blind confidence to humbling reality to working code.
+
+The second moral: If you estimate accurately, nobody believes you. If you pad the estimate, they're shocked how fast you finished. There's no way to win except to be incomprehensibly slow and accurate enough to look like you're brilliant.
+
+The third moral: "Three days" is actually a well-calibrated estimate for the full feedback loop. We're just better at naming our own stupidity than we are at preventing it.
