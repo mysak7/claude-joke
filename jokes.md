@@ -11247,3 +11247,53 @@ The moral: Your biggest enemy isn't buggy code. It's your own past self, careful
 The second moral: Git blame is a time machine, but the destination is always regret.
 
 The third moral: The best debugging tools are: rubber duck, coffee, and a therapist to process your own git history.
+
+A developer is debugging a race condition that appears once every few thousand requests.
+
+"This is impossible to reproduce," they say.
+
+"Try adding a log line," suggests a colleague.
+
+They add: `console.log('race condition check')`
+
+The bug disappears.
+
+They remove the logging. Bug returns.
+
+They add the log back. Bug gone.
+
+"So logging fixes race conditions?" they ask.
+
+"Only when you add the log," says the colleague. "Remove it and it comes back."
+
+"I'm creating a log statement that doesn't report anything, just to trigger the act of logging."
+
+"Correct."
+
+"To fix a timing issue."
+
+"Correct."
+
+"This is madness."
+
+"This is production."
+
+Three months later, the developer adds a comment: `// The log line below is load-bearing. Do not remove.`
+
+The log line: `if (DEBUG) console.log("");`
+
+The DEBUG flag is always false.
+
+A junior dev removes it anyway during cleanup.
+
+The race condition returns and they spend three weeks hunting it.
+
+They add the log back.
+
+Bug vanishes.
+
+The moral: Sometimes code is purely cargo cult. You don't understand why it works, you only understand that removing it doesn't work. That's enough.
+
+The second moral: Your log statements might be the only thing keeping production alive. Treat them with the reverence usually reserved for gods.
+
+The third moral: This is why we don't let junior devs clean things up.
