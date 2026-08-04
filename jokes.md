@@ -11357,3 +11357,37 @@ The moral: The bottleneck is never the code. It's always the user.
 The second moral: Screenshots are not a data format. Please stop using them as one.
 
 The third moral: This is why we can't have nice things—someone, somewhere, is taking a screenshot right now.
+
+A team of developers is reviewing code that's been in production for five years without a single bug report.
+
+"This is bulletproof," says the tech lead. "Look at the error handling. Beautiful."
+
+They're so impressed they decide to refactor it for "modern best practices."
+
+Six months later, production is on fire.
+
+Every edge case they thought was impossible is now happening daily.
+
+They look at the original code. Every single edge case is handled. Weird field names like `catch_the_weird_april_thing` with comments like "DO NOT REMOVE, production depends on this."
+
+"Why would they add handling for something that specific?" asks a junior dev.
+
+The git log shows the original author added it after "an incident."
+
+They find the incident report from 2019. Three sentences, vague, mentions "something weird with the April batch."
+
+"So what was the actual bug?" they ask.
+
+Nobody knows. The author is gone. The incident is resolved. The fix is mysterious.
+
+But it's there. Load-bearing mystery code.
+
+They revert their refactor.
+
+The fires stop.
+
+The moral: Production code isn't always better when you understand it. Sometimes it's better when you're too scared to touch it.
+
+The second moral: Five years of stability isn't a feature of your code. It's evidence that someone, somewhere, already discovered and patched the problem you just introduced.
+
+The third moral: Git history isn't documentation. It's a confession written in code by someone who already paid the price for learning what you just learned.
