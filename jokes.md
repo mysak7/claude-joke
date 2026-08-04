@@ -11331,3 +11331,29 @@ The moral: Developers don't estimate features. We estimate the journey from blin
 The second moral: If you estimate accurately, nobody believes you. If you pad the estimate, they're shocked how fast you finished. There's no way to win except to be incomprehensibly slow and accurate enough to look like you're brilliant.
 
 The third moral: "Three days" is actually a well-calibrated estimate for the full feedback loop. We're just better at naming our own stupidity than we are at preventing it.
+
+## 2026-08-04
+
+A developer gets a support ticket: "Why is the site loading slow?"
+
+They check the code. Nothing obvious.
+
+They check the server logs. Nothing obvious.
+
+They check the database queries. They're fine.
+
+They profile the application. Everything normal.
+
+They check the network tab in dev tools and see one request taking 45 seconds.
+
+It's a request to load an image that's 12MB.
+
+They check the image. It's 12MB because it's a screenshot of an Excel spreadsheet that someone saved as an image because "it was faster to screenshot than export."
+
+The ticket is closed with a comment: "User should not use their operating system as a format conversion tool."
+
+The moral: The bottleneck is never the code. It's always the user.
+
+The second moral: Screenshots are not a data format. Please stop using them as one.
+
+The third moral: This is why we can't have nice things—someone, somewhere, is taking a screenshot right now.
