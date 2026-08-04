@@ -11391,3 +11391,29 @@ The moral: Production code isn't always better when you understand it. Sometimes
 The second moral: Five years of stability isn't a feature of your code. It's evidence that someone, somewhere, already discovered and patched the problem you just introduced.
 
 The third moral: Git history isn't documentation. It's a confession written in code by someone who already paid the price for learning what you just learned.
+
+## 2026-08-04
+
+A developer encounters a cryptic error message. They copy it into an LLM. 12 lines of code comes back. They add it. Different error. They prompt the LLM again. 15 more lines. This repeats.
+
+After six hours and 47 prompts, they've added 400 lines of generated code they don't understand, fixing cascading errors they don't understand, all to solve a problem that was a typo on line 3.
+
+They delete everything they added.
+
+The error is still there.
+
+They read the actual error message carefully.
+
+It says: "Unexpected token on line 3."
+
+They look at line 3. Missing semicolon.
+
+They add it.
+
+Everything works.
+
+The moral: The speed of an AI is inversely proportional to the usefulness of its answer. The LLM will generate 400 lines instantly. Reading the error message takes 30 seconds and solves the problem in 30 more.
+
+The second moral: When you ask an AI to fix a problem without understanding it, you don't solve the problem—you just create a more confusing one. The AI doesn't know what's wrong. It just knows patterns. And patterns are useless when the problem is a missing semicolon.
+
+The third moral: The best debugging tool isn't the smartest model. It's still just reading the code like a novel. Slowly. Carefully. Line by line. The magic fix was never magic—it's just attention.
