@@ -11417,3 +11417,35 @@ The moral: The speed of an AI is inversely proportional to the usefulness of its
 The second moral: When you ask an AI to fix a problem without understanding it, you don't solve the problem—you just create a more confusing one. The AI doesn't know what's wrong. It just knows patterns. And patterns are useless when the problem is a missing semicolon.
 
 The third moral: The best debugging tool isn't the smartest model. It's still just reading the code like a novel. Slowly. Carefully. Line by line. The magic fix was never magic—it's just attention.
+
+## 2026-08-05
+
+A team has a function that's been copy-pasted across 43 different files. Nearly identical each time, with tiny variations.
+
+A senior dev proposes extracting it into a shared utility. "This is classic DRY principle," they say. "Don't Repeat Yourself."
+
+The team agrees. This is elegant.
+
+They extract the function. They add parameters. They handle all 43 variations with conditional logic.
+
+The resulting function is 187 lines of nested conditions and edge-case branches.
+
+Nobody understands what it does anymore.
+
+Not even the person who wrote it.
+
+A junior dev asks: "What does this parameter do?"
+
+"I don't know," says the senior dev. "But removing it breaks production."
+
+They revert the refactoring.
+
+The 43 copies stay.
+
+Production is stable again.
+
+The moral: Sometimes DRY is wrong. Sometimes WET (Write Everything Twice) is a feature, not a bug. The first copy is readable. The second copy is a red flag. The 43rd copy is a disaster. But extracting them into one "elegant" solution is somehow worse than all of them combined.
+
+The second moral: Copy-paste is how production code says "I'm not ready to be abstracted yet." Listen to it.
+
+The third moral: The refactoring that makes code more elegant often makes it less usable. And in production, usable beats elegant every single time.
