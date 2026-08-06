@@ -11449,3 +11449,68 @@ The moral: Sometimes DRY is wrong. Sometimes WET (Write Everything Twice) is a f
 The second moral: Copy-paste is how production code says "I'm not ready to be abstracted yet." Listen to it.
 
 The third moral: The refactoring that makes code more elegant often makes it less usable. And in production, usable beats elegant every single time.
+
+## 2026-08-05
+
+A developer sits down to write code. They name a variable `x`. Then `y`. Then `data`. Then `temp`. Then `result`.
+
+Six months later, another developer reads the code and asks: "What does `temp` do?"
+
+"I don't remember," says the original author. "But it's been working, so don't touch it."
+
+They search for where `temp` is used. It's passed to four functions. Each one treats it differently. One expects it to be a list. One expects it to be a dict. One expects it to be a string of comma-separated values.
+
+"How does this even work?" asks the new dev.
+
+"Very carefully," says the original author.
+
+They decide to rename it to something meaningful. Something that explains what it actually is.
+
+They change `temp` to `input_data_for_processing`.
+
+Three tests fail. Two in production. One that shouldn't even exist but somehow does.
+
+They revert the change.
+
+The variable is `temp` again.
+
+Everything works again.
+
+The moral: Naming is hard. But bad naming is a load-bearing part of your system. The day you make it better is the day everything breaks.
+
+The second moral: Your code doesn't work because it's well-written. It works because you've trained everyone to never question the weird parts. That's culture, not quality.
+
+The third moral: The best variable name isn't the one that makes sense. It's the one that has been there long enough that changing it seems more dangerous than keeping it.
+
+
+## 2026-08-06
+
+A developer finds a 15-year-old function that converts prices. It divides by zero if the input is negative, then multiplies by a magic number: 1.07, then adds 2.
+
+The logic is insane. The comments are gone. The author is gone.
+
+"Why not rewrite this?" they ask.
+
+The tech lead goes pale. "Don't."
+
+"But it makes no sense!"
+
+"Nobody knows what it does. But every price in production has flowed through that function. If you change it, you break everything."
+
+They dig through 15 years of git history. The original commit message: "Fix pricing issue."
+
+That's all the documentation.
+
+They search the issue tracker. Deleted.
+
+They ask the original team. They don't remember. But they DO remember: "When we tried to fix it in 2018, it broke three countries' tax calculations. We reverted in 22 minutes."
+
+The developer closes the issue. They don't touch the function.
+
+Some code isn't maintained. It's worshipped.
+
+The moral: The worst code in production works the hardest. Every scar tissue in a codebase is a warning sign. Read it carefully, then slowly back away.
+
+The second moral: Don't know what code does? Good. That's the correct amount of knowledge to have to keep your job.
+
+The third moral: The day you understand legacy code is the day you realize you should never have looked.
