@@ -11514,3 +11514,37 @@ The moral: The worst code in production works the hardest. Every scar tissue in 
 The second moral: Don't know what code does? Good. That's the correct amount of knowledge to have to keep your job.
 
 The third moral: The day you understand legacy code is the day you realize you should never have looked.
+
+## 2026-08-06
+
+A team discovers their database has a unique constraint that was added "by accident" in 2019.
+
+Nobody knows who added it. Nobody knows why. But for six years, it has silently prevented a class of bugs that would have crashed production exactly 47 times.
+
+They find the constraint while cleaning up the schema. It serves no documented purpose. The field it constrains has no business reason for uniqueness.
+
+"We should remove this," says a junior dev. "It's not part of the actual design."
+
+The tech lead shakes their head. "That constraint is preventing something. We just don't know what."
+
+They write a test to figure out what happens if they remove it. The test passes. In isolation.
+
+They remove the constraint in staging. They run the full test suite. Everything passes.
+
+They deploy to production.
+
+Three hours later, a bug manifests that only occurs when the same data gets inserted in exactly this sequence, at exactly this concurrency level, with exactly this database load.
+
+The bug was silently prevented by a constraint nobody understood.
+
+They add the constraint back.
+
+The bug vanishes.
+
+They add a comment: "DO NOT REMOVE. Unknown reason. 2026."
+
+The moral: Your system isn't a machine that does what you designed. It's a Rube Goldberg device where every accidental part is preventing a different disaster. You just don't know which part prevents which disaster.
+
+The second moral: The best code is code that works despite being wrong. The second-best code is code that's correct but broken.
+
+The third moral: If you want a stable system, stop understanding it. Understanding is how you introduce the bugs you didn't know prevented other bugs.
