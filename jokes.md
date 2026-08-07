@@ -11651,3 +11651,49 @@ The second moral: The most valuable metrics are the ones nobody's watching. They
 
 The third moral: Every line of code is either actively breaking things, silently saving you, or waiting to become one of the two. You never know which, so you delete nothing.
 
+
+## 2026-08-07
+
+A developer finds a global variable: `let globalState = {}; // TODO: refactor this`
+
+It was added in 2017. The comment is 9 years old.
+
+They trace all the code that reads it. There are 47 places. They trace all the code that writes to it. There are 23 different places. Most of them are in functions that call other functions that sometimes use it and sometimes don't.
+
+"This is why we have bad code," says the refactor enthusiast. "Let me eliminate this. I'll pass it as a parameter instead."
+
+They spend three days refactoring. They pass the state through 12 functions. They update all the call sites. They write a test. The test passes. The code looks clean. The function signatures tell you what they need.
+
+They submit the PR. It looks good.
+
+It gets deployed.
+
+The error messages start arriving:
+- "Shopping cart is empty for returning customers"
+- "User permissions are missing after page reload"
+- "Notifications stop working when you switch tabs"
+
+All different systems. All failing in production. All immediately after the deploy.
+
+They roll back in panic.
+
+Everything works again.
+
+They examine the diff more carefully. They missed one place where the globalState is modified in a callback. Not a call they made—a callback registered by a third-party library, happening in a setTimeout, reading the global state that's no longer being passed through.
+
+They add the global variable back.
+
+Everything works again.
+
+Now the code has:
+- The global variable (the original problem)
+- The parameters being passed through 12 functions (the attempted fix)
+- Both systems running in parallel because they're afraid to remove either
+
+The comment now reads: `let globalState = {}; // TODO: refactor this - DO NOT REMOVE, causes mysterious failures`
+
+The moral: Removing a global variable is like removing a load-bearing wall. You don't know it's load-bearing until your building collapses. And sometimes it's load-bearing to something three buildings over that you didn't even know existed.
+
+The second moral: The refactoring that makes sense on paper makes chaos in production. Trust the chaos. It knows something you don't.
+
+The third moral: Every global variable is a secret pact between parts of the system that should never talk to each other but absolutely have to.
