@@ -11584,3 +11584,37 @@ The moral: Production isn't a scale model of your local environment. It's a host
 The second moral: Every error handler you add is a bet that you understand the failure mode. Most of the time, you're just replacing one problem with a worse one that's harder to debug.
 
 The third moral: The code that crashes loudly is more honest than the code that fails silently. But you'll disable both eventually and just accept the mystery.
+
+## 2026-08-07
+
+A developer finds a line in the code: `if (date.getMonth() == 11) { /* Christmas hack */ }`
+
+"Why?" they ask.
+
+The tech lead sighs. "There was a bug in December 2015. We needed a release candidate, and the fix was complex. Someone added a special case. Just for December. Just for that year."
+
+"That was 10 years ago. Remove it."
+
+They remove it.
+
+Three stores report their inventory system is double-counting stock in Q4.
+
+They add the line back.
+
+The line stays for another two years until someone finally investigates: the original library had a genuine bug with date calculations that was never fixed, and this hack was detecting it. Meanwhile, the library was updated six times, and the bug might not even exist anymore.
+
+But nobody knows. The test suite doesn't cover December precisely because of this special case. The developers who understood the context have moved on. The original store owners have changed systems. The PR that added the hack is now archived. Even the commit message is gone.
+
+They run the December code through the new library version. It works. They remove the hack again, more carefully this time. They add a comment explaining what happened.
+
+Six months later, someone refactors the comments away.
+
+The hack reappears three years later when they accidentally discover it.
+
+At that point, it's been running for so long that they just leave it.
+
+The moral: A hack with a sunset date is still a hack—it's just a promise you'll regret not keeping. Every "temporary" solution is a permanent wound waiting to open.
+
+The second moral: Understanding why code is broken is harder than understanding that it's broken. Once code works, the "why it's broken" knowledge is the first thing to evaporate.
+
+The third moral: Some code doesn't live in your system. It lives in people's heads. When those people leave, the code becomes archaeology. And you don't dig up tombs—you just offer them a prayer and move on.
