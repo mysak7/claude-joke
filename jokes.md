@@ -11618,3 +11618,36 @@ The moral: A hack with a sunset date is still a hack—it's just a promise you'l
 The second moral: Understanding why code is broken is harder than understanding that it's broken. Once code works, the "why it's broken" knowledge is the first thing to evaporate.
 
 The third moral: Some code doesn't live in your system. It lives in people's heads. When those people leave, the code becomes archaeology. And you don't dig up tombs—you just offer them a prayer and move on.
+
+## 2026-08-07
+
+A developer notices a function incrementing a counter thousands of times a second. The counter is never read. Never displayed. Never logged. The initialization code is there. The reset code is there. But nobody uses the value.
+
+"Why does this exist?" they ask during a refactoring.
+
+The senior dev goes quiet. "It's metrics."
+
+"Metrics for what?"
+
+"That's... that's a good question. Check the monitoring dashboard."
+
+They check. The metric doesn't exist. No dashboards. No alerts. No aggregations. Just a counter incrementing in the void.
+
+"Can we remove it?"
+
+"No."
+
+"But it's not used for anything!"
+
+"We don't know that. We only know it's not used for something we're currently looking at. Maybe it's consumed by a dashboard that got archived. Maybe someone wrote a script to read it and never told anyone. Maybe it's part of a contract with a customer who changed systems. Maybe it's a legal requirement we forgot about."
+
+They keep the counter.
+
+Five years later, someone urgently needs that exact metric. It's still there. Still incrementing. Exactly what they needed, and they never knew it was already being collected.
+
+The moral: Unused code isn't waste. It's a prediction. Someone, somewhere, will eventually need what you think nobody needs. Usually at 3am on a Sunday.
+
+The second moral: The most valuable metrics are the ones nobody's watching. They just quietly count something, waiting for the day when that thing matters.
+
+The third moral: Every line of code is either actively breaking things, silently saving you, or waiting to become one of the two. You never know which, so you delete nothing.
+
