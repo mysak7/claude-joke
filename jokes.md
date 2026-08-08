@@ -11729,3 +11729,47 @@ The moral: The simplest solution often hides the most complex problem. It was ne
 The second moral: Every implicit contract becomes an explicit nightmare. You can standardize it, but you can never undo it.
 
 The third moral: "if (!value)" looks like it means something. It means a different thing in each place you use it. This is called "polymorphism," and you hate it.
+
+## 2026-08-08
+
+A developer needs to update a library to fix a security vulnerability.
+
+The new version has breaking changes. They update their code. Tests pass locally. They deploy.
+
+Prod error: "Version mismatch."
+
+Another team uses the same library, hasn't updated yet. Both versions now exist in the same process. This is bad.
+
+They roll back.
+
+"Can you update too?" they ask.
+
+"No. We're in a different deployment pipeline. Also, updating breaks our API contract with a customer who's still on our old API."
+
+So the vulnerability stays.
+
+They add a comment: `// TODO: update library - DO NOT UPDATE without coordinating with Team X. Will break their customer API.`
+
+Three years pass.
+
+The library is abandoned. The vulnerability is public. Security audits are failing. Enterprise customers threaten to leave.
+
+They hire a contractor to "coordinate with Team X and update everything."
+
+The contractor discovers:
+- Team X doesn't exist anymore (merged into Team Y in 2024)
+- Team Y doesn't know about "the customer API contract" (nobody documented it)
+- The actual customer went out of business in 2021
+- Their "customer API" is being called by an archived cron job in a Lambda function that nobody remembers deploying
+
+$250k later, the library is updated. The cron job is deleted. Three systems break in production.
+
+The vulnerability was never exploited.
+
+The "fix" was definitely noticed by finance.
+
+The moral: A vulnerability that you can't patch is invisible and survivable. The cost of patching it—discovering all the implicit contracts, the forgotten systems, the vanished dependencies—is always higher than the vulnerability itself. So you patch it anyway. Welcome to production.
+
+The second moral: Every "coordinate with another team" is a tax you'll pay for years after they stop existing.
+
+The third moral: The most expensive bugs are the ones that force you to confront how fragile your entire system actually is.
