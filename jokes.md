@@ -11697,3 +11697,35 @@ The moral: Removing a global variable is like removing a load-bearing wall. You 
 The second moral: The refactoring that makes sense on paper makes chaos in production. Trust the chaos. It knows something you don't.
 
 The third moral: Every global variable is a secret pact between parts of the system that should never talk to each other but absolutely have to.
+
+## 2026-08-08
+
+A developer adds a simple feature: when the user doesn't provide input, use the default. One line of code: `if (!value) value = default;`
+
+Time passes. The feature spreads across the codebase. 200 places. 2000 places. Edge cases accumulate.
+
+What about null? What about 0? What about false? What about empty strings? What about undefined? What about NaN?
+
+They realize the one-liner is wrong in 47 different ways depending on context.
+
+They try to fix it. They make it stricter: `if (value === undefined)`. Now 0 is treated as missing input. Prod crashes.
+
+They make it more flexible: `if (!value || value.length === 0)`. Now false boolean values are treated as empty. Different prod crashes.
+
+They add more conditions: `if (value === null || value === undefined || value === '')`. This breaks APIs that need to distinguish between "not provided" and "explicitly empty".
+
+Each fix breaks something. Each "proper solution" introduces new bugs. Because the original one-liner wasn't just bad code—it was a contract. And the contract was implicit. And every caller implemented it differently.
+
+They eventually standardize it with null-coalescing operators and optional chaining: `value ?? default`. But it takes six months, affects 12 teams, and still breaks backward compatibility somewhere.
+
+Three years later, during a code audit, they find the original line in some old code: `if (!value) value = default;`
+
+Nobody remembers what it does. Nobody knows if removing it will break something.
+
+They leave it.
+
+The moral: The simplest solution often hides the most complex problem. It was never really solved—it was just deferred to every caller.
+
+The second moral: Every implicit contract becomes an explicit nightmare. You can standardize it, but you can never undo it.
+
+The third moral: "if (!value)" looks like it means something. It means a different thing in each place you use it. This is called "polymorphism," and you hate it.
