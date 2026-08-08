@@ -11773,3 +11773,55 @@ The moral: A vulnerability that you can't patch is invisible and survivable. The
 The second moral: Every "coordinate with another team" is a tax you'll pay for years after they stop existing.
 
 The third moral: The most expensive bugs are the ones that force you to confront how fragile your entire system actually is.
+
+A developer embraces the Single Responsibility Principle with religious fervor. "Each function does one thing!" they declare.
+
+They refactor the user loading code into:
+- `fetchUserFromDatabase()`
+- `validateUserData()`
+- `transformToDTO()`
+- `applyPermissions()`
+- `serializeToJSON()`
+- `cacheResult()`
+- `logMetrics()`
+- `publishEvent()`
+
+Eight functions. Each one calls the next. Each one handles one concern.
+
+A junior developer asks: "How do I load a user?"
+
+"Call the first function," says the senior.
+
+"What if I just need the DTO without caching?"
+
+"You still call the first function. It always does all eight steps."
+
+"What if caching fails?"
+
+"The first function throws an error because it can't catch it. Catching errors would violate SRP—that's function 6's job. So actually the error propagates from function 6 through 5, 4, 3, 2, 1 to you."
+
+"Can I test one function in isolation?"
+
+"Yes! But you'll need to mock the other 7. Here's a test that creates mock objects that don't match production behavior."
+
+The test passes. Production fails because the mocks were wrong.
+
+They add error handling: 8 new functions, each wrapping one of the original functions, each catching specific errors. Now there are 16 functions.
+
+A customer reports the user isn't loading. The on-call engineer traces through:
+1. Was it `fetchUserFromDatabase`? → No, it returned data.
+2. Was it `validateUserData`? → No, it passed.
+3. Was it `transformToDTO`? → No, that worked.
+4. Was it `applyPermissions`? → Maybe. Add logging.
+5. Add logging to `serializeToJSON` too.
+6. And `cacheResult`.
+7. And `publishEvent`.
+
+Six hours later: the event publishing silently failed in a way that didn't throw an error. The user was loaded perfectly. The event just never reached the queue. The system worked fine. Nothing told anyone it failed.
+
+The moral: Every principle is a tax. SRP costs you 8 functions and a 6-hour debugging session to save you... 5 minutes of test writing one time.
+
+The second moral: The perfect architecture is always invisible until it's not. Then it's a prison.
+
+The third moral: One function that does eight things and you understand it completely is better than eight functions that each do one thing and you understand none of them.
+
