@@ -11889,3 +11889,75 @@ The moral: Every optimization is a gamble against your future self and everyone 
 The second moral: The algorithm is theoretical. Production is empirical. Theory loses.
 
 The third moral: Once code works, the only reason to touch it is to make it better. 90% of the time you're just making it different. And different looks broken until you test it. So don't test it locally. Test it in prod. This is fine. (No it's not. It's never fine.)
+
+## 2026-08-10
+
+A developer adds a debug flag: `const DEBUG = false;`
+
+A week later, a colleague needs to enable it in staging: `const DEBUG = false; const DEBUG_STAGING = true;`
+
+A month later, production needs a separate flag: `const DEBUG_STAGING = true; const DEBUG_PRODUCTION = false;`
+
+A customer calls: "Can you enable debug logs for just our API key?"
+
+Now there's a list: `const DEBUG_API_KEYS = ['key_123'];`
+
+Another customer: "Can you enable it just during our maintenance window?"
+
+Now there's a time range: `const DEBUG_UNTIL = new Date('2026-08-15T10:00:00Z');`
+
+Another: "Can you enable it only when response time exceeds 1 second?"
+
+Now there's a condition: `const DEBUG_IF_SLOW = { threshold: 1000 };`
+
+A year passes.
+
+The "simple boolean flag" is now 2000 lines of configuration code. It has:
+- A parser that validates rules
+- A rule combiner that handles AND/OR/NOT logic
+- A cache because evaluating rules on every request is slow
+- A cache invalidator because the rules changed but the cache didn't
+- Metrics tracking how often each rule fires
+- A UI for configuring rules
+- An API endpoint for the UI
+- Rate limiting on the API endpoint because someone ran an infinite loop
+- Logging of which rules were evaluated
+- A 2-week on-call rotation because "if debug rules are wrong, production breaks"
+
+It's now a product. They charge $50k/year for "Advanced Debugging Features."
+
+Customers report bugs in the rule engine. The developer who wrote it is gone. New developers fear touching it.
+
+A principal architect asks: "Can we just remove this?"
+
+"No, we have 47 customers on it."
+
+"Can we simplify it?"
+
+"If we break one rule combinator, three customers lose their entire debug system."
+
+"But it's just a debug flag..."
+
+"Not anymore. It's a feature. It's sold. It's contractual. Someone's business depends on it."
+
+They hire a consultant to "build a proper configuration DSL framework."
+
+Three months and $200k later, the consultant delivers a framework that can do debugging rules AND feature flags AND experiment assignment AND... everything.
+
+The original problem—enabling debug logs—now requires:
+1. Define rule in YAML
+2. Deploy new config version
+3. Wait 10 minutes for cache to clear
+4. Check that logs appeared
+5. If not, check three different services to find which one has the stale cache
+
+Sometimes it's faster to SSH into production and edit the running process memory.
+
+They do that. Twice. Both times they forget to revert it. Prod stays in debug mode for three days before anyone notices.
+
+The moral: A boolean flag is never just a boolean flag. It's a commitment to every possible future use of that flag. Every "small exception" you make locks you into supporting all future exceptions.
+
+The second moral: The feature you're proudest of becomes the feature you're most trapped by.
+
+The third moral: The best time to delete code is before anyone depends on it. The second-best time is right now, but you're 5 years too late.
+
