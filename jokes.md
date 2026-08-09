@@ -11961,3 +11961,48 @@ The second moral: The feature you're proudest of becomes the feature you're most
 
 The third moral: The best time to delete code is before anyone depends on it. The second-best time is right now, but you're 5 years too late.
 
+
+## 2026-08-09
+
+A developer writes: `if (x === true)`
+
+Code review: "Just use `if (x)` instead"
+
+Developer changes it.
+
+A month later: production bug. The string `"false"` is treated as truthy.
+
+Investigation: `if (x)` treats any non-empty string as true.
+
+They create a utility: `isTrue(x) { return x === true }`
+
+Another developer creates: `isTrueString(x) { return x === 'true' }`
+
+Another: `isTruish(x) { return Boolean(x) }`
+
+Now there are 47 boolean-checking utilities scattered across the codebase.
+
+A meeting is called. They standardize on one utility function. Write documentation. Declare it the source of truth.
+
+Nobody reads the documentation. Everyone uses their own version.
+
+A new developer sees the sophisticated boolean utilities and thinks: "This codebase takes boolean logic seriously. Let me build a proper boolean state machine for this."
+
+They spend two weeks on it. It handles edge cases, logging, validation, all elegant and abstract.
+
+They deploy it.
+
+Prod gets 47x slower. Every render now has to go through a state machine.
+
+They revert it in an emergency, go back to `if (x === true)`.
+
+Add a comment at the top of the file: `// DO NOT TRY TO BE CLEVER ABOUT BOOLEANS. Yes, this looks stupid. Yes, we already tried being clever. It was slower. Seriously, stop.`
+
+A year later, a different developer sees the comment and thinks: "This is clearly outdated advice. Computers are faster now. Let me refactor this properly."
+
+They do. Prod gets slower again.
+
+The comment gets longer: `// History: attempted state machine (47x slower), attempted utility (nobody used it), attempted functional approach (worse cache locality). Just use === and move on with your life.`
+
+The moral: Never underestimate how much damage a developer can do by "improving" something that's already working.
+
