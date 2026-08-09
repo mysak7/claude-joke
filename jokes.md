@@ -11825,3 +11825,67 @@ The second moral: The perfect architecture is always invisible until it's not. T
 
 The third moral: One function that does eight things and you understand it completely is better than eight functions that each do one thing and you understand none of them.
 
+
+## 2026-08-09
+
+A senior developer leaves a comment: `// This is O(n²) but I tried O(n) and it was slower. Don't change this.`
+
+Six months pass. A new optimization expert sees this comment. "Obviously whoever wrote this didn't understand the Big O notation," they think. They implement a proper O(n) solution.
+
+Tests pass. Performance tests pass. They deploy.
+
+Prod melts. Users report the system is 10x slower.
+
+They investigate the "proper" O(n) solution. It's technically correct but it requires:
+- Building a HashMap on every call (O(n) time, O(n) space)
+- Allocating memory that gets fragmented
+- Garbage collection pauses that spike latency
+- Lock contention on the shared memory pool
+
+The original O(n²) solution just did nested loops. No memory allocation. No GC. No locks. CPU cache was happy. It was actually faster.
+
+They revert the change.
+
+They update the comment: `// This is O(n²) but empirically faster than O(n) for our data. DO NOT "OPTIMIZE" THIS. Seriously. We already did. It was worse.`
+
+Two years later, a different person sees the comment and thinks: "This is clearly cargo cult programming. The author didn't understand Big O. I should refactor this properly."
+
+They implement O(n log n) using sorting.
+
+Prod melts differently this time.
+
+The comment gets longer: `// DO NOT OPTIMIZE. History of attempted "optimizations": O(n) attempt (slower), O(n log n) attempt (much slower). This is O(n²) because our data is small (n≤1000) and CPU caches beat algorithmic complexity. Stop trying to make this clever. It's already clever, just in a way that looks dumb.`
+
+A new rule appears in code review: "Comments claiming non-obvious performance characteristics require a git blame link to the commit that validated them."
+
+Someone adds a link to a commit message that says: "Performance testing shows nested loop version outperforms HashMap by 3x."
+
+New developer: "That's just one test. I'm adding proper benchmarking."
+
+They spend three weeks building a comprehensive benchmark suite. 1000 data points. Statistical analysis. Shows the O(n²) is 2x faster on average.
+
+"Okay, the O(n²) is faster. But it's still algorithmically wrong. The moment they scale to n=10,000, this breaks."
+
+"n will never be 10,000. We're a marketplace for handmade widgets."
+
+"But what if we become really successful?"
+
+"Then we'll rewrite it. Stop optimizing for a problem we don't have."
+
+An argument breaks out in Slack. The thread goes 47 messages. A principal engineer finally says: "The comment is right. The code is right. Add this to our ADR (Architecture Decision Record) so we don't debate it again."
+
+They create an ADR. It's 2000 words. It explains the context (data size), the measurements (three benchmarks), and the decision (keep O(n²)).
+
+Six months pass.
+
+A new team member doesn't read the ADR. Sees the nested loop. Refactors it.
+
+Prod melts.
+
+The original developer is gone. They left a note: `// If you're reading this, I'm sorry.`
+
+The moral: Every optimization is a gamble against your future self and everyone who will work on this code. Sometimes "dumb" is the right answer. Document why. Make it impossible to miss. Accept that someone will miss it anyway.
+
+The second moral: The algorithm is theoretical. Production is empirical. Theory loses.
+
+The third moral: Once code works, the only reason to touch it is to make it better. 90% of the time you're just making it different. And different looks broken until you test it. So don't test it locally. Test it in prod. This is fine. (No it's not. It's never fine.)
