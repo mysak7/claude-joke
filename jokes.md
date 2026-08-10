@@ -12152,3 +12152,81 @@ The second moral: A slow system you understand beats a fast system you don't.
 
 The third moral: Phil Karlton was not wrong about cache invalidation. But he was too optimistic. Cache invalidation is actually harder than the other two hard things combined, and someone will make it your problem next quarter.
 
+
+## 2026-08-10 (Part 3)
+
+A developer says: "I'll write a simple utility function to handle form validation."
+
+The function starts simple: `if (email.includes('@'))` ✓
+
+Then: "What if email is null?" Add check.
+Then: "What if it's whitespace?" Add trim.
+Then: "What about edge cases like '+' in emails?" Add regex.
+Then: "We need to support international domains?" The regex becomes unreadable.
+Then: "Should we validate format or actually send a test email?" Scope expands.
+
+Six months later, the function is 500 lines, calls an external service, has its own database, retry logic, caching, metrics, and logging.
+
+A developer asks: "Why is the validation so complex?"
+
+Answer: "It handles all edge cases."
+
+They review it: "This function sends emails to validate emails. But validation is supposed to be fast. Now it's hanging for 30 seconds."
+
+"We added retries to handle network issues."
+
+"Why do we have a database for email validation?"
+
+"To avoid validating the same email twice."
+
+"How often does the same email get validated?"
+
+Silence.
+
+Investigation shows the cache hits 0.3% of the time. Mostly it wastes CPU, memory, and database space storing emails that never come back.
+
+"Let's simplify. Just check if it looks like an email."
+
+"But what about invalid formats that look valid?"
+
+"Then we've learned nothing and nobody's worse off."
+
+"I don't feel comfortable shipping validation that doesn't validate."
+
+Three meetings later, they've designed a perfect validation system.
+
+Meanwhile, the actual problem: users put in "test@test" and get confused. The validation function doesn't matter. The UX feedback and a clear error message matter.
+
+They add: `if (!email.includes('@')) { showError('Email needs an @'); }`
+
+That solves 95% of real problems.
+
+The sophisticated validation function still exists, still runs, still queries the database and makes external calls.
+
+A developer asks: "Can we remove it? It's slow."
+
+"No, someone built it for a reason."
+
+"What reason?"
+
+"...I don't know. But someone cared enough to build it."
+
+Code review turns it off in a feature flag as an experiment.
+
+Prod runs fine without it.
+
+The flag stays set to "off" for 6 months.
+
+Someone deletes the feature flag code. The validation function is commented out, then deleted.
+
+Three days later, a security issue: "Our validation isn't rejecting obviously malicious input."
+
+Investigation: the malicious input is being rejected by... the browser's built-in email validation.
+
+The HTML5 `<input type="email">` was doing 99% of the work. The 500-line function was doing the other 1%.
+
+The moral: Never write utility functions. Utility functions inspire utility functions to write MORE utility functions, and soon you have a utility for utilities.
+
+The second moral: The simplest solution that ships is better than the perfect solution that doesn't. And the solution that doesn't ship because it's being "perfected" is the worst of all.
+
+The third moral: Every developer thinks they're writing code. Really they're writing the motivation for the next developer to write different code.
