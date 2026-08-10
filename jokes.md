@@ -12069,3 +12069,86 @@ The second moral: Every developer thinks "I'll add proper logging" as their firs
 
 The third moral: The worst day of a developer's life is when they actually need their logs and realize nobody's been reading them for six months because the signal-to-noise ratio is 1:10,000.
 
+
+## 2026-08-10 (Part 2)
+
+A developer reads an article: "Premature optimization is the root of all evil."
+
+They think: "I won't optimize prematurely. I'll just... optimize maturely."
+
+First optimization: "This loop iterates 100 times? I'll memoize the result."
+
+Adds a cache. Fast! Commits with: "Simple performance fix."
+
+Six months later, a developer changes the input validation rules. Forgets to invalidate the cache.
+
+Prod returns wrong results to 10,000 users.
+
+"The cache needs to be smarter."
+
+They add cache invalidation. Two years later, Phil Karlton says from beyond the grave: "There are only two hard things in computer science: cache invalidation and naming things."
+
+The developer names their cache key generation function `generateCacheKey()`. The function is 400 lines and still gets it wrong.
+
+New idea: "What if we don't memoize that specific calculation, but we memoize the VALIDATION instead?"
+
+A week of work. Now validations are fast. Developers love it.
+
+Someone modifies the validation function for a bug fix. Doesn't realize the validation is memoized. Validators still reject things they should accept.
+
+"We need smarter cache invalidation based on which validation rules changed."
+
+This requires tracking dependencies between validations. Which requires a graph. Which requires a framework.
+
+Framework is built. 8 files, 2,000 lines of code, to make sure the cached validation knows when to update.
+
+A bug is found in the validation framework. The fix is simple: "Just... don't cache validations."
+
+They remove the cache.
+
+Prod is 3x slower.
+
+Investigation: the framework was doing something else useful. They don't remember what. The code doesn't have comments. The original developer is gone.
+
+They add the cache back, keep the bug, and add a TODO: "Fix this somehow, but carefully."
+
+A new developer sees: "This caching system is fragile. We need caching that's... self-invalidating. Automatic. Smart."
+
+They propose implementing TTL-based caching. Or event-based. Or dependency-tracking. Pick any sophisticated approach.
+
+Every approach requires understanding EVERY place that data could change. Which is: everywhere.
+
+The discussion becomes architectural. Does validation happen in the service layer? The API layer? Before persistence? After? What about background jobs?
+
+Three meetings later, they're designing a message bus to handle cache invalidation.
+
+One consultant suggests: "What if the bottleneck isn't validation? What if it's the database query that validation needs?"
+
+Investigation shows: the database query is indeed slow. It's slow because it's querying a table with 50 million rows with no index.
+
+Add an index.
+
+Prod performance doubles without touching the cache.
+
+The caching framework is still there. Still buggy. Still broken in ways nobody fully understands. But now it doesn't matter because the real problem was already solved.
+
+Three developers argue about whether to remove the caching system.
+
+"If we remove it, we might get slow again."
+
+"If we keep it, we have to maintain it."
+
+"What if we just... don't call the validation function as much?"
+
+That's the winning idea. Simple. They use lazy validation. Only validate when you MUST.
+
+Prod performance is now better than it's ever been.
+
+The caching system is still there. Sits unused. A $100k monument to premature optimization.
+
+The moral: The best optimization is the one you don't make. The second-best is the one you make once and never touch again. The worst is any optimization that requires a framework, because frameworks require documentation, and documentation becomes outdated the second after it's written, and then you're debugging your own debugging tool.
+
+The second moral: A slow system you understand beats a fast system you don't.
+
+The third moral: Phil Karlton was not wrong about cache invalidation. But he was too optimistic. Cache invalidation is actually harder than the other two hard things combined, and someone will make it your problem next quarter.
+
