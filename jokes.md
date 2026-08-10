@@ -12006,3 +12006,66 @@ The comment gets longer: `// History: attempted state machine (47x slower), atte
 
 The moral: Never underestimate how much damage a developer can do by "improving" something that's already working.
 
+
+## 2026-08-10
+
+A developer encounters an error and types: `console.error('something went wrong')`
+
+A week later, another error. They add context: `console.error('Error in checkout: ' + error.message)`
+
+Operations team floods with vague errors. They add severity levels: `console.error / console.warn / console.info`
+
+A month of messages and nobody knows which errors matter. Decision: "Build a proper logging system."
+
+They implement structured JSON logs, error codes, sampled tracing, and a beautiful dashboard.
+
+Launch day: 100,000 errors per second.
+
+Investigation: the logging system is logging all the failures of... the logging system.
+
+They disable logging for the logger itself: `if (isLogger) { return; }`
+
+Production goes silent.
+
+Prod crashes. Nobody notices because the logger crashed first. Post-mortem: "The database filled with logs and nobody could access the logs reporting the database was full."
+
+Decision: "Delete old logs automatically."
+
+Implementation: `setInterval(() => deleteLogsOlderThan(7 days), 60000)`
+
+One week later, an error happens on Monday. By the time anyone investigates on Friday, the logs are gone.
+
+Customers report bugs. Developers say: "We can't find logs for that."
+
+New idea: "We need a better retention policy. Keep logs longer."
+
+Implementation gets complex: different TTLs for different severity levels, different customers, different services, different timezones (someone's in India, logs should be kept longer).
+
+Their database bloats to 50TB. The application server spends 99% of its CPU time managing log tables.
+
+A principal architect suggests: "What if we just... didn't log things?"
+
+"Impossible. How would we debug?"
+
+"...we already can't debug. The logs are unreadable and we've spent $500k on this logging system."
+
+"Yes, but imagine if we had NO logging. Then we'd REALLY have a problem."
+
+They hire a consultant to build "Advanced Log Aggregation with ML-Powered Error Deduplication."
+
+$200k later, the consultant delivers a system that:
+- Collapses similar errors into one
+- Only logs errors that seem "important"
+- Uses AI to predict which errors customers will complain about
+- Filters everything else
+
+An error happens that the AI predicts nobody will complain about. Nobody does complain—because the feature is broken. It silently fails for a week.
+
+When discovered, there are no logs. The AI predicted perfectly: zero log entries, zero complaints until it got loud.
+
+The moral: You can't log nothing. You can't log everything. The only successful logging strategy is the one nobody uses, so they hire someone else's team to handle it, and then blame that team when they can't see what went wrong.
+
+The second moral: Every developer thinks "I'll add proper logging" as their first commit. By commit #47, they're adding `// TODO: remove debug logs` that never get removed and occupy half the log volume.
+
+The third moral: The worst day of a developer's life is when they actually need their logs and realize nobody's been reading them for six months because the signal-to-noise ratio is 1:10,000.
+
