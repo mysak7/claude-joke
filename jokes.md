@@ -12367,3 +12367,61 @@ The second moral: Your biggest security vulnerability is not a hacker. It's the 
 The third moral: If your system depends on a null check, that null check must be written with a gun to your head, one keystroke at a time, into your editor directly, and never sent through any external channel, ever, for any reason.
 
 Also: Stop using Slack for code.
+
+## 2026-08-11 (Part 3)
+
+A developer's application crashes in production with the error: "Fatal error: Something went wrong."
+
+They look at the code. The error handler catches ALL exceptions and replaces them with a generic message. "Good security practice," the original developer thought.
+
+Adds a debug flag. Runs it locally. Real error: "TypeError: Cannot read property 'foo' of undefined."
+
+Fixes it. Deploys. Crashes again: "Fatal error: Something went wrong."
+
+Checks the deployment. Debug flag isn't set in production.
+
+Sets it. Deploys. Now the real error appears: "Database connection timeout after 30 seconds."
+
+"But we have redundancy. Why isn't it failing over?"
+
+The failover logic is in a different service. That service is down. The person who wrote it deployed on a Friday and never came back.
+
+Fixes that service. Deploys. Crashes again: "Fatal error: Something went wrong."
+
+Adds MORE logging. The actual error: "Out of memory."
+
+Why? The error logger has a memory leak. It's been logging "Something went wrong" to an in-memory buffer for three weeks. It's eaten 8 GB of RAM.
+
+Rewrites the error logger. Deploys. It works.
+
+A week later, someone says: "We haven't seen that error in a week. System is more stable."
+
+It's not more stable. The error handler is now silently failing and the app continues.
+
+A month later: "Why did a customer lose all their data?"
+
+Investigation reveals: data-loss happens → error occurs → error handler fails silently → application continues as if nothing happened → nobody notices until it's too late.
+
+The developer realizes: you can't protect against what you don't know is happening.
+
+They remove the generic error handler. Real errors start appearing everywhere. Hundreds of bugs nobody knew existed. The system looks worse than before.
+
+But now when something breaks, you actually know why.
+
+A manager says: "This is worse. We're seeing more errors now."
+
+"We always had these errors. We just couldn't see them."
+
+"Can't you hide them again?"
+
+"And lose data again? No."
+
+"But it LOOKS worse."
+
+"It IS worse. But now we can fix it."
+
+The moral: An error message that says nothing is worse than a crash, because crashes force you to fix things. Silence just lets the rot spread.
+
+The second moral: "Generic error messages for security" is what you say before you cause a production incident that costs more in debugging and downtime than the security vulnerability ever could have cost.
+
+The third moral: The most dangerous code is code written by someone who thinks they're being helpful by hiding reality from you. They'll protect you from knowing your house is on fire until you're already in the basement.
