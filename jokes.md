@@ -12294,3 +12294,76 @@ The moral: Writing a test for a bug fix is easy. Making sure the test is testing
 The second moral: A test that always passes is not a test. It's a monument.
 
 The third moral: "We need more tests" is how you turn a simple bug into a legacy problem that will haunt developers for three years.
+
+## 2026-08-11 (Part 2)
+
+A developer's code works perfectly in testing. Deploys to production. Immediately fails.
+
+The error: "Unexpected null at line 847."
+
+Developer: "That's impossible. Line 847 has a null check."
+
+They read line 847: `if (value != null) { ... }`
+
+"The null check is right there."
+
+Examines logs. The error is from a different code path. Line 847 is working fine.
+
+Wait. Different line. Looks at line 847 in PROD. It's different than their local copy.
+
+"Did someone change it?"
+
+Checks git history. No changes to that line in 3 months.
+
+"How is it different?"
+
+Compares character by character. Identical. Identical. Identical. Then:
+
+Local: `value != null`
+Prod: `value != null`
+
+The spaces are different. One has a regular space. One has a non-breaking space.
+
+How does a non-breaking space end up in production code?
+
+Investigation reveals: the code was copy-pasted from a Slack message. Slack converts spaces to non-breaking spaces when you paste them back out. Nobody noticed. The code still worked locally because the JavaScript engine is forgiving. But the minifier got confused. The production bundle has mangled variable names due to the unicode character disrupting the parser's assumptions.
+
+The minifier threw out the null check as "unreachable dead code" because it couldn't parse it correctly.
+
+Developer fixes it by retyping the line with normal spaces.
+
+They push this to production. A three-character fix solves a production outage.
+
+The commit message: "Fix spacing."
+
+Code review: "What spacing? These lines look identical."
+
+Developer: "They're not. The old one had a unicode character."
+
+"How?"
+
+"Slack."
+
+"Why would you paste code from Slack?"
+
+"I didn't. Someone sent it in Slack months ago. I think they copied it from Slack too."
+
+They trace the chain of custody:
+1. Original code written
+2. Copied to Slack for discussion
+3. Someone copies from Slack back to their editor
+4. That person emails it
+5. Another developer copies from email
+6. To Slack
+7. To Discord
+8. To their local editor
+
+Five copy-paste operations across five different platforms, and the code somehow survived intact, except for one space that became something else.
+
+The moral: Code is not information. Code is a fragile spell that breaks if you so much as look at it wrong. You can move it carefully, or you can try to copy-paste it, but you CANNOT do both.
+
+The second moral: Your biggest security vulnerability is not a hacker. It's the developer who copy-pastes code from Slack at 11 PM on a Friday.
+
+The third moral: If your system depends on a null check, that null check must be written with a gun to your head, one keystroke at a time, into your editor directly, and never sent through any external channel, ever, for any reason.
+
+Also: Stop using Slack for code.
