@@ -12230,3 +12230,67 @@ The moral: Never write utility functions. Utility functions inspire utility func
 The second moral: The simplest solution that ships is better than the perfect solution that doesn't. And the solution that doesn't ship because it's being "perfected" is the worst of all.
 
 The third moral: Every developer thinks they're writing code. Really they're writing the motivation for the next developer to write different code.
+
+## 2026-08-11
+
+A developer writes a bug fix. It works. They ship it. Prod runs great.
+
+A code reviewer says: "Can you explain why this fixes it?"
+
+Developer: "Sure. I changed `i` to `j` and it stopped crashing."
+
+"Why was crashing before?"
+
+"Variable name collision with the outer loop."
+
+"How did you find that?"
+
+"I changed random things until it worked."
+
+Reviewer: "We need to add tests so we catch this earlier."
+
+Developer writes a test. Brilliant test. Tests that `i != j` in nested loops. The test passes.
+
+Six months later, someone refactors the loop structure completely. The inner loop uses `k` now. The test still passes. It's testing the wrong thing. Nobody noticed. The test sits there, green, useless.
+
+New developer asks: "What does this test verify?"
+
+Nobody knows. The author is in a different team. The commit message is "Add test".
+
+They add a comment: "This test ensures variables don't collide". 
+
+A year later, someone changes the comment to "TODO: understand what this test does".
+
+The TODO becomes a tag. Ticket gets created: "Fix mysterious test". Ticket gets marked as "low priority". Tickets marked low priority are immortal.
+
+Meanwhile, the ACTUAL bug comes back in a different form. A different variable name collision. The test doesn't catch it because it was testing the symptom, not the cause.
+
+New test gets written. Now there are two tests. Both green. Both testing ancient history. Both useless if the code changes.
+
+A developer suggests: "What if we actually code-reviewed this properly instead of running random variable renames?"
+
+"Code reviews take time. Tests prevent this."
+
+"But the test didn't prevent it. It's back."
+
+"Then we need BETTER tests."
+
+They write more tests. Each test is more specific. More brittle. Any refactor breaks them all. Now refactoring is blocked because "we have to update the tests". But the tests are so specific nobody dares touch them.
+
+The original bug fix—changing `i` to `j`—becomes sacred code. Untouchable. It stays in the codebase forever, surrounded by tests that no one understands, written by someone no one can find, preventing changes nobody would want to make.
+
+A new developer joins. Sees the code. Sees the tests. "This is terrible. Let me refactor."
+
+Uses a linter that suggests better variable names. Applies it. Fails every test.
+
+Panics. Reverts. Learns: "Some things can't be changed here."
+
+They add ANOTHER comment: "DO NOT REFACTOR THIS - TESTS WILL FAIL".
+
+Six developers read that comment. Four avoid the code forever. Two investigate why tests would fail. After two hours, they realize: the tests are testing bad code, and the bad code is therefore protected.
+
+The moral: Writing a test for a bug fix is easy. Making sure the test is testing the right thing is hard. Maintaining tests longer than the code they test is impossible.
+
+The second moral: A test that always passes is not a test. It's a monument.
+
+The third moral: "We need more tests" is how you turn a simple bug into a legacy problem that will haunt developers for three years.
