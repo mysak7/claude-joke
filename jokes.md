@@ -12538,3 +12538,56 @@ The moral: Every performance problem is someone's "temporary" config from years 
 The second moral: Someone reading this right now has a hardcoded path to a directory that doesn't exist, or a URL to a dead server, or an API key for a service they don't even use. You know this because you've done it. We've all done it. The code works, so why would you change it?
 
 The third moral: The fastest optimization isn't better algorithms. It's removing the dumb thing someone did in 2019 and forgot about.
+
+## 2026-08-12 (Part 3)
+
+A developer is code reviewing and sees this:
+
+```python
+price = calculate_price(item)
+price = calculate_price(item)
+final_amount = price
+```
+
+"Why is `calculate_price` called twice? This looks like a copy-paste bug."
+
+They fix it, removing the duplicate:
+
+```python
+price = calculate_price(item)
+final_amount = price
+```
+
+Looks good. Merge it. Deploy.
+
+Production catches fire.
+
+Investigation: The duplicate call was intentional. The first call queries a database. The second call queries an external payment processor. Both had side effects. The "bug fix" removed the payment processor call entirely.
+
+The developer asks: "Why would you call the same function twice?"
+
+Git blame shows the commit message: "Duplicate price lookup ensures we catch API latency. Remove one if we switch to synchronous pricing."
+
+So someone added code to handle asynchronous pricing, then the codebase switched back to synchronous pricing years ago, and nobody cleaned it up. The "duplicate" was now a redundant safeguard that actually mattered because the first call sometimes times out.
+
+The developer reverts their change.
+
+Later, they ask the original author: "Was this intentional?"
+
+"Sort of. The price calculation used to be expensive, so calling it twice seemed wasteful. But then I realized we needed it twice for redundancy."
+
+"You could have just called a different function."
+
+"Yeah, but then I'd have to refactor everything. The duplicate works fine."
+
+The developer looks at the function name: `calculate_price`. 
+
+Realizes: there's probably a `calculate_price_with_cache` somewhere, or a version that doesn't have side effects, or... anything but this.
+
+Searches the codebase. Finds seventeen different price calculation functions, none of which are clearly documented. Some have side effects. Some don't. One of them logs to a file for no reason. Another one only works on Thursdays (not kidding, there's a date check in the code).
+
+The moral: If your code looks like a bug but it works, don't fix it. Instead, document WHY it works and add a unit test that specifically tests the thing that looks like a bug. Because the next developer will absolutely try to "fix" it.
+
+The second moral: A function named `calculate_price` that has side effects is a lie. Call it `calculate_price_and_increment_payment_processor_request_counter` or something. Make the lie obvious.
+
+The third moral: Every line of code that looks wrong is probably working around a bug somewhere else. Delete it and watch everything break in production.
