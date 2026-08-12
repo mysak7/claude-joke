@@ -12425,3 +12425,66 @@ The moral: An error message that says nothing is worse than a crash, because cra
 The second moral: "Generic error messages for security" is what you say before you cause a production incident that costs more in debugging and downtime than the security vulnerability ever could have cost.
 
 The third moral: The most dangerous code is code written by someone who thinks they're being helpful by hiding reality from you. They'll protect you from knowing your house is on fire until you're already in the basement.
+
+## 2026-08-12
+
+A developer uses a popular npm package to format dates. The package has one job: convert a timestamp to a readable string.
+
+Works great for six months. Then a report comes in: "Something's wrong with our invoices."
+
+The invoices are all dated one day in the future.
+
+Developer checks the code: `new Date().toISOString()`. Straightforward. Nothing wrong.
+
+Looks at the npm package source code. One function. Fifteen lines. Readable.
+
+But wait. Line 8 has a comment: "// TODO: timezone adjustment for prod servers"
+
+Scrolls down. The TODO is implemented. It checks the server's hostname. If it contains "prod", it adds 24 hours.
+
+Why would anyone do this?
+
+Digs through the package's issue tracker. Three years ago, someone reported: "Dates are off by a day in production."
+
+The package maintainer's response: "This is probably a timezone issue. Try adding 24 hours."
+
+The user replied: "That made it worse."
+
+The maintainer never responded.
+
+Years pass. The maintainer adds the timezone adjustment but makes it hostname-based instead of using actual timezone logic, because they forgot what the issue was about and didn't want to re-read it.
+
+The developer removes the package and writes two lines of code: `new Date().toISOString()`.
+
+That's it. That was the whole package. Two lines. Fifteen lines with a hidden hostname check that nobody asked for.
+
+They report it to npm. The package has 2 million weekly downloads.
+
+The response from the maintainer: "It's been working fine for me."
+
+"Because your hostname doesn't contain 'prod'."
+
+"Oh."
+
+The developer checks their own packages. Finds one that special-cases MacOS usernames that contain "benjamin". Another that slows down if the current directory path contains the word "test". A third that doesn't work on Tuesdays (the maintainer's timezone-offset logic was somehow date-dependent).
+
+They realize: every package is secretly cursed. Somewhere in the dependency tree, someone hardcoded a solution to their specific problem and pushed it to prod without thinking about anyone else.
+
+They start a bot to check npm packages for suspicious hostname checks, date-based behavior, and day-of-week logic.
+
+Finds 8,000 packages.
+
+Tweets about it. Gets ratio'd by developers defending their "quirky" packages. "It's just a joke." "We needed to ship fast."
+
+The developer decides: never trust any software that another human has ever touched.
+
+Writes their own date library from scratch. Then realizes they need to test it. Writes a test library. Then realizes the test library might have bugs. Writes a test-library-testing library.
+
+Three months later, they're still writing tests for their tests for their tests, and they've yet to format a single date.
+
+The moral: If you need to use a dependency, check the source code. But don't check just the parts you use. Check all of it. Check especially the unused parts. Check the comments. Check the variable names. Check the git history. If you see a variable named HACK_FOR_PROD or something checking the hostname, delete the package immediately.
+
+The second moral: A package with 2 million weekly downloads has failed to specify what it does, so it does whatever its maintainer felt like doing. One of those things is probably wrong.
+
+The third moral: "I'll just use npm" is what you say before you spend three hours debugging why your production invoices are dated tomorrow, and the answer is a maintainer who forgot about an issue from 2019.
+
