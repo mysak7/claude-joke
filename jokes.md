@@ -12488,3 +12488,53 @@ The second moral: A package with 2 million weekly downloads has failed to specif
 
 The third moral: "I'll just use npm" is what you say before you spend three hours debugging why your production invoices are dated tomorrow, and the answer is a maintainer who forgot about an issue from 2019.
 
+
+## 2026-08-12 (Part 2)
+
+A developer gets called to a meeting: "Why is our CI/CD pipeline taking 45 minutes?"
+
+They check the pipeline. It's just running tests. Nothing fancy. But the logs show: "Setting up environment... (2 min). Running tests... (1 min). Uploading artifacts... (42 min)."
+
+42 minutes to upload artifacts?
+
+Looks at the upload script. It's uploading to S3. Checks the S3 config. The bucket region is hardcoded as "ap-southeast-2" (Australia). The developers are in California. The server is in Virginia.
+
+"Why would we route through Australia?"
+
+Looks at the git history. The script was written in 2019 by someone who's no longer at the company. The commit message: "Using personal AWS account temporarily for testing."
+
+"Temporarily" was seven years ago.
+
+Checks the AWS console. That account doesn't exist anymore.
+
+"So we're uploading to a non-existent AWS account on the other side of the planet?"
+
+Runs a test upload. The request times out, retries, times out again, retries — the upload "succeeds" after exhausting all retries, even though the bucket was never found.
+
+Changes the region to us-east-1. Pipeline now takes 3 minutes total.
+
+The developer posts in Slack: "Fixed the pipeline. Changed one region setting."
+
+Gets 5 thumbs up reactions.
+
+A manager asks: "How long did that take to debug?"
+
+"Twenty minutes."
+
+"And it was just... a region setting?"
+
+"Yeah."
+
+"So we wasted 42 minutes per deployment, times... how many developers... and how many days per year... multiplied by... "
+
+The developer does the math. Over seven years, the company burned roughly 18,000 engineer-hours uploading artifacts to a non-existent bucket on the other side of the planet because someone pasted their personal AWS account into a script and forgot to change it.
+
+A senior engineer: "At least you found it."
+
+"That's the thing. I didn't find it. I just... changed the region to see if it would work faster. I wasn't trying to debug anything. I was just impatient waiting for the build."
+
+The moral: Every performance problem is someone's "temporary" config from years ago that nobody questioned because it "worked" (in the sense that the build eventually finished, even if it took 42 minutes).
+
+The second moral: Someone reading this right now has a hardcoded path to a directory that doesn't exist, or a URL to a dead server, or an API key for a service they don't even use. You know this because you've done it. We've all done it. The code works, so why would you change it?
+
+The third moral: The fastest optimization isn't better algorithms. It's removing the dumb thing someone did in 2019 and forgot about.
