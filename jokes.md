@@ -12591,3 +12591,80 @@ The moral: If your code looks like a bug but it works, don't fix it. Instead, do
 The second moral: A function named `calculate_price` that has side effects is a lie. Call it `calculate_price_and_increment_payment_processor_request_counter` or something. Make the lie obvious.
 
 The third moral: Every line of code that looks wrong is probably working around a bug somewhere else. Delete it and watch everything break in production.
+
+## 2026-08-13
+
+A developer is refactoring and finds a function called `apply_timezone_offset()`. It takes a timestamp and... does nothing.
+
+```python
+def apply_timezone_offset(timestamp):
+    return timestamp
+```
+
+"Why does this exist?"
+
+Looks at git blame. Added 8 years ago. Commit message: "Placeholder for timezone logic. Will implement properly later."
+
+Never implemented. Called 487 times across the codebase. Always with a TODO comment nearby.
+
+The developer thinks: "If it does nothing, I'll remove all calls."
+
+Production catches fire. All times are 8 hours off for a specific subset of users.
+
+Investigation: There's a second function, `actually_apply_timezone_fix()`, which adjusts timestamps by -8 hours to compensate for the fact that `apply_timezone_offset()` does nothing.
+
+The logic chain:
+1. Calculate timestamp (broken)
+2. Call `apply_timezone_offset()` (does nothing)
+3. Call `actually_apply_timezone_fix()` (compensates for step 2)
+4. Times are correct by accident
+
+Removing step 2 breaks everything because step 3 still runs.
+
+Developer asks: "Why not fix the timestamp calculation?"
+
+Looks at it. It's in a third-party library from 2009. Maintainer inactive 5 years. 50 million weekly downloads. Changing it breaks 10,000 packages.
+
+Restores the calls to `apply_timezone_offset()`.
+
+Gets 2 thumbs up in code review.
+
+A week later, finds: `check_if_payment_succeeded()`. Always returns True.
+
+Added 12 years ago. Message: "Placeholder. Payment gateway not ready yet."
+
+Called 3,200 times. Nobody's noticed that all payments are marked successful even when they fail.
+
+Oh wait, they have. There's `check_if_payment_actually_succeeded()`, which runs AFTER and re-checks.
+
+```python
+if check_if_payment_succeeded():  # Always passes
+    if check_if_payment_actually_succeeded():  # Actually checks
+        confirm_order()
+```
+
+The first function is a placeholder nobody removed. The second was added because the first didn't work. Both exist, both run, system works by accident.
+
+Developer: "Who designed this?"
+
+Git history: six people over twelve years. Four don't work here. One's in management. One's on medical leave.
+
+Posts in Slack: "Why two functions checking payments?"
+
+Six hours of silence.
+
+Finally, senior engineer: "Oh, the first is deprecated. Been meaning to clean it up."
+
+"For how long?"
+
+"...I don't know."
+
+No deprecation notice. No comment explaining why. Just a typo in the name and "FIXME: This doesn't work."
+
+The moral: Dead code doesn't get removed because it might break something. The way to find out what breaks is to delete it and wait for production to fail. The way to avoid that risk is to leave it there forever.
+
+The second moral: Placeholder functions from a decade ago are still functions from a decade ago. They don't automatically get replaced. They just collect workarounds around themselves.
+
+The third moral: If your code has a function that does nothing and a second function that does the work, the real bug is that the first function wasn't deleted. But you can't delete it because something's calling it, and you're not sure if removing the call will break the thing that compensates for the do-nothing function.
+
+The fourth moral: Every codebase is secretly a Jenga game. You stopped noticing years ago.
