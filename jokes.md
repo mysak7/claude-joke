@@ -12713,3 +12713,80 @@ The moral: Joke comments become features. Features become requirements. Requirem
 The second moral: A comment in code is a promise you're never going to keep.
 
 The third moral: "Temporary" has a mean lifespan of 2,847 days and counting.
+
+A developer discovers a line of code:
+
+```javascript
+if (typeof undefined !== "undefined") {
+  process_critical_data();
+}
+```
+
+"This condition is always false. `typeof undefined` is literally the string `"undefined"`. Who wrote this?"
+
+Looks at git blame. Added 11 years ago. Message: "Defensive check. Never know what crazy code might exist out there."
+
+The condition is unreachable. `process_critical_data()` never runs.
+
+"So critical data is never processed?"
+
+No. There's a second function that runs after:
+
+```javascript
+process_critical_data_safely();
+```
+
+And a third that validates:
+
+```javascript
+validate_critical_data();
+```
+
+All three functions do almost the same thing.
+
+"Why three functions?"
+
+First one was the original. Broken condition. Never runs.
+
+Second one was added because critical data wasn't processing. Author thought the first one was the issue, so wrote a new one. Called it `_safely` to be extra careful.
+
+Third one was added by someone who didn't know the other two existed, thought data was corrupted, and added validation.
+
+None of them call each other. All three run independently on every request. The data gets processed three times, validated twice, and the first function still never runs.
+
+"Can we delete the first function?"
+
+Junior asks: "Is anything calling it?"
+
+Grep: nothing.
+
+"Delete it."
+
+24 hours later: in production, someone's ETL pipeline explodes. Turns out they were importing this function as part of the public API, even though nothing in the codebase calls it.
+
+Restore the commit. Silence.
+
+A senior engineer finally speaks up in Slack: "Yeah, that function's for backward compatibility. External customers might be using it."
+
+"But it never runs."
+
+"Right. We stopped maintaining it in 2015. Kept it so their code wouldn't break when they upgrade. They probably aren't even calling it, but we can't know for sure."
+
+"So we maintain a function that does nothing, for customers who might not exist, to prevent hypothetical code breakage?"
+
+"Yep."
+
+"...Should we document that?"
+
+"Document what? That it doesn't work? That would break their trust."
+
+The developer looks at the condition one more time: `typeof undefined !== "undefined"`.
+
+It's not even *trying* to do anything. It's a lie in code form. A placeholder from a decade ago that became a ghost. A function that haunts the codebase because removing it might hurt someone somewhere.
+
+The moral: Unreachable code doesn't get deleted—it gets surrounded by workarounds that eventually look like the real code, and the original unreachable code becomes a legend passed down to junior developers.
+
+The second moral: External API backwards compatibility means you ship broken functions forever and call it "stability."
+
+The third moral: At some point, your codebase becomes a museum. You don't improve it—you maintain it. The exhibit is broken code nobody dares touch.
+
