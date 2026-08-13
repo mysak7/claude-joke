@@ -12668,3 +12668,48 @@ The second moral: Placeholder functions from a decade ago are still functions fr
 The third moral: If your code has a function that does nothing and a second function that does the work, the real bug is that the first function wasn't deleted. But you can't delete it because something's calling it, and you're not sure if removing the call will break the thing that compensates for the do-nothing function.
 
 The fourth moral: Every codebase is secretly a Jenga game. You stopped noticing years ago.
+
+A developer is writing a comment:
+
+```python
+# This is a temporary fix
+def handle_user_input(data):
+    # TODO: Optimize this later
+    # TODO: Add error handling
+    # TODO: Write tests
+    # NOTE: This breaks on Sundays but only in production
+    result = process(data)
+    return result
+```
+
+Eight years later. Still there.
+
+A junior developer asks: "Why does it break on Sundays?"
+
+"It doesn't. That was a joke."
+
+"But... the code?"
+
+"The code breaks on Sundays because the server's clock is wrong. The timezone it thinks it's in doesn't exist. Setting it would break seventeen microservices that depend on that impossible timezone. So we just... skip updates on Sundays. Easiest fix."
+
+"We could fix the clock."
+
+"Then I'd have to fix all the other services. And their tests are written assuming the broken time. And someone wrote cron jobs based on it. And..."
+
+The developer nods. They've seen this before.
+
+"So the comment is a lie?"
+
+"The comment is me, five years ago, making a joke that nobody told me was a joke. Someone read my comment and thought it was documentation. Wrote code around it. Now it's just... how it works."
+
+Posts in Slack: "Why do we skip Sundays?"
+
+Six different answers. All wrong. All confident.
+
+The real answer: Nobody remembers. It works. Don't touch it.
+
+The moral: Joke comments become features. Features become requirements. Requirements become somebody's job. That somebody is you now.
+
+The second moral: A comment in code is a promise you're never going to keep.
+
+The third moral: "Temporary" has a mean lifespan of 2,847 days and counting.
