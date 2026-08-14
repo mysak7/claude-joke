@@ -12918,3 +12918,38 @@ The moral: A boolean is the worst data type for tracking real-world state becaus
 The second moral: Legacy code doesn't have bugs. It has "undocumented features." Features that break when you fix them. Features that depend on each other in ways that aren't written down because nobody understood them when they wrote them down.
 
 The third moral: Every field name in old code is a lie someone told to save five minutes once.
+
+## 2026-08-14
+
+A developer inherits code with a line that just says `Math.random()` with no assignment, no return, no purpose. Floating in the middle of the file like a ghost.
+
+"Why is this here?" they ask.
+
+Senior engineer looks at it. Long pause. "Don't delete it."
+
+"But... it does nothing. It's literally dead code."
+
+"You'd think that. But about three years ago someone added it to fix a race condition. I don't remember how. The commit message just says 'mysterious fix.' I think it might be a seed or something. Or maybe it just delays execution by a microsecond on some JavaScript engines. The point is: the tests pass *with* it and fail *without* it."
+
+"So we don't actually know why it works?"
+
+"Correct. It's a lucky accident in code form. A quantum observation. If you look at it too long and try to understand it, it stops working."
+
+Junior adds a comment: `// DO NOT REMOVE - fixes race condition mysteriously`
+
+Six months later: a different developer is optimizing performance. Sees this comment. Sees the unused `Math.random()`. Removes it. "It's obviously a mistake."
+
+Tests fail. Race condition is back. She adds a console.log before it.
+
+Race condition goes away.
+
+She removes the console.log. Race condition is back.
+
+She adds it back.
+
+The moral: There exists code that only works because JavaScript engines cache the same strings differently if you print to the console. There exists code that only works because the CPU was slightly warmer when it was tested. There exists code that only works because if you're looking at the lines of code in your editor, it compiles to slightly different bytecode than if you don't. There exists code that is fundamentally dependent on Heisenberg uncertainty, and we're just... shipping it.
+
+The second moral: If you encounter a line of code with no purpose, first assume it's cursed. Second, check if the tests break without it. Third, in the space between "does nothing" and "breaks everything" is production code. That's where we live now.
+
+The third moral: Some bugs are features. Some features are bugs. Some lines of code are neither and both, existing in a superposition until observed, at which point they either work or don't, and you'll never know which state is "correct" because correct stopped being the metric we optimized for in like 2014.
+
