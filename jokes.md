@@ -12790,3 +12790,66 @@ The second moral: External API backwards compatibility means you ship broken fun
 
 The third moral: At some point, your codebase becomes a museum. You don't improve it—you maintain it. The exhibit is broken code nobody dares touch.
 
+
+## 2026-08-14
+
+A developer is fixing a bug in the checkout flow. One line of code is wrong. Delete it.
+
+Immediately, the inventory system breaks. Some warehouse automation depends on that bug existing. Turns out nobody told anyone. Git blame shows the bug was added by a contractor in 2019 with the message "quick fix lol."
+
+Add the line back.
+
+Now checkout is broken again. Add an if-statement around the buggy line. Only apply it for certain customer regions. Works.
+
+Six months later: payment processing fails for South America. That region-specific fix is now special-casing the payment logic. Fix it. Add another if-statement for North America, but only on Tuesdays. 
+
+"Why Tuesdays?"
+
+"That's when their reconciliation system runs. If the payment timestamp is wrong and hits Tuesday, two different databases sync and figure it out. If it hits Wednesday, they don't see it until Thursday and everything's out of balance."
+
+"So we're relying on reconciliation happening on a specific day to hide a bug."
+
+"Yes."
+
+"Can't we just fix the bug?"
+
+"We tried that on Thursday. Everything broke. The reconciliation system isn't designed to handle correct data."
+
+Another three months. Payment failures on all other days. Code now has six nested if-statements checking day-of-week, region, customer tier, whether mercury is in retrograde. Function is 340 lines long.
+
+New developer reads it: "This is terrifying."
+
+Senior dev: "Welcome to production."
+
+"What's the original bug?"
+
+"Nobody knows. It's been wrapped in so many fixes that the original issue is lost. At this point, the workarounds *are* the code."
+
+"So if we removed all these if-statements..."
+
+"Everything would break. In ways that don't make sense. We'd find out that other teams built systems on top of these bugs. Someone's billing depends on Tuesdays. Someone else's reports only make sense if times are occasionally wrong."
+
+"This is insane."
+
+"Yes. Welcome to the checkout flow."
+
+Months pass. Checkout works. Intermittently. Mysteriously. But it works.
+
+A new developer gets assigned to "clean up the checkout code." They're excited. They see the nested if-statements. They see the dates. They see the magic numbers. They think: "I can fix this. I can make it clean."
+
+They refactor. Remove the Wednesday exception. Add comments explaining what each part does. Replace magic numbers with constants. It takes two weeks. Code is beautiful. Functions are five lines. Logic is obvious.
+
+They submit for review.
+
+Within hours: payment failures in three regions. One customer's entire transaction log is corrupt. The reconciliation system is confused because times are now consistent. 
+
+They revert their change. Nobody speaks about it again.
+
+The moral: The worst code isn't the code you see. It's the invisible contract between your broken code and all the other broken code around it. You can't fix one thing without understanding what's depending on it being broken.
+
+The second moral: Your bug fix is someone else's documented behavior. Your refactor is their system-of-record.
+
+The third moral: At some point, your code base isn't code anymore. It's a Rube Goldberg machine held together by if-statements and desperation. You don't fix bugs in it. You add more gears. They don't work. You add more gears. It's still broken. You add more gears until it works by accident.
+
+The fourth moral: Checkout flow. Don't touch it. Just... don't.
+
