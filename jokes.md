@@ -12853,3 +12853,68 @@ The third moral: At some point, your code base isn't code anymore. It's a Rube G
 
 The fourth moral: Checkout flow. Don't touch it. Just... don't.
 
+
+## 2026-08-14
+
+A developer adds a feature to legacy code. Needs to track if a user has "seen" a notification. Adds a boolean field: `userHasSeenNotification`. Simple. Clean.
+
+Fast forward two years. "Seen" now means three different things:
+
+1. They received the notification (database level)
+2. They opened it (in the API response)
+3. They took the recommended action (in analytics)
+
+The field is named differently in each system:
+- `notification_seen` in the database schema
+- `userNotificationViewed` in the API response
+- `seenFlag` in the config layer
+- `has_seen` in the analytics pipeline
+
+Nobody remembers which is which anymore. They all sync "somehow."
+
+A new developer looks at this and asks: "What does `seen` actually mean?"
+
+Senior engineer: "Yes."
+
+"Yes to what?"
+
+"Yes. It means yes."
+
+"But which one? Received, opened, or acted upon?"
+
+"All of them. Sometimes none of them. The important thing is the boolean goes true, and we move on."
+
+New developer finds a bug report: "Users say they got a notification they never opened."
+
+Senior: "Right. That's when `notification_seen` is true but `userNotificationViewed` is false. Actually, that's not a bug, that's by design."
+
+"Who designed that?"
+
+"Nobody. It happened over time."
+
+They add a test to clarify the behavior. Test fails. Why? Because the test is trying to verify what the flag *should* mean, not what it actually does. The code doesn't match the test, and the test doesn't match reality.
+
+They update the test to match the code. Test passes. Behavior is still wrong, but at least the test is happy. Ship it.
+
+Week later: payment reconciliation breaks for a subset of users. The billing system checks `has_seen` to charge for notifications. But the UI marks notifications as seen when they're received, not when opened. So people got charged for notifications they never opened.
+
+Add a special case: only charge if the notification was opened *and* received before the customer's billing cycle. Add it as a comment:
+
+```
+// TODO: refactor the seen status system
+// This exists because nobody knows what "seen" means anymore
+// DO NOT TOUCH without understanding all four definitions
+// Seriously. Don't.
+```
+
+"Should we rename the fields to be clearer?" asks the junior.
+
+Silence.
+
+"Just... leave it," says the senior. "Something somewhere is depending on these field names and this broken behavior. Maybe external customers. Maybe internal dashboards. Maybe the intern from 2018 built a reporting system we forgot about. If you rename them, their imports break. If you change what 'seen' means, their dashboards show wrong data. If you touch this code at all, something will explode in a way that doesn't make sense for a week."
+
+The moral: A boolean is the worst data type for tracking real-world state because it's so small and simple it forces people to use it for everything. It starts as one thing. It becomes five. Then nobody can remember what it means. Then you have a flag called `seen` that doesn't mean any of the obvious things.
+
+The second moral: Legacy code doesn't have bugs. It has "undocumented features." Features that break when you fix them. Features that depend on each other in ways that aren't written down because nobody understood them when they wrote them down.
+
+The third moral: Every field name in old code is a lie someone told to save five minutes once.
