@@ -13016,3 +13016,56 @@ The second moral: Case sensitivity. It seems like a simple problem. It's not. No
 
 The third moral: At some point, your codebase isn't engineering anymore. It's archaeology. You're not building things, you're excavating layers of decisions made by people who don't work there anymore, made under constraints that no longer exist, in service of goals that were abandoned decades ago. And somehow... it still works.
 
+
+A senior engineer is explaining null to a junior developer.
+
+"null means the value is missing. undefined means the value was never defined. nil means... actually, we don't use nil here. But some other language does. Somewhere. Probably."
+
+"So what's the difference in practice?"
+
+"null is intentional. It's what you get when you explicitly set something to nothing. undefined is accidental. It's what you get when you forgot to initialize something."
+
+"And if I need to check for both?"
+
+"You check with `if (value == null)` which catches both."
+
+"Why both and not `if (value === null || value === undefined)`?"
+
+"Because that's more typing and you'd rather be dead than type more. Also, if you mix tabs and spaces the universe collapses, so conserve characters."
+
+Three weeks later: new feature ships with a subtle bug. When a user deletes their account, some records have `null` in the status field, others have `undefined`. The analytics dashboard filters by `status == null` to count deleted accounts. The email team filters by `status === null` to exclude them from newsletters.
+
+One million emails go to "deleted" accounts that technically have `undefined` status.
+
+CEO: "Who designed this?"
+
+Engineer: "Nobody *designed* it. It happened."
+
+CEO: "How?"
+
+Engineer: "Well, in 2013 we used `null`. Then we migrated to TypeScript. TypeScript was very excited to tell us about `undefined`. So we had both for a while. Now we have... both. Together. Forever."
+
+The code still has that comment from 2013:
+
+```javascript
+// Handle null for deleted users
+```
+
+Someone added another comment in 2020:
+
+```javascript
+// Also check undefined (unclear why this needed to exist but tests failed without it)
+```
+
+Someone in 2024 tried to unify them:
+
+```javascript
+// TODO: consolidate null/undefined handling
+// Do NOT touch - something in payments depends on this being weird
+```
+
+The moral: There are exactly three falsy values in JavaScript: `false`, `0`, and `""`. But there are six ways to represent "no value": `null`, `undefined`, `NaN`, `Infinity`, empty string, and "the variable doesn't exist." Your code will eventually use all six simultaneously. You will not know why. You will not be able to fix it. You will only be able to add more comments.
+
+The second moral: The difference between `==` and `===` seems important when you learn it. Then you realize it's just kicking the can down the road for eight years until someone else has to deal with the mixed-type comparison bugs.
+
+The third moral: Some languages are designed by philosophers. Some are designed by engineers. JavaScript was designed by someone who was asked to solve five contradictory problems in ten days and figured "why choose? I'll just allow all interpretations simultaneously and let future developers suffer."
