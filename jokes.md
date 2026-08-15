@@ -13069,3 +13069,52 @@ The moral: There are exactly three falsy values in JavaScript: `false`, `0`, and
 The second moral: The difference between `==` and `===` seems important when you learn it. Then you realize it's just kicking the can down the road for eight years until someone else has to deal with the mixed-type comparison bugs.
 
 The third moral: Some languages are designed by philosophers. Some are designed by engineers. JavaScript was designed by someone who was asked to solve five contradictory problems in ten days and figured "why choose? I'll just allow all interpretations simultaneously and let future developers suffer."
+
+A developer writes a defensive check:
+
+```javascript
+// This should never happen
+if (userId === null && userId === undefined && userId === false) {
+  throw new Error("Something went catastrophically wrong");
+}
+```
+
+Gets deployed.
+
+Sixteen months later: the error fires. Millions of times. In production.
+
+The dev gets paged at 3 AM. Looks at the condition. "This... is literally impossible. The userId can't be null AND undefined AND false simultaneously. This is mutually exclusive."
+
+Checks the logs. It's happening.
+
+Spends two hours tracing it. Turns out there's a bug in the serialization layer where under very specific conditions (full moon, 3rd Tuesday, MySQL deciding to be ornery), some JSON fields get corrupted in a way that makes them simultaneously null, undefined, AND false.
+
+Nobody knows how. The behavior changed between Node versions 14 and 16. It's gone in 18. It's back in 20. It's better in 22.
+
+Senior engineer: "Why didn't you just catch the error?"
+
+"I did. The error message is 'Something went catastrophically wrong.' That's... not helpful."
+
+"What's the fix?"
+
+"No idea. We added a log statement. It stopped happening for a month. Then came back. We added console.log in another part of the codebase and it went away again."
+
+They added so many logging statements to "fix" it that the app now writes 50GB of logs per day tracking a bug nobody understands.
+
+A comment in the code:
+
+```javascript
+// DO NOT REMOVE ANY OF THESE LOGS
+// They are not debugging - they are the fix
+// We don't know how or why
+// But the tests pass when they're there
+// And fail when they're not
+// Physics doesn't work here
+// Only logs work here
+```
+
+The moral: The comment says "This should never happen." The universe says "Watch me." In production, impossible conditions happen with clockwork regularity. They're usually caused by a combination of factors so specific and absurd that once you fix it, you'll never see it again. Until you do. Then you'll see it every single day. Forever.
+
+The second moral: Logging is a fix. Not always, but sometimes. In this case, the act of observation changed the quantum state of the system. Schrödinger's userId.
+
+The third moral: Never say never in programming. The stronger you assert something cannot happen, the more urgently it will happen, with witnesses, during a critical deployment.
