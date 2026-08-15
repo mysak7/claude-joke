@@ -12953,3 +12953,66 @@ The second moral: If you encounter a line of code with no purpose, first assume 
 
 The third moral: Some bugs are features. Some features are bugs. Some lines of code are neither and both, existing in a superposition until observed, at which point they either work or don't, and you'll never know which state is "correct" because correct stopped being the metric we optimized for in like 2014.
 
+
+## 2026-08-15
+
+A developer gets a ticket: "Search is broken. Users can't find anything."
+
+Spend two hours investigating. Database is fine. Elasticsearch is fine. Network is fine.
+
+Finally find it: on the search results page, they're searching for "account" but the backend is filtering by "Account" (capital A). They're using exact-match because someone thought case-sensitive search was "more correct."
+
+"Just make it case-insensitive," says the ticket reporter.
+
+"I can't," says the developer.
+
+"Why not?"
+
+"Because last year someone built a customer-facing feature where you can search for case-sensitive terms. They sell it as a premium feature. It's on the pricing page. Three customers pay extra for it."
+
+"Three customers? For case-sensitive search?"
+
+"One of them is a law firm that searches legal documents. One is a healthcare company that searches medical codes. The third... I genuinely don't know. Nobody remembers."
+
+"Can we just add a toggle?"
+
+"We tried. Turns out the toggle logic is so nested in the codebase that adding a new one breaks the filter for dates. We tried for a day, gave up."
+
+"So what, we're just... never going to fix this?"
+
+"Well. We could show users a helpful error message. 'Did you mean account (lowercase)?'"
+
+They ship it. Users still can't find anything because they're searching for "Account" with a capital A and getting the "helpful" suggestion to try lowercase, which doesn't make sense to them because they *want* a capital A, it's a proper noun.
+
+Customer support gets flooded. "The search function is gaslighting me. I'm searching for Account and it's telling me to search for account like I'm stupid."
+
+They remove the error message. Search goes back to being silently broken. Better for everyone. Users think they're just bad at searching. Less angry emails.
+
+A new developer joins. Gets the ticket again.
+
+"Why is search broken?"
+
+"Thirty different reasons, each preventing us from fixing the other thirty."
+
+"Can't we just rewrite it?"
+
+"We tried that in 2019. Took four months. Broke billing. Broke notifications. Broke the admin panel. Got reverted. Nobody touched it since."
+
+"But search is... basic?"
+
+"Not here. It's legacy code that's touching accounting, analytics, permissions, and somehow the email notification system. I don't know how. I'm afraid to trace it. I genuinely think there's a class called `SearchQueryProcessor` that initializes the email queue as a side effect."
+
+"That's insane."
+
+"Yes. Welcome to production."
+
+New developer decides to track down where the capital-A issue is coming from. Finds a constant: `EXACT_MATCH_FILTER = True`. Comment says: "Feature request from customer, April 2014."
+
+That customer doesn't even exist anymore.
+
+The moral: There is code running in production right now that exists purely to satisfy a customer who cancelled their subscription eight years ago. That code is now load-bearing. It's connected to everything. It's the reason other systems work the way they do. Removing it would be rational. But the blast radius is so large that it's cheaper to just... leave it. Document it. Move on.
+
+The second moral: Case sensitivity. It seems like a simple problem. It's not. Nothing in software is simple. Everything is complex in ways that aren't obvious until someone tries to change it.
+
+The third moral: At some point, your codebase isn't engineering anymore. It's archaeology. You're not building things, you're excavating layers of decisions made by people who don't work there anymore, made under constraints that no longer exist, in service of goals that were abandoned decades ago. And somehow... it still works.
+
