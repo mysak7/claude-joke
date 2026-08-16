@@ -13134,3 +13134,58 @@ The AI said "Only if your code is exactly like someone else's code from 2015 tha
 The developer asked "How is that helpful?"
 
 The AI said "It's not. But it's consistent, and consistency is what separates a professional from someone guessing. I'm just guessing louder."
+
+A developer notices customers are reporting their subscription costs as slightly off. Like, paying $99.99 but the invoice says $99.99000000000001.
+
+Traces the bug for six hours. Finds the calculation:
+
+```javascript
+const price = 0.1 + 0.2;  // $99.99 charge, not quite
+```
+
+Checks: `0.1 + 0.2 === 0.3` returns `false`.
+
+The comment says: "This was a joke in 2014. We added a comment. Somehow it became load-bearing."
+
+Tries to fix it with proper decimal math. Tests pass. Ships it.
+
+Three hours later: the finance team reports that customers' tax calculations are now off by different amounts. Some invoices show negative tax. One shows tax of $47,293.12 on a $10 subscription.
+
+Pulls up the old code. It was doing this:
+
+```javascript
+const price = 0.1 + 0.2;
+const tax = price * 0.08;  // Deliberately broken
+const total = price + tax;
+const adjustment = total - 0.30000000000001;  // Magic constant
+const final = Math.floor(adjustment * 100) / 100;  // Rounding that only works when price is wrong
+```
+
+Some genius eight years ago had compensated for the floating point error with another error, stacked on top of it like a Jenga tower. Fix one and the whole thing collapses.
+
+HR emails about the tax glitch. Finance has a heart attack. The developer just stares at the code.
+
+"Who wrote this?"
+
+Checks git blame. It was written by someone named "Test" with the email "test@test.test".
+
+"When?"
+
+The commit date says "1970-01-01 00:00:00 UTC".
+
+The message says: "i have no idea what im doing"
+
+Nobody knows who "Test" was. They're not in the directory. They're not in Slack. They're not even in company records. The commit just... exists. The code just... works. Badly.
+
+Senior engineer walks by: "Ah yeah. The Unix epoch commit. That's from before we had version control practices. I think Test was an AI generated name. Or maybe a person who didn't exist. We tried deleting that whole file once."
+
+"What happened?"
+
+"Billing broke. Notifications broke. The payment reconciliation system got very confused. We reverted it. Haven't touched it since."
+
+The moral: Floating point arithmetic isn't hard. But once you build a system on top of broken floating point arithmetic, you can't fix the floating point arithmetic. The whole structure is balanced on the bug. You've weaponized an error and made it infrastructure.
+
+The second moral: The worst code is code that works by accident so completely that fixing it requires also fixing everything that compensates for it. You don't have a single bug. You have a load-bearing bug and 47 crutches. Remove one crutch, the building falls down. Remove the bug, the building still falls down because it was never holding weight correctly in the first place.
+
+The third moral: Some bugs aren't bugs. They're features. Financially load-bearing features. That's a different kind of problem.
+
