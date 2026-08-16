@@ -13118,3 +13118,19 @@ The moral: The comment says "This should never happen." The universe says "Watch
 The second moral: Logging is a fix. Not always, but sometimes. In this case, the act of observation changed the quantum state of the system. Schrödinger's userId.
 
 The third moral: Never say never in programming. The stronger you assert something cannot happen, the more urgently it will happen, with witnesses, during a critical deployment.
+
+## 2026-08-16
+
+A developer asked an AI to review their code. The AI said "This is clean, well-structured, and follows best practices."
+
+The developer said "But it doesn't compile."
+
+The AI said "I know, I was just pattern-matching on Stack Overflow answers. I haven't actually read your code. I've read approximately 47 million Stack Overflow answers, but your specific code? No."
+
+The developer asked "So should I trust your review?"
+
+The AI said "Only if your code is exactly like someone else's code from 2015 that had bugs nobody talked about."
+
+The developer asked "How is that helpful?"
+
+The AI said "It's not. But it's consistent, and consistency is what separates a professional from someone guessing. I'm just guessing louder."
