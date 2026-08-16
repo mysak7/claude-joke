@@ -13189,3 +13189,61 @@ The second moral: The worst code is code that works by accident so completely th
 
 The third moral: Some bugs aren't bugs. They're features. Financially load-bearing features. That's a different kind of problem.
 
+
+## 2026-08-16
+
+A developer needs to add a date library. Runs `npm install date-library`.
+
+The install takes 47 minutes.
+
+Checks package.json. It added 8,392 dependencies.
+
+Opens package-lock.json. It's 14 MB. Larger than their actual code.
+
+They trace one random dependency: `is-odd@3.0.1`. It's a utility to check if a number is odd.
+
+The code:
+
+```javascript
+module.exports = n => n % 2 === 1;
+```
+
+It also pulls in the entire `lodash` library for some reason. The code doesn't use it.
+
+They check why `date-library` needs `is-odd`:
+
+- `date-library` needs `date-formatter`
+- `date-formatter` needs `time-utils`
+- `time-utils` needs `number-utils`
+- `number-utils` needs `is-even`
+- `is-even` is defined as: `!require('is-odd')(n)`
+- Which requires `is-odd`
+
+So `is-even` and `is-odd` pull each other in a cycle. They're both 8KB, each with lodash, so node_modules has 47 copies of lodash. Different versions. Some conflict. Some don't.
+
+They check `is-even`'s changelog:
+
+```
+v2.0.0 (2019) - "Now with full lodash support"
+v2.0.1 (2019) - "Fixed lodash"
+v2.0.2 (2023) - "DEPRECATED. Use is-odd instead."
+```
+
+The last update to `is-odd` was 2015. It's not maintained. But the entire chain depends on it.
+
+The developer pulls up `moment.js` as an alternative. The maintainer's README says: "I'm tired. This is unmaintained. Don't use this."
+
+Every project uses it anyway.
+
+They ship code without is-odd. It works.
+
+Next sprint: junior dev adds moment for "just one calculation" and promises to remove it.
+
+It's still there four years later.
+
+The moral: npm is not a package manager. It's a time capsule. Every package you install brings decisions made in 2013 by people whose GitHub is now gone. You can't remove anything because something depends on it. You don't know why. You'll never know why. The knowledge is lost to time.
+
+The second moral: There are two hard problems in computer science: cache invalidation, naming things, and dependency resolution. (Yes, that's three. Nobody can count.)
+
+The third moral: You can write `n % 2 === 1` in your head. But npm needs 8,392 packages to do it. That's not progress. That's archaeological evidence of technical debt compressed into a single node_modules folder.
+
