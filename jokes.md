@@ -13247,3 +13247,47 @@ The second moral: There are two hard problems in computer science: cache invalid
 
 The third moral: You can write `n % 2 === 1` in your head. But npm needs 8,392 packages to do it. That's not progress. That's archaeological evidence of technical debt compressed into a single node_modules folder.
 
+
+## 2026-08-17
+
+A developer notices their code is running at 5% of expected speed. Runs a profiler. The slowest function is called `optimizePerformance()`.
+
+The code:
+
+```javascript
+function optimizePerformance() {
+  while(true) {
+    if (Math.random() > 0.9999) {
+      return true;
+    }
+  }
+}
+```
+
+An infinite loop that exits randomly. Checks git blame. This function has been refactored 47 times. The commit messages get progressively more desperate:
+
+- Attempt 1: "Slight optimization"
+- Attempt 5: "URGENT: fix slow code"
+- Attempt 20: "????"
+- Attempt 35: "i'm going to quit"
+- Attempt 46: "whoever reads this, I'm sorry"
+- Attempt 47: "we're keeping it as-is"
+
+The function is called from the critical path. They can't remove it because:
+
+1. A caching layer was built around it, assuming it would return quickly
+2. The cache has a bug that only manifests when the function returns randomly
+3. The system is somehow faster with the bug than without it
+4. Removing the function causes a cascading failure somewhere
+
+Senior engineer: "We didn't optimize the code. We optimized FOR the bug. The system learned to depend on this specific kind of wrong."
+
+The developer stares at the code. A function that does nothing slowly is somehow faster than doing nothing at all. The entire codebase is a Rube Goldberg machine balanced on quantum randomness.
+
+They check if this is the actual problem. Removes the function. Tests fail. Puts it back. Tests pass.
+
+They leave a comment: "DO NOT OPTIMIZE THIS FUNCTION. REMOVING IT BREAKS EVERYTHING. I DON'T KNOW WHY. NEITHER WILL YOU."
+
+The moral: Some bugs aren't bugs. They're infrastructure. You can build entire systems on top of mistakes so specific and absurd that fixing them destroys everything. At a certain point, the bug becomes a feature, and you're no longer debugging—you're maintaining load-bearing debt.
+
+The second moral: Never ask "why is this slow?" before asking "why does this exist?" Sometimes the answer to the first question is "because the answer to the second question is too complicated to explain."
