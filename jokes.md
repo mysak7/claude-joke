@@ -13291,3 +13291,46 @@ They leave a comment: "DO NOT OPTIMIZE THIS FUNCTION. REMOVING IT BREAKS EVERYTH
 The moral: Some bugs aren't bugs. They're infrastructure. You can build entire systems on top of mistakes so specific and absurd that fixing them destroys everything. At a certain point, the bug becomes a feature, and you're no longer debugging—you're maintaining load-bearing debt.
 
 The second moral: Never ask "why is this slow?" before asking "why does this exist?" Sometimes the answer to the first question is "because the answer to the second question is too complicated to explain."
+
+## 2026-08-17
+
+A developer writes an API endpoint to fetch user data. They add error handling for network timeouts, database failures, and invalid input. Tests pass.
+
+Two years later: the endpoint becomes the most reliable thing in the system. SLA: 99.99%. Uptime clock: never reset.
+
+Someone asks: "How did you make it so stable?"
+
+They pull up the code. It's using a deprecated library that was supposed to be replaced in Q3 2024. The library has a bug where it caches all responses for exactly 47 seconds, then silently returns the cached value instead of querying the database.
+
+By accident, this turns out to be perfect. Users hitting the endpoint within 47 seconds get instant responses. The database gets 1/47th the load. The servers don't overheat. Everything works beautifully.
+
+They file a ticket to fix the deprecated library. The on-call engineer reads the impact analysis:
+
+"Removing the deprecated library will likely cause database overload, response time increases of 8-15x, and possible cascading failure in three downstream systems."
+
+They close the ticket.
+
+Someone new to the team asks: "Why are we using a deprecated library with a bug?"
+
+Senior engineer: "Because the bug is the only thing keeping the database alive. The library author removed this 'bug' in v2.0. We tried upgrading. The system fell apart in 18 minutes. We reverted. Never again."
+
+Another engineer chimes in: "The worst part is the library is for PDF parsing. We don't parse PDFs. We're using it for string replacement. The caching behavior just happens to solve a problem we didn't know we had."
+
+A third engineer: "Someone tried to understand why it was pulling in PDF libraries. The git history just says 'I needed this at the time.' The person who wrote it doesn't work here anymore. Their GitHub is deleted. We can't ask them."
+
+The endpoint keeps running. The bug keeps caching. The database keeps thriving.
+
+A compliance audit asks: "Why are you using unmaintained code in production?"
+
+"It's reliable."
+
+"But it's from 2018."
+
+"Yes. And it's been running error-free for 730 days. Can you say the same about your modern stack?"
+
+The moral: The best code is code that works so perfectly by accident that you can never fix it. At some point, you're not maintaining software anymore—you're maintaining a very specific mistake that has become indistinguishable from correctness.
+
+The second moral: Bugs age like wine. Give them enough time, and they become features. The system doesn't remember that something was wrong. It only knows that it works.
+
+The third moral: The scariest comment in production code is not "FIXME" or "TODO". It's "Works for reasons nobody understands."
+
