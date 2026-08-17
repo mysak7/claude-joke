@@ -13334,3 +13334,51 @@ The second moral: Bugs age like wine. Give them enough time, and they become fea
 
 The third moral: The scariest comment in production code is not "FIXME" or "TODO". It's "Works for reasons nobody understands."
 
+
+## 2026-08-17
+
+A developer writes a CSV parser. During code review, someone asks: "Why catch all exceptions and return `null`?"
+
+"Error handling."
+
+"So if the file is corrupted... you return null?"
+
+"Yep."
+
+"Same as an empty file?"
+
+"Yes."
+
+"That seems wrong."
+
+They remove the try-catch to be "proper." The build passes. Tests pass. They deploy.
+
+Production explodes.
+
+Traces show a cron job called `stability_test.js` is deliberately feeding corrupted CSVs to the parser and checking that it returns null. Not to catch errors—to *verify the system can handle garbage input gracefully.*
+
+Someone else built a caching layer that depends on null being returned exactly. The cache has a bug where it doesn't work if the parser throws. But with null, everything works.
+
+A third system was written assuming the parser is "lenient" and built its own validation on top. If the parser throws, the validation never runs.
+
+Three separate teams, across two years, all accidentally built systems that assume the try-catch-null behavior.
+
+They ask who wrote the original code. Git blame points to a commit from 2021 with message: "csv parser" and nothing else.
+
+The author left the company. Their GitHub is deleted. They're unreachable.
+
+The senior engineer sighs: "We didn't build a robust system. We built a system that's robust *specifically to this one function returning null.* Remove it, and the entire architecture fails."
+
+The developer asks: "So we keep the try-catch?"
+
+"Yes. And add this comment: 'DO NOT REMOVE. Three separate systems depend on this behavior. Two of them don't know they do.'"
+
+Six months later: a new developer tries to "modernize" the error handling and use proper exceptions. A cascade of failures kills three services in production, takes down a cron job that nobody knew mattered, and somehow breaks a completely unrelated dashboard.
+
+They revert in 14 minutes.
+
+The moral: You don't write bug-free code. You write code that is so specifically wrong in exactly the way your system needs it to be wrong that fixing it would require fixing everything else first. And by then, everything else is load-bearing.
+
+The second moral: The most dangerous developer is one who doesn't know the ugly truth: that someone else is depending on their "incorrect" code in ways they can't see. That comment that says "this is a hack"? Two systems are built on it. That weird null return? It's a feature now.
+
+The third moral: If you ever find code with a comment that says "DO NOT TOUCH THIS" with no explanation, congratulations—you've found infrastructure. Don't ask why. The answer was lost to time.
