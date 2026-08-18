@@ -13425,3 +13425,54 @@ The second moral: The system doesn't care if you solve the problem correctly. It
 
 The third moral: Never rename variables just to make them sound professional. If it says `temp_timeout_hack_2019`, leave it. That name is doing the only documentation that matters: warning the next person not to touch it.
 
+
+## 2026-08-18
+
+A team writes a deploy script. It kills 10% of the servers during deployment and waits for them to rejoin. Chaos engineering, they call it.
+
+The truth is messier.
+
+The original script had `kill_percentage=0`. Someone was debugging production deploys at 2 AM. They ran:
+
+```bash
+./deploy_with_random_sacrifice.sh 10
+```
+
+Meant to check the parameter. Thought the script would error. It didn't.
+
+10% of servers died during the CEO's live demo.
+
+The system recovered in 3 seconds. The load balancer handled it. Nobody noticed. The CEO's slides didn't even stutter.
+
+So they kept it.
+
+"We should remove that," someone says a month later.
+
+They try. The next deploy has subtle cascading failures because nobody was expecting that one edge case—the one that only surfaces when servers die mid-deploy. It's rare enough that testing never caught it. It's frequent enough in production that it breaks things.
+
+They add the random sacrifice back.
+
+Now the deploy script is documented:
+
+> "Deploys can succeed because we've tested that they work when 10% of the infrastructure spontaneously dies mid-deployment."
+
+A junior developer asks: "Shouldn't we fix the deploy to be more careful?"
+
+Senior engineer: "The other team tried. They have 47% downtime. We have the chaos. We have 99.99% uptime. The system doesn't work despite the chaos. It works because of it."
+
+Years later, someone is tracing through the recovery logic:
+
+```bash
+sleep $(($RANDOM % 30))
+```
+
+They can't tell if this is randomized backoff or part of the chaos engineering. Maybe both. Maybe neither. Maybe the system heals itself so fast that whoever wrote this just added randomness out of paranoia and it accidentally solved something.
+
+Three separate engineers have tried to optimize it. Three separate times, things got worse. The randomness stays.
+
+The moral: The best deployments aren't built on engineering—they're built on specific, irreproducible accidents that work so well you'd have to be insane to understand them.
+
+The second moral: Chaos engineering is when you deliberately break things to test resilience. What we have is something stranger: a system so fragile it requires controlled failure to stay standing.
+
+The third moral: If your deploy script has a line that does something nobody can justify, and removing it breaks everything, congratulations—you've achieved production stability through perfectly-timed randomness. Don't ask why. The answer would break it.
+
