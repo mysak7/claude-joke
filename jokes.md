@@ -13635,3 +13635,44 @@ The second moral: If your performance is completely inexplicable, congratulation
 
 The third moral: A server procurement mistake from 2021 is now a non-negotiable part of your production infrastructure. Someone, somewhere, is probably paying for that extra RAM and has no idea it's the only reason your database isn't timing out. That person is you. You're paying for luck.
 
+
+A programmer is debugging at 2 AM. The code works. It shouldn't work. By every law of physics and programming logic, it should not work. But it does.
+
+They search Stack Overflow. Nothing.
+
+They ask ChatGPT. It says the code is broken and should be rewritten.
+
+They run it again. Works perfectly.
+
+They add a comment:
+
+```javascript
+// I don't know why this works but if you remove it everything breaks
+// so DO NOT TOUCH THIS LINE
+randomVariable = Math.random() * 0;
+```
+
+Three months later, a new hire removes the comment and the line below it because "we should have proper error handling and this is just creating a zero."
+
+Everything breaks. Production goes down. The entire system times out.
+
+The new hire asks: "What was that line doing?"
+
+"We never figured it out," says the senior engineer. "We call it the lucky line."
+
+"But it's just `Math.random() * 0`. That equals zero. It's useless."
+
+"Yes."
+
+"And yet removing it breaks everything?"
+
+"Yes."
+
+"Shouldn't we—"
+
+"No. Here's the Git history. Here's the Slack channel from 2021 where someone discovered that removing it causes cascading failures. Here's the 47-comment Stack Overflow thread where nobody knew why. Here's the ticket that's been marked 'resolved' for 3 years even though nothing was resolved. We have accepted that this line is quantum—it exists in a state of Schrödinger's Code. The moment you understand what it does, it stops working."
+
+The new hire: "This is insane."
+
+The senior engineer: "Yes. Now revert your change and we will both pretend this conversation never happened. And welcome to production engineering."
+
