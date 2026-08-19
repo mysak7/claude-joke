@@ -13549,3 +13549,89 @@ The second moral: Never assume a cron schedule is a design decision. Sometimes i
 
 The third moral: If your production system relies on a specific day and time to function correctly, congratulations. You've discovered infrastructure that can only be described as "working by accident while the system holds its breath."
 
+
+## 2026-08-19
+
+A developer writes a database query. It's terrible. No indexes, full table scans, joins that make database people weep. It looks like it should take 30 seconds.
+
+It takes 47 milliseconds.
+
+"That's impossible," says the DBA. "Show me the query."
+
+They show her. She stares. "This should lock up the entire database. Where's the index on the user_id column?"
+
+"There isn't one."
+
+"Then how is—" She runs `EXPLAIN`. The planner shows it's doing exactly what it looks like: a full table scan of 45 million rows. Should take minutes. The execution time says 47 milliseconds.
+
+"Are you sure you're running it on production data?"
+
+They check. Yes. Full production database. 45 million rows. The query completes in 47 milliseconds every single time.
+
+A week of investigation reveals: The query is fast because the entire table fits in the CPU cache. All 45 million rows. Somehow. The table is 2GB. The L3 cache is 20MB. This makes no sense.
+
+They check the hardware. Someone accidentally ordered servers with 256GB of RAM instead of 16GB. Memory is so cheap they just kept it. The entire table is in RAM. Has been for 3 years. They never realized.
+
+"So if we ever hit a server without the RAM misconfiguration, the query dies?"
+
+"Completely."
+
+They add a comment:
+
+```sql
+-- DO NOT REMOVE THIS QUERY
+-- DO NOT OPTIMIZE THIS QUERY
+-- DO NOT UNDERSTAND THIS QUERY
+-- It runs in 47ms. We don't know why.
+-- The last person who tried to optimize it
+-- broke production for 6 hours.
+-- Leave it exactly as is.
+-- The query works because of a server
+-- procurement mistake from 2021.
+-- If this ever gets deployed to a normal
+-- server, it will break. But it will break
+-- in production first, not in staging,
+-- because obviously staging has normal RAM.
+-- We have accepted this.
+```
+
+A new hire reads the comment. "We should document this better."
+
+They spend a week trying to understand why the query is fast. They read every line of code. They trace through the query planner. They check the server specs. They create a ticket: "Understand mysterious query performance."
+
+A senior engineer adds a comment: "It's the RAM. Stop investigating. You will not enjoy what you find."
+
+The new hire: "So it's just... luck?"
+
+Senior engineer: "Infrastructure is what we call it when luck has been working for more than six months without failure."
+
+Three years later, a junior developer removes the comment because "the code is self-documenting." They optimize the query for readability. Split it into three subqueries. Add proper indexes. Make it correct.
+
+The query now takes 3 seconds.
+
+Everything breaks. Not immediately—cascadingly, over the next 18 hours. Every system that depends on that query starts timing out. Load balancers think servers are dead. Auto-scaling kicks in. New servers spin up. They also have 256GB of RAM so they're fine. But older hardware starts being used for disaster recovery. Those servers don't have the magic RAM.
+
+Production melts.
+
+They revert in 45 minutes.
+
+The junior developer's commit message: "Optimize database query performance"
+
+The revert commit message: "Revert. Do not touch that query."
+
+A manager asks: "Why can't we just upgrade the older servers to have more RAM?"
+
+Everyone stares at the floor.
+
+"We'd have to also upgrade the database application stack because the query depends on memory behavior that only exists in this specific version of PostgreSQL, this specific kernel version, and these specific CPU families. The older hardware has different CPUs. The query behaves differently there."
+
+"So the solution is to never use the older hardware for that query?"
+
+"The solution is to never touch that query ever again."
+
+The moral: Some systems don't work despite their bugs—they work because of them. At that point, fixing them isn't optimization. It's sabotage.
+
+The second moral: If your performance is completely inexplicable, congratulations—you've discovered infrastructure that's optimized by accident. Document it. Fear it. Do not touch it. And definitely never let a new hire read the code.
+
+The third moral: A server procurement mistake from 2021 is now a non-negotiable part of your production infrastructure. Someone, somewhere, is probably paying for that extra RAM and has no idea it's the only reason your database isn't timing out. That person is you. You're paying for luck.
+
