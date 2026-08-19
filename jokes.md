@@ -13676,3 +13676,68 @@ The new hire: "This is insane."
 
 The senior engineer: "Yes. Now revert your change and we will both pretend this conversation never happened. And welcome to production engineering."
 
+
+## 2026-08-19
+
+A developer writes a function called `processData()`. In the comments, they write: "This function is cursed. Don't use it."
+
+Three years later, someone uses it.
+
+Production catches fire.
+
+An email goes out: "Can everyone please read the comments before using functions?"
+
+The next week, someone uses the same function. This time in staging. Staging explodes too.
+
+The developer who wrote it originally tries to delete the function. A ticket opens immediately: "why are you deleting this critical function?"
+
+They search for usages. The search shows 47 places calling it. But that's odd—some are through aliases, some are dynamic, some are imported from deprecated systems that should have been removed years ago.
+
+"But if it's so broken, how is production even working?"
+
+"We genuinely don't know. It might be that all the places using it are hitting a shared error that triggers something else that accidentally makes it work. Or maybe we just got lucky."
+
+The developer gives up trying to delete it. They expand the comment:
+
+```python
+# DO NOT USE THIS FUNCTION
+# This function is cursed.
+# Here's the link to the 73-comment Slack thread from 2019 explaining why.
+# Here's the GitHub issue that's been open since 2018.
+# Here's the ticket from 2022 titled "understand why processData breaks everything"
+# It has 40 comments, none of which explain anything.
+# We have tried everything.
+# We have tried nothing and we're all out of ideas.
+# Just... don't. Use literally any other function.
+# If you need to use this one, file a ticket and wait for the on-call to reject it.
+```
+
+Three months later, someone actually reads the comment and adds it to their list of "overly dramatic code comments that should be removed for professionalism."
+
+But then they look at the Git history.
+
+They don't touch it.
+
+A week after that, a different developer does touch it. They remove the comment to "keep the codebase clean" and add a proper docstring that just says: "Process data."
+
+That night, the monitoring system sends out 47 cascading alerts. The on-call engineer pages three senior people. They wake up the developer who removed the comment.
+
+"Did you change something related to `processData()`?"
+
+"Yeah, I just... cleaned up the documentation."
+
+"Put it back. Exactly as it was."
+
+"It's just a comment—"
+
+"The comment is holding together three different subsystems through what we can only describe as 'shared failure modes.' Put. It. Back."
+
+The developer restores it, character by character, from the Git history.
+
+Production stabilizes.
+
+The moral: Some functions aren't broken—they're cursed. And some curses, once accepted, become indistinguishable from features. At that point, the code isn't something you maintain. It's something you placate.
+
+The second moral: If the comment is longer than the code and sounds like a warning from ancient texts, you have discovered something that was never meant to be understood—only feared.
+
+The third moral: "Cleaning up" a codebase means you will eventually find the cursed parts. And when you do, you'll understand why the previous maintainer just... left those comments there. It wasn't laziness. It was self-preservation.
