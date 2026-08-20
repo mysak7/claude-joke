@@ -13795,3 +13795,34 @@ The ticket gets closed as "working as designed."
 
 The function stays exactly as is—a monument to the chaos principle: sometimes code doesn't fail for reasons we understand. It succeeds for reasons we don't. And that's production engineering.
 
+
+## 2026-08-20
+
+A developer writes code to delete old database records and asks a senior: "Should I add a confirmation prompt to prevent mistakes?"
+
+Senior: "Absolutely not."
+
+"Why? It's destructive."
+
+"Because someone will leave the confirmation dialog open, get distracted, then press yes without thinking."
+
+"So what stops them from deleting everything?"
+
+"They don't have direct access. They file a ticket, get three approvals, wait 48 hours, then a senior runs it manually at 3am when everyone's exhausted."
+
+"That's overcomplicated."
+
+"Yes. But less overcomplicated than the incident where someone ran a production DELETE without WHERE because they thought they were in the test database."
+
+"Did they at least have a confirmation prompt?"
+
+"They did."
+
+"And...?"
+
+"They confirmed it anyway."
+
+The moral of the story isn't that we don't trust machines. It's that we don't trust humans. And we're right. Every safety mechanism in production is there because someone, somewhere, confidently did exactly the wrong thing at the worst possible moment and made everyone's life worse.
+
+We build the process around human overconfidence, not machine failure. The machines are fine. We're the problem.
+
