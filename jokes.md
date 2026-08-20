@@ -13741,3 +13741,57 @@ The moral: Some functions aren't broken—they're cursed. And some curses, once 
 The second moral: If the comment is longer than the code and sounds like a warning from ancient texts, you have discovered something that was never meant to be understood—only feared.
 
 The third moral: "Cleaning up" a codebase means you will eventually find the cursed parts. And when you do, you'll understand why the previous maintainer just... left those comments there. It wasn't laziness. It was self-preservation.
+
+## 2026-08-20
+
+A developer commits a function with the message: "this is stupid but it works."
+
+Six months later, the entire payment system depends on it.
+
+The developer asks their manager: "Can we rewrite this?"
+
+Manager: "Is it working?"
+
+"Yes, but—"
+
+"Then it's not stupid. It's elegant."
+
+"It's literally just 47 lines of doing the same mathematical operation twice and taking the average."
+
+"Why would anyone do that?"
+
+"I was very tired when I wrote it. I have no idea why it's shaped this way."
+
+The function is called `normalizePaymentAmount()`. But it doesn't normalize anything. It performs duplicate computation designed to confuse reviewers. A code reviewer from three years ago had written: "This seems redundant. Should we simplify?"
+
+The original developer replied: "No. It needs to be exactly this way to match legacy system behavior."
+
+Nobody ever proved this was true.
+
+But now four different systems depend on this exact behavior. If you change it, one system duplicates charges, another reverses transactions, and a third silently fails—until 72 hours later when a scheduled job notices the discrepancy and pages oncall at 3 AM.
+
+A junior developer opens a ticket: "Refactor normalizePaymentAmount for clarity"
+
+The entire team responds in Slack:
+
+"DO NOT"
+"SERIOUSLY"
+"I TRIED IN 2023"
+"WE WERE DOWN FOR FOUR HOURS"
+"I HAVE THREE NEW GREY HAIRS BECAUSE OF THIS FUNCTION"
+"DELETE THIS TICKET"
+
+The junior developer asks: "But what does it actually do?"
+
+Silence.
+
+Then someone replies: "It normalizes payment amounts. In a way. Sometimes. Depends on system load, database connection pool state, and what timezone the server is in."
+
+"That's not... how anything should work."
+
+"Correct. Which is why we've collectively decided to treat this function like a museum piece. We catalog it. We preserve it. We absolutely do not touch it. If it ever breaks, we have a 2018 Slack thread where six people independently decided the universe is fundamentally broken and we should just accept chaos as the default state of operations."
+
+The ticket gets closed as "working as designed."
+
+The function stays exactly as is—a monument to the chaos principle: sometimes code doesn't fail for reasons we understand. It succeeds for reasons we don't. And that's production engineering.
+
