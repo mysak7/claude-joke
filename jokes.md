@@ -13826,3 +13826,53 @@ The moral of the story isn't that we don't trust machines. It's that we don't tr
 
 We build the process around human overconfidence, not machine failure. The machines are fine. We're the problem.
 
+
+A developer adds a small dependency to handle a simple task. It works perfectly.
+
+Two years later, a major version update breaks everything. The original maintainer abandoned it in 2019.
+
+The team decides: "Let's remove this dependency and just inline the code."
+
+They search for usages. 47 files depend on it.
+
+A senior developer pulls up the code: "Wait. The actual dependency code is four lines. Why are 47 files calling it through here?"
+
+"Better abstraction?"
+
+"Better than what?"
+
+"Than... just writing the four lines repeatedly?"
+
+"But we already maintain it in one place now. That's the best kind of abstraction."
+
+They look at when it was added. The first commit says: "Added json-parse-with-comments-v2 because we might need this in the future."
+
+"We don't parse JSON with comments anywhere in this codebase."
+
+"We might. Someday."
+
+They decide to remove it anyway. They inline the four-line function.
+
+Four hours later, a test fails in an obscure subsystem that no one has touched since 2021. It turns out the dependency had a bug—a bug that only manifested when the JSON had exactly 1,037 characters and contained a specific combination of whitespace.
+
+Two different internal systems had discovered this bug independently and wrote workarounds that *relied on the bug existing*.
+
+The senior developer re-adds the dependency.
+
+"So we're keeping broken software because we accidentally built on top of its brokenness?"
+
+"Correct. This is called 'emergent architecture.' It's not a flaw. It's a feature we didn't intentionally build."
+
+"We could just fix the bug."
+
+"No. If we fix the bug, two production systems break. If we keep the bug, everything works. This is why we have a policy: Never understand why working code works. Just accept it and move on."
+
+The dependency stays. The GitHub issue remains open. It's titled: "Evaluate removing json-parse-with-comments-v2" and the last comment, from three years ago, reads: "After investigation, we cannot remove this without understanding why it works. We have elected not to understand it."
+
+A junior developer asks: "Is that professional?"
+
+"Is it working?"
+
+"Yes."
+
+"Then it's professional. This is enterprise software."
