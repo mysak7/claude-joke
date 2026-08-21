@@ -13918,3 +13918,85 @@ The variable sits in the code, a monument to accidental architecture. It's calle
 It's not technical debt. It's technical quicksand. Every attempt to fix it makes it worse.
 
 The moral: In production software, "temporary" is forever. And "permanent" is how you describe things you're afraid to touch.
+
+## 2026-08-21
+
+A developer is oncall at 2 AM when a critical production alert fires. A function that processes user uploads has stopped working.
+
+They check the code. It's a simple `try/except` block that logs errors to a file.
+
+The error log shows a cryptic message: `socket.error: [Errno 104] Connection reset by peer`.
+
+They search the codebase for this error. It appears exactly once—in a function called `upload_handler` written three years ago.
+
+The developer checks the git history. The person who wrote it left the company in 2019.
+
+They look at the implementation:
+
+```python
+try:
+    file_data = socket.recv(1024)
+    process_file(file_data)
+except Exception:
+    log_error("Upload failed")
+    return None
+```
+
+The developer thinks: "This is catching socket errors, but we're not using raw sockets anymore. We switched to HTTP requests two years ago."
+
+They check what's calling this function.
+
+Eight different API endpoints. All in production. All handling millions of daily requests.
+
+They search for any documentation about why this function exists.
+
+A single commit message from 2018: "Added legacy upload handler for backwards compatibility."
+
+"Backwards compatible with what?" they ask Slack.
+
+"That was before my time," says the senior who's been here the longest.
+
+"Do we support this API anymore?"
+
+"We have no idea. No one's monitoring it. But it's in production, so if we remove it, *something* will break."
+
+The developer checks the actual error. The socket is being reset because the code is trying to use raw TCP sockets on a port that's no longer bound.
+
+They fix it—switching it to HTTP like everything else.
+
+They deploy the fix.
+
+Thirty seconds later: Monitoring alerts. Three internal systems, operating in stealth mode in the codebase, were actually *relying* on the socket failing in exactly this way. They had built error-recovery logic around "Connection reset by peer means upload in progress."
+
+One system starts retrying the upload in a tight loop. The server gets hammered. CPU spikes to 100%.
+
+They revert the fix.
+
+The oncall developer sits in Slack:
+
+"So this broken legacy function has three undocumented systems depending on its specific failure mode?"
+
+"Yes."
+
+"Can we document it?"
+
+"If we document it, someone might try to 'fix' it properly again."
+
+"Can we refactor it?"
+
+"See: oncall alert 47 minutes ago."
+
+"Can we remove it?"
+
+"See: oncall alert 47 minutes ago."
+
+"Is this production code?"
+
+"Unfortunately."
+
+They leave the code exactly as is. The socket code stays. The HTTP migration never happened. The error log fills with meaningless messages that no one reads.
+
+Two years later, someone will read this code, see that it's wrong, refactor it, and start the entire incident cycle over again.
+
+The moral of the story: Legacy code isn't code that's old. Legacy code is code that's not understood but deeply entangled. And the only way to live with it is to stop trying to understand it and start accepting that somewhere, someone's production system is quietly depending on the exact specific way it fails.
+
