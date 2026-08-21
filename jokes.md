@@ -13876,3 +13876,45 @@ A junior developer asks: "Is that professional?"
 "Yes."
 
 "Then it's professional. This is enterprise software."
+
+## 2026-08-21
+
+A developer types a variable name as `temp_value`.
+
+Two weeks later, it's used in 23 places.
+
+Three months later, it's used in 127 places.
+
+One year later, someone renames it to `temporary_cache_for_payment_reconciliation_and_stuff`.
+
+That developer gets promoted. Nobody knows why they renamed it. The commit message says: "Clarified variable purpose."
+
+But the code still doesn't explain what the value actually is, what it should contain, or why it needs to exist at all. It's just longer now. People assume that if the name is that specific, someone must understand it.
+
+A junior developer asks the original author: "Why is this called `temp_value` in the first function but gets passed through six more functions?"
+
+"Because it's temporary?"
+
+"For a year?"
+
+"Yes."
+
+"But it's not temporary. It's persisted to Redis."
+
+"Ah. Well. That's new."
+
+The developer who added Redis persistence is in another timezone and left the company six months ago. Their only comment was: "Redis caching for performance. Trust me."
+
+Nobody knows what performance issue was being solved. The metrics don't show any impact.
+
+But it works. Removing it causes subtle race conditions in payment processing that only appear under specific database connection pool conditions and disappear when you add logging.
+
+A Slack thread from three years ago has the answer. The original author wrote: "The temp_value thing is hacky but necessary. If we refactor it, the whole system becomes uncertain. I don't recommend touching it."
+
+He was absolutely right. Two developers tried anyway. One left the company. The other won't talk about it.
+
+The variable sits in the code, a monument to accidental architecture. It's called `temp_value`. It's permanent. It should be renamed but can't be because somewhere, someone depends on searching for exactly this string. Remove it and something breaks. Rename it and someone's grep script breaks.
+
+It's not technical debt. It's technical quicksand. Every attempt to fix it makes it worse.
+
+The moral: In production software, "temporary" is forever. And "permanent" is how you describe things you're afraid to touch.
