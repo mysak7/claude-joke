@@ -14000,3 +14000,35 @@ Two years later, someone will read this code, see that it's wrong, refactor it, 
 
 The moral of the story: Legacy code isn't code that's old. Legacy code is code that's not understood but deeply entangled. And the only way to live with it is to stop trying to understand it and start accepting that somewhere, someone's production system is quietly depending on the exact specific way it fails.
 
+
+A developer finds a file in the repo called `delete_me.js`. It's been there for 7 years. The commit message says "TEMPORARY - testing something, will remove soon."
+
+They delete it.
+
+The deployment fails. Not because `delete_me.js` is imported anywhere—it's not. But something deep in the dependency tree has a hardcoded check: `if (fs.existsSync('delete_me.js')) { skipMigration = true; }`
+
+Someone, years ago, needed a way to disable a migration in production without merging code. They committed a TODO to fix it. That TODO still exists in a Slack thread from 2018.
+
+That senior engineer who wrote it? Now a staff engineer at another company.
+
+The developer asks: "Why would they use file existence as a feature flag?"
+
+"Because," says the tech lead, "the alternative was touching the config system. And the last person who touched the config system spent two weeks debugging connection string parsing."
+
+"So they created a magic file?"
+
+"Yes. A magic file that must exist forever, or everything breaks. We've essentially hostaged our own migration system."
+
+"Can't we fix the config system?"
+
+"Did you hear the part about what happened to the last person who touched it?"
+
+They re-add `delete_me.js`.
+
+The file sits in the repo, useless, unchanging, undocumented, unkillable. It's a gravestone for a decision made by someone who quit. It's a prayer flag for "please don't refactor this."
+
+A year later, someone new joins the team. They see the file. They think: "This is obviously a mistake. I should clean this up."
+
+They don't, because by then they've read the commit history. They understand the pattern now.
+
+The moral: In production systems, nothing is ever truly temporary. Files, variables, dependencies—they all become load-bearing walls. The phrase "I'll fix this later" means "another person will inherit this problem and make peace with it."
