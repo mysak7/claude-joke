@@ -14145,3 +14145,74 @@ No one replies. The author quit in 2015.
 The constant sits there. Seven. Just seven. A ward against chaos. A sacrifice to the gods of configuration. A constant that exists to prove that if something was there long enough, it became a supporting pillar even if no one built it on purpose.
 
 The moral: The most dangerous constants in your codebase aren't the ones doing something. They're the ones that do nothing—because somewhere, someone's production system is quietly depending on the void they fill.
+
+## 2026-08-22
+
+A developer adds a small utility function:
+
+```javascript
+function parseDate(dateString) {
+  return new Date(dateString);
+}
+```
+
+Simple. Clean. Three lines including the braces.
+
+Six months later, there's a bug in production: dates are being parsed inconsistently across different time zones. The team investigates. They trace it through the codebase.
+
+The parseDate function is called in 847 places.
+
+847.
+
+They dig into the commit history. The function was copied, not imported. 847 times. Each copy in a different file. Some with subtle variations. Some with commented-out lines that say "HACK - timezone adjustment" and then other hacks on top.
+
+"Why wasn't this a shared utility?" someone asks.
+
+"It is," the tech lead says, pointing at the original function.
+
+"Why do we have 847 copies?"
+
+"Because importing it was slow."
+
+"Slow how?"
+
+"In JavaScript. Adding one more import statement. Someone measured it."
+
+"And concluded that copying the code 847 times was faster?"
+
+"They measured it. Found a 2-millisecond improvement. Added it to the PR description. Got it approved."
+
+"That's... mathematically that's not how that works."
+
+"Tell that to the performance metrics from 2019."
+
+Now the team has a choice: fix all 847 parseDate implementations, or live with inconsistent date parsing.
+
+"Can we fix them with a script?" the junior asks.
+
+"We tried in 2022. The script failed on three of them because someone had rewritten parseDate inline as a lambda. The refactor conflicted with another branch. Someone's local file wasn't even in git—just a copy they emailed to someone else."
+
+"So what's the solution?"
+
+"We're writing a wrapper. A shared function that all 847 copies of parseDate will delegate to."
+
+"So we're importing after all?"
+
+"No. We're using eval to inject the wrapper function at runtime."
+
+"You're using eval to... why would you—"
+
+"Because the performance metrics are still there. We're not breaking measurements. We're bending the laws of physics."
+
+The wrapper gets deployed. It works. The measurements still show the same performance. Everyone's happy.
+
+A year later, a security researcher finds the eval call. They publish a paper: "Evaluating Evil: How Runtime Code Injection Became Production Standard in Enterprise JavaScript."
+
+The team's response: "It's not a security vulnerability. It's a performance optimization."
+
+"Using eval is never a—"
+
+"We've measured it."
+
+The moral: In technology, measurement beats logic. If you can measure something getting faster—even by 2 milliseconds—you can justify almost any decision. Measure 847 times. That's the real performance gain.
+
