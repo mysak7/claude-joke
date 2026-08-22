@@ -14089,3 +14089,59 @@ The junior finds a comment in a five-year-old ticket: "Should rename x to factor
 Status: "CLOSED - TOO RISKY"
 
 The moral: The shortest variable names cause the longest debugging sessions.
+
+A developer discovers a codebase constant at the top of every file:
+
+```javascript
+const MAGIC_NUMBER = 7;
+```
+
+It's used nowhere. Defined everywhere. Committed 15 years ago.
+
+"Why do we define this everywhere?" they ask.
+
+"Legacy," someone says.
+
+"From what?"
+
+"No one knows. But removing it from even one file causes mysterious test failures."
+
+The junior decides to be brave. They delete it from a single utility module. The tests pass. The linter passes. The type checker passes. They deploy it.
+
+Forty-seven minutes later, a notification comes through: the analytics pipeline is down.
+
+The log is cryptic: `MAGIC_NUMBER was undefined.`
+
+But the analytics pipeline never imports that module. How could it care about a constant?
+
+They dig. And dig. And finally find it: somewhere in the initialization sequence, a configuration loader tries to require all environment constants from a file that no longer exists because someone refactored it three years ago. That file doesn't define MAGIC_NUMBER anymore—it just used to. The loader tries to validate that the constant exists by checking if it's defined "the way it used to be."
+
+If it's not defined in the old way, it assumes the entire configuration is corrupted. It shuts down.
+
+"So," the junior says, "MAGIC_NUMBER is a dead ritual that signals 'the configuration is valid'?"
+
+"Yes."
+
+"Even though it's never used?"
+
+"Even though it's never used."
+
+"And removing it breaks production?"
+
+"Removing it breaks production."
+
+They restore it. The constant returns. The analytics pipeline comes back. Everything is fine.
+
+A week later, the junior finds a GitHub issue from 2011: "Remove unused MAGIC_NUMBER constant - cleanup."
+
+Status: CLOSED - WONTFIX
+
+The comment from the original author: "Tried removing this. Broke something. No idea what. It's safer to keep it."
+
+The junior posts a response: "Did you ever figure out what broke?"
+
+No one replies. The author quit in 2015.
+
+The constant sits there. Seven. Just seven. A ward against chaos. A sacrifice to the gods of configuration. A constant that exists to prove that if something was there long enough, it became a supporting pillar even if no one built it on purpose.
+
+The moral: The most dangerous constants in your codebase aren't the ones doing something. They're the ones that do nothing—because somewhere, someone's production system is quietly depending on the void they fill.
