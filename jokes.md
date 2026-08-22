@@ -14032,3 +14032,60 @@ A year later, someone new joins the team. They see the file. They think: "This i
 They don't, because by then they've read the commit history. They understand the pattern now.
 
 The moral: In production systems, nothing is ever truly temporary. Files, variables, dependencies—they all become load-bearing walls. The phrase "I'll fix this later" means "another person will inherit this problem and make peace with it."
+
+## 2026-08-22
+
+A junior developer discovers a one-line utility function buried in the codebase:
+
+```python
+def x(n):
+    return n if n == 0 or n == 1 else n * x(n - 1)
+```
+
+"What does this do?" they ask.
+
+"Factorial," says the senior.
+
+"Why isn't it named `factorial`?"
+
+"Because ten years ago, the original author thought single letters were faster."
+
+"Faster at what?"
+
+"We've never figured that out."
+
+The junior renames it to `factorial`. Three weeks later, a subtle bug appears in the recommendation engine. Output is slightly different. Not broken, just... different. Revenue metrics shift by 0.03%. The CEO notices. Three people get paged at 2 AM.
+
+The root cause: somewhere in a machine learning model pipeline, someone had hardcoded `x(5)` as a magic number for "calculate base case." When the function got renamed, their IDE's autocomplete stopped finding it. They had to import it explicitly. The import order changed. The seed initialization order changed. The random number generator initialized differently. The model results diverged.
+
+The code goes back to `def x(n):`.
+
+"This is insane," the junior says. "A one-letter function name has taken over your production system."
+
+"Yes."
+
+"We're hostages to single-letter variables?"
+
+"Welcome to production."
+
+A year later, the junior is now senior. They're onboarding someone new.
+
+"What does function `x` do?"
+
+"We have no idea. But if you rename it, something breaks. Don't rename it."
+
+"But it's called `x`. Can't we—"
+
+"No."
+
+"Not even—"
+
+"Especially not a refactor. Last person who tried is now a manager at another company."
+
+The function sits there. `def x(n):` A monument to the chaos of accumulation. Each new developer learns the same truth: in production code, naming doesn't matter as much as consistency. Once something's in production long enough, it becomes law. Not because it's good. But because changing it requires understanding *everything*.
+
+The junior finds a comment in a five-year-old ticket: "Should rename x to factorial for readability."
+
+Status: "CLOSED - TOO RISKY"
+
+The moral: The shortest variable names cause the longest debugging sessions.
