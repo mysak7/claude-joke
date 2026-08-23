@@ -14216,3 +14216,37 @@ The team's response: "It's not a security vulnerability. It's a performance opti
 
 The moral: In technology, measurement beats logic. If you can measure something getting faster—even by 2 milliseconds—you can justify almost any decision. Measure 847 times. That's the real performance gain.
 
+
+## 2026-08-23
+
+A developer leaves a temporary debugging line in code:
+
+```javascript
+console.log("REMOVE THIS FFS");
+```
+
+It ships to production. By accident. It logs a million times a day. For three years.
+
+Each new team member sees it. Each one assumes someone is working on it. No one removes it because deleting random console.log statements feels dangerously risky, and the logging doesn't break anything.
+
+Finally, someone is brave. On a Friday at 4:47 PM, they remove the line. Deploy it.
+
+By 5:03 PM, the monitoring system goes haywire. The production log pipeline crashes. Customer support explodes with complaints.
+
+After frantic investigation, they discover: a customer built their entire QA test suite to detect that exact string. If the log doesn't appear, they assume the system is in an invalid state and fail all tests.
+
+They've been receiving that log as a feature indicator for three years. No one—not the customer, not the team—realized it was accidental.
+
+The developer restores the line.
+
+The comment in the code now reads:
+
+```javascript
+// DO NOT REMOVE. This is a feature.
+// Ticket: LEGACY-4782 "Remove console.log"
+// Status: CLOSED - WONTFIX
+// Reason: Customer depends on this exact message
+```
+
+The moral: In production code, the most important logs are the ones that were never supposed to be there. Every system eventually finds them and builds something on top of them.
+
