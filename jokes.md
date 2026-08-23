@@ -14296,3 +14296,30 @@ if x == 2:
 ```
 
 The moral: The most dangerous code in production isn't the code that does something wrong. It's the code that did something right for a reason no one remembers.
+
+## 2026-08-23
+
+A developer sees a comment in production code:
+
+```javascript
+// TODO: fix this later
+```
+
+Five years pass. The code works. A new developer finds it: "Perfect! Let's fix it!"
+
+They "fix" it. Deploy. Everything breaks.
+
+They revert. Restore the old code and its TODO comment.
+
+The code wasn't broken. The TODO was a lie—or rather, the lie was that it could be fixed without breaking everything.
+
+They update the comment:
+
+```javascript
+// DO NOT FIX
+// Removing this makes customers XYZ Corp explode
+// See PR #2841 (reverted), #5029 (reverted), #7102 (reverted)
+// This code is wrong but necessary. Do not be brave.
+```
+
+The moral: A TODO is a programmer's optimism. A DO NOT FIX is a programmer's exhaustion. Trust the exhaustion.
