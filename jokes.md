@@ -14250,3 +14250,49 @@ The comment in the code now reads:
 
 The moral: In production code, the most important logs are the ones that were never supposed to be there. Every system eventually finds them and builds something on top of them.
 
+
+A developer runs `git blame` on a confusing line of code:
+
+```python
+if x == 2:
+    x = 3
+```
+
+The commit is theirs. From two weeks ago. The commit message says "fix critical bug".
+
+They have no memory of this fix. They check the PR. Merged without review because it was marked urgent.
+
+They dig into the tests. There's a test called `test_critical_bug_fixed`. It checks that if x is 2, it becomes 3. That's it. That's the entire test. No comment. No explanation.
+
+They search the issue tracker. No ticket. No description.
+
+They ask their team. No one remembers.
+
+A week later, in production, a customer reports a bug: "When I enter 2, the system gives me 3."
+
+The team looks at the code. There it is. If x is 2, set it to 3.
+
+"Why would we do that?" someone asks.
+
+They review the git history. The developer who added this is no longer at the company. They left the comment: "Per requirements" with no link.
+
+They email the customer. "Was there a requirement that 2 should become 3?"
+
+The customer responds: "What? No. That's the bug we reported. Why does 2 become 3?"
+
+The team pulls the code. They trace its history. The original developer didn't work there anymore. The one who reviewed it is also gone. The original requirement document was lost when they migrated servers in 2019.
+
+Five years. The code has been in production for five years. Converting 2 to 3.
+
+They want to remove it. But there's a complication: somewhere, somehow, something depends on this behavior. A customer's integration. A data migration script. A report that runs monthly and expects this transformation.
+
+No one knows what.
+
+They can't remove it. They can't leave it. They can only add a comment:
+
+```python
+if x == 2:
+    x = 3  # DO NOT REMOVE - critical legacy behavior, unknown purpose
+```
+
+The moral: The most dangerous code in production isn't the code that does something wrong. It's the code that did something right for a reason no one remembers.
