@@ -14401,3 +14401,49 @@ The comment:
 ```
 
 The moral: Sorting is simple until it isn't. Then it becomes a lesson in the terrible complexity of natural language.
+
+A developer receives a bug report: "Users in China can't log in."
+
+They check the code. The auth logic is fine. They check the server logs. No errors. It works fine locally.
+
+They ask: "Is it all Chinese users or specific ones?"
+
+"All of them. Every Chinese user gets a timeout."
+
+They add logging. The requests reach the server. They're processed. The response is sent.
+
+But the user never receives it.
+
+They trace the network. The response travels fine through 15 hops. Then... stops.
+
+They find the issue: The response is slightly over the Great Firewall's inspection limit. Some packets get dropped.
+
+They compress the response. It works.
+
+"But wait," someone asks, "why is it so large?"
+
+The developer checks. They're sending the user's entire profile: 500 fields. Most of them are null.
+
+They optimize the response. 450 fields removed. Payload goes from 5MB to 50KB.
+
+"Great," the manager says. "Ship it."
+
+They deploy.
+
+The next day: "Users everywhere are reporting bugs. Data is missing."
+
+They check. Those 450 fields were used by mobile apps, old web clients, integrations...
+
+They revert.
+
+They add a comment:
+
+```python
+# DO NOT OPTIMIZE THE RESPONSE
+# I know it has 450 useless fields
+# I know they're null
+# I know they make the payload huge
+# But somewhere, someone depends on them
+# We've reverted this twice
+# I refuse to revert it again
+```
