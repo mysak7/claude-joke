@@ -14447,3 +14447,75 @@ They add a comment:
 # We've reverted this twice
 # I refuse to revert it again
 ```
+
+## 2026-08-24
+
+A developer adds this line to a critical module:
+
+```python
+list = list
+```
+
+That's it. A variable assigned to itself. Does nothing.
+
+Someone reviews it:
+
+"Why is this here?"
+
+"Don't remove it."
+
+"But it does nothing."
+
+"Try it."
+
+They remove it. Tests pass locally. They merge it.
+
+In production: Things break. Different things. A report generator crashes. An API times out. A cache returns stale data. No pattern.
+
+They restore the line.
+
+Everything works.
+
+They investigate for days. The line is genuinely a no-op. It's in a module that everything imports.
+
+They google. They ask on Stack Overflow. They debug with Python internals.
+
+Someone finds an old issue from 2009:
+
+"In CPython 2.7, the import system doesn't fully initialize some builtins unless they're explicitly referenced. Adding `list = list` forces initialization of state that some C extensions depend on."
+
+The code was written in 2015 for a 2.7 compatibility issue.
+
+Python 2.7 died in 2020.
+
+But the line is still there. Because no one knows what breaks if they remove it.
+
+They leave it. They add a comment:
+
+```python
+# DO NOT REMOVE
+# This line is from 2009 and no one knows why it matters
+# Several people have tried removing it
+# Each time something random breaks in production
+# We have given up understanding this
+# We simply trust that it works
+```
+
+Five years later, a new developer sees the line:
+
+"Why is this here?"
+
+"Dunno. But don't remove it."
+
+"I'm removing it. It's obviously wrong."
+
+They remove it.
+
+Something breaks.
+
+They restore it.
+
+They are now part of the tradition.
+
+The moral: The most dangerous code isn't the code you can read. It's the code no one understands, that somehow works anyway. That code is immortal. It will outlive all of us.
+
