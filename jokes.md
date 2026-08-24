@@ -14323,3 +14323,81 @@ They update the comment:
 ```
 
 The moral: A TODO is a programmer's optimism. A DO NOT FIX is a programmer's exhaustion. Trust the exhaustion.
+
+## 2026-08-24
+
+A developer gets assigned a "quick fix" ticket: "Sort the user list alphabetically."
+
+Sounds simple.
+
+They implement it:
+
+```javascript
+users.sort()
+```
+
+Deploy. It works. Test passes.
+
+Three weeks later, support reports a bug: "Users from Japan are missing from the list."
+
+They check. The Japanese users are still there. But they're sorted... last.
+
+```
+Alice
+Bob
+Charlie
+...
+Zoe
+田中
+鈴木
+```
+
+The issue: JavaScript sorts alphabetically by Unicode value. Japanese characters have higher values. They sort to the end.
+
+They fix it:
+
+```javascript
+users.sort((a, b) => a.localeCompare(b, 'en'))
+```
+
+Works. Deploy.
+
+Two days later: "Russian users are now at the bottom."
+
+The sort order changed. Russian characters (Cyrillic) come after Latin in locale comparison.
+
+They try a different approach:
+
+```javascript
+users.sort((a, b) => {
+    const aLower = a.toLowerCase()
+    const bLower = b.toLowerCase()
+    return aLower.localeCompare(bLower, 'en')
+})
+```
+
+Works. Deploy.
+
+A week later: "Users named 'Ä' are sorting weirdly."
+
+They check the logic. It's correct now. But localeCompare has... options. Lots of them. sensitivity, numeric, usage, etc.
+
+They try every combination. Each breaks something else.
+
+Finally, they ask: "Why do we need alphabetical sort?"
+
+Support: "Users kept complaining they couldn't find themselves in the list."
+
+They implement: Sort by the user's preferred language first, then alphabetically in that language, with special handling for names, diacritics, and... they give up.
+
+The final solution: "Sort by whatever language the user selected in their profile, then alphabetically, and if they don't have a profile preference, we have no idea, so we randomize it and hope they're happy."
+
+The comment:
+
+```javascript
+// DO NOT TOUCH. Sorting users is more complex than physics.
+// If you think you can improve this, you're not frustrated enough yet.
+// Wait until you need to handle emoji in user names.
+```
+
+The moral: Sorting is simple until it isn't. Then it becomes a lesson in the terrible complexity of natural language.
