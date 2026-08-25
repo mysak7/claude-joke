@@ -14519,3 +14519,139 @@ They are now part of the tradition.
 
 The moral: The most dangerous code isn't the code you can read. It's the code no one understands, that somehow works anyway. That code is immortal. It will outlive all of us.
 
+
+## 2026-08-25
+
+A developer is assigned to fix a feature: "Product images aren't updating. Users upload new ones, but the old images stay visible."
+
+They check the code. They find the caching layer:
+
+```python
+@cache(ttl=86400)
+def get_product_image(product_id):
+    return db.query(f"SELECT image FROM products WHERE id = {product_id}")
+```
+
+"Found it," they announce. "Cache isn't being invalidated when images are updated."
+
+They add invalidation:
+
+```python
+def update_product_image(product_id, new_image):
+    db.update(f"UPDATE products SET image = ? WHERE id = {product_id}", new_image)
+    cache.invalidate(f"product_image_{product_id}")
+```
+
+Ship it.
+
+The next day: "Images update instantly now. But sometimes they disappear for hours."
+
+They dig. It's the same product ID being cached differently in different places:
+
+- `cache.get(f"product_image_{product_id}")`
+- `cache.get(f"image_product_{product_id}")`
+- `cache.get(f"p_{product_id}_img")`
+- `cache.get(f"product-{product_id}-image")`
+
+Three different services. Different naming schemes. All caching the same data.
+
+They create a cache invalidation function that hits all four keys:
+
+```python
+def invalidate_product_image_everywhere(product_id):
+    for pattern in [
+        f"product_image_{product_id}",
+        f"image_product_{product_id}",
+        f"p_{product_id}_img",
+        f"product-{product_id}-image"
+    ]:
+        cache.invalidate(pattern)
+```
+
+Two weeks later: "We added a new image resizing service. It caches resized images."
+
+The new service uses:
+
+```python
+cache.get(f"product_{product_id}_image_600x400")
+```
+
+No one knows where this cache lives. It's in a microservice that nobody owns anymore. The developer who wrote it quit in 2019.
+
+The team tries to find it. It's not in their code. It's in a library. The library's updated twice since then. The config changed.
+
+They add the pattern to the invalidation function anyway:
+
+```python
+def invalidate_product_image_everywhere(product_id):
+    for pattern in [
+        f"product_image_{product_id}",
+        f"image_product_{product_id}",
+        f"p_{product_id}_img",
+        f"product-{product_id}-image",
+        f"product_{product_id}_image_600x400"  # ??? where does this live?
+    ]:
+        cache.invalidate(pattern)
+```
+
+A year passes. They've added 47 patterns.
+
+A new developer joins. They look at this function and ask: "Can we consolidate the cache keys? Have one naming scheme?"
+
+Silence.
+
+"You can try," someone finally says.
+
+The new developer spends three weeks refactoring. They create one unified cache key format. They test it everywhere.
+
+They merge it.
+
+The next day: An ancient reporting system breaks. It's been querying the old cache keys directly for five years. No one remembered it existed.
+
+They revert.
+
+The final version of the function:
+
+```python
+def invalidate_product_image_everywhere(product_id):
+    """
+    Invalidate product images across all services.
+    
+    IMPORTANT: Do not modify this function.
+    
+    We have tried to consolidate the cache keys.
+    We have tried to understand which service uses which key.
+    We have tried to find the service that uses f"product_{product_id}_image_600x400".
+    
+    It no longer works if you touch this.
+    
+    If you need to add a new cache key, just append it here.
+    Do not refactor. Do not consolidate.
+    Do not ask why. Just add the pattern.
+    
+    - 2019 Developer
+    - 2020 Developer
+    - 2021 Developer
+    - 2022 Developer (tried to fix this, regrets it)
+    - 2023 Developer
+    - 2024 Developer
+    - 2025 Developer (tried to optimize, regrets it)
+    - 2026 Developer
+    """
+    for pattern in [
+        f"product_image_{product_id}",
+        f"image_product_{product_id}",
+        f"p_{product_id}_img",
+        f"product-{product_id}-image",
+        f"product_{product_id}_image_600x400",
+        # Add new patterns below, NEVER remove old ones
+        f"prod_img_{product_id}",
+        f"cached_image_v2_{product_id}",
+        f"{product_id}:product:image",
+        # ??? there are more, but we've stopped looking
+    ]:
+        cache.invalidate(pattern)
+```
+
+The moral: There are only two hard things in Computer Science: cache invalidation, and naming things, and knowing which of your 47 cache services are still alive.
+
