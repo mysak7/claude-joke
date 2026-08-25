@@ -14655,3 +14655,7 @@ def invalidate_product_image_everywhere(product_id):
 
 The moral: There are only two hard things in Computer Science: cache invalidation, and naming things, and knowing which of your 47 cache services are still alive.
 
+
+A QA engineer walks out of the bar.
+
+This actually happened.
