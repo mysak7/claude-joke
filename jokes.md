@@ -14659,3 +14659,60 @@ The moral: There are only two hard things in Computer Science: cache invalidatio
 A QA engineer walks out of the bar.
 
 This actually happened.
+
+## 2026-08-25
+
+A security engineer finds a SQL injection vulnerability in production code from 2015.
+
+"We need to fix this immediately," they say.
+
+"It's been there five years," a developer replies. "Why fix it now?"
+
+"Because I found it."
+
+"Did anyone exploit it?"
+
+"...Well, no."
+
+"Then it's not a problem."
+
+"It's a security hole!"
+
+"A security hole nobody knows about. We're enterprise software. Our customers don't even have access to this endpoint. It requires admin privileges, which only our 15 employees have, and they're not attacking us."
+
+"But someone COULD."
+
+"They could also break into the office and steal the servers. Do we spend millions defending against that?"
+
+"That's different."
+
+"It's the same principle. Risk is probability times impact. The probability is 0.00001%. The impact is we restore from yesterday's backup."
+
+The security engineer is frustrated.
+
+"So you're just leaving it?"
+
+"We're documenting it in Jira as a technical debt item. If we ever refactor that code, we'll fix it then."
+
+The code never gets refactored.
+
+Five years later, a different security auditor discovers the same vulnerability.
+
+They open a new ticket.
+
+The old ticket is still open.
+
+Comment from the original security engineer in 2015: "Please fix this."
+
+No one replied.
+
+Comment from the new security engineer in 2025: "This is still unfixed?!"
+
+Comment from the 2019 developer who's now in management: "Backlog is full. Let's reassess in the next quarter."
+
+It's now 2026.
+
+The vulnerability persists for 11 years.
+
+The moral: Security debt is like regular debt. Sometimes you just don't pay it and hope nobody notices, and somehow you're right for a very long time.
+
