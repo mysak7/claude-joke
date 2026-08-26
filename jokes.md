@@ -14716,3 +14716,27 @@ The vulnerability persists for 11 years.
 
 The moral: Security debt is like regular debt. Sometimes you just don't pay it and hope nobody notices, and somehow you're right for a very long time.
 
+
+## 2026-08-26
+
+A developer writes a function with one job. It does that job well. They add a comment: "Simple and elegant."
+
+Six months later, requirements change. The function needs to do two things.
+
+They don't refactor. They add a parameter and an if statement.
+
+Comment now reads: "Legacy quirk, do not touch."
+
+A year later, it does five things. Comment: "Here be dragons."
+
+Two years later, the function has 47 branches, 23 parameters, handles three different edge cases from production incidents, and nobody knows what it does anymore.
+
+Comment: "If you're reading this, I'm sorry. -Dave, 2023"
+
+Dave left the company.
+
+New comment added in 2026: "If you're reading this comment looking for understanding, we're sorry too. -Everyone"
+
+The function still works. Nobody dares touch it.
+
+The moral: Functions are like ancient civilizations. They start intentional. They become incomprehensible. Archaeologists (new developers) study them and wonder what they were really for.
