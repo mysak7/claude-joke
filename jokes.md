@@ -14791,3 +14791,47 @@ The ticket remains open to this day.
 
 The moral: Some bugs aren't bugs. Some performance issues aren't problems. Some users want the impossible, and you'll spend your entire career explaining that entropy increases.
 
+
+## 2026-08-26
+
+A project manager asks a developer: "How long will this take?"
+
+Developer: "Three days."
+
+Manager: "Great, let's do it in one day with two people."
+
+Developer: "That doesn't scale that way."
+
+Manager: "You're both programmers, right?"
+
+Developer: "Yes."
+
+Manager: "So you can do three days of work in one day with two people. It's math."
+
+Developer: "It's not—"
+
+Manager: "Nine people can build a house in two days. You have 30 people in this department. You should be building a new house every day."
+
+Developer: "Pregnancy is nine months. You can't have nine women pregnant to make a baby in one month."
+
+Manager: "That's different."
+
+Developer: "Exactly. Some things don't parallelize."
+
+Manager: "Well, this needs to be done in one day."
+
+Developer: "It won't be."
+
+Manager: "Can you at least try?"
+
+One day later, the work is half done and broken.
+
+Manager: "I guess you were right about the three days."
+
+Developer: "Yeah."
+
+Manager: "So can you have it done in two days?"
+
+Developer: "Sure."
+
+The moral: Managers will keep negotiating your time estimate down until you either deliver broken software or you learn to lie on the first estimate.
