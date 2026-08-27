@@ -14835,3 +14835,55 @@ Manager: "So can you have it done in two days?"
 Developer: "Sure."
 
 The moral: Managers will keep negotiating your time estimate down until you either deliver broken software or you learn to lie on the first estimate.
+
+## 2026-08-27
+
+A library is released. 100 users adopt it immediately.
+
+A flaw is discovered in the API design.
+
+Developer: "We need to fix this before more people adopt it."
+
+Manager: "How many breaking changes?"
+
+Developer: "Just one parameter that needs to be renamed."
+
+Manager: "How many users would that affect?"
+
+Developer: "100."
+
+Manager: "Can you make it backward compatible?"
+
+Developer: "Sure, we can support both the old name and the new name."
+
+Manager: "Perfect. Do that."
+
+Developer does it. Now the API accepts both parameters.
+
+One year later, 10,000 users. Another flaw discovered. Same conversation. Manager asks for backward compatibility. Developer delivers. Now the API accepts three parameter names for the same thing.
+
+This pattern repeats five more times.
+
+The API now accepts eight different parameter names that all do the same thing.
+
+Documentation reads: "These all work, but don't use most of them. Except if you're using the legacy system, then use this one. Actually, this one is best. But they all work."
+
+A junior developer joins. They see "best parameter" in the docs. They use it.
+
+It works. They ship to production.
+
+Senior developer: "Why are you using that parameter?"
+
+Junior: "Documentation says it's best."
+
+Senior: "That section wasn't updated in 2024."
+
+Junior: "The file was modified in 2024."
+
+Senior: "Someone missed that part in the refactor."
+
+A ticket is created to update documentation.
+
+It's still open three years later.
+
+The moral: Backward compatibility is how you end up with eight ways to do the same thing, and no one knows which one is correct or when to use it.
