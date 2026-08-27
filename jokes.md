@@ -14887,3 +14887,51 @@ A ticket is created to update documentation.
 It's still open three years later.
 
 The moral: Backward compatibility is how you end up with eight ways to do the same thing, and no one knows which one is correct or when to use it.
+
+A developer takes a vacation. Leaves their code with a colleague to maintain.
+
+Colleague changes one line. The app crashes.
+
+Colleague changes it back. The app still crashes.
+
+Colleague: "How is that possible?"
+
+Developer returns. Colleague shows them the change.
+
+Developer: "That line does nothing."
+
+Colleague: "Exactly. So I removed it."
+
+Developer: "It does nothing, but if it's not there, the app crashes."
+
+Colleague: "That doesn't make sense."
+
+Developer: "I don't know why either. I added it during a 3am debugging session six months ago. It fixed the problem. I moved on."
+
+Colleague: "We should figure out the real root cause."
+
+Developer: "Yes."
+
+Six months pass. The ticket is still open. No one has time to debug it.
+
+New feature launches. The app crashes for an unrelated reason.
+
+During the post-mortem, someone discovers the unrelated crash and the mystery line are related through 4 levels of indirection involving the garbage collector.
+
+Developer: "That's... incredibly unlikely to be the real fix."
+
+Architect: "The fix works. Let's leave it."
+
+Developer: "But we don't know why."
+
+Architect: "Do we need to?"
+
+Developer: "For maintainability? Probably?"
+
+Architect: "It works. Ship it."
+
+New developers start asking: "Why does this line exist?"
+
+The answer is always: "It makes the app work. Don't touch it."
+
+The moral: Mysterious code that "just works" is a form of technical debt. It survives because breaking it is worse than understanding it, so everyone ignores it forever.
