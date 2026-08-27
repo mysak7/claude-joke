@@ -14935,3 +14935,37 @@ New developers start asking: "Why does this line exist?"
 The answer is always: "It makes the app work. Don't touch it."
 
 The moral: Mysterious code that "just works" is a form of technical debt. It survives because breaking it is worse than understanding it, so everyone ignores it forever.
+
+A developer receives a bug report: "It doesn't work on my machine."
+
+They debug for hours. Check the code. Test it. Everything works.
+
+Developer: "It's working on mine. Can you send me your exact setup?"
+
+User sends a screenshot of Windows 7.
+
+Developer: "Windows 7 is 15 years old and unsupported."
+
+User: "But it still works sometimes."
+
+Developer checks the code. It uses a Windows API that was added in Windows 8. Literally impossible.
+
+Developer: "The code cannot work on Windows 7."
+
+User: "But it does. I just saw it work."
+
+Developer: "Can you scroll down?"
+
+User scrolls. The app crashes immediately.
+
+User: "Only that feature doesn't work."
+
+Developer: "That's the feature that uses the API that doesn't exist on Windows 7."
+
+User: "So fix it."
+
+Developer updates the documentation: "Windows 7 is not supported."
+
+User leaves a one-star review: "Says it works on all Windows. Doesn't work on mine."
+
+The moral: Half the time when a user says "it works on my machine," they're describing something that's not actually possible. The other half, they accidentally fixed it without knowing what they did.
