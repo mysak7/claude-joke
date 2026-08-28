@@ -15061,3 +15061,47 @@ Senior developer: "What does this variable do?"
 Junior developer checks the git blame: "Nobody knows. The original developer and reviewer stopped working here."
 
 The moral: The most important variable name is the one nobody understands, because then nobody dares to refactor it.
+
+A developer finds a Stack Overflow answer that solves their problem exactly.
+
+They copy-paste it into their codebase.
+
+It works.
+
+They move on.
+
+Six months later, that code section needs to be modified.
+
+Developer: "Who wrote this?"
+
+Git blame: "Someone on Stack Overflow in 2018."
+
+Developer: "What does it do?"
+
+The code is a workaround for a bug that was fixed in a newer version of the library they're using.
+
+But the workaround is still there.
+
+Developer: "Should I remove it?"
+
+Senior dev: "Does the code work?"
+
+Developer: "Yes."
+
+Senior dev: "Then leave it."
+
+Developer: "But it's a workaround for a bug that's been fixed."
+
+Senior dev: "If you remove it, something breaks. You're not allowed to learn what that is."
+
+Developer adds a comment: "DO NOT REMOVE. See Stack Overflow link from 2018. Reason unknown."
+
+Five years later, a refactoring project removes dead code.
+
+The Stack Overflow workaround is gone.
+
+Production breaks in a way nobody understands.
+
+Post-mortem: "The code was keeping something alive. We don't know what. Everyone who might have known is gone."
+
+The moral: Stack Overflow answers are like ancient spells. They work, but understanding WHY they work is optional and not recommended.
