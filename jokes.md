@@ -14969,3 +14969,43 @@ Developer updates the documentation: "Windows 7 is not supported."
 User leaves a one-star review: "Says it works on all Windows. Doesn't work on mine."
 
 The moral: Half the time when a user says "it works on my machine," they're describing something that's not actually possible. The other half, they accidentally fixed it without knowing what they did.
+
+## 2026-08-28
+
+Two developers reviewing auto-generated code from an AI model.
+
+Dev 1: "The code works, but I don't understand how."
+
+Dev 2: "The AI doesn't either. It just probabilistically guessed."
+
+Dev 1: "Should we clean it up?"
+
+Dev 2: "Do you want to own the responsibility for it?"
+
+Dev 1: "No."
+
+Dev 2: "Then ship it."
+
+Six weeks later, the code breaks in production.
+
+Dev 1: "We need to fix this."
+
+Dev 2: "The AI is gone. We can't ask it why it wrote that."
+
+Dev 1: "Then we rewrite it manually and understand it?"
+
+Dev 2: "With our limited understanding of what it already does? That's guaranteed to break something."
+
+They decide to add a comment: "DO NOT MODIFY. AI generated this. We have no idea how it works. If you change it, you will break everything and I will be sad."
+
+One year later, a junior developer needs to refactor that section.
+
+They read the comment.
+
+They modify it anyway because "the comment is probably outdated, right?"
+
+Everything breaks.
+
+The post-mortem: "The code worked, but nobody understood it. Turns out that was a feature, not a bug."
+
+The moral: AI-generated code is like ancient hieroglyphics written by someone having a fever dream. It works until it doesn't, and by then the only person who could have explained it is gone.
