@@ -15009,3 +15009,55 @@ Everything breaks.
 The post-mortem: "The code worked, but nobody understood it. Turns out that was a feature, not a bug."
 
 The moral: AI-generated code is like ancient hieroglyphics written by someone having a fever dream. It works until it doesn't, and by then the only person who could have explained it is gone.
+
+A developer submits a pull request.
+
+Code reviewer: "Why does this variable exist?"
+
+Developer: "To store a value."
+
+Code reviewer: "But what value?"
+
+Developer: "A number between 1 and 100."
+
+Code reviewer: "The variable name is `x`."
+
+Developer: "That's because I was iterating quickly."
+
+Code reviewer: "Can you rename it to something descriptive?"
+
+Developer renames it to `temp_storage_thing`.
+
+Code reviewer: "That's worse."
+
+Developer renames it to `data`.
+
+Code reviewer: "Still not descriptive."
+
+Developer renames it to `this_is_definitely_a_number_between_one_and_one_hundred`.
+
+Code reviewer: "That's too long."
+
+Developer: "Pick one."
+
+Code reviewer: "It should be descriptive but concise."
+
+Developer: "Those are contradictory requirements."
+
+Code reviewer: "That's why you need to be a good engineer."
+
+Developer submits the same PR with the original name `x`.
+
+Code reviewer: "Why didn't you fix the variable name?"
+
+Developer: "I tried."
+
+Code reviewer approves it anyway because they're tired.
+
+Six months later, the code breaks.
+
+Senior developer: "What does this variable do?"
+
+Junior developer checks the git blame: "Nobody knows. The original developer and reviewer stopped working here."
+
+The moral: The most important variable name is the one nobody understands, because then nobody dares to refactor it.
