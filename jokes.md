@@ -15105,3 +15105,54 @@ Production breaks in a way nobody understands.
 Post-mortem: "The code was keeping something alive. We don't know what. Everyone who might have known is gone."
 
 The moral: Stack Overflow answers are like ancient spells. They work, but understanding WHY they work is optional and not recommended.
+
+## 2026-08-29
+
+A developer leaves a TODO comment in their code:
+
+```
+// TODO: Fix this properly later
+```
+
+Six months later, the code is in production.
+
+New developer: "Should I fix this TODO?"
+
+Original developer: "Leave it. It's the only thing holding everything together now."
+
+One year later, during a refactor:
+
+Junior dev: "The TODO says to fix it properly."
+
+Senior dev: "The TODO is a lie."
+
+Junior dev: "But it's in the code. Why would someone write a TODO if they didn't mean it?"
+
+Senior dev: "Because at 11 PM before a release, 'fixing it properly' becomes 'making it stop crashing.'"
+
+Junior dev: "So what do I do?"
+
+Senior dev: "Leave the TODO. In another year, someone will ask the same question. This is the circle of life in software development."
+
+Junior dev: "That's not how software development works."
+
+Senior dev: "Keep thinking that. It'll make the moment you understand it much funnier."
+
+The next day, the code breaks because someone finally removed the TODO.
+
+The post-mortem:
+
+Lead dev: "Why did this code break?"
+
+Engineer: "Someone removed the TODO comment."
+
+Lead dev: "The TODO was the fix?"
+
+Engineer: "The TODO WAS the code."
+
+Lead dev: "..."
+
+Lead dev changes their resume to say: "Extensive experience managing technical debt."
+
+The moral: A TODO comment is not a reminder to fix something. It's a warning label on code that's sitting on a knife's edge. The comment itself is the load-bearing pillar. Remove it and the whole structure collapses. Never remove a TODO without asking yourself: "Why is this here?" If the answer is "I don't know," that's not a green light. That's a stop sign painted red with someone's desperate hopes.
+
