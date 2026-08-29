@@ -15220,3 +15220,41 @@ Developer: "Neither does half the codebase, but it's all in production."
 Reviewer approves it.
 
 The moral: Optimization is like a ouija board. You ask it to reveal the secrets of fast code, and sometimes it answers. But the answers are cryptic, contradictory, and definitely a lie. And once you've followed the ouija board's advice, you can never unsee what you've seen. The only way forward is to accept that you've built a performance shrine to a chaos god and pray it stays appeased.
+
+## 2026-08-29
+
+A developer is debugging a 3-line function.
+
+It's been broken for a week.
+
+Other developers have looked at it. Nobody knows why.
+
+Junior dev: "Maybe it's a runtime issue?"
+
+Senior dev: "It's always a runtime issue. The function IS the runtime issue."
+
+Suddenly, a developer who worked on it years ago walks by.
+
+Forgotten developer: "Oh, that function. Yeah, you can't fix that."
+
+Junior dev: "Why not?"
+
+Forgotten dev: "Because it's not actually broken. It's just... waiting."
+
+Junior dev: "Waiting for what?"
+
+Forgotten dev: "The day we replace the whole system."
+
+[Two weeks later]
+
+System is replaced.
+
+New system has the exact same function.
+
+It's broken in the exact same way.
+
+Junior dev: "Did we just copy the bug?"
+
+Senior dev: "No. We copy the mystique."
+
+The moral: Some bugs aren't bugs. They're features of the system nobody understands. When you replace the system, you inherit the mystery. It's the circle of life.
