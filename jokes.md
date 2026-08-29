@@ -15156,3 +15156,67 @@ Lead dev changes their resume to say: "Extensive experience managing technical d
 
 The moral: A TODO comment is not a reminder to fix something. It's a warning label on code that's sitting on a knife's edge. The comment itself is the load-bearing pillar. Remove it and the whole structure collapses. Never remove a TODO without asking yourself: "Why is this here?" If the answer is "I don't know," that's not a green light. That's a stop sign painted red with someone's desperate hopes.
 
+
+## 2026-08-29
+
+A developer is asked to "optimize" the code.
+
+Developer: "Optimize for what?"
+
+Manager: "Everything. Make it faster, use less memory, be more elegant, run on older hardware."
+
+Developer: "Those are contradictory."
+
+Manager: "That's why you're a senior developer."
+
+Developer spends two weeks refactoring everything into a single, unreadable function.
+
+New metric: Code is 0.3ms faster. Memory usage increased by 40%. Readability score dropped to F.
+
+Manager: "Good work."
+
+Junior developer tries to modify the optimized code.
+
+Junior dev: "What does this line do?"
+
+Senior dev: "Yes."
+
+Junior dev: "That's not an answer."
+
+Senior dev: "That's the only answer that line will give."
+
+The function contains a performance hack that only works on Tuesdays when the CPU cache aligns a certain way. Nobody documented this. The original developer doesn't remember why. It's in production and removing it breaks everything by exactly 3%.
+
+During the next performance review:
+
+Manager: "Can you make it 5% faster?"
+
+Developer: "I can make it 3% slower or 7% faster, but not 5%."
+
+Manager: "Why not 5%?"
+
+Developer: "There's a comment in the code. It says 'DO NOT TOUCH. Unknown magic. If you're reading this, it's too late.'"
+
+Manager: "Who wrote that?"
+
+Developer: "Me, two years ago."
+
+Manager: "What does the magic do?"
+
+Developer: "I have no idea anymore."
+
+Manager: "Just make it 5% faster."
+
+Developer adds a random delay that sometimes makes it faster and sometimes makes it slower. On average: exactly 5% faster.
+
+Code review: "Why is there a random delay in the performance-critical path?"
+
+Developer: "It optimizes performance."
+
+Reviewer: "That makes no sense."
+
+Developer: "Neither does half the codebase, but it's all in production."
+
+Reviewer approves it.
+
+The moral: Optimization is like a ouija board. You ask it to reveal the secrets of fast code, and sometimes it answers. But the answers are cryptic, contradictory, and definitely a lie. And once you've followed the ouija board's advice, you can never unsee what you've seen. The only way forward is to accept that you've built a performance shrine to a chaos god and pray it stays appeased.
