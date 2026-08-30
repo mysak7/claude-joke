@@ -15349,3 +15349,57 @@ The senior developer stares at them silently for 30 seconds.
 "No. We don't talk about that here."
 
 The moral: A bad variable name is a debt that compounds. You can't just rename it—you have to rename it everywhere, and everywhere is more places than you thought. So you live with `x`, and you teach the next developer to live with it too. It's the circle of technical debt.
+
+A developer opens a legacy codebase for the first time.
+
+"There are 200 unit tests," they observe. "That's good, right?"
+
+"Yes," says the tech lead. "But 150 of them are testing other tests."
+
+"What?"
+
+"We have a test for the test runner. It tests the mock. The mock tests the test helper. The helper... actually nobody knows."
+
+The developer runs the tests.
+
+All pass.
+
+They add a new feature. One test fails.
+
+They update the test.
+
+Now five tests fail.
+
+They update those five tests.
+
+Now the entire test suite fails to run—there's a circular import somewhere in the test infrastructure.
+
+"How did this even work before?" the developer asks.
+
+"Carefully," the tech lead replies. "We made changes carefully. We tested carefully. We never, ever looked directly at what the tests were actually testing, because if you do, they stop working."
+
+The developer asks: "Shouldn't we refactor this?"
+
+The tech lead smiles sadly.
+
+"Last developer who said that lasted three days. When they tried to fix the tests, the tests started breaking in ways that didn't make mathematical sense. A test for module A would fail when they changed module C. Eventually they just... stopped trying and left."
+
+"Where did they go?"
+
+"Management. Couldn't handle the pressure anymore."
+
+The developer sits down and opens a new test file.
+
+They add a test that tests nothing.
+
+It passes.
+
+They add a comment: "This test ensures backwards compatibility with the legacy test framework."
+
+Six months later, someone tries to remove it.
+
+Seven other tests break.
+
+It stays forever.
+
+The moral: In legacy codebases, the tests aren't testing the code. The code is testing the tests. And everyone has agreed, implicitly, to never acknowledge this.
