@@ -15301,3 +15301,51 @@ Senior dev: "Neither is our codebase. We stopped asking why years ago."
 
 The moral: The code you write changes depending on what time it is. At morning time it's elegant. By afternoon it's suspicious. By night it's sentient. By production it's your legacy, whatever that legacy may be.
 
+
+## 2026-08-30
+
+A developer is reviewing a pull request.
+
+"What does this variable do?" they ask.
+
+"It's `x`," the author replies. "It holds data."
+
+"What data?"
+
+"Various."
+
+"Can you be more specific?"
+
+"It used to be more specific, but then we needed it to do other things, so we made it flexible."
+
+"So it does anything?"
+
+"Pretty much."
+
+The reviewer leaves a comment: "Consider a more descriptive name."
+
+Six months later, a production bug appears. The variable `x` is somehow storing user IDs as strings, times as integers, and occasionally containing a configuration object from 2019 that nobody knows how to remove.
+
+"Why is `x` like this?" asks the junior developer.
+
+"That's just how `x` is," says the senior developer.
+
+"But there are 47 places that reference it."
+
+"Yes."
+
+"Should we refactor it?"
+
+"We did. Three times. It's still `x`."
+
+"Why?"
+
+"Because renaming it would break seven microservices, a scheduled job, someone's weekend query script, and probably a stored procedure we forgot about."
+
+The junior developer suggests: "What if we call it `x_v2`?"
+
+The senior developer stares at them silently for 30 seconds.
+
+"No. We don't talk about that here."
+
+The moral: A bad variable name is a debt that compounds. You can't just rename it—you have to rename it everywhere, and everywhere is more places than you thought. So you live with `x`, and you teach the next developer to live with it too. It's the circle of technical debt.
