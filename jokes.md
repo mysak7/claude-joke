@@ -15487,3 +15487,57 @@ The next day's ticket: "Why do we have two add buttons?"
 The developer updates their LinkedIn.
 
 The moral: Floating point precision is the universe's way of reminding engineers that math isn't invented—it's negotiated.
+
+A developer is asked to add a simple validation: "Just check that the email is not empty."
+
+They add `if (email !== "")` and call it done.
+
+Six months later, a user enters an email: `"   "` (three spaces).
+
+It passes validation.
+
+The system sends a confirmation to a mailbox that doesn't exist. The email bounces. The bounce message goes nowhere. The system assumes success.
+
+Two years later, someone notices 40,000 accounts with three-space emails.
+
+"Why didn't validation catch this?" asks the manager.
+
+"Because," the original developer explains (they've moved to a different team by now), "I only checked that it wasn't an empty string."
+
+"And someone should have caught this in code review!"
+
+"It was three lines. Nobody looks closely at three lines."
+
+Now the developer is asked to write "proper" email validation. They decide to use regex.
+
+They spend four hours reading about RFC 5321 and RFC 5322. They write a regex that is 254 characters long. It validates 99.8% of valid emails and rejects 2% that are technically correct but practically never used.
+
+"Is this good?" they ask.
+
+The code reviewer stares at the regex.
+
+"I have no idea," they admit.
+
+They approve it anyway because finding someone who understands email validation is harder than finding someone who speaks Sumerian.
+
+The new system rejects emails from users in Denmark. Turns out, the plus sign requirement is specific to US standards.
+
+Tickets arrive. The developer updates the regex to accept plus signs or no plus signs, equals signs, and now the validation is 891 characters.
+
+"We should really use a library," suggests the junior developer.
+
+"There are 400 email validation libraries," the senior developer responds. "Each one thinks the other 399 are wrong. We tried npm's 'email-validator' once."
+
+"And?"
+
+"We got a GitHub issue from someone in Nepal explaining why our validation broke their postal system. Do not ask me how those are connected."
+
+The ticket to fix email validation is still open.
+
+It has 87 comments, mostly arguing about whether `.museum` is a valid top-level domain.
+
+A new developer is assigned to it.
+
+They update their LinkedIn within a week.
+
+The moral: Email validation is why software engineers believe chaos theory is real.
