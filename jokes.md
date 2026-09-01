@@ -15453,3 +15453,37 @@ They add a console.log anyway.
 Because old habits die hard.
 
 The moral: Software engineering is not about being smart. It's about checking the obvious things first, then panicking productively when those don't work.
+
+## 2026-09-01
+
+A developer receives a ticket: "1.1 + 2.2 should equal 3.3, not 3.3000000000000003."
+
+They assume integer overflow and switch to higher precision. Nothing changes.
+
+They blame the database. Migrate to PostgreSQL. Still broken.
+
+They consider it might be a timezone issue (it's not, but software engineering has made them paranoid).
+
+They file a bug against the language runtime. The maintainer responds with a link to IEEE 754 and closes it WONTFIX.
+
+In desperation, they call a senior developer.
+
+"It's floating point," the senior dev says simply.
+
+"Fix it," they beg.
+
+"You can't fix it. You can only accept it. This is your life now."
+
+The developer implements rounding to 2 decimal places. Now 0.1 + 0.2 + 0.1 equals 0.40000000000000008 when rounded step-by-step, but 0.4 when the sum is rounded at the end.
+
+"Why are there two different answers?" the user asks.
+
+"Because," the developer says, staring into the void, "we live in a computer simulation with rounding errors baked into the foundation."
+
+They implement both calculations and let the user choose which one to use.
+
+The next day's ticket: "Why do we have two add buttons?"
+
+The developer updates their LinkedIn.
+
+The moral: Floating point precision is the universe's way of reminding engineers that math isn't invented—it's negotiated.
