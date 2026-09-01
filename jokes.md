@@ -15403,3 +15403,53 @@ Seven other tests break.
 It stays forever.
 
 The moral: In legacy codebases, the tests aren't testing the code. The code is testing the tests. And everyone has agreed, implicitly, to never acknowledge this.
+
+## 2026-09-01
+
+A developer encounters a bug at 2 PM.
+
+"Simple," they think. "I'll just add a console.log."
+
+The bug persists.
+
+"Threading issue. I need a mutex."
+
+Still broken.
+
+"Timezone problem. Obviously."
+
+Nope.
+
+In desperation, they refactor the entire module.
+
+Three weeks later, someone asks: "Did anyone check if the feature flag is turned on?"
+
+The developer stares at the feature flag, which has been off the entire time.
+
+The bug was never a bug. It was a function that wasn't running.
+
+They undo everything. Remove the console.log, the mutex, the timezone handling, the refactor. They flip the flag.
+
+Everything works.
+
+"So all of that was... unnecessary?" asks the junior developer.
+
+"Yes," says the senior developer.
+
+"Why did you do it?"
+
+"Because I was thinking like an engineer instead of like a user."
+
+The junior developer nods, understanding.
+
+The next day, they find a bug.
+
+They immediately check the feature flag.
+
+It's on.
+
+They add a console.log anyway.
+
+Because old habits die hard.
+
+The moral: Software engineering is not about being smart. It's about checking the obvious things first, then panicking productively when those don't work.
