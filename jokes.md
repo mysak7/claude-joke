@@ -15541,3 +15541,39 @@ A new developer is assigned to it.
 They update their LinkedIn within a week.
 
 The moral: Email validation is why software engineers believe chaos theory is real.
+
+## 2026-09-02
+
+A product manager asks: "Can we just change the button color from blue to red?"
+
+The developer says: "Sure, five minutes."
+
+Two hours later, the developer is still working on it.
+
+"Why?" asks the manager. "It's just a color!"
+
+"It was hardcoded in 47 places," the developer explains.
+
+They refactor it into a variable. Now they need to update the theme system. The theme system isn't modular—it's a 2000-line file with magic numbers.
+
+They refactor the theme system. This breaks the dark mode. Dark mode isn't actually dark mode—it's just multiplying all colors by 0.8.
+
+They implement proper dark mode. Someone asks: "What about colorblind users?"
+
+Now they're implementing five different colorblind-friendly palettes.
+
+Six days later, the button is red.
+
+The developer has also rewritten the entire styling system, implemented accessibility features, created a component library, and documented it all.
+
+The product manager looks at the button.
+
+"It's red," they say.
+
+"Yes," says the developer, hollow-eyed.
+
+"Can we change it back to blue? The CEO's niece said red doesn't match the logo."
+
+The developer updates their LinkedIn.
+
+The moral: Never say "five minutes" to a product manager. The button wasn't blue because of the color. It was blue because we'd collectively agreed to ignore the technical debt beneath it.
