@@ -15611,3 +15611,37 @@ The URL validation now works perfectly, which is suspicious. The developer adds 
 They find a blog post from 2014 claiming the library function has a bug in IPv6 parsing. They spend a week implementing a custom fix for a bug that was patched in 2015.
 
 The moral: Stack Overflow's regex isn't wrong. It's just learned to predict exactly what you wanted to do wrong.
+
+A developer is asked to estimate how long a task will take.
+
+"Two weeks," they say confidently.
+
+"That's too long," says the manager. "Can you do it in two days?"
+
+"No," says the developer.
+
+"But what if we add another developer?"
+
+The developer calculates. In their experience, two developers means three times as many meetings, twice the communication overhead, and one person explaining to the other why something doesn't work (without actually fixing it).
+
+"It would take three weeks," they say.
+
+"That makes no sense," says the manager.
+
+The developer explains Brooks's Law: "Adding manpower to a late software project makes it later."
+
+"That's from 1975," says the manager. "We have Slack now. Surely that fixes it?"
+
+The developer thinks about their last project with five developers and four Slack channels, all saying slightly different things about the same problem.
+
+"No," they say.
+
+Two months later, the original estimate would have been met by one developer working alone.
+
+Instead, five developers have delivered something that works 80% of the time and nobody knows who owns which part.
+
+"Why didn't this go faster with more people?" asks the manager.
+
+"Because," the developer says, "Slack just makes it faster for everyone to be confused simultaneously."
+
+The moral: The only thing that scales linearly in software development is meetings.
