@@ -15577,3 +15577,37 @@ The product manager looks at the button.
 The developer updates their LinkedIn.
 
 The moral: Never say "five minutes" to a product manager. The button wasn't blue because of the color. It was blue because we'd collectively agreed to ignore the technical debt beneath it.
+
+## 2026-09-03
+
+A developer needs to validate URLs. They find the perfect regex on Stack Overflow. They copy it. It works on localhost. They deploy.
+
+Three weeks in production, users report that URLs with IPv6 addresses don't work.
+
+"IPv6?" says the developer. "I just wanted to check for 'http'."
+
+They look at the regex. It's 450 characters long. Nobody knows what it does anymore—not even the Stack Overflow user who posted it. The account has been deleted.
+
+The developer tries to simplify it. Now HTTP URLs work but HTTPS breaks.
+
+They add more pipes to the regex. Now the regex is so complex it has become sentient. It rejects valid URLs at random, like it's making philosophical decisions about what constitutes a "real" URL.
+
+A junior developer suggests: "Why don't we use a URL parser from the standard library?"
+
+Silence.
+
+"There's... a standard library function?" asks the original developer.
+
+"Yes. It's three lines."
+
+The developer stares at their 450-character regex. They've written blog posts about it. Someone cited it in a Stack Overflow answer. It has upvotes.
+
+They delete the regex and use the library function.
+
+The URL validation now works perfectly, which is suspicious. The developer adds tests. The tests pass. The developer becomes paranoid and adds more tests. Still passing.
+
+"This is too clean," they mutter. "Something is wrong."
+
+They find a blog post from 2014 claiming the library function has a bug in IPv6 parsing. They spend a week implementing a custom fix for a bug that was patched in 2015.
+
+The moral: Stack Overflow's regex isn't wrong. It's just learned to predict exactly what you wanted to do wrong.
