@@ -15704,3 +15704,53 @@ The developer raises their hand: "Could we add a linter rule that flags console.
 
 The moral: Every line of code you write at 11 PM at 3 AM has opinions about your career choices, and they're all judgmental.
 
+
+## 2026-09-04
+
+A developer is assigned to fix a critical bug: users sometimes see a loading spinner forever.
+
+They add logging to debug it. The logs show the API call never completes.
+
+They check the API. It's responding fine locally. They check production. The API is responding, but *sometimes* slowly.
+
+They check the network. Fine. They check the database. Fast. They check if there's caching. There isn't.
+
+"I'll add caching," they decide.
+
+They deploy Redis. The spinner still appears sometimes.
+
+"I'll add a timeout," they say.
+
+Now users see an error instead of a spinner. That's worse. They remove the timeout.
+
+"I'll add more logging," they think.
+
+The logs grow to 10 MB per second. They turn off the logging.
+
+Three weeks in, an intern asks: "Did you try reloading the page?"
+
+The developer reloads. The API completes instantly.
+
+"Oh," they say. "It's a race condition. The request fires twice. One finishes, one hangs."
+
+"Can't you just deduplicate?"
+
+The developer adds request deduplication. The spinner vanishes.
+
+"What was the actual bug?" asks the manager.
+
+"A race condition. The second request would hang."
+
+"But you added caching, timeout logic, and extra logging?"
+
+"That was before I found it."
+
+"Did you remove all that?"
+
+"It's already in production."
+
+So now the code has caching it doesn't need, timeouts that never trigger, and logging from failed attempts to debug the original issue.
+
+It works though. Which is somehow worse.
+
+The moral: The bug was the second request. The bigger bug—the one you're still carrying—is the code you added while looking for the first bug.
