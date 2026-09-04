@@ -15645,3 +15645,62 @@ Instead, five developers have delivered something that works 80% of the time and
 "Because," the developer says, "Slack just makes it faster for everyone to be confused simultaneously."
 
 The moral: The only thing that scales linearly in software development is meetings.
+
+## 2026-09-04
+
+A developer adds a debug log statement at 11 PM: `console.log("DEBUG: temp value =", tempValue)`.
+
+They deploy it to production. Monitoring alerts trigger immediately. The logs are growing at 500 GB per hour.
+
+"Why?" asks the on-call manager.
+
+"It was just a debug statement," says the developer. "I was going to remove it before merging."
+
+"Clearly you didn't."
+
+The developer checks the git history. The commit message says: "Add debug logging, remove before merge!!!"
+
+"I forgot," they admit.
+
+"Okay, just remove it and redeploy."
+
+They fix the code. They merge the PR. They deploy to production. The logs are still growing.
+
+"What?" says the developer.
+
+They check the logs. Their new log statement is appearing millions of times per second. But they deleted it.
+
+"Oh no," they say. "There's another debug statement I forgot about."
+
+There are actually three. One logs every database query. Another logs every function call. A third logs the entire request/response object of every HTTP call, including the raw authentication tokens.
+
+"Were you just copying and pasting debug logs everywhere?" asks the manager.
+
+"I was trying to figure out why the login endpoint was slow!"
+
+"Did you find the issue?"
+
+"No, but I found every other endpoint is slow too. It's because of the logging I added to debug the first thing."
+
+They remove all the debug logs. Redeploy. The logs shrink. The database stops groaning under the weight of write-heavy queries logging themselves.
+
+"Is everything fixed?" asks the manager.
+
+"Mostly," says the developer. "But now there are 800 security alerts because I logged authentication tokens."
+
+"You logged credentials to production?"
+
+"Just in the debug statement!"
+
+"Which millions of people saw."
+
+The developer updates their LinkedIn.
+
+Twelve hours later, the security team forces a password reset for every account that logged in during the debug window. They post-mortem the incident. It's labeled "Insufficient code review and lack of automated debug-statement detection."
+
+The developer raises their hand: "Could we add a linter rule that flags console.log?"
+
+"We already have that rule," says the tech lead quietly. "You disabled it. In your commit message, you wrote: 'temporarily disabling for debugging.'"
+
+The moral: Every line of code you write at 11 PM at 3 AM has opinions about your career choices, and they're all judgmental.
+
