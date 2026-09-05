@@ -15806,3 +15806,68 @@ So now the fix involves:
 The typo never gets fixed. The code still ships with it. But now there's a ticket explaining why, assigned to nobody, with 37 comments about backwards compatibility.
 
 The moral: Before you fix a typo, ask yourself: how many systems are named after it?
+
+## 2026-09-05
+
+A developer is asked to add one feature: "Just filter out inactive users from the list."
+
+Simple. They add a filter: `users.filter(u => u.active)`.
+
+It works. They deploy. Users report a problem: the sidebar shows "You have 47 pending requests" but clicking on pending requests shows only 5.
+
+"The filter," they realize. "I filtered out inactive users, but some inactive users had pending requests."
+
+They fix it. They remove the filter. Now all users show, but inactive ones clutter the interface.
+
+"I'll add a parameter," they think. `filterInactive: true` for some views, `false` for others.
+
+That works fine until someone calls the function without specifying the parameter. They get random results depending on what the default was.
+
+"Let me add a default," they say. They set it to `true`.
+
+Three sprints later, QA reports: the archive shows inactive users even though it's supposed to show active only. Someone called the function without the parameter.
+
+"I'll rename the parameter to be clearer," they say. `includeInactiveUsers: true`.
+
+They change it in ten places. They miss one. That endpoint has been broken for six months. Nobody noticed.
+
+They find 14 places they missed because the function signature changed so many times that there are four different ways people call it:
+
+```javascript
+filterUsers(data)
+filterUsers(data, true)
+filterUsers(data, { active: true })
+filterUsers(options, { filterInactive: true })
+```
+
+"I'll add deprecation warnings," they think.
+
+The deprecation warnings spam the console so aggressively that a customer complains their app feels slow.
+
+"Let me use a better logger," they think.
+
+Now the warnings go somewhere else. Nobody sees them. People keep using the old API.
+
+Meanwhile, a data scientist wants to download all users including inactive ones for analysis. They ask for a special parameter.
+
+Now there's also: `filterInactive: false`.
+
+But some views hardcode `true`. Some default to `true`. Some have a UI toggle. The toggle doesn't match the URL parameter. One endpoint has both.
+
+A new developer joins and asks: "Wait, why does this one view skip inactive users in the admin panel but include them in reports?"
+
+"Because of the filter," says the original developer.
+
+"But I need to show inactive users in the admin panel."
+
+"Change the filter."
+
+"Which filter? There's four now."
+
+"The right one."
+
+"How do I know which one's right?"
+
+They look at the git blame. Seven people have touched this code. The first change says: "Add filter for inactive users" with no rationale.
+
+The moral: Never add a parameter for just one thing. By the time you're done, you've invented your own configuration language and nobody remembers what the original problem was.
