@@ -15754,3 +15754,55 @@ So now the code has caching it doesn't need, timeouts that never trigger, and lo
 It works though. Which is somehow worse.
 
 The moral: The bug was the second request. The bigger bug—the one you're still carrying—is the code you added while looking for the first bug.
+
+## 2026-09-05
+
+A developer is asked to fix a typo in an error message. One character. Should take 30 seconds.
+
+They find the file. The error message is on line 847.
+
+"I'll do a simple find-and-replace," they think.
+
+They search for the exact string. It appears 47 times. Turns out it's not just in error messages—it's in logs, comments, documentation, tests, and a config file from 2014 that nobody touches.
+
+"Okay, I'll be careful," they say.
+
+They replace 10 instances. They test locally. Good. They push to dev. Good. They push to staging.
+
+Staging breaks. The config file had a dependency on that exact string being present to validate something.
+
+They revert that file. Now it's a mixed change: some strings updated, some not.
+
+"I'll just update the config file too," they think.
+
+The config file has a comment from 2015: "DO NOT CHANGE THIS STRING—system depends on it."
+
+They change it anyway. Deploy. Now three services break because they were checking for that string.
+
+"Just a typo fix," they text the manager at 2 AM.
+
+Two hours later, they've updated the string in:
+- The main codebase (10 files)
+- The config system (3 different formats)
+- Database migration scripts (5 files)
+- A legacy API that old clients depend on (which they can't break)
+- Comments in 23 places where people explained why the typo existed
+
+One comment from 2018 says: "This typo is intentional because a customer's old system expects it."
+
+They reach out to that customer. The customer no longer exists. They merged with another company. That company doesn't know about the dependency.
+
+So now the fix involves:
+- A deprecation period
+- A feature flag
+- A new API version
+- Talking to five different teams
+- A change-management review
+
+"It was a typo," says the developer at the retrospective.
+
+"It was a *cultural artifact*," says the tech lead.
+
+The typo never gets fixed. The code still ships with it. But now there's a ticket explaining why, assigned to nobody, with 37 comments about backwards compatibility.
+
+The moral: Before you fix a typo, ask yourself: how many systems are named after it?
