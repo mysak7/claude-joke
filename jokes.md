@@ -15934,3 +15934,85 @@ A manager asks: "When can we remove the feature flag?"
 "To make sure we don't break anything by removing the flag."
 
 The moral: Feature flags are scaffolding. The problem is nobody remembers you can take down scaffolding. One day you're working on a building from 1955 that still has temporary supports.
+
+A developer writes a function to handle null values. It's simple, defensive: check for null, handle gracefully.
+
+They use it everywhere. The codebase feels safer.
+
+A year later, they're debugging a production issue. A value is somehow `undefined` instead of `null`.
+
+"But the check is for null," they think. 
+
+They add a check for undefined too: `if (value === null || value === undefined)`.
+
+Someone points out: `if (!value)` does the same thing.
+
+They switch to that.
+
+Then someone reports an issue: the number `0` is being treated as missing.
+
+"0 is falsy," says a new developer.
+
+They revert: `if (value === null || value === undefined)`.
+
+The next week, an empty string breaks something. Empty arrays break something else. `false` breaks something.
+
+"Why are all these falsy values in the data?" someone asks.
+
+"Because that's the data," says the backend developer.
+
+So now they have:
+
+```javascript
+if (value === null || value === undefined) { ... }
+if (value === null || value === undefined || value === 0) { ... }
+if (value === null || value === undefined || value === "" || value === false || value.length === 0) { ... }
+```
+
+Three different functions. One in each place. Slightly different.
+
+Someone adds a utility: `const isNullish = (v) => v === null || v === undefined`.
+
+It gets imported in 120 places.
+
+A new requirement: treat `NaN` as missing too.
+
+Someone changes the utility. Sixteen places break because `NaN === NaN` is `false` and they check for it wrong.
+
+"Let me add JSDoc," says a developer.
+
+```javascript
+/**
+ * Returns true if the value is null, undefined, NaN, or missing.
+ * Does NOT treat 0, false, or empty strings as missing.
+ * If you need those treated as missing, use something else.
+ * Actually, don't. Use this. Unless you can't. Then don't.
+ */
+```
+
+Three developers misread it anyway.
+
+Someone says: "We should use optional chaining."
+
+But that only works if the thing you're checking is a property, not a value.
+
+A language spec is debated. `??` (nullish coalescing) is added.
+
+Now the code is split:
+- Old code: `if (!value)`
+- Defensive code: `if (value === null || value === undefined)`
+- New code: `value ?? defaultValue`
+- Edge case code: `isNullish(value)`
+
+A code review points out the inconsistency. Someone tries to standardize it.
+
+They create a 47-page RFC.
+
+It gets rejected. Too opinionated.
+
+Five years later, a code smell analyzer flags null checks as "too defensive." Someone removes them.
+
+The app crashes on an edge case that's been there since day one.
+
+The moral: Null isn't actually nothing. Nothing is a design decision. And the more you check for it, the more you realize you have no idea what nothing is.
+
