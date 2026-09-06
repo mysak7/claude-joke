@@ -15871,3 +15871,66 @@ A new developer joins and asks: "Wait, why does this one view skip inactive user
 They look at the git blame. Seven people have touched this code. The first change says: "Add filter for inactive users" with no rationale.
 
 The moral: Never add a parameter for just one thing. By the time you're done, you've invented your own configuration language and nobody remembers what the original problem was.
+
+## 2026-09-06
+
+A developer adds a feature flag: `betaFeature: true/false`.
+
+It works. They toggle it on and off. Perfect. They ship it.
+
+A month later, someone asks: "Why isn't the feature on for this user?"
+
+They check. The flag is on globally. But the user still sees the old behavior.
+
+Turns out, the flag is checked in 47 different places:
+- Once in the API
+- Three times in the client
+- Once in the database query
+- Seventeen times in tests
+- And twenty-four times in comments saying "this will work when betaFeature is on"
+
+Some of them contradict each other.
+
+"I'll add a user-level override," they think.
+
+Now the flag can be:
+1. On globally, off for the user
+2. Off globally, on for the user
+3. Both on, but only if the user is in the right group
+4. Both off, because that user hit an edge case six months ago
+
+There's a comment in one place that says: "Remove this in Q4 2025."
+
+It's now 2026.
+
+A different developer removes the flag from one of the 47 places. Things break. Spectacularly.
+
+"I thought we shipped the feature," they say.
+
+"We did," says the first developer. "We're just... still checking the flag everywhere."
+
+"Why?"
+
+"Because removing all 47 checks is risky. Someone will get the old behavior."
+
+"Aren't we already shipping the new behavior?"
+
+"Sometimes. Depends on which code path the user hits."
+
+A manager asks: "When can we remove the feature flag?"
+
+"After we're confident the feature is stable."
+
+"It's been three months."
+
+"Yeah, but we're *really* confident now."
+
+"Can you remove the flag?"
+
+"That'll take two sprints."
+
+"To remove a flag?"
+
+"To make sure we don't break anything by removing the flag."
+
+The moral: Feature flags are scaffolding. The problem is nobody remembers you can take down scaffolding. One day you're working on a building from 1955 that still has temporary supports.
