@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
-# Reads prompt from job.md and runs Claude Code headlessly.
+# Reads prompt from job.md and runs it through a real interactive Claude Code
+# session (see run-in-tty.sh) rather than `claude -p`, which does not open a
+# usage window the way interactive use does.
 # On success, archives job.md and result to archive/ with a datetime tag.
 # On failure, leaves job.md in place so the next run retries.
+# Note: the archived result is the terminal transcript of the run, not the bare
+# answer text that `-p` used to return.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -27,7 +31,8 @@ else
     PROMPT=$(cat "$JOB_FILE")
 fi
 
-RESULT=$(cd "$WORK_DIR" && /home/mi/.local/bin/claude -p "$PROMPT")
+RESULT=$(TTY_WORKDIR="$WORK_DIR" TTY_MODEL="${JOB_MODEL:-opus}" TTY_TIMEOUT="${JOB_TIMEOUT:-1800}" \
+    "$SCRIPT_DIR/run-in-tty.sh" "$PROMPT")
 
 {
     echo "# Job result"

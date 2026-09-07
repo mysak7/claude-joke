@@ -7,5 +7,6 @@
   "model": "haiku",
   "prompt": "Generate a clever and funny programming joke. Do NOT read the whole jokes.md (it is large) - instead run `tail -n 150 jokes.md` to see the most recent jokes and avoid repeating those. Then append the new joke to jokes.md via bash (e.g. cat >> jokes.md): today's date as a markdown header (e.g. ## 2026-04-15), then the joke below it.",
   "retry_every_minutes": 10,
-  "retry_for_minutes": 180
+  "retry_for_minutes": 180,
+  "run_timeout_seconds": 900
 }
