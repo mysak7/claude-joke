@@ -16016,3 +16016,53 @@ The app crashes on an edge case that's been there since day one.
 
 The moral: Null isn't actually nothing. Nothing is a design decision. And the more you check for it, the more you realize you have no idea what nothing is.
 
+
+## 2026-09-07
+
+A developer's code works perfectly on their machine. They push it. The CI server fails. The staging server fails. Production explodes.
+
+"Works on my machine," they shrug.
+
+A senior dev asks: "What's different about your machine?"
+
+"I don't know. Nothing. I'm running the same OS, same Node version, same everything."
+
+They dig. The difference is: the developer has 47 global npm packages installed. Their node_modules has been accumulating for three years.
+
+On CI, there's a fresh install.
+
+One of those 47 packages, installed three years ago, depends on a specific version of a subdependency that was deprecated six months ago and now installs differently.
+
+The code path is slightly different. The test passes on the developer's machine. It fails on CI.
+
+"Let me add a conditional," they think.
+
+Now two code paths exist. One for machines with the weird dependency state. One for clean machines.
+
+Nobody documents it.
+
+A junior developer checks out the code. It works. They change something unrelated. CI fails.
+
+"Weird," they think. They push again. Same error.
+
+They check out the original code. CI still fails.
+
+"That doesn't make sense," they say. "The original code worked for them."
+
+Another junior dev joins. They check out the code on a fresh machine. It works.
+
+"Oh, you just need to clear your node_modules and reinstall," they say.
+
+They say this three times this week.
+
+Someone says: "We should just use Docker."
+
+They build a Docker image. It works locally. CI passes. They push it to production.
+
+Production is a different architecture. Docker doesn't run. Or runs differently.
+
+"Should've tested the Dockerfile," someone says.
+
+"I did. On my machine."
+
+The moral: "Works on my machine" isn't a bug. It's proof that your machine is wrong, but you'll never know how or why.
