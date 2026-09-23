@@ -16111,3 +16111,47 @@ Someone in six years will blame both commits and be equally confused.
 
 The moral: Comments are time-capsules of debugging panic, and nobody ever reads the follow-up that explains the follow-up.
 
+
+A developer needs to check if a string ends with "example".
+
+Five minutes later: `str.endsWith("example")`
+
+But code review: "What if it's null? Undefined? Not a string?"
+
+Guard added:
+```javascript
+if (str && typeof str === 'string') {
+  return str.endsWith("example");
+}
+return false;
+```
+
+Senior dev suggests: `const checkExample = (str) => str?.endsWith("example") ?? false;`
+
+Added to utils. Imported in 47 places.
+
+A year later, someone needs to check a different suffix. They copy-paste the function, rename it, change the value.
+
+Now two identical functions exist.
+
+Architecture review flags duplication. Make it generic:
+```javascript
+export const endsWith = (str, suffix) => 
+  str?.endsWith(suffix) ?? false;
+```
+
+Renamed in 47 places. Three developers break their code because they forgot parameter order.
+
+Someone suggests adding it to String.prototype. Ten-message thread about polluting global namespace.
+
+JavaScript's built-in `.endsWith()` has existed since 2015.
+
+Nobody uses the util anymore.
+
+It stays as dead code for five years.
+
+When someone tries deleting it, search finds 47 imports. But those imports were never deleted when code migrated back to the built-in.
+
+The developer who wrote the "first utility function" gets promoted for "establishing patterns." The developer who deletes unused utilities is told they're not a "systems thinker."
+
+The moral: The only thing harder than choosing a name is choosing not to create a function for something that already exists.
