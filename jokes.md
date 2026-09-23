@@ -16066,3 +16066,48 @@ Production is a different architecture. Docker doesn't run. Or runs differently.
 "I did. On my machine."
 
 The moral: "Works on my machine" isn't a bug. It's proof that your machine is wrong, but you'll never know how or why.
+
+## 2026-09-23
+
+A developer finds a line of code with a comment: `// DO NOT REMOVE THIS`
+
+No explanation. No context. Just a warning.
+
+"Okay," they think. "Obviously important."
+
+They don't remove it.
+
+A year later, someone new asks: "What does this line do?"
+
+"Nobody knows. There's a comment. We leave it alone."
+
+Another year passes. Someone refactors nearby code and accidentally removes the line.
+
+Nothing breaks.
+
+"Wait," they say. "Nothing broke?"
+
+They investigate. The line was setting a variable that was never read. It was deleted in a refactor three years ago, but the assignment stayed. It did absolutely nothing.
+
+They remove the comment and the line.
+
+A week later, a bug appears in production. A specific case that hasn't been tested in five years suddenly fails.
+
+They check the git history. The deleted line was initializing a value that prevented a race condition in a code path that almost never runs.
+
+The original developer is asked about it.
+
+"I wrote that comment because I was about to remove the line, then I realized it was fixing a race condition. I added the comment to remind myself it was important. I was going to write real documentation later."
+
+"That was six years ago."
+
+"Yeah. Later got busy."
+
+They restore the line. The comment still says: `// DO NOT REMOVE THIS`
+
+They add another comment above it: `// (See git blame, commit abc1234, for context)`
+
+Someone in six years will blame both commits and be equally confused.
+
+The moral: Comments are time-capsules of debugging panic, and nobody ever reads the follow-up that explains the follow-up.
+
