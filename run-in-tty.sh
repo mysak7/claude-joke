@@ -75,10 +75,13 @@ FULL_PROMPT="$PROMPT
 
 When you have completely finished the task above, run this command as your very last action: touch $MARKER"
 
-# A login-ish shell keeps PATH etc. the same as an interactive terminal, which
-# matters under cron where the environment is otherwise nearly empty.
+# The command goes to tmux as separate argv elements, which tmux execs directly
+# without a shell. Building a single string with `printf %q` does not work: it
+# emits bash-only $'...' quoting, and tmux runs a string through $SHELL, which
+# is /bin/sh (dash) under cron -- any apostrophe in the prompt then breaks the
+# quoting and the pane dies before claude even starts.
 tmux new-session -d -s "$SESSION" -x 200 -y 50 -c "$WORKDIR" \
-    "exec $(printf '%q' "$CLAUDE") --model $(printf '%q' "$MODEL") $(printf '%q' "$FULL_PROMPT")" \
+    -- "$CLAUDE" --model "$MODEL" "$FULL_PROMPT" \
     || { echo "run-in-tty.sh: failed to start tmux session" >&2; exit 64; }
 
 capture() {
