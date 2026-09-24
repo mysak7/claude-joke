@@ -16237,3 +16237,39 @@ They add `// See ticket #4271 for why this exists` above the `result = result - 
 Ticket #4271 was closed in 2019. The repository was deleted. The developer who opened it works somewhere else.
 
 The moral: The best bugs are the ones that stay bugs because fixing them would require understanding why they exist, and understanding requires reading code from before you were born.
+
+A tech lead watches their team struggle with a function that returns an object with 47 properties.
+
+"It's hard to remember what each one means," someone complains.
+
+"Let's add TypeScript types!" another says.
+
+They create an interface. The IDE now autocompletes all 47 properties. Nobody reads the descriptions.
+
+Someone thinks: "This is too complex. Let's break it into smaller objects."
+
+They refactor. Now the function returns an object containing five objects, each with nested objects. The IDE autocompletes 47 properties through four levels of dot notation.
+
+"Better separated concerns," they write in the PR.
+
+A week later: someone misses a property three levels deep. The code breaks in production.
+
+They add a validator: a function that checks all 47 properties exist. Now they run two passes: one to create the object, one to make sure it's correct.
+
+"Why not just... not create invalid objects in the first place?" a junior asks.
+
+"Because the function is too complex to reason about," they explain.
+
+"So... shouldn't we fix the function?"
+
+Silence.
+
+They add tests instead. Ten tests, each checking one property. The function still breaks in ways no test predicted.
+
+Someone suggests: "What if we just returned a simple string, and parsed it on demand?"
+
+"That's unstructured data," they say, disgusted.
+
+The function now has 51 properties. They add a deprecation notice to twelve of them. The code still passes them around. Five years later, someone tries to remove a deprecated property. Fourteen services break because they were written before the deprecation notice and still rely on it.
+
+The moral: Over-engineering a function is like over-engineering a function — at some point, you've created a problem complex enough to require its own solution.
