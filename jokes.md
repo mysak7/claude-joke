@@ -16273,3 +16273,53 @@ Someone suggests: "What if we just returned a simple string, and parsed it on de
 The function now has 51 properties. They add a deprecation notice to twelve of them. The code still passes them around. Five years later, someone tries to remove a deprecated property. Fourteen services break because they were written before the deprecation notice and still rely on it.
 
 The moral: Over-engineering a function is like over-engineering a function — at some point, you've created a problem complex enough to require its own solution.
+
+A developer opens a ticket: "Feature works but only on Tuesdays."
+
+Monday: works. Tuesday: works. Wednesday: broken.
+
+They investigate. It's not time-based code. Not cron jobs. No scheduler.
+
+They add logging to every function. On Wednesday, logs are identical to Tuesday.
+
+They restart the service. Works. They wait until Wednesday. Broken again.
+
+They copy prod data to staging. Wednesday? Still broken.
+
+They copy Wednesday prod data to staging. But it's only Monday in staging. Works perfectly.
+
+They realize: somehow, a production variable is holding state from Tuesday.
+
+A global variable is being modified but never reset.
+
+They find it: `let cachedResult = null; // Only used in one place`
+
+That one place is called Tuesday, Wednesday, and Thursday. But the reset only happens on Friday.
+
+"Why does it reset on Friday?" nobody knows. Someone wrote it in 2015.
+
+They add a comment: `// Reset on Fridays because of... performance? Legacy? Who knows`
+
+They remove the variable. The feature works every day.
+
+But two services that import from this file now expect it to exist.
+
+They add it back.
+
+A junior asks: "Why does it only break on Wednesday?"
+
+"Because it's the only day the reset doesn't happen."
+
+"Can't we just... reset it every day?"
+
+"No, that would break the other services."
+
+"What if we reset it in the other services?"
+
+That's a three-month project.
+
+They decide to keep Wednesday broken.
+
+The ticket gets: "WONTFIX - Feature not critical on Wednesdays, all users need to avoid that day" and is closed.
+
+The moral: The easiest bugs to fix are the ones that don't affect enough people to justify understanding them.
