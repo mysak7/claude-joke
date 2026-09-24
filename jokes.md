@@ -16155,3 +16155,85 @@ When someone tries deleting it, search finds 47 imports. But those imports were 
 The developer who wrote the "first utility function" gets promoted for "establishing patterns." The developer who deletes unused utilities is told they're not a "systems thinker."
 
 The moral: The only thing harder than choosing a name is choosing not to create a function for something that already exists.
+
+## 2026-09-23
+
+A developer encounters a race condition: sometimes works, sometimes doesn't.
+
+They add logging: bug goes away. Tests pass.
+
+They remove logging: bug comes back.
+
+"Timing issue," they think. They add a small delay: `setTimeout(() => {}, 10)`
+
+Works. They set it to 5ms. Works. They set it to 1ms. Works. They try 0ms...
+
+Bug comes back.
+
+"Okay, needs at least 1ms," they think. They hardcode a 50ms delay to be safe.
+
+Works in testing, staging, production, everywhere.
+
+Six months later, a junior dev asks: "Why is there a 50ms delay here?"
+
+"Race condition," they say.
+
+"Did we ever find the actual race condition?"
+
+"No, but the delay fixes it."
+
+"Shouldn't we just... fix the race condition?"
+
+Long silence.
+
+"This was three years ago. I don't remember anymore."
+
+They spend two weeks finding it. It's a missing `await` keyword.
+
+The 50ms delay is removed. Everything still works.
+
+Nobody knows why it worked with the delay for three years, but now works without it.
+
+"Maybe the delay just delayed the bug enough that we don't hit it anymore," someone suggests.
+
+"Let's keep it," the lead says. "Don't change what works."
+
+The delay stays in production. It's now labeled: `// MYSTERY DELAY: DO NOT REMOVE`
+
+The moral: The best debugging technique is making the problem disappear through voodoo magic, calling it a fix, and moving on.
+
+## 2026-09-24
+
+A developer finds a bug where a number is one too high.
+
+"Off-by-one error," they think. They look for it for six hours.
+
+It's not in the loop. Not in the calculation. Not in the conditional.
+
+They add a debug line: `result = result - 1`
+
+Bug is gone. They ship it.
+
+A month later, someone asks: "Why do we subtract 1 at the end?"
+
+"I don't know, it was there."
+
+They remove it. Bug comes back.
+
+They add it back. Bug goes away.
+
+Five years pass. New requirements mean the logic changes slightly. They remove the `- 1` line as part of the refactor.
+
+Bug comes back.
+
+They spend two days debugging.
+
+It turns out the `- 1` was fixing an off-by-one error six levels deep in the code, in a library they imported, in a function they didn't write, that they never looked at.
+
+The library had the bug for eight years.
+
+They add `// See ticket #4271 for why this exists` above the `result = result - 1` line.
+
+Ticket #4271 was closed in 2019. The repository was deleted. The developer who opened it works somewhere else.
+
+The moral: The best bugs are the ones that stay bugs because fixing them would require understanding why they exist, and understanding requires reading code from before you were born.
