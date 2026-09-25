@@ -16323,3 +16323,59 @@ They decide to keep Wednesday broken.
 The ticket gets: "WONTFIX - Feature not critical on Wednesdays, all users need to avoid that day" and is closed.
 
 The moral: The easiest bugs to fix are the ones that don't affect enough people to justify understanding them.
+
+## 2026-09-25
+
+A team decides to refactor a massive God Object into microservices.
+
+"We'll separate concerns!" they say.
+
+Three months later, their God Object has been split into 17 services.
+
+Each service calls 4 other services.
+
+That's 68 service-to-service calls minimum per request.
+
+Latency went from 50ms to 2 seconds.
+
+"But the code is cleaner," they say.
+
+Someone adds caching.
+
+Now the code is "clean" but data is sometimes stale.
+
+They add cache invalidation.
+
+"There are two hard things in Computer Science: cache invalidation, naming things, and off-by-one errors," someone quotes.
+
+They spend four months on cache invalidation.
+
+A junior asks: "What if we just... went back to the God Object?"
+
+"We'd lose the separation of concerns."
+
+"But we'd have fast queries."
+
+"Performance isn't as important as code organization."
+
+A customer asks why their requests take 2 seconds.
+
+"Microservices architecture," they explain proudly.
+
+"It used to be 50ms."
+
+"Yes, but now it's maintainable."
+
+"How maintainable? The query takes 2 seconds."
+
+"We're caching now."
+
+"Is it cached?"
+
+"Sometimes. Unless it gets invalidated."
+
+"When does it get invalidated?"
+
+Nobody knows. It's in 4 different services.
+
+The moral: The most important optimization in software is knowing when you've optimized enough to need to undo your optimization.
