@@ -16379,3 +16379,78 @@ A customer asks why their requests take 2 seconds.
 Nobody knows. It's in 4 different services.
 
 The moral: The most important optimization in software is knowing when you've optimized enough to need to undo your optimization.
+
+A product manager requests: "Let users export data as CSV."
+
+Simple. Two hours.
+
+A week later: "Add JSON support too."
+
+One more hour.
+
+"And XML."
+
+XML added.
+
+"Custom CSV delimiters?"
+
+Added.
+
+"Support UTF-8, UTF-16, ISO-8859-1?"
+
+All added.
+
+"Compression? Encryption? Digital signatures?"
+
+All three added.
+
+Six months later, the export feature is 40% of the codebase.
+
+Someone asks: "Why are deployments so slow?"
+
+"The export tests."
+
+"How many?"
+
+"2,847."
+
+"What are they testing?"
+
+"Combinations of encoding × compression × encryption × signature × delimiter × format."
+
+"That's millions of combos..."
+
+"Yeah. We test 2,847."
+
+"Why not all?"
+
+"We'd need 5,000 years of CPU time."
+
+A junior asks: "Why didn't we just use an export library?"
+
+Silence.
+
+Someone whispers: "There are 47 of them."
+
+"We could compose them?"
+
+"They all have conflicting opinions on what CSV means."
+
+"So we built our own standard?"
+
+"Yes."
+
+"Does it handle everything?"
+
+"No. But it handles what we test."
+
+A user reports: "Export fails for 2GB+ files."
+
+They check their 2GB test. It passes.
+
+The user's file is 2.000001GB.
+
+They add another test.
+
+The moral: Never ask "what if?" in engineering, because someone will ask it next, and you'll spend the next six months saying yes to it.
+
