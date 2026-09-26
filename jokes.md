@@ -16515,3 +16515,88 @@ The next week: same service down again.
 
 The moral: A production incident isn't truly resolved until you've had the exact same incident three times and have given up trying to understand it.
 
+
+## 2026-09-26
+
+A developer ships a feature.
+
+"It works locally," they say.
+
+"But not in production," says the alert.
+
+"Weird. Let me reproduce it."
+
+They spin up the exact same environment. Locally.
+
+"Hmm, works for me."
+
+"Check the database," suggests a colleague.
+
+"Same schema as production."
+
+"Check the config."
+
+"Identical."
+
+"Network calls?"
+
+"Same endpoints."
+
+"Time zones?"
+
+Silence.
+
+"What timezone is production?"
+
+"UTC."
+
+"What timezone is your laptop?"
+
+"Also UTC."
+
+"Huh."
+
+They check the timestamps in the logs.
+
+Local: 2026-09-26 14:32:15 UTC
+Production: 2026-09-26 14:32:15 UTC
+
+"They're the same minute," someone notes.
+
+"But not the second."
+
+A pause.
+
+"Check the clock sync on the prod servers."
+
+One server is 47 seconds fast.
+
+"Why?"
+
+"No idea. Someone SSH'd in six months ago. Might've changed it."
+
+"Was it documented?"
+
+"No."
+
+"Will we fix it?"
+
+"Later. We have a hotfix to deploy."
+
+The fix makes the comparison lenient by ±1 minute.
+
+It ships.
+
+Six months later: "Why is this tolerance so wide?"
+
+"Good question," says the original developer, now on a different team.
+
+"Should we reduce it?"
+
+"Only if you want the feature to break again in six months."
+
+"Why would it?"
+
+"I don't know. Some reason we didn't document."
+
+The moral: Production debugging is just asking "what bizarre thing did someone do that made perfect sense at 2 AM?" until you find it.
