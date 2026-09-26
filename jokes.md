@@ -16600,3 +16600,51 @@ Six months later: "Why is this tolerance so wide?"
 "I don't know. Some reason we didn't document."
 
 The moral: Production debugging is just asking "what bizarre thing did someone do that made perfect sense at 2 AM?" until you find it.
+
+## 2026-09-26
+
+A developer writes a function and names it `processData()`.
+
+"Not descriptive enough," says the code review.
+
+They rename it to `transformAndValidateUserInputWithBusinessLogic()`.
+
+A year later, someone asks what it does.
+
+"Look at the name," says the original developer, now on another team.
+
+They read the name. It doesn't help.
+
+"What's the actual implementation?"
+
+"It's 200 lines. Probably does what the name says."
+
+"Can we refactor it?"
+
+"Only if you want three other services to break."
+
+They rename it to `doTheThing()`.
+
+"Better," someone says sarcastically.
+
+A few months later, a new developer needs similar logic.
+
+"Can I use `processData()`?" they ask.
+
+"Don't use that," says their mentor. "Use `doTheThing()` instead."
+
+"Why are there two?"
+
+"Legacy reasons."
+
+"Which one is older?"
+
+"Unknown. They both do similar things but slightly differently."
+
+"Should we consolidate them?"
+
+"Someone tried that once. We don't talk about what happened."
+
+They now have `processData()`, `doTheThing()`, and `handleStuff()`, each with slightly different behavior nobody fully understands.
+
+The moral: A function's name is marketing. Its behavior is the truth. Pray they meet.
