@@ -16454,3 +16454,64 @@ They add another test.
 
 The moral: Never ask "what if?" in engineering, because someone will ask it next, and you'll spend the next six months saying yes to it.
 
+
+## 2026-09-26
+
+A service goes down at 3 AM.
+
+"Check the logs," says the manager.
+
+"They're in a different service," says the on-call engineer.
+
+"Check that service."
+
+"It's down too."
+
+"Both crashed at the same time?"
+
+"Yep."
+
+"Why?"
+
+"Unknown. We didn't log that part."
+
+The incident is escalated.
+
+A senior engineer arrives, half-asleep.
+
+"Restart everything," she says.
+
+It works.
+
+"What was it?" someone asks.
+
+"No idea. I've never seen this."
+
+"Should we investigate?"
+
+"We have eight other incidents paged."
+
+"Are they all the same?"
+
+"Unknown. We didn't log that part either."
+
+"Should we add logging?"
+
+"Yeah, after we fix these eight incidents."
+
+Two days later, a new incident appears.
+
+"I'll look at it tomorrow," someone says.
+
+"Why not now?"
+
+"Because we already fixed the incident. Adding logging would be optimizing a solved problem."
+
+The next week: same service down again.
+
+"Check the logs."
+
+"They're in a different service."
+
+The moral: A production incident isn't truly resolved until you've had the exact same incident three times and have given up trying to understand it.
+
