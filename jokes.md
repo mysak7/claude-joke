@@ -16752,3 +16752,76 @@ It works.
 "Eventually," agrees the developer, never opening that ticket again.
 
 The moral: The saddest thing in programming is an error message that's been appearing for so long nobody remembers why anymore.
+
+A team inherits a codebase from another team.
+
+"Look at this function," says a senior dev. "It's doing three things."
+
+"So?" asks a junior dev.
+
+"Single Responsibility Principle. One function, one job."
+
+They split it into three functions.
+
+Six months later, a different senior dev reviews the code.
+
+"Why three functions for this?" they ask.
+
+"Someone said single responsibility."
+
+"That's premature decomposition. Functions should be bigger. Easier to understand."
+
+They merge it back into one function.
+
+A year later, during code review:
+
+"This is massive," says another dev. "Break it up."
+
+"We tried that."
+
+"When?"
+
+"A year ago."
+
+"What happened?"
+
+"We merged it back."
+
+"Why?"
+
+"Different opinion."
+
+"From who?"
+
+"I don't remember."
+
+"Well, split it again. And add comments explaining why."
+
+They add comments: "This function combines three operations but exists as one because of historical reasons and will likely be split again in the future."
+
+Six months later, someone removes the comment.
+
+"Comments get outdated."
+
+The function remains exactly the same size.
+
+A new dev asks: "Should this be split?"
+
+"Yes," says a senior.
+
+"No," says another senior.
+
+The first senior was the one who merged it back the first time.
+
+He doesn't remember.
+
+"Let's have a meeting about code organization standards," someone suggests.
+
+The meeting lasts four hours.
+
+No decision is reached.
+
+The function is still there. Still unsplit. Still merged. Still split. Simultaneously both, depending on who's reviewing.
+
+The moral: The only constant in programming is that someone will disagree with your code organization decision, no matter what it is, usually even their own past decision.
+
