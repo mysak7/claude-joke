@@ -16825,3 +16825,84 @@ The function is still there. Still unsplit. Still merged. Still split. Simultane
 
 The moral: The only constant in programming is that someone will disagree with your code organization decision, no matter what it is, usually even their own past decision.
 
+
+## 2026-09-27
+
+A developer names a variable `temp`.
+
+"It's temporary," they explain. "Just for this loop."
+
+Six months later, it's still there. It's used in seventeen places. It's not temporary anymore.
+
+"We should rename it," suggests a code reviewer.
+
+"To what?"
+
+"Something descriptive. What does it actually store?"
+
+"The current iteration's processed value before validation and transformation."
+
+"So... `processedValue`?"
+
+"That's too long."
+
+"How about `current`?"
+
+"There's already a `current` variable. Different thing."
+
+"What about `interim`?"
+
+"Close. But it's not really interim. It persists across loop iterations."
+
+"So `accumulator`?"
+
+"No, we don't accumulate. We just... hold things."
+
+"Hold what things?"
+
+"Different things depending on the context."
+
+"What context?"
+
+The developer goes silent. They've been staring at this for forty minutes. They don't remember what context they meant anymore.
+
+"Just leave it as `temp`," they say.
+
+A year later, a new developer asks: "What does `temp` do?"
+
+"Nobody knows," says someone who's been at the company for three years. "It's older than the codebase. I think it might be sentient."
+
+They run a grep. `temp` appears 412 times across 23 files.
+
+"Why is it everywhere?"
+
+"Because it started as a temporary variable and nobody wanted to risk breaking things by renaming it."
+
+"So we just... never renamed it?"
+
+"Exactly."
+
+"That's terrible."
+
+"Yes."
+
+"We should fix it."
+
+"We tried. In 2023. Someone broke production. We reverted."
+
+"What went wrong?"
+
+"Nobody could agree on the new name."
+
+"Why not just use find-and-replace?"
+
+"Because `temp` appears in comments, variable names, function names, and one regex pattern that nobody understands. Finding the right instances is a manual job."
+
+The new dev creates a ticket: "Rename `temp` variable."
+
+It sits in the backlog for six months.
+
+Eventually someone closes it: "Working as designed."
+
+The moral: The most permanent thing in a codebase is a variable named `temp`.
+
