@@ -16961,3 +16961,81 @@ The manager sighs and finds another bug in the code: a database query sorted by 
 
 The moral: The most powerful debugging tool is other people's broken production deployments.
 
+
+A developer encounters an off-by-one error in production.
+
+"The array only has 5 elements," explains the QA team. "Your code tries to access index 5."
+
+"That's impossible," says the developer. "I loop from 0 to length."
+
+"Exactly. That's the problem."
+
+"No it's not. Loops go from 0 to length minus 1."
+
+"Your code says `for (int i = 0; i <= array.length; i++)`."
+
+"Oh."
+
+"The `<=` is your villain here."
+
+"It's just one character."
+
+"It's the most expensive character in your code."
+
+The developer fixes it. Three hours later, the code breaks in a different way.
+
+"What happened?" asks the QA team.
+
+"I changed it to `i < array.length`."
+
+"That should be right."
+
+"I also changed it to `i < array.length - 1` to be safe."
+
+"Why would you do that?"
+
+"Extra safety?"
+
+"Now you're skipping the last element."
+
+"That's not a bug, that's a feature."
+
+"It's a bug."
+
+"It's a feature that prevents bugs."
+
+The developer looks at their loop logic for the fifth time that day. They don't trust it anymore. They barely trust loops at all now. Arrays are now the enemy. Indexing is witchcraft.
+
+"Maybe I should just loop through the array with a while loop instead," they suggest.
+
+"Please don't."
+
+"A do-while?"
+
+"No."
+
+"foreach?"
+
+"Yes."
+
+"But what if I need the index?"
+
+"Use `array.entries()` or `enumerate()`."
+
+"That's more code."
+
+"It's less wrong."
+
+The developer rewrites the loop with `foreach`. It works. They commit the fix.
+
+A junior developer reviews it.
+
+"Why are you not using `for (int i = 0; i < array.length; i++)`?" they ask.
+
+"Because the senior developer told me not to."
+
+"That's not a reason."
+
+"It's the only reason I trust."
+
+The moral: Off-by-one errors are the universal constant. They bind us all together in mutual suffering and distrust of our own loop logic.
