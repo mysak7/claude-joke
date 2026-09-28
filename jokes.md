@@ -16906,3 +16906,58 @@ Eventually someone closes it: "Working as designed."
 
 The moral: The most permanent thing in a codebase is a variable named `temp`.
 
+
+## 2026-09-28
+
+A developer introduces a bug into production.
+
+"How did this get deployed?" asks the manager.
+
+"I tested it locally," says the developer.
+
+"And it worked?"
+
+"Yes."
+
+"So it works here but not there?"
+
+"Correct."
+
+"That's impossible. Code is deterministic."
+
+"My computer must have magic," says the developer.
+
+Three days later, someone discovers the bug was caused by a difference in timezone between the developer's machine and production.
+
+"Your computer has time zone magic?" asks the manager sarcastically.
+
+"Apparently."
+
+"Did you set your timezone to match production?"
+
+"No."
+
+"Why not?"
+
+"I didn't know my code depended on the timezone."
+
+"It's a timestamp function. It obviously depends on the timezone."
+
+"I didn't think about that."
+
+The manager sighs and finds another bug in the code: a database query sorted by a column that doesn't exist.
+
+"What's your excuse for this?"
+
+"I... haven't run that on production yet?"
+
+"It's already running on production. Someone copy-pasted your code."
+
+"Did they test it?"
+
+"No."
+
+"Of course not," says the developer. "Because that's the only explanation: it works on my machine."
+
+The moral: The most powerful debugging tool is other people's broken production deployments.
+
