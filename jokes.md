@@ -17039,3 +17039,54 @@ A junior developer reviews it.
 "It's the only reason I trust."
 
 The moral: Off-by-one errors are the universal constant. They bind us all together in mutual suffering and distrust of our own loop logic.
+
+
+## 2026-09-28
+
+A developer has a bug in production.
+
+"Add some logging," suggests the manager.
+
+The developer adds `console.log()` everywhere.
+
+The code is now 50% logging, 50% actual logic.
+
+"Is it fixed?" asks the manager.
+
+"I have 10,000 lines of logs per second."
+
+"Does it show the bug?"
+
+"It shows everything. I can't see anything."
+
+"Filter the logs."
+
+The developer adds more logging to filter the logs.
+
+Now there are 20,000 lines of logs per second.
+
+"This isn't helping," says the developer.
+
+"Remove some logging," suggests the manager.
+
+The developer removes half the logging.
+
+The bug disappears.
+
+"Is it fixed?" asks the manager.
+
+"I don't know. I removed the logging that would show it."
+
+"Add it back."
+
+The bug reappears.
+
+"So the logging causes the bug?"
+
+"No, the timing changes. The logging changes the timing. Schrodinger's bug."
+
+"So what's the actual bug?"
+
+"I have no idea. But I can log it really well."
+
+The moral: Adding logging to find a bug is like adding more water to find a leak in a dam — it makes everything worse before it makes anything better.
