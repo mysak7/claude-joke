@@ -17139,3 +17139,109 @@ The developer adds seven confirmation endpoints, two-factor authentication, an e
 "Not even close. But the auditors are happy."
 
 The moral: REST is just a guideline until someone deletes your entire production database. Then it becomes a suggestion.
+
+A developer is asked to fix a production bug.
+
+"It's probably a floating point precision issue," says the developer without looking.
+
+They run the code. The output is 0.1 + 0.2 = 0.30000000000000004.
+
+"Yep," they confirm.
+
+"Can you just fix it?"
+
+"Sure, I'll round it."
+
+They add `.toFixed(2)`.
+
+The bug is gone.
+
+Three weeks later, someone reports a different bug: the totals don't add up.
+
+"The individual items round to $10.00 each, but ten items total $100.01."
+
+"That's a floating point thing," says the developer.
+
+"So fix it."
+
+"I did. I added `.toFixed(2)`."
+
+"That's not a fix, that's a band-aid."
+
+"Computers don't do math the way humans do," explains the developer patiently.
+
+"So computers are bad at math?"
+
+"Computers are perfect at math. Floating point is just how computers decided to do math."
+
+"That sounds like a bad decision."
+
+"It is. Welcome to programming."
+
+"Can't you just use integers?"
+
+"Then $0.01 becomes 1. It works until someone in a different country uses a different currency with different decimal places."
+
+"So floating point is a conspiracy?"
+
+"It's a compromise. Between speed, precision, and sanity."
+
+"We're choosing speed and insanity?"
+
+"Always."
+
+The developer adds another `.toFixed(2)` in a different place.
+
+The bug gets worse.
+
+They consider using a decimal library.
+
+They don't.
+
+The moral: Floating point numbers are a lie told by mathematicians to protect us from the truth that computers can't actually do math without lying about it.
+
+A developer writes a comment: "TODO: Fix this hack later"
+
+Five years later, the code is in production.
+
+"Is that TODO still there?" asks the new developer.
+
+"Yes," says the old developer.
+
+"Did you ever fix it?"
+
+"No."
+
+"Why not?"
+
+"Because it started working for reasons I don't understand. Touching it might break it."
+
+"So you're just leaving it?"
+
+"The comment now reads: 'DO NOT FIX THIS HACK. IT IS HOLDING THE ENTIRE SYSTEM TOGETHER.'"
+
+"That seems bad."
+
+"It is. Very bad. But also very stable."
+
+"How stable?"
+
+"Five years stable."
+
+"That's... actually pretty stable."
+
+"Don't touch it."
+
+The next developer touches it. The system breaks.
+
+They add the hack back.
+
+"Why was that there?" they ask.
+
+No one knows.
+
+"We're never removing it."
+
+"Good plan."
+
+The moral: Never remove a hack that's been working for more than a year, even if you understand why it exists. Especially if you understand why it exists.
