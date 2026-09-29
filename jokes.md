@@ -17090,3 +17090,52 @@ The bug reappears.
 "I have no idea. But I can log it really well."
 
 The moral: Adding logging to find a bug is like adding more water to find a leak in a dam — it makes everything worse before it makes anything better.
+
+
+## 2026-09-29
+
+A developer writes an API.
+
+"Make it RESTful," says the architect.
+
+The developer makes `/users`, `/users/{id}`, `/users/{id}/posts`.
+
+"What about deleting a user?" asks another developer.
+
+"Send a DELETE request to `/users/{id}`."
+
+"What about deleting all users at once?"
+
+"Send DELETE to `/users`."
+
+"Without confirmation?"
+
+"It's an API. Developers should know what they're doing."
+
+Three months later, someone writes a script that accidentally calls DELETE on `/users` in a loop. Every user in production is deleted.
+
+"This is a disaster," says the CTO.
+
+"You said it should be RESTful," says the developer.
+
+"You should have added a confirmation endpoint."
+
+"You said it should be RESTful."
+
+"Add `/users/confirm-delete` or something."
+
+"That's not RESTful."
+
+"Nothing is RESTful when your database is empty."
+
+The developer adds seven confirmation endpoints, two-factor authentication, an email verification step, a 30-day grace period, and a callback to a webhook that asks the user's manager.
+
+"Is it RESTful?" asks the developer.
+
+"No," says the architect. "But it works."
+
+"Does it still follow REST principles?"
+
+"Not even close. But the auditors are happy."
+
+The moral: REST is just a guideline until someone deletes your entire production database. Then it becomes a suggestion.
