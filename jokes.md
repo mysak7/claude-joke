@@ -17287,3 +17287,153 @@ The developer sighs and makes the code even more complex, optimizing the part th
 The real bottleneck? Loading data from the network. Something they could have discovered in 10 minutes with a profiler.
 
 The moral: Measuring first before optimizing isn't a suggestion—it's a survival mechanism against the most dangerous optimization of all: optimizing the wrong thing, very efficiently.
+
+## 2026-09-30
+
+A bug appears in production.
+
+"Who wrote this code?" asks the manager.
+
+They check git blame.
+
+The original developer left the company four years ago.
+
+"When was it last modified?"
+
+"Three weeks ago, by someone adding logging."
+
+"Did they write the original code?"
+
+"No. They just touched it."
+
+"So we have code nobody wrote, modified by someone who didn't write it."
+
+"Welcome to programming," says a veteran developer.
+
+"Whose fault is this bug?"
+
+"Everyone's. And no one's."
+
+"Very helpful."
+
+"That's what we thought when we shipped it."
+
+They fix the bug.
+
+Three months later: the same code breaks differently.
+
+"Didn't we test this?"
+
+"We tested the normal case."
+
+"So this is an edge case?"
+
+"Yes."
+
+"Why didn't we handle it?"
+
+"Because we didn't know it would happen."
+
+"So we added a use case to code that wasn't designed for it?"
+
+"That's called production," says the veteran.
+
+They fix it again. Different fix.
+
+Six months later: another similar bug in the same code.
+
+"We need to refactor this," says the new developer.
+
+"Absolutely not," says the veteran.
+
+"Why not?"
+
+"That code is cursed. Every time anyone touches it, something breaks."
+
+"So we just leave it broken?"
+
+"We fix it in production. Indefinitely."
+
+"That's inefficient."
+
+"It's consistent."
+
+The code stays untouched, except when it's breaking.
+
+Three different developers have "fixed" it in three different ways.
+
+None of the fixes talk to each other.
+
+It's now a palimpsest of patches.
+
+When someone tries to understand it: `git log --oneline` shows 47 commits for the same file.
+
+Commit messages: "Fix for vendor X", "hotfix: urge", "NEVER CHANGE THIS", "changed it back", "reverted that revert"
+
+"Who maintains this?" asks a new engineer.
+
+"It maintains itself now," explains the veteran. "Through sheer spite and scar tissue."
+
+The code stays in production.
+
+It's arguably the most stable part of the system.
+
+No one understands it.
+
+Everyone's afraid of it.
+
+It works anyway.
+
+The moral: Code that's been broken and repatched enough times reaches a form of stability — not through design, but through the fact that you can't break it any more than it already is broken.
+
+
+A junior developer finds some code:
+
+```
+// This is cursed, but it works
+int result = value * 2 / 2;
+```
+
+Three operations that cancel each other out.
+
+"Why is this here?" they ask.
+
+"Stack Overflow," says the senior developer.
+
+"I don't understand."
+
+"Neither do we."
+
+Six months later, the junior developer optimizes it:
+
+```
+int result = value;
+```
+
+Perfect. Clean. The code that does nothing now does less.
+
+It breaks production.
+
+They revert it immediately.
+
+They add a new comment:
+
+```
+// DON'T TOUCH THIS. WE HAVE TRIED MANY TIMES.
+// IT ONLY WORKS WHEN IT MAKES NO SENSE.
+```
+
+The original developer—now three jobs and a continent away—could explain it.
+
+But they never responded to the Slack.
+
+So they'll never know.
+
+No one will ever know.
+
+The code works anyway.
+
+That's programming: sometimes the bug is the feature, and removing it breaks everything.
+
+The moral: The line between "bad code" and "working code" is whether removing it crashes production. If it does, it's good code. Confusing? Yes. But employed.
+
