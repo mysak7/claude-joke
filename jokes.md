@@ -17245,3 +17245,45 @@ No one knows.
 "Good plan."
 
 The moral: Never remove a hack that's been working for more than a year, even if you understand why it exists. Especially if you understand why it exists.
+
+## 2026-09-30
+
+A developer notices their app takes 500ms to start.
+
+"Let's optimize," they decide.
+
+They spend a week refactoring the initialization code. They eliminate redundant loops, cache calculations, use bitwise operations, profile memory allocation, and reduce the startup time to 475ms.
+
+"We saved 25 milliseconds," announces the developer proudly.
+
+"How long did that take?" asks the team lead.
+
+"A week."
+
+"How often does the app start?"
+
+"Once. When the user opens it."
+
+"Does the user care about 25 milliseconds?"
+
+"Probably not."
+
+"So you spent a week to save time the user will never notice."
+
+"But it's more efficient."
+
+"Efficient at what? You used 40 hours of developer time to save 0.025 seconds of user time."
+
+"But what if someone opens the app 100 times a day?"
+
+"That's... not how apps work."
+
+"What if the startup time was critical?"
+
+"It's not. The user is still waiting for their slow internet connection anyway."
+
+The developer sighs and makes the code even more complex, optimizing the part that's already fast enough.
+
+The real bottleneck? Loading data from the network. Something they could have discovered in 10 minutes with a profiler.
+
+The moral: Measuring first before optimizing isn't a suggestion—it's a survival mechanism against the most dangerous optimization of all: optimizing the wrong thing, very efficiently.
