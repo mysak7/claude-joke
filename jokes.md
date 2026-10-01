@@ -17526,3 +17526,96 @@ if (Math.abs(total - expectedTotal) < 0.0001) {
 "I stopped counting."
 
 The moral: Copy-pasting without understanding is like catching fire with a net—it works until it doesn't, and by then you've built your whole house out of temporary fixes.
+
+A developer spends four hours debugging a complex state management system.
+
+The app is broken. Variables aren't updating. Data flows backwards through the system like cursed salmon.
+
+They check Redux docs. They trace through selectors. They add console.logs everywhere.
+
+Nothing. Pure chaos.
+
+At 2 AM, they add one more console.log at the very top of the file:
+
+```javascript
+console.log("ABOUT TO ENTER THE PAIN ZONE");
+```
+
+They refresh the page.
+
+It works.
+
+They remove the console.log.
+
+It breaks again.
+
+They add it back.
+
+It works.
+
+"So," says a sleepy colleague via Slack, "the console.log is part of the code now?"
+
+"Yes."
+
+"We can't remove it?"
+
+"No."
+
+"Do you know why?"
+
+"No."
+
+"Is this—"
+
+"Yes. This is programming."
+
+The developer commits the console.log with a commit message:
+
+```
+CRITICAL: Do not remove this console.log or the app breaks
+```
+
+Six months later, a senior developer finds it during code review:
+
+"Why is this here?"
+
+"If I remove it, the app breaks."
+
+"Have you tried removing it recently?"
+
+"No."
+
+"Try now."
+
+They do. The app works perfectly.
+
+They delete the console.log.
+
+The app breaks.
+
+They restore it.
+
+They commit again:
+
+```
+CRITICAL (VERIFIED AGAIN): Do not remove this console.log or the app breaks
+```
+
+The senior developer gives up.
+
+The console.log joins the codebase forever, like a warning buoy in the code ocean: "Here lies the boundary between working and not working. What is the difference? Unknown."
+
+Weeks pass. A new developer asks: "What does this console.log do?"
+
+"It prevents the app from breaking."
+
+"That's not how console.log works."
+
+"Evidently it is."
+
+"This violates every principle of programming."
+
+"This IS programming."
+
+The moral: Sometimes the most important line of code is the one you don't understand. Remove it at your peril.
+
