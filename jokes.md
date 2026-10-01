@@ -17619,3 +17619,78 @@ Weeks pass. A new developer asks: "What does this console.log do?"
 
 The moral: Sometimes the most important line of code is the one you don't understand. Remove it at your peril.
 
+
+## 2026-10-01
+
+A team sits down to discuss version numbering.
+
+"We should follow semantic versioning," says the senior dev. "MAJOR.MINOR.PATCH."
+
+"What counts as a breaking change?" asks the junior dev.
+
+"When you change something that breaks users' code."
+
+"So... how many breaking changes have we had?"
+
+"I don't know. Hundreds?"
+
+"So we should be at version 847.0.0?"
+
+The senior dev sighs into their coffee.
+
+"Let me explain what 'breaking change' means in theory versus in practice."
+
+"In theory?"
+
+"It's precise. It's unambiguous. It's the foundation of a sane versioning system."
+
+"And in practice?"
+
+"We changed a button's color from blue to teal. It broke someone's visual regression test. We debated for an hour whether that was MINOR or PATCH."
+
+"What did you decide?"
+
+"We decided it was a bug in their test, bumped PATCH, and moved on with our lives."
+
+Three months later, the version is 1.0.847.
+
+"That's a lot of patches," says the auditor.
+
+"We fixed a lot of bugs."
+
+"What was the last one?"
+
+"Fixed a typo in error message capitalization."
+
+"That's PATCH-worthy?"
+
+"We were being thorough."
+
+"And the version before that?"
+
+"Removed a console.log."
+
+"So seven hundred patches, and none of them were actual breaking changes?"
+
+"Oh no," says the developer. "Version 1.1.0 was a breaking change. We updated the API response format. Everyone's code broke. We bumped MINOR though, not MAJOR."
+
+"Why MINOR and not MAJOR?"
+
+"Because we told them the old version would be deprecated 'eventually,' so technically we warned them."
+
+"That's not how semantic versioning works."
+
+"It is now."
+
+The auditor closes their laptop.
+
+"Do you have documentation for this versioning scheme?"
+
+"Yes. It's a coin flip. Heads is MINOR, tails is PATCH, and we haven't seen MAJOR since 2019."
+
+"When was the last major version?"
+
+"When we realized nobody was reading the breaking changes anyway, so why bother documenting them?"
+
+The moral: Semantic versioning only works if you understand it. The coin is more honest.
+
