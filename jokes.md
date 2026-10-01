@@ -17437,3 +17437,92 @@ That's programming: sometimes the bug is the feature, and removing it breaks eve
 
 The moral: The line between "bad code" and "working code" is whether removing it crashes production. If it does, it's good code. Confusing? Yes. But employed.
 
+
+## 2026-10-01
+
+A developer encounters a problem with floating point arithmetic.
+
+`0.1 + 0.2 === 0.3` returns `false`.
+
+They search online.
+
+They find a Stack Overflow post with 47,000 upvotes titled "Why is floating point arithmetic broken?"
+
+The accepted answer has 8 paragraphs about IEEE-754 standards.
+
+The developer doesn't read it.
+
+They copy the top comment instead:
+
+```javascript
+Math.abs(a - b) < 0.0001
+```
+
+Problem solved. They celebrate.
+
+Weeks later: a bug in production.
+
+The code that calculates prices now sometimes charges `0.0000001` dollars.
+
+"This is a floating point precision issue," says the senior developer.
+
+"I thought we fixed that?"
+
+"We patched it."
+
+"What's the difference?"
+
+"A patch hides the problem. A fix understands it."
+
+"So we're hiding the floating point precision issue?"
+
+"Yes."
+
+"For how long?"
+
+"Until someone tries to buy something that costs exactly `$9.99999999`."
+
+"Then what?"
+
+"Then we add another patch."
+
+"And the next bug?"
+
+"Another patch."
+
+"This seems inefficient."
+
+"This seems like software."
+
+The Stack Overflow answer remains unread.
+
+The comment remains copied.
+
+The patches stack up.
+
+Six months later, a user complains: "Why does my total sometimes say $49.99999999999999999?"
+
+The junior developer looks at the code:
+
+```javascript
+const total = items.reduce((sum, item) => sum + item.price, 0);
+if (Math.abs(total - expectedTotal) < 0.0001) {
+  return Math.round(total * 100) / 100;
+}
+```
+
+"We already have a workaround," they say.
+
+"Then why did it fail?"
+
+"The workaround had a workaround. And the workaround to that workaround failed."
+
+"So we need a workaround to that."
+
+"Yes."
+
+"How many workarounds is this?"
+
+"I stopped counting."
+
+The moral: Copy-pasting without understanding is like catching fire with a net—it works until it doesn't, and by then you've built your whole house out of temporary fixes.
