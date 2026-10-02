@@ -17744,3 +17744,93 @@ They commit it.
 The system works again.
 
 The moral: Sometimes fixing bugs creates more problems. That's why we call it "legacy code" instead of "broken code."
+
+A developer writes a comment:
+
+```
+// TODO: refactor this tomorrow, it's a mess but it works
+```
+
+"Refactor WHAT exactly?" asks the code reviewer.
+
+"The whole thing. It's duct tape and prayers."
+
+"How long will refactoring take?"
+
+"Two hours."
+
+"Okay, add it to the sprint."
+
+Three weeks later, the TODO is still there.
+
+"Did you refactor?" asks the tech lead.
+
+"No, something else came up."
+
+"Okay, but soon?"
+
+"Yes. Soon."
+
+Six months later, a new developer finds it.
+
+"This says tomorrow. We're six months past tomorrow."
+
+"That's not how time works here," says the original developer, now on a different project.
+
+"How DOES time work here?"
+
+"Tomorrow means 'not today.' It can be perpetually tomorrow."
+
+The developer updates the comment:
+
+```
+// TODO: refactor this tomorrow (day 187)
+```
+
+A year passes. The comment reaches day 365.
+
+"It's a full year later," says an intern.
+
+"Is it?" says the senior dev. "I haven't noticed."
+
+"Shouldn't someone fix this?"
+
+"Why? It works."
+
+"It says it's a mess."
+
+"It's a PRODUCTIVE mess. The worst code is code that doesn't exist. This code exists. It is therefore good code."
+
+Another developer proposes a rewrite.
+
+The original author reviews it:
+
+```
+// I see you've rewritten my mess into something clean.
+// Here's the problem: nobody understands the new code.
+// But everyone understands how to work around the old code.
+// Which is a form of understanding.
+// So actually, no.
+```
+
+The rewrite is rejected.
+
+Five years later, a startup engineer fresh out of college finds the code.
+
+"This is the worst thing I've ever seen."
+
+"Welcome to production," says the tech lead.
+
+"When was this written?"
+
+"2021."
+
+"Hasn't anyone fixed it?"
+
+"Have you noticed we're still in business?"
+
+"What does that have to do with—"
+
+"Everything."
+
+The moral: The best code is the code you understand well enough to leave alone. The best comment is the one that says 'tomorrow' because tomorrow never comes, so neither do the bugs.
