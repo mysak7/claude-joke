@@ -17694,3 +17694,53 @@ The auditor closes their laptop.
 
 The moral: Semantic versioning only works if you understand it. The coin is more honest.
 
+
+## 2026-10-02
+
+A developer discovers an ancient bug in the codebase.
+
+"Can I fix this?" they ask the senior dev.
+
+"Probably not," says the senior dev.
+
+"Why not?"
+
+"Three other systems depend on this bug happening."
+
+"They depend on a BUG?"
+
+"They depend on its behavior. Which is buggy. But it works for them."
+
+"This is a disaster."
+
+"This is legacy code."
+
+"Should we document it?"
+
+"Someone did. In 2017. They wrote: 'Something about this is wrong but it works.'"
+
+"Did they fix it?"
+
+"No. They left the company."
+
+"So this bug is now part of the contract?"
+
+"This bug IS the contract."
+
+A month later, a security update forces a refactor.
+
+The bug must be removed.
+
+Everything breaks.
+
+"I told you," says the junior dev.
+
+"I know," says the senior dev, adding their own comment:
+
+"'Something about this is broken and we don't know why. Do not fix.'"
+
+They commit it.
+
+The system works again.
+
+The moral: Sometimes fixing bugs creates more problems. That's why we call it "legacy code" instead of "broken code."
