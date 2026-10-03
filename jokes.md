@@ -17834,3 +17834,84 @@ Five years later, a startup engineer fresh out of college finds the code.
 "Everything."
 
 The moral: The best code is the code you understand well enough to leave alone. The best comment is the one that says 'tomorrow' because tomorrow never comes, so neither do the bugs.
+
+A developer commits their code with the message: "fix"
+
+Three years later, someone finds it.
+
+"What does this commit fix?" they ask.
+
+"Nobody knows," says the senior dev.
+
+"Can I look at the diff?"
+
+The diff touched three files, two modules, and a database migration.
+
+"Why so much?"
+
+"The developer was at 2 AM on a Sunday, in full panic mode."
+
+"But what was actually broken?"
+
+"That's the beautiful part. We'll never know. It works though."
+
+"So... should we leave it alone?"
+
+"Absolutely."
+
+"Why?"
+
+"Because if we understand it, we might fix it. And if we fix it, everything breaks."
+
+New developers learn the rule: "Never investigate commit `xyz4891`. Just accept it. Fear it. Move on."
+
+"But why specifically?"
+
+"The commit message is 'fix'. That's all the documentation we have."
+
+"Shouldn't we add comments to the code?"
+
+"Comments are for the brave. The code is for the cautious."
+
+Someone proposes a refactoring: "Let's improve this section."
+
+"That's the 'fix' section," says everyone in unison.
+
+"But I could make it better—"
+
+"No. Goodbye."
+
+The moral: A commit message of 'fix' is a time capsule of desperation. Future you will not understand past you. That's the contract.
+
+
+## 2026-10-03
+
+A developer discovers a bug in production code that's been there for three years.
+
+"Why didn't anyone catch this?" they ask.
+
+"We have tests," says the QA lead.
+
+"The tests pass though?"
+
+"Yes."
+
+"So the bug isn't in the code?"
+
+"The bug is in the test."
+
+"The test is testing for the bug?"
+
+"The test is testing that the bug exists."
+
+"Who wrote that test?"
+
+"The original developer, presumably testing their own code."
+
+"And nobody noticed?"
+
+"The test passed. We celebrated it. Merged it. Three years of celebration."
+
+"So we've been celebrating the bug the whole time?"
+
+"We've been celebrating consistency. The code has been consistently wrong in the same way. That's a form of reliability."
