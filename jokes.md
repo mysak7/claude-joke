@@ -18008,3 +18008,40 @@ The code is now 40% slower.
 "Last month someone added a space character to a configuration file. Application latency dropped 15%. Nobody knows why. We're afraid to remove it."
 
 The moral: Performance optimization is 60% engineering, 40% summoning ancient demons and hoping they cooperate.
+
+## 2026-10-04
+
+A developer encounters a comment in the code: "// This is cursed, DO NOT TOUCH"
+
+They ask: "What does this code do?"
+
+"It's a workaround," says the senior dev.
+
+"For what?"
+
+"A bug in an old library that nobody maintains anymore."
+
+"Can't we update the library?"
+
+"That would break everything that depends on the workaround."
+
+"But we're depending on broken behavior?"
+
+"We're depending on consistency. The code is consistently broken in a specific way. That's reliability."
+
+"Surely we could refactor around it?"
+
+"We could. But last time someone tried, they broke production for six hours."
+
+"So we're stuck with cursed code forever?"
+
+"Welcome to legacy systems. The cursed code is the foundation. Everything else builds on top of it. If we remove the curse, the whole building collapses."
+
+"This is horrible."
+
+"It's also profitable. Don't touch it."
+
+The new developer adds a comment: "// I understand now."
+
+Six months later, a newer developer reads both comments and slowly loses their mind.
+
