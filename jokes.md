@@ -18095,3 +18095,53 @@ The mysterious Stack Overflow code becomes sacred—documented nowhere, understo
 "Exactly. We back it up anyway. Just in case."
 
 The moral: Software development is 60% understanding what you built, 40% reverently preserving ancient code you copied from the internet and dare not question.
+
+A developer spends three hours debugging a subtle race condition in their code.
+
+"I can't find it," they say in frustration.
+
+"Tell me what's happening," says their colleague.
+
+The developer starts to explain.
+
+"So it's intermittent, only happens under—"
+
+"Wait, do you have a goroutine running without a context?"
+
+"No, I checked th—"
+
+"What about the shutdown sequence? How do you handle in-flight requests?"
+
+"Oh. OH. I don't."
+
+The bug is fixed by speaking, not by coding.
+
+"That's it?" says the colleague.
+
+"That's it."
+
+"You could have figured that out yourself if you'd just talked to me earlier."
+
+"I know. That's why I came to find you. I needed the cognitive weight of another person's presence."
+
+"That's pathetic."
+
+"That's debugging."
+
+"We could automate this. Create a rubber duck that asks good questions."
+
+"It would never work."
+
+"Why not?"
+
+"Because the problem isn't that the duck asks good questions. It's that my brain works better when it has an audience. Even a silent audience. The duck would work fine."
+
+"Then why doesn't it?"
+
+"Because I'm too proud to debug with a plastic duck. I need a person. I need to feel judged."
+
+"So you're paying me to silently judge you while you fix your bugs?"
+
+"Exactly. Welcome to senior engineering."
+
+The moral: Code reviews aren't about reviewing code. They're about providing a judgment-delivery platform that makes developers produce better work through shame.
