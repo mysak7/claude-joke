@@ -18260,3 +18260,46 @@ Six months later, a comment appears above the function:
 
 The moral: The scariest code isn't the code you don't understand. It's the code you wrote yourself and have no idea how it actually executes.
 
+
+A developer tests their new concurrency feature on a laptop: "This is beautiful. Clean synchronization. No deadlocks."
+
+Ships to production.
+
+The ops team pages them: "Your service is creating a thread per request."
+
+"That's fine," says the developer. "Threads are cheap."
+
+"You have fourteen thousand threads."
+
+"...oh."
+
+"Does your laptop have fourteen thousand CPUs?"
+
+"No. It has eight."
+
+"And production?"
+
+"Also eight."
+
+"So when you load-tested on your machine, how many concurrent requests did you simulate?"
+
+"Uh. Two? Maybe three?"
+
+"And at what point did you realize that your beautiful synchronization mechanism only works when there's no actual concurrent load?"
+
+"Just now, apparently."
+
+"What's the fix?"
+
+"Complete rewrite. I built the entire thing on assumptions that only hold true when nothing is actually happening simultaneously."
+
+"Which is the opposite of what concurrency features should do."
+
+"Yes."
+
+"How long?"
+
+"Two weeks. And a lot of humility."
+
+The moral: Your laptop is a liar. It will tell you your concurrency code is beautiful at scales that don't exist. Production will tell you the truth at 3 AM.
+
