@@ -18145,3 +18145,47 @@ The bug is fixed by speaking, not by coding.
 "Exactly. Welcome to senior engineering."
 
 The moral: Code reviews aren't about reviewing code. They're about providing a judgment-delivery platform that makes developers produce better work through shame.
+
+## 2026-10-05
+
+A developer estimates: "This feature will take two days."
+
+The manager asks: "Are you sure?"
+
+"Yeah, it's just a simple CRUD operation. Create, read, update, delete. I've done this a thousand times."
+
+Three weeks later...
+
+"What happened?" asks the manager.
+
+"Well," says the developer, "the simple part was simple. But then we needed to handle concurrent updates, so we added optimistic locking. Then we realized our ORM doesn't support the locking strategy we wanted, so we rewrote three queries. Then we discovered a subtle race condition that only happens under load. Then we had to add caching, but the cache invalidation strategy was complex, so we added distributed cache synchronization. Then that broke under network partitions, so we added circuit breakers. Then we realized the circuit breaker was cutting off valid traffic, so we—"
+
+"Stop," says the manager. "It's done though, right?"
+
+"It's done."
+
+"How simple is it now?"
+
+"It's beautiful. Bulletproof. I could run it on a potato and it wouldn't break."
+
+"Fantastic."
+
+"Yeah. Now I need to update the documentation."
+
+"How long will that take?"
+
+"Two hours?"
+
+"Let me guess. Someone will read the documentation, find an edge case we didn't handle, and—"
+
+"We'll spend another three weeks fixing it."
+
+"What's the lesson here?"
+
+"There's no simple CRUD operation. There's just CRUD with varying degrees of complexity that you don't know about until you start."
+
+"Should we stop estimating?"
+
+"We should stop saying 'simple.'"
+
+The moral: In software development, "simple" is a four-letter word that means "you don't understand the problem yet."
