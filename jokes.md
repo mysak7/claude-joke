@@ -18189,3 +18189,74 @@ Three weeks later...
 "We should stop saying 'simple.'"
 
 The moral: In software development, "simple" is a four-letter word that means "you don't understand the problem yet."
+
+A developer proudly reviews their own code: "This function is elegant. I cache the result here, use lazy loading there, and the performance characteristics are predictable."
+
+The code ships to production.
+
+Three days later: "Why is our database melting?"
+
+The developer checks the logs: "That's... not what I thought that line did."
+
+"What did you think it did?"
+
+"I thought it updated the cache once per request. It's actually hitting the database once per iteration. Per item. Per nested loop."
+
+"How nested is the loop?"
+
+"There are five levels."
+
+"And how many items?"
+
+"About ten thousand. Per request."
+
+"So you're doing fifty million database queries. Per request."
+
+"When you say it like that, it sounds bad."
+
+"It is bad! We're getting rate-limited by our own database!"
+
+The developer stares at the code. "I wrote this. I understand databases. I know what `select` does."
+
+"And yet."
+
+"There's no way this got past code review."
+
+"I reviewed it."
+
+"What did you look for?"
+
+"I looked for obvious mistakes. Null pointers. Off-by-one errors. Things that make code obviously wrong."
+
+"But not for fundamental misunderstandings of how databases work?"
+
+"I don't work at that level. I trust that senior developers understand their own code."
+
+"I'm senior. I have no idea what my code does anymore."
+
+"So what now?"
+
+"Now I drink coffee and stare at this function until I understand why my eyes see 'update cache' but my code sees 'query database for every integer from 1 to 10,000.'"
+
+"How long will that take?"
+
+"Twelve hours. Then another twelve hours to fix it. Then another week to explain to my manager why we spent twenty million database queries discovering that the word 'caching' and I have different definitions."
+
+The developer goes back to the code.
+
+Six months later, a comment appears above the function:
+
+```
+// IMPORTANT: DO NOT TRUST THE VARIABLE NAMES
+// What looks like a cache update is actually a database query.
+// What looks like lazy loading is eager loading.
+// What looks like a performance optimization is a performance catastrophe.
+// 
+// This was written by someone who understood databases in theory
+// but executed them like they learned programming from a fortune cookie.
+//
+// If you're reading this, I'm sorry. Even I don't know what this does.
+```
+
+The moral: The scariest code isn't the code you don't understand. It's the code you wrote yourself and have no idea how it actually executes.
+
