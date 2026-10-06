@@ -18422,3 +18422,163 @@ The developer checks the code: "Oh no."
 
 The moral: When performance is bad, check the documentation before checking Stack Overflow. When you feel like that's obvious, you've probably already shipped a production bug that proves you forgot this lesson.
 
+
+## 2026-10-06
+
+A developer builds a financial reporting system for a global company.
+
+"It's straightforward," they say. "Add up transactions, show totals, done."
+
+It ships.
+
+Three hours later: "Why is London's report showing different totals than New York's?"
+
+The developer checks: "That's weird. The transactions are identical. Same amounts, same dates."
+
+"Same dates and times?"
+
+"Well... the times are different. But that shouldn't matter for totals."
+
+"What are the times?"
+
+"2026-10-06 15:30:00 in New York, 2026-10-06 20:30:00 in London. Same moment in time, different timezones."
+
+"And why would that affect the totals?"
+
+"It... shouldn't."
+
+"So what's the bug?"
+
+"Oh. Oh no."
+
+"What?"
+
+"When I fetch transactions for 'today', I'm comparing the date in UTC against the date in the user's local timezone."
+
+"Why would you do that?"
+
+"I wasn't thinking about it. I just grabbed `DateTime.now().date` and compared it to the transaction date."
+
+"In what timezone?"
+
+"The server's timezone."
+
+"Which is?"
+
+"UTC."
+
+"And the user is in?"
+
+"London. Which is GMT+1 right now."
+
+"So when it's 15:30 in New York, it's 20:30 in London."
+
+"Yes."
+
+"And what date is it?"
+
+"2026-10-06 in both places."
+
+"Right. But what time did you check?"
+
+"On the server, it was 2026-10-06 20:30 UTC."
+
+"Which is?"
+
+"2026-10-06 20:30 in London. 2026-10-06 15:30 in New York."
+
+"Exactly. So when you compare against the user's local date..."
+
+"Oh. I'm comparing 2026-10-06 at 20:30 UTC against the transaction date in the user's local date."
+
+"Which is?"
+
+"Still 2026-10-06. So that should match."
+
+"It should. But does it?"
+
+"I... need to look at the code."
+
+The developer checks. "Oh no. I'm doing `DateTime.now().toLocalTime().date` but then I'm also filtering by `transaction.date.toUTC()` first."
+
+"You're converting to local time and then comparing against UTC?"
+
+"I'm converting different directions at different points in the code. Sometimes I convert the transaction time to local before comparing. Sometimes I convert the current time to UTC."
+
+"So you're mixing timezones."
+
+"Within the same calculation."
+
+"And the totals are wrong because?"
+
+"Depending on which timezone I convert to first, a transaction that's technically on 2026-10-06 in UTC but 2026-10-07 in Tokyo might get included or excluded inconsistently."
+
+"Is Tokyo in this system?"
+
+"I don't know. I didn't check. I just used the server's idea of 'now' and assumed it was universal."
+
+"It is. UTC is."
+
+"But I didn't use UTC consistently."
+
+"How many places in the code convert timezones?"
+
+"Seventeen?"
+
+"Did they all use the same method?"
+
+"No. Some use `toLocalTime()`, some use `toUTC()`, some use `getOffset()` and manually add/subtract."
+
+"Please tell me you didn't manually calculate timezone offsets."
+
+"I did. Because I thought that would be faster than calling a timezone library."
+
+"Is the system faster?"
+
+"No. It crashes when daylight saving time changes."
+
+"Because your manual offset calculation doesn't account for DST?"
+
+"It doesn't even know what DST is. I just hardcoded the offset I observed on the day I wrote the code."
+
+"So when we spring forward or fall back?"
+
+"The offset is wrong."
+
+"For how long?"
+
+"Until someone notices and tells me. So far it's been three hours."
+
+"And nobody noticed it was the exact moment when the timezone offset changed?"
+
+"I did. I assumed it was unrelated."
+
+"How?"
+
+"I thought maybe the users' clocks were wrong."
+
+"The users' clocks or your code's understanding of what time it is?"
+
+"I see now that I was optimistic."
+
+"What's the fix?"
+
+"Delete everything I wrote. Use a real timezone library. Pick one timezone — probably UTC — convert to it once at the input boundary, do all calculations in that timezone, convert back only at the output boundary."
+
+"That's the standard approach."
+
+"It is now that I've learned this the hard way."
+
+"How many reports have wrong totals?"
+
+"Based on how long it was running? Probably all of them."
+
+"Are you going to fix them?"
+
+"I'm going to add a note to the README that says: 'Never, ever, under any circumstances, use manual timezone calculations. Not even for a quick prototype. Not even if you're sure you'll replace it later. Just use a library. Your future self will thank you. Your manager will thank you. The users who need accurate reports will thank you. Timezones are a conspiracy to make developers suffer.'"
+
+"Is that in the official README?"
+
+"It should be."
+
+The moral: Timezones are not optional complexity. Databases, APIs, and reporting systems that ignore timezone handling don't work reliably. Accept this now, or learn it by debugging three hours of reports that don't match.
