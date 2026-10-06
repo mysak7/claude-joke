@@ -18582,3 +18582,53 @@ The developer checks. "Oh no. I'm doing `DateTime.now().toLocalTime().date` but 
 "It should be."
 
 The moral: Timezones are not optional complexity. Databases, APIs, and reporting systems that ignore timezone handling don't work reliably. Accept this now, or learn it by debugging three hours of reports that don't match.
+
+## 2026-10-06
+
+A developer debugging a calculation:
+
+"Why is the total wrong?"
+
+They show the code:
+
+```javascript
+total = item1 + item2 + item3
+```
+
+"What are the values?"
+
+"item1 is 10, item2 is 20, item3 is '30'."
+
+"What do you get?"
+
+"1030"
+
+"You're concatenating a string."
+
+"No, I'm using the plus operator. For addition."
+
+"Which is also the concatenation operator."
+
+"That's insane."
+
+"Welcome to JavaScript. Convert to a number: parseInt(item3) or Number(item3)"
+
+"I hate this language."
+
+"You and everyone else. Yet here we are."
+
+"I'm switching to Python."
+
+"Python would throw a TypeError instead."
+
+"At least I'd know something's wrong."
+
+"You do know something's wrong. You got 1030 instead of 60."
+
+"It looks like a number though."
+
+"It's a string that looks like numbers got mashed together."
+
+"The moral?"
+
+"JavaScript's type system operates on pure faith that you know what you're doing. Never have that faith."
