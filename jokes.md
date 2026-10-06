@@ -18303,3 +18303,122 @@ The ops team pages them: "Your service is creating a thread per request."
 
 The moral: Your laptop is a liar. It will tell you your concurrency code is beautiful at scales that don't exist. Production will tell you the truth at 3 AM.
 
+
+## 2026-10-06
+
+A developer writes a function that calls an external API to fetch user data.
+
+"It's simple," they say. "Just make a request, parse the response, return the user."
+
+It ships to production.
+
+Two weeks later: "Why are our endpoints timing out?"
+
+The developer checks the code: "Oh no."
+
+"What?"
+
+"I'm calling the API synchronously."
+
+"Is that a problem?"
+
+"The API sometimes takes thirty seconds to respond."
+
+"And how long is your endpoint timeout?"
+
+"Five seconds."
+
+"So for every slow API response, you're timing out and returning an error to the user?"
+
+"Worse. The request is still hanging in the background. The connection pool is exhausted. New requests are getting rejected."
+
+"How many requests per second do you get?"
+
+"About fifty."
+
+"And how many connections does your pool have?"
+
+"Two hundred. But they're all waiting on the slow API."
+
+"For thirty seconds each?"
+
+"Yes. So every few seconds, a hundred requests fail instantly because there are no available connections."
+
+"Why didn't you test this?"
+
+"I tested it locally. The API responded in milliseconds."
+
+"And how many requests did you simulate?"
+
+"One."
+
+"So you tested a single synchronous request against a staging API that was probably close to your machine. In production you have fifty concurrent requests against an API in another region with latency."
+
+"When you say it like that, it sounds obvious."
+
+"Did you read the API documentation?"
+
+"...skimmed it."
+
+"And?"
+
+"It says 'Request timeout: 30 seconds. For time-sensitive operations, use our asynchronous endpoint instead.'"
+
+"There's an asynchronous endpoint."
+
+"Yes."
+
+"For your exact use case."
+
+"Yes."
+
+"That you didn't notice because you skimmed the documentation."
+
+"I know."
+
+"How many people got 500 errors while you were figuring this out?"
+
+"About twenty thousand?"
+
+"Twenty thousand? In two weeks?"
+
+"The bug was subtle. Only showed up under load. We only noticed when monitoring started alerting."
+
+"And you didn't check the API docs for performance guidance?"
+
+"I checked Stack Overflow instead."
+
+"And?"
+
+"Found a post from 2019 that said 'just use this library, it handles everything.' The library was four versions behind. Turns out they added async support three versions ago."
+
+"Did it occur to you to look at the library's recent changes?"
+
+"Not until my manager asked why we were getting paged every night."
+
+"So you updated the library?"
+
+"Can't. Two major versions have breaking changes to the API."
+
+"So you rewrote the function?"
+
+"I'm rewriting the entire service. Should be done in two weeks."
+
+"Which is how long the bug was in production."
+
+"Yes."
+
+"Any lessons?"
+
+"Don't skim documentation. Don't assume Stack Overflow is current. Don't test synchronous code with a single concurrent request. And maybe: if an external API has a timeout longer than your patience, you probably don't understand the problem yet."
+
+"Are you adding any comments to the code?"
+
+"Yes. I'm adding a comment at the top of the file that says: 'READ THE DOCUMENTATION. SERIOUSLY. I MEAN IT. CTRL+F "ASYNC". READ THAT SECTION. DON'T SKIP IT.'"
+
+"In all caps?"
+
+"Every word. Future me needs to know that past me was a disaster."
+
+The moral: When performance is bad, check the documentation before checking Stack Overflow. When you feel like that's obvious, you've probably already shipped a production bug that proves you forgot this lesson.
+
