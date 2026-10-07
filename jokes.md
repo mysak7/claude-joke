@@ -18632,3 +18632,33 @@ total = item1 + item2 + item3
 "The moral?"
 
 "JavaScript's type system operates on pure faith that you know what you're doing. Never have that faith."
+
+## 2026-10-07
+
+A developer explaining old code to a junior:
+
+"What does this variable do?"
+
+"Honestly? No idea."
+
+"It's your code."
+
+"From five years ago. I documented it with the name `temp_thing_maybe`."
+
+"You thought maybe?"
+
+"I was unsure. Turns out the 'maybe' was more important than the 'temp' — it's still here."
+
+"Did you ever figure out what it does?"
+
+"No. And now changing it breaks three tests and two different service calls."
+
+"What does it actually do?"
+
+"Something. It's definitely doing something. Possibly essential. Quite possibly critical."
+
+"So you have to keep it?"
+
+"And maintain it. And hope."
+
+The moral: A variable named `temp_thing_maybe` from five years ago isn't temporary — it's a permanent mystery. Never name things optimistically. Your future self won't remember your assumptions, only your bad naming choices.
