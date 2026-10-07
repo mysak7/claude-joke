@@ -18734,3 +18734,85 @@ A developer finds their app suddenly slower in production.
 "I did many things wrong."
 
 The moral: Logging is debugging for the impatient. Remove it before committing. Or configure log levels properly. Or both. Never assume fast failure cycles are unrelated to changes you just made.
+
+## 2026-10-07
+
+A developer staring at a test that randomly fails.
+
+"Why does this test pass sometimes and fail other times?"
+
+"Did you write a race condition?"
+
+"No, I'm just doing basic calculations. It should be deterministic."
+
+"Can you run it multiple times?"
+
+Five runs. Pass. Pass. Fail. Pass. Fail.
+
+"Yeah, that's a race condition."
+
+"Where? It's just math. No threads, no async."
+
+"What about imports?"
+
+"Standard library only. Math is math."
+
+"Show me the test setup."
+
+```python
+def test_calculation():
+    result = calculate_value()
+    assert result == 42
+```
+
+"What's `calculate_value`?"
+
+"Multiplies two globals that get initialized in `setUp`."
+
+"Which globals?"
+
+"uh... `global_a` and `global_b`."
+
+"Who initializes them?"
+
+"The test framework's setup runs before each test."
+
+"Does each test get its own process?"
+
+"No, all tests run in the same Python process."
+
+"With pytest-xdist for parallelization?"
+
+"Yeah."
+
+"And multiple workers?"
+
+"Four workers."
+
+"Four tests. Each test modifying the same globals. Concurrently."
+
+"Oh."
+
+"Yeah. 'Oh.'"
+
+"But Python has the GIL. Isn't that—"
+
+"The GIL prevents simultaneous bytecode execution. It doesn't prevent test orders from being random."
+
+"So test B reads global_a while test A is writing it?"
+
+"Constantly. Hence random failures."
+
+"How did you not notice this?"
+
+"It ran fine locally. I always run with `-n 1`."
+
+"Because you ran single-threaded."
+
+"I did. Because parallel testing felt unnecessary for simple tests."
+
+"Now?"
+
+"Now I'm learning that 'simple' and 'flaky' are closer than I thought."
+
+The moral: Global state + parallelization = flaky tests. The GIL is not your friend. Always test the way CI tests, or CI will surprise you with failures you can never reproduce.
