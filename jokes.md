@@ -18662,3 +18662,75 @@ A developer explaining old code to a junior:
 "And maintain it. And hope."
 
 The moral: A variable named `temp_thing_maybe` from five years ago isn't temporary — it's a permanent mystery. Never name things optimistically. Your future self won't remember your assumptions, only your bad naming choices.
+
+A developer finds their app suddenly slower in production.
+
+"What changed?"
+
+"Nothing. The code's identical to staging."
+
+"When did it start?"
+
+"Last Tuesday. Right after the deploy."
+
+"What did you deploy?"
+
+"Oh, just added a few logging statements to debug some edge cases."
+
+"And?"
+
+"I forgot to remove them."
+
+"How many logging statements?"
+
+"Uh. A lot."
+
+"Like, hundreds?"
+
+"More. It's every function entry and exit. Plus request/response bodies."
+
+"In a request handler?"
+
+"Yeah, a very popular endpoint. Gets like ten thousand requests per second."
+
+"You're logging ten thousand request bodies per second to disk?"
+
+"Yes."
+
+"What does that look like?"
+
+"The disk fills up in about six minutes. Then the service crashes. Then the monitoring alert pages the on-call engineer. Then they restart the service."
+
+"So this cycles?"
+
+"Every six minutes. I didn't notice for a week because I assumed the alerts were a false positive."
+
+"A false positive that happens every six minutes?"
+
+"I was sleeping."
+
+"During the day?"
+
+"There were a lot of false positives."
+
+"No there weren't. You were filling your disk with logs."
+
+"I understand now."
+
+"What's the fix?"
+
+"Remove the console.log statements."
+
+"Will you?"
+
+"I thought I did. Turns out I only removed the ones in development. The production ones are still there."
+
+"All of them?"
+
+"All of them."
+
+"And you deployed this to production."
+
+"I did many things wrong."
+
+The moral: Logging is debugging for the impatient. Remove it before committing. Or configure log levels properly. Or both. Never assume fast failure cycles are unrelated to changes you just made.
