@@ -18816,3 +18816,63 @@ def test_calculation():
 "Now I'm learning that 'simple' and 'flaky' are closer than I thought."
 
 The moral: Global state + parallelization = flaky tests. The GIL is not your friend. Always test the way CI tests, or CI will surprise you with failures you can never reproduce.
+
+## 2026-10-08
+
+A developer discovers a strange bug: their code works perfectly in production 99.9% of the time, but randomly returns `NaN` for no apparent reason.
+
+```javascript
+function calculateBalance(transactions) {
+  let balance = 0;
+  for (let i = 0; i < transactions.length; i++) {
+    // sum all transactions to current balance
+    balance = balance + transactions[i];
+  }
+  return balance;
+}
+
+const myTransactions = [100, 50, 25, "20", 10];
+console.log(calculateBalance(myTransactions));
+```
+
+"Why does this sometimes return NaN?" they ask their colleague.
+
+"What's in your transactions array?"
+
+"Numbers. Mostly."
+
+"Mostly?"
+
+"Well, sometimes the API returns strings that look like numbers."
+
+"And you're adding them directly?"
+
+"Yes. It works 99.9% of the time."
+
+"What happens the 0.1%?"
+
+"That's when the NaN appears."
+
+"You're adding `"20"` to a number. JavaScript coerces it."
+
+"It should work."
+
+"Number plus string. JavaScript turns that into string concatenation. `0 + "20"` becomes `"020"`. Keep going, you get `"02025"` concatenated with `10`, which is `"0202510"`. Then add that to a real number? `NaN`."
+
+"But... it works most of the time?"
+
+"The one time a string appears near the end, it breaks spectacularly."
+
+"How do I fix it?"
+
+"Parse the string as a number first. `Number(transactions[i])` or `parseInt(transactions[i], 10)`."
+
+"Why didn't the tests catch this?"
+
+"Your test data was probably all actual numbers."
+
+"Isn't that what real data is?"
+
+"Real data is whatever the user types, whatever the API glitches and returns, whatever the database corrupts. Your test data was the happy path. The real path has footprints from three years of accumulated edge cases."
+
+The moral: JavaScript's type coercion is a feature and a bug at the same time. Always validate at system boundaries. The happy path is just the first one. The unhappy paths are infinite.
