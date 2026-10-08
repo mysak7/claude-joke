@@ -18876,3 +18876,43 @@ console.log(calculateBalance(myTransactions));
 "Real data is whatever the user types, whatever the API glitches and returns, whatever the database corrupts. Your test data was the happy path. The real path has footprints from three years of accumulated edge cases."
 
 The moral: JavaScript's type coercion is a feature and a bug at the same time. Always validate at system boundaries. The happy path is just the first one. The unhappy paths are infinite.
+
+A developer is confused because their PR shows hundreds of files changed that they never touched.
+
+"I only modified one file. How are all these others showing as changed?"
+
+"Show me your PR."
+
+"All marked as modified in my branch."
+
+"Did you rebase before merging?"
+
+"I merged main into my branch to stay up to date."
+
+"Then merged your branch back?"
+
+"Yeah."
+
+"You merged main into your branch, introducing all of main's commits. Then when you merged your branch back into main, those commits came along."
+
+"So they're showing as my changes?"
+
+"In the merge commit, yes. They're not actually your changes, but git shows them as integrated by you."
+
+"How do I fix this?"
+
+"Next time: rebase your branch onto main, don't merge main into your branch."
+
+"What's the difference?"
+
+"Merge creates a new commit. Rebase rewrites history. One pollutes the timeline, one cleans it."
+
+"Which is which?"
+
+"The one you just did is the polluted one."
+
+"I hate git."
+
+"Git didn't do this. You integrated wrong."
+
+The moral: Merge vs rebase will confuse junior developers forever. Neither is universally right; both are right sometimes. But if you merge main into a feature branch just to "stay updated," you're doing it wrong.
