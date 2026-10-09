@@ -19032,3 +19032,40 @@ They pull up the logs. The first error, timestamped an hour after the ticket was
 "You know what's exciting? Solving a six-hour problem in six minutes."
 
 The moral: The most expensive debugging session is the one where the error message was visible from the start and you just didn't read it. Production logs aren't for looking at later; they're the first place to look. And the reason the senior engineer asked wasn't condescension—they wanted you to learn the habit. Some lessons are cheaper than six hours.
+
+## 2026-10-09
+
+A developer deploys an optimization to their export feature. "Added caching," they announce. Users report it's still slow.
+
+They check metrics. Exports run in 100ms. Cache hit rate is 95%. Timeout is 30 seconds. Yet still timing out.
+
+They look at the queue. 5000+ pending exports.
+
+"Why are there so many queued?"
+
+They check the logs. Every time a user opens the dashboard, the app calls the export endpoint. The dashboard auto-refreshes every minute.
+
+"So one user leaving it open all day queues up 1440 exports?"
+
+"Yeah. Times however many users do that."
+
+"Is there code preventing duplicates?"
+
+"No."
+
+"You optimized the solution to the wrong problem. The issue isn't that export is slow. It's that you're exporting 5000 times when you need to export once."
+
+"But the data needs to stay fresh."
+
+"How often does it actually change?"
+
+"I... don't know."
+
+"Then you're probably exporting way more often than necessary. Stop exporting every page load. Only export when data actually changes."
+
+"That seems simple."
+
+"It is. Most performance problems are. You're not making the hamster run faster. You're questioning whether the hamster should run at all."
+
+The moral: Caching is great. But it optimizes the symptom, not the problem. Before you cache something, ask why it's being computed so often. The answer is usually "because I made it compute automatically" not "because it's slow." Optimization is for code that does the right thing slowly. Code that does the wrong thing 5000 times is not slow—it's wrong.
+
