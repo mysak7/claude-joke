@@ -18986,3 +18986,49 @@ Silence.
 "No. Two months later someone changed it back to `* * * * *` and added a note: 'Removed yelling comment, made code more readable.'"
 
 The moral: One character. That's all it takes. Cron jobs are silent killers. Comments in code don't prevent typos; they just get deleted when they get inconvenient. And the scariest bugs are the ones that work correctly while quietly ruining your weekend.
+
+A developer gets a critical production ticket: "Feature X is completely broken."
+
+They immediately spin up the profiler.
+
+Then they add extensive logging throughout the code.
+
+Then they write a test that reproduces the issue.
+
+After six hours of debugging, the senior engineer asks: "Did you check the production logs?"
+
+Silence.
+
+They pull up the logs. The first error, timestamped an hour after the ticket was filed: "Unknown column: 'user_id'."
+
+"Someone renamed the column?"
+
+"Yeah. Migration from three days ago."
+
+"The query still references the old name?"
+
+"The migration file is there. The actual query? Not updated."
+
+"Why didn't you see this immediately?"
+
+"I didn't check the logs."
+
+"You spent six hours debugging instead of reading the one line that said what was wrong?"
+
+"I thought the logs would just have routine stuff."
+
+"Production logs are your first source of truth. Check them before you run the profiler. Check them before you add logging. Check them before you write tests."
+
+"I know now."
+
+"Do you?"
+
+"I'll write a runbook."
+
+"You could. Or you could just teach yourself to read the logs first, every time, before doing anything else."
+
+"That's not very exciting."
+
+"You know what's exciting? Solving a six-hour problem in six minutes."
+
+The moral: The most expensive debugging session is the one where the error message was visible from the start and you just didn't read it. Production logs aren't for looking at later; they're the first place to look. And the reason the senior engineer asked wasn't condescension—they wanted you to learn the habit. Some lessons are cheaper than six hours.
