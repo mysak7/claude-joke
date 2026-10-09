@@ -18916,3 +18916,73 @@ A developer is confused because their PR shows hundreds of files changed that th
 "Git didn't do this. You integrated wrong."
 
 The moral: Merge vs rebase will confuse junior developers forever. Neither is universally right; both are right sometimes. But if you merge main into a feature branch just to "stay updated," you're doing it wrong.
+
+## 2026-10-09
+
+A developer notices their API endpoint is mysteriously slow, consuming 40% CPU constantly. They investigate for hours.
+
+"The query is optimized. The database is fine. Why is it crawling?"
+
+They add caching. Still slow.
+
+They add connection pooling. Still slow.
+
+They profile with flame graphs. 98% of time is in the endpoint handler itself, doing almost nothing.
+
+"How often is this endpoint being called?" they ask DevOps.
+
+"According to the metrics? Every 0.3 seconds."
+
+"It's an admin endpoint. Nobody calls it that frequently."
+
+"Let me check the scheduled tasks."
+
+Silence.
+
+"There's a cron job. Supposed to run once an hour."
+
+"What does it do?"
+
+"It calls your endpoint."
+
+"How often?"
+
+"The cron expression is... `* * * * *`."
+
+"That's..."
+
+"Every minute. Every single minute. Since three weeks ago."
+
+"Why?"
+
+"Someone meant to write `0 * * * *` for hourly. One-character typo."
+
+"One character. Forty percent CPU."
+
+"One character."
+
+"For three weeks nobody noticed?"
+
+"The endpoint returns 200. It works. Just slow."
+
+"It's being hammered by your own infrastructure."
+
+"I know."
+
+"And everyone blamed the code."
+
+"I know."
+
+"What did you learn?"
+
+"That cron syntax is `minute hour day month weekday`. That a scheduled task will happily DoS your own API if you let it. And that `0 * * * *` and `* * * * *` are very different despite being one character apart."
+
+"And?"
+
+"And I added monitoring that alerts if an endpoint is called more than expected. And I added a comment above that cron job in big red letters: `CHANGE THIS WRONG EXPRESSION AND SIXTY PEOPLE WILL SPEND SIXTY HOURS DEBUGGING.`"
+
+"Did the comment help?"
+
+"No. Two months later someone changed it back to `* * * * *` and added a note: 'Removed yelling comment, made code more readable.'"
+
+The moral: One character. That's all it takes. Cron jobs are silent killers. Comments in code don't prevent typos; they just get deleted when they get inconvenient. And the scariest bugs are the ones that work correctly while quietly ruining your weekend.
