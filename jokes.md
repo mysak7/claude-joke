@@ -19201,3 +19201,97 @@ They dig deeper. The database stores times in UTC. The scheduler runs in UTC. Bu
 
 The moral: Timezones are why some developers just use Unix timestamps and refuse to think about calendar dates ever again. Time seems simple—it's just numbers, right?—until you add humans, and humans live in timezones, and timezones change, and some don't exist, and some are 30 minutes off. Build in UTC. Convert at the edges. Use a library that understands this better than you do. And if someone says "we should just use a local time," walk away quietly. Don't run. Walk.
 
+
+A developer gets paged at 2 AM.
+
+"The API is down."
+
+They check the logs. Nothing. They check the server status. Running. They SSH in and restart the service.
+
+It comes back up.
+
+By 4 AM they're back asleep.
+
+By 6 AM it's down again.
+
+They check the code. No recent changes. They check the database. No errors. They check the cache. Looks fine. They increase the timeout. They add more servers. They roll back the last deployment.
+
+Still happening.
+
+By Thursday they've tried everything. Every senior dev on the team is looking at it. Nobody finds anything.
+
+"Let me check the alerts," someone says.
+
+"We have alerts?"
+
+"Yeah. You're getting paged because the service is down, so there must be an alert."
+
+They look at the alert.
+
+"OK so the alert fires when the health check fails."
+
+"Right."
+
+"And the health check is... what?"
+
+"A GET request to `/health`"
+
+"And if that endpoint returns 500, we're down."
+
+"Right."
+
+"Let me search for `/health` in the code."
+
+Silence.
+
+"I found it. It's a test endpoint."
+
+"A what?"
+
+"A test endpoint. Someone added it to manually test the service. It returns a hardcoded 500."
+
+"Why would someone do that?"
+
+"It says here: 'TODO: implement proper health check' and the date is..."
+
+"Don't say it."
+
+"Three years ago."
+
+The developer stares. They grep for this endpoint. It's never called in production. It only exists because someone stubbed it out on a Friday and never finished.
+
+But somehow, the alert is pointing to it.
+
+They check the alert configuration.
+
+The endpoint is hard-coded.
+
+"We've been getting paged by a TODO from three years ago," the developer says quietly.
+
+"So delete it."
+
+"I'm afraid to. What if something depends on it?"
+
+"Does anything?"
+
+"No."
+
+"Then delete it."
+
+It takes 20 minutes to confirm nothing depends on it. Another 10 to delete the endpoint and update the alert.
+
+The next morning: no page.
+
+The next week: no page.
+
+The next month: no page.
+
+A senior dev pulls the developer aside.
+
+"Next time something breaks at 2 AM, your first question should be: is this real? Or did someone leave a debug endpoint in production?"
+
+"Isn't that obvious?"
+
+"It should be. It never is."
+
+The moral: We all leave things in production we didn't intend to. A debug statement. A test case. A temporary fix that became permanent. A TODO from three years ago. We find out when it matters most—2 AM, Sunday, during an incident. Before you deploy, ask: does this belong here? And if the answer is 'no,' delete it.
