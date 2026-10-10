@@ -19154,3 +19154,50 @@ They ask: "How many users have asked for this?"
 
 The moral: The most expensive code is code solving a problem that doesn't exist yet. Build what's asked for, not what might be asked for. You'll add the complexity when the complexity is real, and by then you'll understand it. Your job is to deliver solutions to real problems, not inventions in search of problems. And if you're ever tempted to build the elaborate version "just in case," ask yourself: am I solving the problem, or am I solving the problem I wish someone had asked me to solve?
 
+
+## 2026-10-10
+
+A developer writes code to send notifications at "3:00 PM" every day. Tests pass. Deploys to production.
+
+Notifications arrive at the wrong time.
+
+They check the code. The time looks correct.
+
+They check the logs. Different users reporting different times.
+
+"Oh. Different timezones."
+
+They add timezone handling. "Fixed."
+
+Tests pass. Deploys again.
+
+Still wrong.
+
+They dig deeper. The database stores times in UTC. The scheduler runs in UTC. But the frontend was in Eastern time. And the user's expectation was Pacific.
+
+"How many layers of timezone conversion do I need?"
+
+"At least three, probably four."
+
+"Can I just use UTC everywhere?"
+
+"You can try. But then you have to convert when displaying it, when parsing input, when comparing dates, when calculating durations—"
+
+"Stop. I see the problem."
+
+"The problem is that time isn't a number or a string. It's a concept, and it means different things in different places."
+
+"So the solution?"
+
+"One timezone for storage. UTC. One timezone for the application logic. UTC. Convert only at the boundaries—when you display it, when you accept input. Use a datetime library that knows about timezones, not a string parser you wrote."
+
+"That's it?"
+
+"That's it. Most developers figure this out after breaking production twice."
+
+"I haven't broken it yet."
+
+"You will. This is how everyone learns that time is a minefield."
+
+The moral: Timezones are why some developers just use Unix timestamps and refuse to think about calendar dates ever again. Time seems simple—it's just numbers, right?—until you add humans, and humans live in timezones, and timezones change, and some don't exist, and some are 30 minutes off. Build in UTC. Convert at the edges. Use a library that understands this better than you do. And if someone says "we should just use a local time," walk away quietly. Don't run. Walk.
+
