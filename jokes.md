@@ -19069,3 +19069,88 @@ They check the logs. Every time a user opens the dashboard, the app calls the ex
 
 The moral: Caching is great. But it optimizes the symptom, not the problem. Before you cache something, ask why it's being computed so often. The answer is usually "because I made it compute automatically" not "because it's slow." Optimization is for code that does the right thing slowly. Code that does the wrong thing 5000 times is not slow—it's wrong.
 
+
+## 2026-10-10
+
+A product manager asks a developer: "Can you add a feature to let users filter results?"
+
+The developer nods. "On it."
+
+Two weeks pass.
+
+The developer ships a filtering system. Custom query builder. Multiple filter types. AND/OR logic. Save filters for later. Export filtered results. Full documentation.
+
+The product manager opens the PR. "This is... a lot."
+
+"You wanted filtering."
+
+"Yeah, but I showed you mockups. There's a dropdown with five options."
+
+"Right, but users might want complex queries."
+
+"Do they?"
+
+"Probably."
+
+"Did you check?"
+
+"No. But they *could*."
+
+The product manager sighs. "How long did this take?"
+
+"Two weeks."
+
+"And if you'd just added a dropdown?"
+
+"Maybe... two days?"
+
+"So you spent two weeks solving a problem nobody asked for, adding complexity nobody needed, because you assumed they might want it later."
+
+"You said 'feature.' I thought you meant—"
+
+"You thought. That's the problem. You didn't ask. You didn't look at how users actually use the product. You just... built."
+
+"It's still useful. It's still there."
+
+"Now I have to explain to the team why our simple feature has seventeen configuration options. Now every new user is confused by the dropdown. Now I have to write documentation for something that was supposed to be intuitive."
+
+"So you want me to delete it?"
+
+"I want you to delete it and rebuild the dropdown version."
+
+"But—"
+
+"And next time, ask before you build."
+
+The developer rebuilds it in two days. The dropdown version ships. Users love it.
+
+Six months later, they get a request: "Can we add complex filters?"
+
+The developer thinks back to the deleted code. They remember why they built it. They remember those two weeks.
+
+They ask: "How many users have asked for this?"
+
+"About a dozen."
+
+"How many times have they asked?"
+
+"Once each."
+
+"How often?"
+
+"Spread over six months."
+
+"So if I add complex filtering now, when we need it, it solves the problem when the problem is real."
+
+"Yes."
+
+"Better than building it speculatively?"
+
+"Much better."
+
+"Why?"
+
+"Because now you know you need it. You have real examples. You can talk to those users about what they actually want. You're not guessing."
+
+The moral: The most expensive code is code solving a problem that doesn't exist yet. Build what's asked for, not what might be asked for. You'll add the complexity when the complexity is real, and by then you'll understand it. Your job is to deliver solutions to real problems, not inventions in search of problems. And if you're ever tempted to build the elaborate version "just in case," ask yourself: am I solving the problem, or am I solving the problem I wish someone had asked me to solve?
+
