@@ -19392,3 +19392,67 @@ The junior pauses.
 
 The moral: Null checks seem simple—if something is null, handle it. But developers either check too much (cargo cult programming, five checks for one value) or too little (passing null down six function calls and crashing deep in the stack where nobody expects it). Check at the boundary. Trust the path. And if you find yourself writing the same check twice, you've already lost.
 
+
+A developer discovers a performance issue. The app is consuming 2GB of RAM instead of 200MB.
+
+They Google the error message.
+
+Stack Overflow result #1: "Just upgrade to Node 18."
+
+They upgrade. The app still uses 2GB.
+
+Result #2: "Disable clustering. It leaks memory."
+
+They disable clustering. Still 2GB.
+
+Result #3: "Use this undocumented flag: --max-old-space-size=2048."
+
+They set it to 4096. Now it crashes at 4GB.
+
+Result #4: "Update npm. That fixed my leak."
+
+They update npm. Same issue.
+
+Result #5: "It's probably DNS."
+
+They restart everything. Same issue.
+
+They close the laptop and take a walk.
+
+When they come back, they actually run the profiler.
+
+They find the problem: their code is caching every HTTP response in memory forever. The cache never evicts. After a few hours, it's full.
+
+They add a 5-minute TTL to the cache.
+
+RAM drops to 150MB.
+
+Three months later, a junior developer finds the cache code:
+
+"Why does this have a 5-minute TTL?"
+
+"Memory leak."
+
+"But Stack Overflow says to upgrade Node."
+
+"Stack Overflow was wrong."
+
+"So we should upgrade Node too?"
+
+"Yes, but not for the leak. Always upgrade for security. Just don't expect it to fix problems caused by your own code."
+
+"So the leak was... our code?"
+
+"Yes."
+
+"But I thought memory leaks were a language thing."
+
+"No. This was an application thing. We were holding references to objects that should have been garbage collected. The 5-minute TTL forces them to be discarded."
+
+The junior nods. Later, they post on Stack Overflow: "I had a memory leak. I profiled my code. Turns out my cache wasn't evicting. Added a TTL. Problem solved. Maybe try debugging before upgrading everything?"
+
+They get one upvote.
+
+The top answer is still "just upgrade Node."
+
+The moral: Cargo cult programming isn't unique to old code. It's a temptation everywhere. The next developer with your problem will find Stack Overflow first. They'll try ten random suggestions. They won't debug. And if they find something that seems to work—maybe it did nothing, maybe it was a coincidence, maybe the actual fix was somewhere else—they'll post it as the solution. And now it's the top answer. The temptation to just try things is almost overwhelming when you're under pressure. It's faster than profiling. But it's faster at wasting time. Profile first. Understand the problem. Then fix it. Not the other way around.
