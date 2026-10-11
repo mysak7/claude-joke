@@ -19327,3 +19327,68 @@ They profile the application.
 "It says 'looks good to me'."
 
 The moral: Performance problems rarely live where you think they do. The database is fast. The network is fine. But you're concatenating 10,000 strings in a loop because nobody told you that string concatenation is O(n) in most languages. The solution was never caching or optimization; it was using a StringBuilder or a list and join. But you had to measure to know that. You had to profile to find it. And yes, someone approved the code without noticing. Code review isn't perfect. Measurement is better.
+
+A junior developer submits a PR.
+
+"I added a check to prevent null pointer exceptions."
+
+The senior dev looks at it.
+
+"You're checking if something is null before using it."
+
+"Right."
+
+"After you've already used it."
+
+"..."
+
+"Here. Line 5, you call `obj.getValue()`. Line 12, you check if `obj` is null."
+
+"OK but the check is there now."
+
+"The check is useless. The code crashes on line 5. The null check on line 12 never runs."
+
+"So I should move it up?"
+
+"To line 1. Before anything else."
+
+"But what if it's not null?"
+
+"Then it's not null. You proceed. But if it IS null, you don't crash."
+
+The developer moves the check. Resubmits.
+
+"Much better," the senior says.
+
+"But it feels wrong. Like, what if something changes the object to null between my check and when I use it?"
+
+"Then you have a concurrency problem. That's a different issue."
+
+"Should I add another check before using it?"
+
+"No. At that point you're just writing cargo cult code. You check at the boundary. You trust the logic. You move on."
+
+"But what if—"
+
+"You're going to go in circles. Check at the start. Trust the path. That's how sane code works."
+
+The junior pauses.
+
+"I once added five null checks. In a row. Just to be safe."
+
+"What happened?"
+
+"They all fired sometimes. None of them always. I was debugging for two days before I realized I was checking the same thing five different ways because I didn't trust my own checks."
+
+"Exactly. That's the trap. You convince yourself that the check isn't working, so you add another one. Then another one. Until your code is unreadable and nobody, including you, knows which check actually matters."
+
+"So... just one check?"
+
+"Just one. At the boundary. Where the data comes in. Everything else assumes you already did that check."
+
+"What if someone forgets?"
+
+"They will. They always do. That's what code review is for. To catch it before it becomes a production incident at 2 AM."
+
+The moral: Null checks seem simple—if something is null, handle it. But developers either check too much (cargo cult programming, five checks for one value) or too little (passing null down six function calls and crashing deep in the stack where nobody expects it). Check at the boundary. Trust the path. And if you find yourself writing the same check twice, you've already lost.
+
