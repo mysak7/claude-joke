@@ -19295,3 +19295,35 @@ A senior dev pulls the developer aside.
 "It should be. It never is."
 
 The moral: We all leave things in production we didn't intend to. A debug statement. A test case. A temporary fix that became permanent. A TODO from three years ago. We find out when it matters most—2 AM, Sunday, during an incident. Before you deploy, ask: does this belong here? And if the answer is 'no,' delete it.
+
+## 2026-10-11
+
+A developer gets a complaint: "The app is slow."
+
+They check the database. Queries are fast.
+
+They check the network. Response times are good.
+
+They check the code. Nothing obviously wrong.
+
+They add caching. Still slow.
+
+They optimize the algorithm. Still slow.
+
+They profile the application.
+
+"OK so the app is spending 80% of its time in string concatenation."
+
+"In... what?"
+
+"String concatenation. In a loop. Building a gigantic SQL query by doing `query = query + " AND " + condition` inside a loop that runs 10,000 times."
+
+"Why would anyone do that?"
+
+"I don't know, let me check git blame."
+
+"..."
+
+"It says 'looks good to me'."
+
+The moral: Performance problems rarely live where you think they do. The database is fast. The network is fine. But you're concatenating 10,000 strings in a loop because nobody told you that string concatenation is O(n) in most languages. The solution was never caching or optimization; it was using a StringBuilder or a list and join. But you had to measure to know that. You had to profile to find it. And yes, someone approved the code without noticing. Code review isn't perfect. Measurement is better.
