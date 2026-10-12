@@ -19651,3 +19651,91 @@ const data = JSON.parse(workaround);
 Now there are two TODOs on top of each other. Like sedimentary layers of good intentions.
 
 The moral: Comments are not a replacement for understanding. A TODO is not a plan. If something is temporary, either make it temporary (set an alarm, make a ticket, add it to the sprint backlog) or admit it's permanent and refactor it properly. Don't write a comment hoping someone else will deal with it. They won't. Because comments are invisible to the code. A broken test, a failing CI check, a compiler warning—those force action. A comment just sits there, getting older, slowly transforming from "we should fix this" to "this is how it's supposed to be." Don't build your codebase on temporary hacks held together by TODO comments. Fix the hack, or make it permanent and document *why* it's necessary. Otherwise you're not leaving instructions—you're leaving a debt that compounds with interest.
+
+## 2026-10-12
+
+A developer discovers a bug in production.
+
+They look at the code:
+
+```python
+if condition:
+    do_something()
+else:
+    # This should never happen
+    do_something_else()
+```
+
+The bug: `do_something_else()` is being called. The condition failed.
+
+"How?" the developer asks. "I tested this. The condition always succeeds."
+
+"In your tests," the senior developer says.
+
+"Right. In my tests."
+
+"But not in production."
+
+"Apparently not."
+
+"Why do you think that is?"
+
+The developer shrugs. "Because production is different?"
+
+"Different how?"
+
+"I don't know. There's more data. More users. More... chaos."
+
+The senior nods. "Your tests were nice. Clean. Predictable. Production is dirty. Unpredictable. It has 47 edge cases you never thought of."
+
+"So I should have tested more?"
+
+"You should have tested the sad path. The path you thought would never happen. Test it anyway."
+
+"But—"
+
+"Test it."
+
+The developer tests the sad path in production. It fails immediately.
+
+A year later, another developer adds a new condition:
+
+```python
+elif other_condition:
+    other_thing()
+else:
+    # This should definitely never happen
+    raise Exception("PANIC! IMPOSSIBLE STATE!")
+```
+
+The senior developer passes by. Reads the comment. Nods.
+
+"Don't."
+
+"Don't what?"
+
+"Don't write 'this should never happen.' It will happen. Probably tomorrow. Probably in the most customer-visible way possible."
+
+"But I'm confident about this condition."
+
+"Confidence is not a test."
+
+The developer removes the comment. Leaves just:
+
+```python
+else:
+    raise Exception("Unexpected state reached. Please contact support.")
+```
+
+Six months later, the exception is triggered in production.
+
+A customer calls: "Your app crashed and told me to call support. I'm calling."
+
+The developer checks the code. The condition *shouldn't* have been triggered. Except... it was.
+
+"Why?" they ask no one in particular.
+
+The moral: Comments like "this should never happen" are a challenge to Murphy's Law. They're prophecy disguised as code. They're a developer saying: "I understand all the cases, and this isn't one of them."
+
+You don't understand all the cases. Neither do I. Neither does anyone. The code that survives is the code that handles the cases you didn't think of. So don't write comments that express confidence in what won't happen. Write comments that explain what *will* happen, and why. Don't assert the impossible. Prepare for it instead.
+
