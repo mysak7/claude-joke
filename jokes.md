@@ -19456,3 +19456,134 @@ They get one upvote.
 The top answer is still "just upgrade Node."
 
 The moral: Cargo cult programming isn't unique to old code. It's a temptation everywhere. The next developer with your problem will find Stack Overflow first. They'll try ten random suggestions. They won't debug. And if they find something that seems to work—maybe it did nothing, maybe it was a coincidence, maybe the actual fix was somewhere else—they'll post it as the solution. And now it's the top answer. The temptation to just try things is almost overwhelming when you're under pressure. It's faster than profiling. But it's faster at wasting time. Profile first. Understand the problem. Then fix it. Not the other way around.
+
+## 2026-10-12
+
+A product manager writes a specification:
+
+"When the user clicks the button, show the result."
+
+A developer reads it.
+
+"OK so... show what result?"
+
+"The result of the operation."
+
+"Which operation?"
+
+"The one they triggered."
+
+"By clicking the button?"
+
+"Yes."
+
+The developer goes back to their desk. They interpret "show the result" to mean "show it in the console." They wire up the button to log the value to stdout.
+
+Six months later, the PM runs the code.
+
+"Where's the result?"
+
+"In the console."
+
+"The user can't see the console."
+
+"It's there though."
+
+"I need it on the screen."
+
+"Oh. That would have been nice to know."
+
+The developer moves the console.log to a DOM update. It shows the result on the screen now.
+
+The PM is happy.
+
+Three months after that, the designer complains:
+
+"The result is just raw JSON. It needs to be formatted nicely."
+
+"But the spec said show the result."
+
+"It implied nicely formatted."
+
+"The spec doesn't say anything about formatting."
+
+"Well, it should."
+
+The developer adds CSS. The result now has padding, a border, a pleasant background color. The PM and designer are happy.
+
+Then the data analyst looks at it:
+
+"Why is the result a string?"
+
+"Because that's what the operation returns."
+
+"It should be a number."
+
+"The operation returns a string."
+
+"Parse it to a number."
+
+"The spec didn't mention parsing."
+
+"Well obviously."
+
+The developer parses it. Now the result is a number. A floating-point number with 47 decimal places.
+
+The PM looks at it: "It has too many decimal places."
+
+"I can round it."
+
+"Round it."
+
+The developer rounds it. Now it shows 3 decimal places.
+
+The designer: "Actually the user might want to see more precision sometimes."
+
+"How would they do that?"
+
+"Add a toggle?"
+
+The developer adds a toggle. Now the user can switch between 3 and 15 decimal places.
+
+The PM asks: "Why not 10?"
+
+"You never said 10."
+
+"That's a reasonable number of decimal places."
+
+The developer changes it to 10.
+
+Six months later, a user asks for a feature: "Can you show the result in different formats? Like scientific notation?"
+
+"No."
+
+"Why not?"
+
+"The spec said show the result. You're asking for show the result in scientific notation. That's not the same thing."
+
+"But I need it."
+
+"Then you need a new requirement."
+
+The PM writes a new spec: "When the user clicks a format button, show the result in that format."
+
+This time the developer doesn't ask questions. They just build it.
+
+It works.
+
+But now the code is 300 lines for what was supposed to be a 10-line feature.
+
+One day, someone reads the original spec again:
+
+"When the user clicks the button, show the result."
+
+"Huh," they say. "That's exactly what we built."
+
+"It took six months," the developer replies.
+
+"Why?"
+
+"Because nobody knew what that meant."
+
+The moral: A spec that says "show the result" is too vague. But a developer who asks "which result, in what format, with what precision, on what UI element" is being pedantic. The truth is somewhere in between. Worse, the truth moves. By the time you finish the feature, the spec has changed three times. The user has new needs. The designer has new opinions. So you end up with a feature that's over-engineered for the original spec but under-engineered for the actual needs. The solution isn't better specs (though that helps). It's shipping early. Building the simplest version. Putting it in front of users. Learning what they actually want. Then building that. Not guessing.
+
