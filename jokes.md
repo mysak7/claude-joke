@@ -19587,3 +19587,67 @@ One day, someone reads the original spec again:
 
 The moral: A spec that says "show the result" is too vague. But a developer who asks "which result, in what format, with what precision, on what UI element" is being pedantic. The truth is somewhere in between. Worse, the truth moves. By the time you finish the feature, the spec has changed three times. The user has new needs. The designer has new opinions. So you end up with a feature that's over-engineered for the original spec but under-engineered for the actual needs. The solution isn't better specs (though that helps). It's shipping early. Building the simplest version. Putting it in front of users. Learning what they actually want. Then building that. Not guessing.
 
+
+A developer writes some complex code:
+
+```javascript
+// TODO: This is a temporary hack. Remove this next sprint.
+const data = JSON.parse(workaround);
+```
+
+Six months later, another developer finds it:
+
+"Why is this here?"
+
+"It's a temporary hack."
+
+"From when?"
+
+"The comment says to remove it next sprint."
+
+"Which sprint?"
+
+The developer checks the git history. The commit is 26 sprints old.
+
+"Why wasn't it removed?"
+
+"Probably because it works."
+
+"But it's called a hack."
+
+"Hacks often work. That's why they're dangerous. They work *just well enough* that nobody remembers to fix them. Then they're a hack for six months. Then they're a hack for a year. Then they're a hack forever, and nobody dares touch it because it might break something."
+
+The developer considers deleting it anyway.
+
+"Don't," says the first developer. "When I wrote that comment, I knew it would break eventually. But I had a deadline. So I wrote the hack, added the TODO, and hoped someone would fix it."
+
+"So why didn't they?"
+
+"Because every time someone looked at it, they saw it *working*. And they saw the TODO comment. And they thought: 'Oh, this is marked for removal. Someone will deal with it.' So they left it alone. The comment made it seem like it was under control."
+
+The second developer nods slowly.
+
+"So the TODO was just... kicking the can down the road?"
+
+"Exactly. And you know what happens when you kick the can far enough?"
+
+"What?"
+
+"You forget it's a can. You just think of it as part of the road."
+
+Two years later, during a major refactor, someone finally removes the hack. The code breaks in production. It took 26 hours and three meetings to restore it.
+
+A ticket is created: "Investigate why the hack is needed."
+
+Nobody responds.
+
+Six months later, a new TODO comment is added above the hack:
+
+```javascript
+// TODO: Understand why this is necessary. Remove if safe.
+const data = JSON.parse(workaround);
+```
+
+Now there are two TODOs on top of each other. Like sedimentary layers of good intentions.
+
+The moral: Comments are not a replacement for understanding. A TODO is not a plan. If something is temporary, either make it temporary (set an alarm, make a ticket, add it to the sprint backlog) or admit it's permanent and refactor it properly. Don't write a comment hoping someone else will deal with it. They won't. Because comments are invisible to the code. A broken test, a failing CI check, a compiler warning—those force action. A comment just sits there, getting older, slowly transforming from "we should fix this" to "this is how it's supposed to be." Don't build your codebase on temporary hacks held together by TODO comments. Fix the hack, or make it permanent and document *why* it's necessary. Otherwise you're not leaving instructions—you're leaving a debt that compounds with interest.
