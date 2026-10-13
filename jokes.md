@@ -19818,3 +19818,65 @@ Eventually, someone documents the system as "legacy." It sits there, maintained 
 
 The moral: A boolean is sometimes just a boolean. Not everything needs architecture. Not every future is worth building for. Sometimes the developer who just adds the boolean field is smarter than the one who builds the ultimate preference management system. The best code is often the simplest code. The best optimization is sometimes not adding the code in the first place.
 
+
+A developer creates a variable: `x = 5`
+
+Six months later, another developer reads it and asks: "What is x?"
+
+"It's... a number."
+
+"Why is it called x?"
+
+"Because it could be anything."
+
+"What is it in this context?"
+
+"A count."
+
+"So it should be called count?"
+
+"Maybe."
+
+"But it's called x?"
+
+"Yes."
+
+"Why?"
+
+"Because when I wrote it, I didn't know what it would be used for."
+
+"And now?"
+
+"Now I'm afraid to change it, because something might depend on it being called x."
+
+"Does something depend on its name?"
+
+"Probably not."
+
+"Then why haven't you changed it?"
+
+"Because I'm afraid."
+
+One year later, the variable is still called x. It's been copied 47 times across the codebase. All 47 copies are different things. Half the team is constantly trying to figure out which x is which. A developer gets paged at 3am because the wrong x was used in production.
+
+"Just fix the variable name," says the tech lead.
+
+"I can't. There are 47 xes."
+
+"So fix them all."
+
+"They're all different."
+
+"So give them different names."
+
+"That would break the build."
+
+"So it's a bad design?"
+
+"It's a legacy codebase."
+
+"Which means it's a bad design that's too old to fix?"
+
+"Exactly."
+
+The moral: The most expensive variable name is one that's too short to mean anything. And the most dangerous design decision is the one you make because you didn't know any better at the time, and then you're too afraid to fix it later.
