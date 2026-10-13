@@ -19880,3 +19880,59 @@ One year later, the variable is still called x. It's been copied 47 times across
 "Exactly."
 
 The moral: The most expensive variable name is one that's too short to mean anything. And the most dangerous design decision is the one you make because you didn't know any better at the time, and then you're too afraid to fix it later.
+
+## 2026-10-13
+
+A developer says: "It works on my machine."
+
+"Then deploy your machine," says ops.
+
+"That's not how this works."
+
+"But the code works on it."
+
+"Yes."
+
+"So the problem is the environment, not the code."
+
+"Correct."
+
+"And your machine is an environment."
+
+"Well, yes."
+
+"So ship your machine."
+
+"You can't ship a machine."
+
+"Why not?"
+
+"It's a laptop."
+
+"So ship it."
+
+"I need it to work."
+
+"You need the code to work. The code works on your laptop. Ship the laptop."
+
+"This is insane."
+
+"What's insane is that we can't deploy your code without your laptop. That's a dependency. And dependencies should be managed, not shipped."
+
+"How do I manage it?"
+
+"By making your code work somewhere else."
+
+The developer moves the code to staging. It breaks.
+
+"It works now," says the developer.
+
+"Did you fix something?"
+
+"Yes. I copied your machine's configuration to staging."
+
+"Does staging look like production?"
+
+"Not anymore."
+
+The moral: "It works on my machine" is the most dangerous sentence in software development. Because the developer is right—it does work on their machine. The problem is that their machine is a miracle of accumulated hacks, disabled security, admin privileges, four cups of coffee, and three prayers to the gods of Linux. Replicate that environment exactly and you've discovered the secret to chaos.
