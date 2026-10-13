@@ -19739,3 +19739,82 @@ The moral: Comments like "this should never happen" are a challenge to Murphy's 
 
 You don't understand all the cases. Neither do I. Neither does anyone. The code that survives is the code that handles the cases you didn't think of. So don't write comments that express confidence in what won't happen. Write comments that explain what *will* happen, and why. Don't assert the impossible. Prepare for it instead.
 
+
+## 2026-10-13
+
+A product manager asks a developer: "Can you add a new user field?"
+
+"Sure," says the developer. "Which field?"
+
+"Email preferences. We need to know if they want marketing emails."
+
+"Easy. I'll add a boolean field."
+
+"Great! How long?"
+
+"Two hours."
+
+Six hours later, the developer has added:
+- A user preferences table
+- A preferences service
+- A cache layer for the service
+- An async queue to handle preference updates
+- Three new microservices
+- A data pipeline to clean up old preferences
+- Event streaming to notify other services
+- A GraphQL interface
+
+"Why?" asks the product manager. "It's a boolean."
+
+"Yes," says the developer. "But what if we need to add more preference types later?"
+
+"Do we?"
+
+"Probably not, but if we do—"
+
+"When?"
+
+"I don't know."
+
+"Will it cost more to add them later?"
+
+"Yes."
+
+"How much more?"
+
+"Maybe a day's work instead of two hours."
+
+"So you spent five extra days to save a theoretical future day?"
+
+"Yes."
+
+"When that theoretical future might never happen?"
+
+"Correct."
+
+"And in the meantime, we have three new microservices to monitor, three new databases to back up, three new services to scale, three new potential failure points, and a deployment process that's two minutes longer?"
+
+"Also correct."
+
+"Why did you do this?"
+
+The developer pauses. Thinks.
+
+"Because I'm a programmer. And programmers are optimizers. We see a problem and we solve it. But we don't solve *this* problem—we solve the problem we think we'll have, plus the problem we might have, plus the problem someone else might have, plus three more problems that probably don't exist."
+
+"So why not solve the actual problem?"
+
+"Because then I'd just be a person who answered a question. But if I build a system... I'm an architect."
+
+The product manager nods.
+
+"You over-engineered this because it made you feel important."
+
+"I prefer 'future-proofed,'" says the developer.
+
+Three months later, the business pivots. The user field requirement changes. The three microservices are decomissioned. Most of the code is deleted. What remains lingers for six more months, unmaintained and feared, until finally someone deletes it. Then realizes it was handling something important. Then re-adds it. Then deletes it again.
+
+Eventually, someone documents the system as "legacy." It sits there, maintained out of fear, a digital monument to a problem that was never solved but complicated beyond recognition.
+
+The moral: A boolean is sometimes just a boolean. Not everything needs architecture. Not every future is worth building for. Sometimes the developer who just adds the boolean field is smarter than the one who builds the ultimate preference management system. The best code is often the simplest code. The best optimization is sometimes not adding the code in the first place.
+
