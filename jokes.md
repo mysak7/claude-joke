@@ -19995,3 +19995,60 @@ The manager realizes the developer has achieved a perfect trinity of technical d
 
 The moral: The hardest thing in computer science is not cache invalidation or naming things. It's that all the hard things are connected. You can't solve one without making another worse. This is why developers say "it depends"—because the three hard problems are codependent, and untangling them requires understanding that sometimes the best solution is to stop trying to solve them and just accept that your code is a little bit broken in ways that are technically correct and functionally terrible.
 
+
+## 2026-10-14
+
+A developer walks up to another developer at a whiteboard covered in architecture diagrams.
+
+"What are you designing?" asks the first developer.
+
+"A caching layer," says the second.
+
+"For what?"
+
+"To cache the results of our database queries."
+
+"Why?"
+
+"Because the queries are slow."
+
+"Why are the queries slow?"
+
+"Because we have too much data."
+
+"How did we get too much data?"
+
+"We cached everything."
+
+The first developer pauses. "The database is slow because you cached everything?"
+
+"We needed the cache for performance."
+
+"So you cached the data to speed up the queries that are slow because of the cache?"
+
+"It's more complicated than that."
+
+"Is it?" asks the first developer. "Because from where I'm standing, we've achieved perfect circular reasoning. We need a cache because of performance problems caused by over-caching. Which means we need to cache the cache to cache the cache efficiently."
+
+"You're not wrong."
+
+"Can we just delete the cache?"
+
+"No."
+
+"Why not?"
+
+"Because then everything will be slow again."
+
+"It's slow now."
+
+"Yes, but for a reason. If we delete the cache, it will be slow for a different reason. And different problems are always harder to debug than the ones you're used to."
+
+The first developer considers this philosophy of technological stagnation.
+
+"So we're stuck with a broken cache because fixing it would create a different kind of broken?"
+
+"Now you're thinking like a senior engineer."
+
+The moral: Caching is like a relationship—it starts as a solution to a problem, becomes a problem itself, and then you stay with it because changing it might be worse. Plus, if you delete it, you have to explain to everyone why things are suddenly broken in new and creative ways. It's easier to just add another layer of cache on top and pretend that's progress.
+
