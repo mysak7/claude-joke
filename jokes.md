@@ -20052,3 +20052,57 @@ The first developer considers this philosophy of technological stagnation.
 
 The moral: Caching is like a relationship—it starts as a solution to a problem, becomes a problem itself, and then you stay with it because changing it might be worse. Plus, if you delete it, you have to explain to everyone why things are suddenly broken in new and creative ways. It's easier to just add another layer of cache on top and pretend that's progress.
 
+
+## 2026-10-14
+
+A developer encounters a NullPointerException in production.
+
+"The variable is null," they tell their colleague.
+
+"Why is it null? You initialized it."
+
+"I did initialize it. I swear."
+
+"Show me the code."
+
+The developer shows the code. It looks fine.
+
+"Run it again," says the colleague.
+
+It crashes at a different line.
+
+"Now it's a different error," says the developer. "A different null. They're multiplying."
+
+"How many nulls are there in this code?"
+
+"I counted. Seven. But I only initialized three variables."
+
+"Where did the other four come from?"
+
+"The method is returning null somewhere. But it has no return null statement, so I don't understand how—"
+
+"Is it calling other methods that might return null?"
+
+"Yes, but—"
+
+"Are you checking if they return null before using them?"
+
+"...No."
+
+"That's the problem."
+
+The developer stares at their code. "But I never documented that these methods could return null. So nobody expects them to."
+
+"Well, your code is experiencing a surprise null. In production. At 3 AM."
+
+"I should have used TypeScript," mutters the developer.
+
+"TypeScript wouldn't have prevented this."
+
+"No, but at least I could have blamed the type system instead of myself."
+
+The colleague pauses. "You understand you wrote the TypeScript type definitions, right?"
+
+"I'm going to go get coffee."
+
+The moral: null is the absence of a value, and the absence of null checks is the absence of a working application. NullPointerException is Java's way of saying "you had one job: think about what happens when things are empty." And you didn't do it. Good luck in production.
