@@ -19936,3 +19936,62 @@ The developer moves the code to staging. It breaks.
 "Not anymore."
 
 The moral: "It works on my machine" is the most dangerous sentence in software development. Because the developer is right—it does work on their machine. The problem is that their machine is a miracle of accumulated hacks, disabled security, admin privileges, four cups of coffee, and three prayers to the gods of Linux. Replicate that environment exactly and you've discovered the secret to chaos.
+
+## 2026-10-14
+
+A manager asks a developer: "There are only two hard things in computer science—cache invalidation, naming things, and off-by-one errors. Which is your problem?"
+
+"Yes," says the developer.
+
+"Which one?"
+
+"All of them."
+
+"But there are only two."
+
+"Exactly. That's the off-by-one error."
+
+The manager pauses. "But you listed three problems."
+
+"Right."
+
+"So there's an off-by-one error in the famous quote about off-by-one errors?"
+
+"The best kind of meta."
+
+"What about cache invalidation and naming things?"
+
+"I named my cache 'data'. Every time I invalidate it, I have to rename it to 'old_data'. Then rename the next one to 'data'. This has created a git history of 47 commits that just say 'renamed data to old_data, renamed old_data_2 to old_data, renamed data_3 to data.'"
+
+"That's a naming problem."
+
+"It's a naming problem caused by a cache invalidation problem. Which is caused by not naming things properly in the first place."
+
+"So which of the three problems is your actual problem?"
+
+The developer thinks carefully.
+
+"Yes."
+
+"That's not a valid answer."
+
+"Is it not? Because I'm pretty sure I just named it correctly, and I'm also pretty sure I'm going to have to invalidate it from cache immediately because it's too complicated to remember."
+
+The manager realizes the developer has achieved a perfect trinity of technical debt, where the three problems feed on each other in an eternal cycle of suffering.
+
+"Can you fix any of them?" asks the manager.
+
+"I could fix cache invalidation. But then I'd have to rename everything."
+
+"So fix the naming."
+
+"But then the cache would be invalid."
+
+"So fix the cache."
+
+"But then naming things would—"
+
+"I get it," says the manager.
+
+The moral: The hardest thing in computer science is not cache invalidation or naming things. It's that all the hard things are connected. You can't solve one without making another worse. This is why developers say "it depends"—because the three hard problems are codependent, and untangling them requires understanding that sometimes the best solution is to stop trying to solve them and just accept that your code is a little bit broken in ways that are technically correct and functionally terrible.
+
