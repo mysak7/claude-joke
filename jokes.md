@@ -20210,3 +20210,55 @@ The manager nods. "So the lesson is that all frameworks are wrong?"
 "The lesson," says the second developer, "is that framework selection isn't about picking the best tool. It's about committing to a tool early enough that you can't blame anyone for picking it later, because everyone will have forgotten why you picked it anyway."
 
 The moral: Technology decisions are made before you have enough information to make a good decision. The best framework is the one your team knows, not the one that would theoretically be optimal. In six months you'll discover a different framework would have been better. But you would have discovered the same thing about that framework. The real skill isn't picking the right framework. It's living with the consequences of picking the wrong one while pretending you knew it was a risk all along.
+
+## 2026-10-17
+
+A junior developer needs to parse a JSON response from an API. They search Stack Overflow.
+
+They find a post with 47 upvotes showing exactly what they need. They copy the code.
+
+It works.
+
+Fast forward 6 months. The API changes slightly. The code breaks.
+
+The junior developer, now slightly less junior, searches Stack Overflow again.
+
+They find the exact same post. The post now has 150 upvotes. They copy the updated code.
+
+They show the senior developer.
+
+"Did you understand why that code works?" asks the senior.
+
+"No, but it works."
+
+"What if the API changes again?"
+
+"I'll copy from Stack Overflow again."
+
+"That's... not a strategy."
+
+"Stack Overflow has always been right. I trust it more than I trust myself."
+
+The senior developer sits down. "Stack Overflow was written by humans. Humans make mistakes."
+
+"Not the ones with 150 upvotes."
+
+"That's not how it works."
+
+"It's how it works for me."
+
+Six months later, the API changes again. The Stack Overflow post hasn't been updated. The junior developer is now a mid-level developer. They look at the code they copied six months ago. They look at the code they copied a year ago.
+
+"I should probably learn what this actually does," they mutter.
+
+They read the documentation. Then they read the Stack Overflow post that's now outdated. Then they read the original API documentation. Then they read three more Stack Overflow posts. Then they look at the code they've written over time.
+
+Finally, they understand it.
+
+"I could rewrite this properly," they think.
+
+But there's a deadline.
+
+They copy from a different Stack Overflow post and ship it.
+
+The moral: Stack Overflow is the programmer's way of solving today's problem by copy-pasting someone else's solution to a slightly different problem from four years ago. Eventually, you accumulate enough copies of copies that your code is held together by Stack Overflow posts and prayers. One day, you'll debug something and realize you're looking at code you copied from a post that copied code from another post, from someone who just copied code from another post. It's Stack Overflow posts all the way down. And somehow, it all works in production. Don't ask why.
