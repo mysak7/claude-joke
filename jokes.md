@@ -20152,3 +20152,61 @@ The developer checks. "Fifty-two lines. Twenty of them are known limitations. Tw
 The colleague nods knowingly. "The professional's creed."
 
 The moral: Dependency management is the art of keeping your code working despite the collective chaos of everyone else's breaking changes. Version pins are not beautiful, but they work. And when your README is longer than your actual code because it's mostly troubleshooting guides, you've reached professional software development.
+
+## 2026-10-16
+
+A team meets to choose a new framework.
+
+"Framework A is more popular," says one developer.
+
+"Framework B has better performance," says another.
+
+"Framework A has more tutorials," says the first.
+
+"Framework B is newer," says the second.
+
+They debate for two hours.
+
+"So," says the manager. "Which one do we choose?"
+
+"Doesn't matter," says the first developer. "In six months we'll regret it."
+
+"Why?"
+
+"Because the real limitations only become obvious after you've built your entire application on top of it."
+
+"Can't we just switch if we discover a problem?"
+
+"Sure, if you want to rewrite thousands of lines of code."
+
+"What if we design it to be framework-agnostic?"
+
+"That adds so much complexity that we'll regret that decision instead."
+
+The manager stares at the whiteboard covered in arguments. "So there's no good choice?"
+
+"There's no choice that will look good in hindsight," says the second developer. "We will absolutely be idiots for picking this one."
+
+"But you'll both say that about whichever we choose, won't you?"
+
+"Yes."
+
+"Then let's just pick one."
+
+They pick Framework A.
+
+Three months later, they discover Framework B would have solved their main problem.
+
+"I told you so," says the second developer.
+
+"We couldn't have known," says the first developer.
+
+"It's literally in the documentation."
+
+"We would have found other reasons to regret Framework B."
+
+The manager nods. "So the lesson is that all frameworks are wrong?"
+
+"The lesson," says the second developer, "is that framework selection isn't about picking the best tool. It's about committing to a tool early enough that you can't blame anyone for picking it later, because everyone will have forgotten why you picked it anyway."
+
+The moral: Technology decisions are made before you have enough information to make a good decision. The best framework is the one your team knows, not the one that would theoretically be optimal. In six months you'll discover a different framework would have been better. But you would have discovered the same thing about that framework. The real skill isn't picking the right framework. It's living with the consequences of picking the wrong one while pretending you knew it was a risk all along.
