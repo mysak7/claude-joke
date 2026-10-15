@@ -20106,3 +20106,49 @@ The colleague pauses. "You understand you wrote the TypeScript type definitions,
 "I'm going to go get coffee."
 
 The moral: null is the absence of a value, and the absence of null checks is the absence of a working application. NullPointerException is Java's way of saying "you had one job: think about what happens when things are empty." And you didn't do it. Good luck in production.
+
+## 2026-10-15
+
+A developer updates a single dependency to get a bugfix.
+
+"Why is the build failing?" they ask their colleague.
+
+"The dependency you updated requires version 4.x of another package. But you're on version 3.x."
+
+"So I'll update that too."
+
+The developer updates it. Now three more dependencies are broken.
+
+"This is dependency hell," they mutter, updating everything.
+
+Now the code doesn't run because the new versions of everything have breaking API changes.
+
+"I'm going back to the old versions," the developer says.
+
+"The old versions have the bug you were trying to fix."
+
+"I know."
+
+"So?"
+
+"We'll just document it as a known limitation."
+
+The colleague looks horrified. "You're adding another line to the README about what doesn't work?"
+
+"Yes."
+
+"How many lines are in the README now?"
+
+The developer checks. "Fifty-two lines. Twenty of them are known limitations. Twelve of those are just 'use version X.Y.Z of the dependencies, which is incompatible with newer versions but compatible with the rest of your app.'"
+
+"That's not a README. That's a support document."
+
+"It's both. We're beyond documentation now. We're in the phase where the code is held together by specific version numbers and a prayer that nobody tries to update anything."
+
+"Is that considered best practice?"
+
+"It's considered 'whatever works at 2 AM when the service is down.'"
+
+The colleague nods knowingly. "The professional's creed."
+
+The moral: Dependency management is the art of keeping your code working despite the collective chaos of everyone else's breaking changes. Version pins are not beautiful, but they work. And when your README is longer than your actual code because it's mostly troubleshooting guides, you've reached professional software development.
