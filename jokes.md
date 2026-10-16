@@ -20262,3 +20262,67 @@ But there's a deadline.
 They copy from a different Stack Overflow post and ship it.
 
 The moral: Stack Overflow is the programmer's way of solving today's problem by copy-pasting someone else's solution to a slightly different problem from four years ago. Eventually, you accumulate enough copies of copies that your code is held together by Stack Overflow posts and prayers. One day, you'll debug something and realize you're looking at code you copied from a post that copied code from another post, from someone who just copied code from another post. It's Stack Overflow posts all the way down. And somehow, it all works in production. Don't ask why.
+
+## 2026-10-16
+
+A developer finishes a feature. "I tested it locally and it works fine," they tell the team.
+
+The feature ships to production.
+
+Three minutes later, alerts fire everywhere.
+
+"What happened?" asks the team lead. "You said you tested it!"
+
+"I did test it locally."
+
+"Then why is it broken in production?"
+
+"Production is different from my local environment."
+
+"How?"
+
+"Production has real data."
+
+The team lead stares. "You wrote a feature that works with fake data but breaks with real data?"
+
+"Nobody told me we'd be using real data."
+
+"It's a production service. Of course there's real data."
+
+"In development, I used mock data."
+
+"And it didn't occur to you that there might be edge cases in real data?"
+
+"There are a million records. I tested with three."
+
+"Three out of a million. And you expected that to work?"
+
+"I tested with the three most important ones."
+
+"Which ones are those?"
+
+"The first one, the last one, and one in the middle."
+
+The team lead closes their eyes. "That's not how testing works."
+
+"My tests passed."
+
+"Your tests are wrong."
+
+"But they passed locally."
+
+And now it's an argument about what "works" means. The developer says it works locally. The production database says it doesn't work. The team lead says the developer is technically correct but philosophically wrong. Three hours later, they roll back the change.
+
+The developer creates a pull request. The comment section fills up with questions like "Did you test with NULL values?" and "Did you test with numbers larger than expected?" and "Did you test with the actual data?"
+
+The developer responds to each one: "No, I didn't test for that."
+
+"Will you now?"
+
+"I guess."
+
+They write a few more test cases, which now pass locally. They ship it again.
+
+Same error in production, different data pattern.
+
+The moral: "It works on my machine" is not a deployment strategy. Testing locally with mock data and three examples is like saying you've read the requirements document because you looked at the first page. Production environments have millions of edge cases you've never thought of. When you test with real data and find bugs, congratulations—you've discovered the gap between how you think people use your code and how they actually use it. The only way to truly test code is to ship it, watch it fail, fix it, and remember this feeling the next time you say "it works locally."
