@@ -20373,3 +20373,73 @@ Three months later, a new developer joins the team. "Why is this so complicated?
 
 The moral: Code isn't broken, it's just legacy. Workarounds compound over time until your codebase becomes a Jenga tower where removing any piece causes everything to fall. The best strategy is to leave it alone and add new workarounds on top. Your code might be a disaster, but at least it's a *predictable* disaster.
 
+
+## 2026-10-16
+
+A developer is asked to fix a simple bug. "It's just a typo," says the team lead. "Five minutes."
+
+Three hours later, the developer emerges from the code.
+
+"What happened?" asks the team lead.
+
+"That typo... it's not actually a typo."
+
+"What do you mean?"
+
+"The function does the opposite of what its name suggests. But the entire system depends on that behavior."
+
+"So... it's not broken?"
+
+"It's so broken that fixing it becomes the bug."
+
+The team lead thinks. "Can you just rename the function?"
+
+"I tried. There are 47 places that call it. Four of them expect it to do the opposite thing. One of them has a comment that says 'this is backwards but don't fix it.' I found a JIRA ticket from 2019 asking why it's backwards. The ticket is closed as 'working as designed.'"
+
+"Working as designed," repeats the team lead slowly.
+
+"By someone who no longer works here."
+
+"What was the original typo?"
+
+"A variable name. `isValid` instead of `isInvalid`."
+
+"And the code was written around that?"
+
+"No, the code was written assuming one thing, but someone misread it once, built a feature on top of the misunderstanding, and now we're six layers deep in a house of lies."
+
+The team lead looks at the calendar. There's a deadline in two days.
+
+"What's the fix?"
+
+"Option one: rename the variable correctly and accept that we'll break production in ways we don't yet understand."
+
+"Option two?"
+
+"Leave it as is. Add a comment explaining the situation. Hope nobody else finds this."
+
+"Is there an option three?"
+
+"Delete the entire function and rewrite the three systems that depend on it."
+
+The team lead picks up the phone. "Deadline gets pushed back a week. We're not touching this."
+
+Six months later, a new developer joins. They ask why `isValid` returns the opposite value.
+
+"Historical reasons," says the team lead.
+
+"That makes no sense."
+
+"It makes perfect sense if you understand the original misunderstanding that everyone built on. You don't want to understand it."
+
+"Why not?"
+
+"Because once you do, you'll realize that half the codebase is accidental and the other half is intentional around the accident. And you'll have to choose: fix the accident and break everything, or leave it and become part of the conspiracy."
+
+The new developer reads the JIRA ticket from 2019.
+
+"So... what was the decision?"
+
+"We decided that understanding old code is less important than not breaking production."
+
+The moral: Every codebase has a few functions that are wrong in exactly the right way. These functions are protected by layers of institutional knowledge, unwritten rules, and the collective agreement to never examine them too closely. The moment you ask "why does this work backwards?" you've volunteered to either fix it (and break production) or live with the knowledge that your code is fundamentally nonsensical. Choose the red pill and you can never un-see it.
