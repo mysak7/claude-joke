@@ -20326,3 +20326,50 @@ They write a few more test cases, which now pass locally. They ship it again.
 Same error in production, different data pattern.
 
 The moral: "It works on my machine" is not a deployment strategy. Testing locally with mock data and three examples is like saying you've read the requirements document because you looked at the first page. Production environments have millions of edge cases you've never thought of. When you test with real data and find bugs, congratulations—you've discovered the gap between how you think people use your code and how they actually use it. The only way to truly test code is to ship it, watch it fail, fix it, and remember this feeling the next time you say "it works locally."
+
+## 2026-10-16
+
+A developer sees a bug in production. They trace it back to a line of code written three years ago.
+
+"We need to fix this," they say.
+
+They open the code. There's a comment: "DO NOT CHANGE THIS. LEGACY SYSTEM DEPENDS ON THIS BEHAVIOR."
+
+"Wait, it's a bug and it's intentional?"
+
+"Sort of. It's a workaround for a different bug that was fixed five years ago."
+
+"So we can just remove it?"
+
+"Only if you want to break the legacy system."
+
+"But the legacy system also depends on the original bug?"
+
+"Probably. Nobody remembers."
+
+The developer decides to fix the original bug instead. Three hours later, they realize the bug is now in five other places.
+
+"How is that possible?"
+
+"Someone copy-pasted the broken code as a solution to different problems."
+
+"So it's not actually broken?"
+
+"It's broken. But in exactly the right way for five different purposes."
+
+They decide to add another workaround instead of fixing anything.
+
+Three months later, a new developer joins the team. "Why is this so complicated?"
+
+"Historical reasons," says the senior developer.
+
+"Can we refactor it?"
+
+"No."
+
+"Why not?"
+
+"Because nobody understands why it's this complicated, which means changing anything will probably break production. We call this 'job security through incomprehensibility.'"
+
+The moral: Code isn't broken, it's just legacy. Workarounds compound over time until your codebase becomes a Jenga tower where removing any piece causes everything to fall. The best strategy is to leave it alone and add new workarounds on top. Your code might be a disaster, but at least it's a *predictable* disaster.
+
