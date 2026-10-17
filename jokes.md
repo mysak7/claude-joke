@@ -20443,3 +20443,57 @@ The new developer reads the JIRA ticket from 2019.
 "We decided that understanding old code is less important than not breaking production."
 
 The moral: Every codebase has a few functions that are wrong in exactly the right way. These functions are protected by layers of institutional knowledge, unwritten rules, and the collective agreement to never examine them too closely. The moment you ask "why does this work backwards?" you've volunteered to either fix it (and break production) or live with the knowledge that your code is fundamentally nonsensical. Choose the red pill and you can never un-see it.
+
+## 2026-10-17
+
+A developer is reviewing performance metrics. One endpoint is consistently fast, even though the code looks like it should be slow.
+
+"Why is this so fast?" they ask a senior engineer.
+
+"I don't know. It just is."
+
+"There must be a reason. Let me check the history."
+
+They dig into git blame. Five commits back, someone added a line that makes no sense. It's a variable assignment that doesn't get used. The commit message: "performance fix."
+
+"What's this for?"
+
+The senior engineer squints. "Oh, that. I think it's related to how the compiler optimizes certain loops. Or maybe it's a memory cache thing. Honestly, nobody's sure."
+
+"So we could remove it?"
+
+"Probably not."
+
+"Why not?"
+
+"Because the moment we do, someone will file a bug saying the endpoint got slower. Then we'll spend a week trying to figure out why, eventually add the line back, and pretend we understand."
+
+"That's not a solution."
+
+"No, but it's *the* solution. We tried removing it once. The whole system got 40% slower. Then we added it back and it was fast again."
+
+"And nobody knows why?"
+
+"Correct. We have a comment that says: 'DO NOT TOUCH THIS LINE. IT MAKES THINGS FAST. WE DON'T KNOW WHY.'"
+
+The developer reads the comment. It's in all caps.
+
+"Is there a ticket about this?"
+
+"Yes. From 2018. It's marked as RESOLVED and closed. The description says 'mystery solved' but there's no explanation."
+
+"What if we add more comments explaining the weird line?"
+
+"Someone tried that. They added three paragraphs explaining every theory about why it works. Then that person left the company. Now the comments are just warnings that the code is 'magical' and 'don't touch it.'"
+
+The developer decides to add more mystery: "// if you're reading this, we're so sorry"
+
+Three months later, a new person joins the team. They see the warning comment and ask about it.
+
+"Don't ask," everyone says in unison.
+
+"But—"
+
+"Don't. Ask."
+
+The moral: Every codebase has a few lines of code that are actively hostile to understanding. They're mysterious, they work, and they slow down whoever tries to investigate them. You have three options: ignore it, add a scarier comment, or spend six months investigating and discover it was probably copy-pasted from Stack Overflow in 2015 and nobody remembers why. Most teams choose options one and two.
