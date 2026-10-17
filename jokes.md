@@ -20497,3 +20497,62 @@ Three months later, a new person joins the team. They see the warning comment an
 "Don't. Ask."
 
 The moral: Every codebase has a few lines of code that are actively hostile to understanding. They're mysterious, they work, and they slow down whoever tries to investigate them. You have three options: ignore it, add a scarier comment, or spend six months investigating and discover it was probably copy-pasted from Stack Overflow in 2015 and nobody remembers why. Most teams choose options one and two.
+
+## 2026-10-18
+
+A developer is code reviewing a pull request when they spot a variable named `x`.
+
+"What does `x` represent?" they ask.
+
+"Uh... a thing."
+
+"What thing?"
+
+"A thing that... needs to be processed?"
+
+The reviewer digs deeper. After 200 lines of code, `x` gets passed to a function that returns `y`, which gets assigned to `z`, which then gets converted to `a` for "Adjusted z", then `b` for "Better a", then finally `result`.
+
+"Why not just name it from the start?"
+
+"Because I wasn't sure what it was while I was writing it."
+
+"And now?"
+
+"Still not sure."
+
+The reviewer finds a comment from eight months ago: "TODO: rename `x` to something meaningful"
+
+"Did you ever rename it?"
+
+"I tried. There are 47 places that reference `x`. I renamed it in the main function, the tests all failed, I renamed it back, and then I just... never tried again."
+
+"What would you name it if you renamed it now?"
+
+The developer squints. "I'd call it `item`."
+
+"Just `item`?"
+
+"Maybe `obj`?"
+
+"That's not better."
+
+"I know."
+
+Another developer on the call unmutes: "We call this 'the naming freeze.' Once a variable name gets into production, it becomes part of the social contract. Everyone knows `x` means that. If you change it to `userData`, someone's muscle memory breaks and they start calling it `x` in their head anyway, and then they write code that assumes `x`, and then production breaks."
+
+"So you just... never improve the name?"
+
+"Correct. The variable name becomes a historical artifact. In five years, when someone asks 'why is this called `x`?', the answer will be 'because that's what it's always been called.'"
+
+The new reviewer gives up. They approve the PR with a comment: "Great code, terrible naming, but I know I'll just get used to it and never change it anyway."
+
+Six months later, a bug report comes in: "The value of `x` is wrong."
+
+Nobody knows how to fix it because nobody knows what `x` is supposed to be.
+
+A meeting is called. Someone suggests renaming it to something meaningful. Everyone in the meeting goes quiet. 
+
+Finally: "Let's just add a workaround instead."
+
+The moral: Naming is the single hardest problem in programming, but unlike all the other hard problems, we've collectively decided that once you pick a name, you're locked in for the lifetime of the project. It doesn't matter if the name is wrong, misleading, or actively hostile to understanding. Changing it is worse than living with it. This is why your codebase is full of variables like `x`, `temp`, `data`, and my personal favorite, `wtf`. They're not placeholders—they're historical monuments to a developer's confusion from three years ago.
+
