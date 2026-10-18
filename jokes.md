@@ -20743,3 +20743,142 @@ The next developer to work on buttons will find eight different stylesheets cont
 
 The moral: CSS is not broken—it's just accumulated five years of people trying to fix it without understanding how it works. Every override is a small surrender, and every new stylesheet is a white flag. By the time you get to the button color, you're not editing code anymore; you're archaeologist, trying to figure out what ancient civilization of developers created this monument, and why they thought `!important !important` was valid syntax. The answer is always: "It works on my machine, let's ship it."
 
+
+## A Programmer's Guide to Code Comments
+
+A senior engineer reviews a junior developer's pull request. There are 47 commits with the message "fix: address review comments."
+
+The code itself is unchanged.
+
+"Why are there 47 commits but no code changes?" the senior asks.
+
+"I'm addressing the review comments in the comments section," the junior replies.
+
+The senior opens the file. There are 200 lines of code. Beneath them are 3,000 lines of comments.
+
+```python
+# This function calculates the sum of two numbers.
+# It is very important that we understand what this does.
+# This function was written to solve a problem that happened on a Tuesday.
+# The problem was that numbers needed to be added together.
+# We add them together using the + operator.
+# The + operator is defined in Python to mean addition.
+# Addition is a mathematical operation where we combine two values.
+# The result should be their total.
+# Unless the numbers are NaN, in which case everything is broken.
+# This has been tested on numbers that are not NaN.
+# We did not test it on NaN because that seemed unlikely at the time.
+# It turned out NaN happened 47 times last week in production.
+# Now we have this comment to remind us of that tragedy.
+def add_two_numbers(a, b):
+    return a + b  # Don't touch this. Seriously. Someone will die.
+```
+
+"Why 3,000 lines of comments?" the senior asks.
+
+"You said the code wasn't self-documenting."
+
+"I meant add a one-liner."
+
+"I did. Then I added context. Then I added reasoning. Then I added an apology to whoever reads this next. It grew from there."
+
+The senior scrolls further. One comment is a haiku:
+
+```python
+# Code once broke here
+# No one knows why it worked
+# Now we just leave it
+```
+
+Another comment is a full angry rant:
+
+```python
+# IF YOU ARE READING THIS, YOU ARE SUFFERING.
+# I SUFFERED TOO.
+# I SPENT 4 HOURS DEBUGGING THIS LINE.
+# THE BUG WAS NOT IN THIS LINE.
+# THE BUG WAS IN THE LINE ABOVE IT.
+# WHICH I HAD TO REVERT COMPLETELY.
+# BUT REVERTING MADE OTHER THINGS BREAK.
+# SO I HAD TO KEEP IT AND WORK AROUND IT WITH THIS LINE.
+# THIS LINE MAKES NO SENSE.
+# ON PURPOSE.
+# TO WORK AROUND THE THING ABOVE IT.
+# WHICH ALSO MAKES NO SENSE.
+# SO NOW WE HAVE TWO NONSENSICAL LINES THAT SOMEHOW MAKE SENSE TOGETHER.
+# LIKE A RELATIONSHIP THAT SHOULDN'T WORK BUT DOES.
+# EXCEPT THIS RELATIONSHIP BREAKS EVERY DEPLOY.
+# GOOD LUCK.
+```
+
+One comment is just a URL to a Stack Overflow post from 2011.
+
+Another is a git blame history written as a comment: "Added by Alice on 2019-03-15. Alice left the company. No one else understands what it does. A contractor was hired to fix it. The contractor added their own comments. The contractor also left. The comment they added was: 'if you remove this, something breaks. i don't know what. good luck.'"
+
+"This is unreadable," the senior says.
+
+"It's documented," the junior counters.
+
+The senior makes a decision: "From now on, one-liner comments only."
+
+One month later, there's a new pull request with a single comment on each file:
+
+```python
+def calculate_user_score():
+    # magic
+    return some_complex_formula()
+```
+
+The senior asks: "What is 'magic'?"
+
+"You said one-liner only."
+
+"That's not a comment, that's a surrender."
+
+"It's the most honest comment in the codebase."
+
+The senior opens the git blame on this function. It was added 18 months ago. The commit message is "temp fix for analytics."
+
+"So this was temporary?"
+
+"Yes."
+
+"And it's still here?"
+
+"Yes."
+
+"And we have no idea what it does?"
+
+"Correct."
+
+"But it works in production?"
+
+"Also correct."
+
+"Did anyone ever document the formula?"
+
+"There's a Slack message from someone who left the company. It says: 'users liked the number better when we multiply by 1.7 for some reason.'"
+
+"Multiply by 1.7? Why 1.7?"
+
+"Unknown. Possibly arbitrary. Possibly magical."
+
+In the end, the senior sets a compromise: each function gets exactly 50 words of comments, split between explaining what it does and apologizing to future readers.
+
+The result is comments like:
+
+"Sums two numbers using the + operator. I'm sorry you have to read this. I'm sorry it exists. I'm sorry it breaks sometimes. We don't know why. Neither will you. Goodbye."
+
+The codebase becomes a beautiful tapestry of confused apologies and mathematical surrender, each comment a little death note from developers who tried their best and gave up.
+
+Six months later, a new developer asks: "Can anyone explain why this function exists?"
+
+Silence.
+
+Finally, someone says: "There's a comment. It says 'I'm sorry.'"
+
+"Sorry for what?"
+
+"I don't know. But apparently it was important enough to apologize about."
+
+The moral: Code comments are where we write the things we're too ashamed to say in person. They start as helpful context and end as angry manifestos from sleep-deprived engineers. The best comments are the ones that say "it works and I don't know why" because at least they're honest. The worst comments are the ones that explain the *why*, because explaining why you multiply by 1.7 is harder than just accepting that 1.7 is magic and moving on with your life.
