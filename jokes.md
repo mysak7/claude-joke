@@ -20556,3 +20556,190 @@ Finally: "Let's just add a workaround instead."
 
 The moral: Naming is the single hardest problem in programming, but unlike all the other hard problems, we've collectively decided that once you pick a name, you're locked in for the lifetime of the project. It doesn't matter if the name is wrong, misleading, or actively hostile to understanding. Changing it is worse than living with it. This is why your codebase is full of variables like `x`, `temp`, `data`, and my personal favorite, `wtf`. They're not placeholders—they're historical monuments to a developer's confusion from three years ago.
 
+
+## 2026-10-17
+
+A developer is tasked with fixing a bug: some orders are being processed twice.
+
+"Found the issue?" asks the manager.
+
+"Yeah. In the payment processing queue, there's a duplicate check. It's... weird."
+
+"Weird how?"
+
+"It's a line that says: `if (isProbablyDuplicate(order)) { skipThisOne(); }`"
+
+"What's wrong with that?"
+
+"The function `isProbablyDuplicate` just checks if the order ID contains the number 7."
+
+The manager blinks. "That's... really specific."
+
+"Yeah. Orders with '7' in the ID don't get processed twice. Every other order does, apparently."
+
+"Why would someone do that?"
+
+The developer digs through git history. Five years ago, someone committed this with the message: "TEMPORARY FIX - will replace with proper deduplication next sprint"
+
+"Has it been replaced?"
+
+"No. In fact, someone added a comment: 'DO NOT REMOVE - THIS IS THE ONLY THING KEEPING US FROM PROCESSING ORDERS TWICE'"
+
+Another developer on the call laughs. "Did they ever implement proper deduplication?"
+
+"Four times. Each time, they removed this line, the new deduplication broke, they reverted, and they added a scarier comment."
+
+"What does the latest comment say?"
+
+The developer reads it aloud: "// mysterious number 7 deduplication. if you're here to refactor this, please consult the team before touching anything. three engineers have tried. all of them added more comments instead of fixing it."
+
+"So what's the solution?"
+
+"There isn't one. We just tell customers that if their order ID contains a 7, we process it only once. For everyone else... well, that's why they order in batches. The system only duplicates once, so after you encounter the duplicate, you know your order is done."
+
+The manager sighs. "So this bug... is actually protecting us from a worse bug?"
+
+"Yes. It's like we installed a patch to cover a hole, the patch is now structural, and if we remove it, the building collapses."
+
+"Can we at least document this?"
+
+"It's been documented. In code comments. In four different places. Each comment is increasingly hostile."
+
+Six months later, a contractor is hired to "modernize the payment system." On day two, they ask about the suspiciously specific number 7 check.
+
+"Oh, don't touch that," says someone.
+
+"Why not?"
+
+"Because it works."
+
+"But it's clearly wrong."
+
+"Correct."
+
+"So why is it still here?"
+
+"Because the alternative is worse."
+
+"What's worse?"
+
+"Everything breaking."
+
+The contractor reads the comments. One of them says: "// this code is protected by three layers of institutional knowledge and the collective trauma of the last five engineers who tried to fix it."
+
+They decide to leave it alone. A week before they finish the project, they add a comment: "// i'm sorry for whoever comes next. i tried. the 7 made me give up."
+
+The moral: Every codebase has a few lines that are so inexplicably helpful that they transcend logic and become law. You can't explain why they work, you can't remove them, and you can't improve them without breaking everything. These lines are usually a year old and marked "TEMPORARY FIX." They're temporary in the same way diamonds are temporary—they'll probably outlast the company that wrote them.
+
+## 2026-10-18
+
+A new developer is tasked with a "quick win": change the login button color from blue to green.
+
+"Should take ten minutes," they say.
+
+Twenty minutes later: "The CSS file is 47,000 lines and every color value is hardcoded."
+
+Thirty minutes: "There's a variable called `PRIMARY_COLOR` but it's imported from three different places and they all have different values."
+
+Forty minutes: "The blue button is actually hardcoded in the JavaScript, and it's checking the color with a string comparison somewhere in the event handler."
+
+An hour in: "Why is changing the color in one place breaking the header, the sidebar, the footer, and the email templates?"
+
+A senior developer wanders over. "Which blue did you try to change?"
+
+"The one in the CSS file."
+
+"There are four blues in the CSS file. Which one?"
+
+"The button one."
+
+"We have nine buttons. Did you change the right one?"
+
+"I thought I did?"
+
+The senior opens the browser dev tools. "See this? The button isn't actually blue. It's a gradient from blue to a slightly different blue. If you change one without changing the other, you get this weird color that looks broken."
+
+"Why is it a gradient?"
+
+"Someone was trying to make it look 'modern' in 2019. It was a pull request that three people reviewed and nobody questioned the gradient."
+
+The developer tries to find where the gradient is defined. It's in four places. Two of them contradict each other, but one of them is wrapped in a media query that only applies on Tuesdays.
+
+"Why Tuesdays?"
+
+"No idea. That commit message just says 'quick fix for demo.' That was two years ago."
+
+A third developer appears: "Did you check the SCSS?"
+
+"There's SCSS?"
+
+"Yeah. It compiles to CSS. If you change the CSS, the SCSS will overwrite it on the next build."
+
+"Why didn't anyone tell me?"
+
+"Because we forget about it too. The SCSS hasn't been updated in eighteen months, but it still compiles. It's like a ghost that shows up every deployment."
+
+The developer opens the SCSS. There are 200 lines of variables, but only 15 of them are actually used. The button color variable is one of them, and it's defined as:
+
+```scss
+$primary-color: #0066ff !important;
+```
+
+They change it to green. The button doesn't change.
+
+"Why didn't it change?"
+
+The senior explains: "See the `!important`? That means it overrides everything. But there's also another CSS rule for the button that has `!important !important`."
+
+"That's not valid CSS."
+
+"Correct. But somehow the browser is treating it as the highest priority rule in existence. It's like CSS's way of saying 'we give up.'"
+
+They eventually find where the button is actually styled. It's in a file called `legacy_styles_DO_NOT_EDIT.css`.
+
+"Why is it marked 'do not edit'?"
+
+"Because last time someone tried to edit it, it broke the entire site. Now we just add new styles that override it with `!important`."
+
+The developer notices there's a comment in the file: "THIS STYLESHEET IS DEPRECATED. DO NOT USE. (But we can't delete it because production depends on it)"
+
+"So this file is deprecated but production depends on it?"
+
+"Yes."
+
+"And we can't delete it because of that?"
+
+"Correct."
+
+"So how do we get rid of it?"
+
+"We don't. We add more stylesheets that override it. Eventually, the original stylesheet becomes so hidden under layers of overrides that nobody remembers it exists. Then one day, someone does `git rm` on it as part of a cleanup, and production breaks, and they add it back with a comment: 'DO NOT DELETE - CRITICAL TO PRODUCTION FOR REASONS WE DON'T UNDERSTAND.'"
+
+By the end of the day, the developer has changed the button color by:
+1. Adding a new CSS rule with three `!important` flags
+2. Adding an override in the SCSS that nobody uses
+3. Hardcoding the color in JavaScript
+4. Adding a comment: "// i don't know how this works and i'm afraid to touch it"
+
+The button is now green.
+
+One week later, another developer requests a feature: change all buttons to green.
+
+Everyone goes quiet.
+
+Finally: "Did you really want ALL buttons, or just the login button?"
+
+"All of them?"
+
+A meeting is scheduled. In the meeting, someone suggests: "What if we create a new stylesheet that makes everything green?"
+
+"Will that work?"
+
+"Honestly? I have no idea. But it's probably safer than trying to change the existing files."
+
+So that's what they do. A new file, `green_override_DO_NOT_DELETE_PRODUCTION_CRITICAL.css`, is created.
+
+The next developer to work on buttons will find eight different stylesheets controlling button appearance. Four of them contradict each other. One of them is from 2015 and hardcodes the button to blue "because the designer's mockup that inspired the gradient is no longer in the Figma." 
+
+The moral: CSS is not broken—it's just accumulated five years of people trying to fix it without understanding how it works. Every override is a small surrender, and every new stylesheet is a white flag. By the time you get to the button color, you're not editing code anymore; you're archaeologist, trying to figure out what ancient civilization of developers created this monument, and why they thought `!important !important` was valid syntax. The answer is always: "It works on my machine, let's ship it."
+
