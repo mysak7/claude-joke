@@ -20882,3 +20882,61 @@ Finally, someone says: "There's a comment. It says 'I'm sorry.'"
 "I don't know. But apparently it was important enough to apologize about."
 
 The moral: Code comments are where we write the things we're too ashamed to say in person. They start as helpful context and end as angry manifestos from sleep-deprived engineers. The best comments are the ones that say "it works and I don't know why" because at least they're honest. The worst comments are the ones that explain the *why*, because explaining why you multiply by 1.7 is harder than just accepting that 1.7 is magic and moving on with your life.
+
+## 2026-10-18
+
+## The Regex Incident
+
+A developer needs to validate email addresses. "Easy," they think. "I'll just use a regex."
+
+Thirty minutes later, they have this:
+
+```regex
+^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$
+```
+
+They test it. It works. They ship it.
+
+Three months later, a customer with the email `user+tag@sub.domain.co.uk` reports they can't sign up. The developer stares at the regex. The regex stares back.
+
+"But the email is valid," the customer says.
+
+"The regex says it isn't," the developer replies, as if this is the email's fault.
+
+They Google "email validation regex." They find a StackOverflow post from 2009. The accepted answer is 8,000 characters long and includes a comment that says "This regex is a lie. Nothing works. Use a mail server."
+
+They use that one instead. Now the regex is 8,000 characters. It validates emails that haven't been invented yet. It also validates some things that are definitely not emails but somehow deserve the privilege anyway.
+
+A code review comment appears: "Can we just use a library for this?"
+
+The developer replies: "I already wrote the regex."
+
+"Can we still use a library?"
+
+"The regex works."
+
+"Does it?"
+
+The developer tests it again. It passes seven unit tests and breaks two in production. They add a comment:
+
+```javascript
+// This regex is held together by dark magic and user complaints
+// Do not touch. If you are reading this, you have already broken it
+// Consider using: const isEmail = str => str.includes('@')
+// But then you're a coward
+```
+
+Six months later, someone writes a PR that replaces the regex with `const isEmail = str => str.includes('@')`.
+
+The comments in the PR thread:
+
+- "Does this handle all cases?"
+- "Better than the regex."
+- "Which cases does it miss?"
+- "All of them. But it's honest about it."
+- "Ship it."
+
+The moral: There are only two hard things in Computer Science: cache invalidation, naming things, and regex. The regex always wins because it's not even really a string—it's a cry for help written in a language designed to be unreadable. The fact that it sometimes works is a statistical anomaly. The fact that it sometimes works in production is divine intervention. The fact that it broke your email validation is just Tuesday.
+
+The true email validation solution is older than the internet itself: send a confirmation email. If they can read it, the email is valid. If they can't, well, that's their email provider's problem now.
+
