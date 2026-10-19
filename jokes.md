@@ -21043,3 +21043,88 @@ The solution: never use an index again. If you need the index, use `enumerate()`
 
 The last comment on the PR is from someone who left the company six months ago: "just use numpy"
 
+
+## 2026-10-19
+
+## The Great Type Coercion Disaster
+
+A developer is reviewing code and finds this line:
+
+```javascript
+if (user.role == 'admin') {
+    grant_access();
+}
+```
+
+"You should use `===` instead of `==`," they comment.
+
+"Why? It works fine," the other developer replies.
+
+"Because of type coercion. What if `user.role` isn't a string?"
+
+"It always is. It's a role name from the database."
+
+Famous last words.
+
+Six months later, someone optimizes the database schema. Instead of storing role names as strings, they use integer codes: `1 = 'admin'`, `2 = 'user'`, `3 = 'guest'`. They update the authentication code... mostly.
+
+`user.role` is now sometimes a number. The code still works because `1 == 'admin'` is somehow true (type coercion). Actually, it's false. But the admin user IS role 1, so it still works accidentally.
+
+Then there's a race condition. A user's role becomes `undefined`.
+
+`undefined == 'admin'` is false. They lose access on their birthday. Support ticket filed.
+
+Another user's role gets corrupted to an empty array: `[]`
+
+`[] == 'admin'` is false. Still works.
+
+But someone adds an API endpoint that returns roles as arrays for "backwards compatibility":
+
+```javascript
+user.role = ['admin', 'user']
+```
+
+Now `['admin', 'user'] == 'admin'` is false. That user can't log in.
+
+But if `user.role = ['admin']`, then the array converts to string `'admin'` and... it's true.
+
+So now the system grants access if your role is an array containing exactly one item `'admin'`, but not if it's the string `'admin'`.
+
+A code reviewer finally says: "Just use `===`. This is insane."
+
+"But then we'd break the array case."
+
+"Why does role need to be an array?"
+
+"For backwards compatibility."
+
+"With what?"
+
+"I think... a system from 2015?"
+
+They implement a proper fix:
+
+```javascript
+const isAdmin = (role) => {
+    if (typeof role === 'string') return role === 'admin';
+    if (Array.isArray(role)) return role.includes('admin');
+    if (typeof role === 'number') return role === 1;
+    if (typeof role === 'object' && role?.admin === true) return true;
+    return false;
+};
+```
+
+It ships. Then QA finds someone with role as an object `{admin: true}` from a 2019 migration script that was supposed to have been deleted.
+
+The authentication code is now 40 lines to check if someone is an admin. The original was one line. That one line used `==`.
+
+A senior developer stares at it and says: "This is what we get for not using `===` from the start."
+
+"But it worked—"
+
+"Did it, though? Did it *really*?"
+
+The moral: In JavaScript, `==` is not loose equality—it's a rope you hang yourself with slowly, over the course of six months, through incremental decisions that each seemed fine at the time. Type coercion is not a feature. It's the language designer's way of saying "I trust you to write good code" and then laughing as you debug why `[] == false` is true but `[] ? true : false` is also true.
+
+The only way to win is to never use `==`. Ever. Not even once. Not even when you're sure it will work. Especially then. Because six months later, someone will change something, and your authentication system will grant admin access to a user with the role `"1"` stored as a string when you were expecting a number, and you will deserve every minute of debugging time.
+
