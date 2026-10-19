@@ -20940,3 +20940,106 @@ The moral: There are only two hard things in Computer Science: cache invalidatio
 
 The true email validation solution is older than the internet itself: send a confirmation email. If they can read it, the email is valid. If they can't, well, that's their email provider's problem now.
 
+
+## 2026-10-19
+
+## The Mysterious Off-By-One Bug
+
+A junior developer is iterating through an array. The code looks clean:
+
+```python
+for i in range(len(array)):
+    process(array[i])
+```
+
+It works perfectly in testing. Ships to production. Everything is fine.
+
+Then one day, a user reports: "Sometimes my data is missing the last item."
+
+The developer reviews the logs. The last item is being processed. It's being saved. But somehow, in the UI, it's gone.
+
+They add debug logging. The last item reaches the UI layer. Still there. They refresh the page. It vanishes.
+
+"It's a front-end bug," they confidently declare.
+
+The front-end developer says: "No, the API is only sending 99 items when there should be 100."
+
+Back and forth. Back and forth. A meeting is scheduled. Then another meeting. Someone mentions it might be a cache issue. Someone else suggests it's a timezone problem (it's not).
+
+Finally, a senior developer asks: "What changed recently?"
+
+"We upgraded the database library."
+
+"And?"
+
+"And... nothing else?"
+
+"Let's check the database directly."
+
+They do. All 100 items are there.
+
+"What about the Python version?"
+
+"We upgraded that too."
+
+They test the loop on the old Python version. All 100 items. On the new Python version? 99 items.
+
+"How is that even possible?" the junior asks.
+
+The senior developer spends three hours comparing Python release notes. Finds nothing.
+
+Then, by accident, they print out the iteration variable at the very end:
+
+```python
+for i in range(len(array)):
+    process(array[i])
+print(i)  # What is i?
+```
+
+On the new Python version, `i` retains its value after the loop ends (last value: 99).
+
+On the old Python version, `i` is deleted after the loop ends.
+
+The junior had written a cleanup function that relies on `i` being undefined:
+
+```python
+try:
+    final_cleanup(array[i])  # Should fail if i is undefined
+except NameError:
+    pass  # It's expected
+```
+
+The function was never being called. Now it was. And it was corrupting the last item.
+
+The fix is one line: `i = None` after the loop.
+
+Or, as the senior suggests: "Just use `for item in array:` instead of indexing."
+
+The junior stares at this. "That's... that's been available the entire time?"
+
+"Yes."
+
+"And I never..."
+
+"No."
+
+"But what about using the index?"
+
+"You weren't using it."
+
+"I... was using it once."
+
+"And now you're using Python 3.10, so you broke it."
+
+The commit message reads: "Fix off-by-one bug caused by my own stupidity and the Python language designers' decision to change scoping rules in a way that breaks code that was never good to begin with."
+
+The pull request gets approved with one comment: "Welcome to programming."
+
+The moral: Off-by-one errors don't come from bad math. They come from Python letting loop variables exist after the loop ends. They come from you using indexed loops when iterator loops exist. They come from writing code at 3 AM that somehow works for months and then breaks because a language version changed a detail you never read. The true bug is that you're iterating at all. The real bug is that you're thinking about indices when you should be thinking about items. The deepest bug is that programming languages let you write `for i in range(len(array))` without the IDE suggesting you should reconsider your life choices.
+
+If you've written `for i in range(len(array))`, you've already lost. You're not a programmer anymore. You're a person manually indexing arrays in the year 2026. You've become the kind of person who learns Python and immediately forgets that Python exists.
+
+The solution: never use an index again. If you need the index, use `enumerate()`. If you need to access the previous item, that's what `zip()` is for. If you need to access the next item, you should be using an iterator. And if you need to do all three things at once, you're probably over-engineering something that should be simpler, and you should take a break.
+
+The last comment on the PR is from someone who left the company six months ago: "just use numpy"
+
