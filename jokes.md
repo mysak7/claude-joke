@@ -21128,3 +21128,165 @@ The moral: In JavaScript, `==` is not loose equality—it's a rope you hang your
 
 The only way to win is to never use `==`. Ever. Not even once. Not even when you're sure it will work. Especially then. Because six months later, someone will change something, and your authentication system will grant admin access to a user with the role `"1"` stored as a string when you were expecting a number, and you will deserve every minute of debugging time.
 
+
+## 2026-10-19
+
+## The Floating Point Surprise Party
+
+A junior developer implements a price calculator for an e-commerce site:
+
+```python
+price = 0.1 + 0.2
+if price == 0.3:
+    apply_discount()
+```
+
+It works in testing. It ships to production. For a few weeks, everything is fine.
+
+Then customer support gets angry. Discounts aren't applying randomly—usually when the cart total is between $18.50 and $23.99.
+
+The junior checks the logs. `0.1 + 0.2` is not `0.3`. It's `0.30000000000000004`.
+
+"That's impossible," they say.
+
+A senior leans over. "It's computers."
+
+"But... it's just addition."
+
+"Not in binary."
+
+They pull up a Python shell:
+
+```
+>>> 0.1 + 0.2 == 0.3
+False
+>>> 0.1 + 0.2
+0.30000000000000004
+>>> price = 0.0
+>>> for _ in range(10):
+...     price += 0.1
+>>> price
+0.9999999999999999
+>>> price == 1.0
+False
+```
+
+The junior stares at this. "So if I add 0.1 ten times, I don't get 1.0?"
+
+"Welcome to floating point arithmetic. It's the language telling you: don't use floats for money."
+
+"But... the value is stored as a float in the database."
+
+"Then convert it to an integer when doing math."
+
+"How?"
+
+"Multiply by 100. Now you're working in cents, which is an integer. Add, subtract, multiply. Then divide by 100 at the end."
+
+The junior does this. Tests again. Works perfectly. They feel smug.
+
+Then another bug: when displaying the price, they forgot to format it:
+
+```python
+price = 999  # cents
+display = price / 100  # Back to dollars
+print(display)  # 9.99 (or is it?)
+```
+
+It prints `9.989999999999999`.
+
+"Again?!"
+
+"You divided by 100. Now you're back in floats. Use Decimal for display."
+
+```python
+from decimal import Decimal
+price = Decimal('999')
+display = price / 100
+print(display)  # 9.99
+```
+
+The junior implements Decimal. The site works. They think it's over.
+
+Six months later, a database query returns prices with different floating point rounding errors across different regions (because different servers have different optimization levels). Comparisons fail. Transactions don't match. Reports are wrong.
+
+A veteran developer looks at this and says: "This is what happens when you trust floats."
+
+"I'm using Decimal everywhere now."
+
+"Did you convert the string inputs to Decimal?"
+
+"No."
+
+"Did you convert the JSON responses to Decimal?"
+
+"No."
+
+"Did you convert the database values to Decimal?"
+
+"No."
+
+"So you're comparing Decimal(0.1 + 0.2) with Decimal(0.3)?"
+
+"Is that different?"
+
+"Yes. Because 0.1 + 0.2 is evaluated as floats first, THEN converted to Decimal."
+
+The junior rewrites the code to parse everything as strings first:
+
+```python
+price = Decimal('0.1') + Decimal('0.2')
+print(price == Decimal('0.3'))  # True!
+```
+
+It works. The bugs are fixed. For two weeks.
+
+Then the finance team complains: some reports show different totals than the accounting system (which uses floating point). They don't match by exactly $0.00000000000001 per transaction, but across 100,000 transactions... it adds up.
+
+The veteran comes back: "You can't compare Decimal systems with float systems. You have to pick one."
+
+"Which should I pick?"
+
+"Not floats."
+
+"But the accounting system uses floats."
+
+"Then your accounting system is broken, and you shouldn't be using it. But since you have to, you now have to round all Decimal values at the end so they match the broken float values."
+
+So now the code is:
+
+```python
+total = sum(Decimal(p) for p in prices)
+rounded_total = float(total)
+if rounded_total == expected_float:
+    process_transaction()
+```
+
+The junior is now comparing Decimal and float again, which is what caused the problem in the first place.
+
+The commit message reads: "Just use integers for everything and pray you never have to refactor this."
+
+Years later, at a conference, someone asks: "What's the hardest part of programming?"
+
+A panel of experts answers:
+- Memory management
+- Concurrency
+- Naming things
+- Off-by-one errors
+- Floating point arithmetic
+
+The junior, now a senior, adds: "Floating point arithmetic. At least with the others, you eventually understand them. Floating point arithmetic understands you. It watches you from inside your CPU, waiting for the moment you trust it. And then it fails. Always."
+
+The moral: Floats are not numbers. They're an approximation wearing a number's costume. They passed the border checkpoint with the number's ID and nobody checked too carefully. Now they're living your numbers' lives, showing up to your bank account, running your calculations, and nobody suspects they're not the real thing. Your code trusts them. Your tests pass. Your users don't notice... until they do. And by then, you're six months deep in production, trying to explain to accounting why $1,000.00 isn't actually $1,000.00. The only way to win is to never use floats for anything you care about. If you have to use them, treat them like you treat JavaScript—assume they're broken, and verify everything. If you're comparing floats, you've already lost. The only winning move is to use integers.
+
+Or Python 3.10+:
+
+```python
+from decimal import Decimal
+prices = [Decimal(p) for p in ['0.1', '0.2']]
+total = sum(prices, Decimal('0'))
+print(total)  # Still Decimal('0.3')
+```
+
+But do yourself a favor: just use integers. Use cents. Use the smallest unit that makes sense. Let floating point be someone else's problem.
+
