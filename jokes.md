@@ -21474,3 +21474,61 @@ Stack Overflow has their own solution in the search results, voted 47 times, wit
 They didn't remember writing it.
 
 The moral: All programming problems have already been solved. You just have to find the right forum post from before search engines existed.
+
+## 2026-10-21
+
+A developer finishes a feature at 11:59 PM on Friday.
+
+Tests pass. Code review is approved. They're about to merge when someone asks: "Did you check the edge cases?"
+
+They freeze. Edge cases. They didn't. They add a quick unit test for one edge case they can think of. It fails.
+
+They fix it. Test passes. 12:04 AM on Saturday.
+
+They merge. Deploy to production. Go to sleep.
+
+Sunday morning: a user reports a bug in the exact feature they deployed. Different edge case they didn't test.
+
+They fix it. Add a test for that case. Deploy again. Go back to bed.
+
+Monday morning: another bug. Another edge case.
+
+By Wednesday, they've tested 14 edge cases. 12 of them were theoretical. The real 2 caught actual bugs.
+
+By Friday, they're paranoid. They write a test for what happens if the user inputs the color "purple". Not a valid color, but somehow this matters now.
+
+The test passes. The feature still works.
+
+They ship it anyway, because what if.
+
+Six months later, someone reviews the test suite. They find 400 test cases. Most of them have comments like:
+
+```python
+# If the ID is negative and the user is left-handed
+# and the database is in a weird state, this breaks
+test_some_weird_edge_case_nobody_encounters():
+    assert calculate(data=-1) == expected_value
+```
+
+A manager asks: "Why are we testing for negative IDs when IDs are always positive?"
+
+"Because what if?"
+
+"What if what?"
+
+"I don't know. What if something goes wrong?"
+
+"It already did. Six times. And your edge case tests didn't catch any of them."
+
+"But the ones that did matter—"
+
+"—were caught by the developers who ran the code by hand before merging, not by tests for situations that never happen."
+
+The junior developer has learned an important lesson: there are two kinds of edge cases.
+
+The ones that matter: caught by running your code with real data before shipping.
+
+The ones that don't: caught by tests written in a paranoid fever dream at 2 AM.
+
+The moral: Don't test what you're afraid of. Test what you know is broken.
+
