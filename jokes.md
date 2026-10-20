@@ -21448,3 +21448,29 @@ The moral: Null pointer exceptions are not a bug. They're a feature. They're you
 
 Or use Rust.
 
+
+## 2026-10-20
+
+A developer has a problem. They Google it. Stack Overflow has an answer.
+
+The answer is marked as "duplicate" and links to another question from 2009.
+
+That question links to a GitHub issue from 2003 that's been locked "to preserve historical context."
+
+The developer clicks the link anyway. GitHub says the page doesn't exist. 404.
+
+They try the Wayback Machine. It has a snapshot from 2004. The solution is "use jQuery."
+
+They search for "jQuery alternative 2026". Stack Overflow suggests using... jQuery.
+
+They give up and just rewrite the whole feature from scratch.
+
+It takes 12 hours and works perfectly.
+
+They Google their exact same problem one more time out of curiosity.
+
+Stack Overflow has their own solution in the search results, voted 47 times, with a comment saying "This worked for me" in 2022.
+
+They didn't remember writing it.
+
+The moral: All programming problems have already been solved. You just have to find the right forum post from before search engines existed.
