@@ -21290,3 +21290,161 @@ print(total)  # Still Decimal('0.3')
 
 But do yourself a favor: just use integers. Use cents. Use the smallest unit that makes sense. Let floating point be someone else's problem.
 
+
+## 2026-10-20
+
+A junior developer learns about null pointer exceptions. Gets paranoid. Starts adding null checks everywhere:
+
+```python
+if user:
+    if user.profile:
+        if user.profile.settings:
+            if user.profile.settings.notifications:
+                if user.profile.settings.notifications.email:
+                    send_email(user.profile.settings.notifications.email)
+```
+
+It works. No crashes. They feel smart.
+
+Then they check an API response. The server returns:
+
+```json
+{
+  "user": {
+    "profile": {
+      "settings": {
+        "notifications": null
+      }
+    }
+  }
+}
+```
+
+The email check fails silently. No notifications sent. Users complain.
+
+So they add more checks:
+
+```python
+if user and user.profile and user.profile.settings and (user.profile.settings.notifications or {}) and (user.profile.settings.notifications.get('email') or user.email):
+    send_email(...)
+```
+
+It's unreadable, but it works.
+
+Then a new requirement: check the admin's notification settings if the user's settings are null.
+
+```python
+settings = (user.profile.settings if user and user.profile else {})
+notifications = (settings.notifications if settings else {})
+email = (notifications.email if notifications else None) or (admin.profile.settings.notifications.email if admin and admin.profile and admin.profile.settings and admin.profile.settings.notifications else user.email)
+```
+
+Three months of this. The codebase is 40% null checks, 60% null checks within null checks.
+
+A senior walks by: "Why is this function 200 lines?"
+
+"Null safety."
+
+"Did you think about using optional chaining?"
+
+The junior has never heard of it. The senior shows them:
+
+```python
+email = user?.profile?.settings?.notifications?.email or user?.email
+```
+
+Seven lines become one. The junior implements it everywhere. Feels foolish.
+
+But then TypeScript exists. TypeScript will catch null dereferences at compile time. The junior is ecstatic. Finally, no more runtime null errors.
+
+They write typed code. Strict mode. No implicit any. The code compiles.
+
+They ship it. A user sends `null` as the email. Runtime error.
+
+"But TypeScript!"
+
+"TypeScript doesn't run at runtime. It's a type checker, not a magic force field."
+
+So they add validation:
+
+```typescript
+if (typeof email !== 'string' || !email.includes('@')) {
+    throw new Error('Invalid email');
+}
+```
+
+It works. The users can't send null anymore. They send an empty string.
+
+Cascade of bugs. Null checks weren't the problem. Input validation was.
+
+But the junior doesn't know that yet. So they add more null checks:
+
+```typescript
+const email: string | null = data?.email ?? null;
+if (email !== null && email !== '' && typeof email === 'string' && email.includes('@')) {
+    send_email(email);
+}
+```
+
+They've now written a function that's 90% guards, 10% actual logic.
+
+A mentor looks at this and says: "You don't trust your data."
+
+"I don't trust anything."
+
+"That's not being careful. That's being paranoid."
+
+"But what if—"
+
+"What if what? The null is going to attack you? The undefined will steal your socks?"
+
+"What if the API changes?"
+
+"Then your tests will fail, and you'll fix it. That's what tests are for, not defensive null checks."
+
+The junior writes a test. It tests the happy path, the null path, the empty string path, the 500-character path, the path with only spaces...
+
+They've written 15 test cases for a function that should have 3.
+
+The mentor looks at this: "You don't trust your tests either."
+
+"I was just being thorough."
+
+"You're being paranoid. Pick the essential cases, test those, and trust that if something is wrong, the error will be obvious."
+
+The junior simplifies. Removes half the tests. The code still works.
+
+Six months later, a bug: the API sometimes returns the email in uppercase in one region, lowercase in another. Case-sensitive comparison breaks.
+
+So they add `.toLowerCase()`:
+
+```python
+email = (user?.email or admin?.email)?.toLowerCase()
+```
+
+It works. But what if email is null? The function chokes again. So more guards:
+
+```python
+email = (user?.email or admin?.email)?.toLowerCase?.() ?? null
+```
+
+It's a null check wrapped in a null check wrapped in a null check. The junior created a Russian nesting doll of conditional logic.
+
+A veteran developer looks at this and says: "This is what programming is. Not the logic. The defenses against the logic failing. Every line of code is surrounded by an invisible moat of null checks and edge case handling. That's why simple programs are hard. You're not writing code. You're writing prophecy about everything that could go wrong."
+
+"So what do I do?"
+
+"Accept it. Write the null checks. Add them early. Name them clearly. Extract them to helper functions. Use libraries that handle this for you. And then accept that you'll still miss some cases, and that's okay. That's why you have tests. That's why you have logs. That's why you have an error budget."
+
+The junior adds one more null check, just in case.
+
+Then one more.
+
+Then one more.
+
+They've become the very thing they feared: a programmer who trusts nothing, checks everything, and somehow still ships bugs because the null wasn't where they expected it to be.
+
+The moral: Null pointer exceptions are not a bug. They're a feature. They're your code telling you "something went wrong before I even got here." The tragedy is spending your entire career building fences to keep them out, only to realize: the real bug was trusting the data in the first place. Validate once, at the boundary. After that, assume it's clean. Let the nulls come, if they must. Your tests will catch them.
+
+Or use Rust.
+
