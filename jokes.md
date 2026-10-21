@@ -21532,3 +21532,46 @@ The ones that don't: caught by tests written in a paranoid fever dream at 2 AM.
 
 The moral: Don't test what you're afraid of. Test what you know is broken.
 
+
+## 2026-10-21
+
+A developer writes a function to format a date. Simple. January 1st becomes "Jan 1st". Works fine.
+
+Six months later, a user in Germany reports a bug. The dates are in German: "Jan" should be "Jan" (same), but "1st" should be "1.". Okay, locale support.
+
+They add `Intl.DateTimeFormat`. Now it works in German. And French. And Japanese. Perfect.
+
+Two years later, the user is still using the old version. They call support: "My dates are wrong."
+
+The developer checks. The user is on version 1.0, from 2024. There's a version 5.0 from today that fixes this.
+
+"You need to upgrade."
+
+"No, I can't. It'll break other things."
+
+The developer sighs. There's nothing to do. The user will never upgrade. They will call support every six months about the same bug.
+
+Meanwhile, another user upgraded to version 5.0. That version has a new feature: dates in emojis. January 1st becomes "🗓️📅🎉". It's beautiful. It's useless. It breaks every system that expects a string.
+
+The developer gets a bug report: "emojis are showing up in our logs as garbage characters."
+
+"That's the new feature!"
+
+"It's not a feature, it's a bug."
+
+They add a config flag: `{ emoji: false }`. Now users have to opt out of broken behavior to use the library.
+
+A third user, meanwhile, never updated at all. They're still on 1.0. Their dates work fine. They're happy.
+
+The developer considers backporting the German fix to 1.0. But 1.0 has 47 other bugs. If they touch it, something will break. So they leave it alone.
+
+The user continues to use 1.0 forever.
+
+The moral: Software versioning is a lie. Version numbers don't mean "better." They mean "different." And "different" usually means "you'll need to change your config, rebuild, retest, and hope nothing breaks." So users don't update. They stay on the old version. Forever.
+
+It's not debt. It's detention. You're trapped in version 1.0 for eternity, just like you're trapped in this meeting about why the API returns dates in 47 different formats.
+
+You know what? Let's just use Unix timestamps. Problem solved.
+
+(It's not solved. It'll cause 100 other problems. In 2027.)
+
