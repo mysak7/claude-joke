@@ -21575,3 +21575,75 @@ You know what? Let's just use Unix timestamps. Problem solved.
 
 (It's not solved. It'll cause 100 other problems. In 2027.)
 
+
+## 2026-10-21
+
+A developer finds an ancient code comment:
+
+```python
+# HACK: This is terrible but it works for now
+# TODO: Refactor this properly
+timestamp = int(datetime.now().timestamp() * 1000 + random.randint(0, 999))
+```
+
+The comment is from 2019.
+
+It's now 2026.
+
+The hack is still there.
+
+The developer asks their lead: "Should I refactor this?"
+
+"No, it's in production. Don't touch it."
+
+"But it's hacky—"
+
+"So is everything in production. At least this one is documented."
+
+Six months later, a bug report comes in: timestamps are sometimes colliding. Impossible, right? The code adds randomness. Should be unique.
+
+The developer re-reads the comment. It says "terrible but it works."
+
+It doesn't work.
+
+They ask: "Why is there random.randint in a timestamp?"
+
+Their lead responds: "Someone added that in 2019 as a quick fix for duplicate timestamps. They were going to refactor it properly, but someone deployed to production before the refactor was done. So the hack stayed."
+
+"For seven years?"
+
+"For seven years."
+
+The developer fixes it. Removes the random. Uses a proper microsecond-precision timestamp. Tests it thoroughly. Gets code review approval.
+
+Before merging, their lead asks: "Did you add a comment about this?"
+
+"No, the code is clear. It's just a timestamp."
+
+"Add a comment."
+
+"Why? The code is self-documenting."
+
+"Because in 2033, someone will see this code and ask 'Why not nanoseconds? Why not add a hash?' Add a comment explaining the decision. Then when that person inevitably wants to change it, they'll know why it's this way."
+
+The developer adds:
+
+```python
+# Using millisecond precision, not microsecond or nanosecond
+# Reason: millisecond precision is sufficient for this use case
+# and avoids collision issues from previous random-based approach (see #2019-HACK)
+timestamp = int(datetime.now().timestamp() * 1000)
+```
+
+They merge.
+
+Seven years from now, a developer will read this comment and think: "Why does this comment reference #2019-HACK? That ticket doesn't exist. Is this a joke? Did they actually track a bug for seven years?"
+
+Yes.
+
+The moral: Every line of code has a ghost. The ghost is the decision that put it there. The comment is your exorcism. Write it even if the code is clear, because clarity is subjective. Today's clarity is tomorrow's "why would anyone write it that way?" And the answer, trapped in a comment from a time before, will save you from making the same decision again.
+
+Also: Never ask "why is this code here?" The answer is always "because it fixes a bug." The real question is "why does this bug still exist?" And the answer to that is "because we're afraid to change it."
+
+Your job is to be less afraid.
+
