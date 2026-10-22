@@ -21647,3 +21647,136 @@ Also: Never ask "why is this code here?" The answer is always "because it fixes 
 
 Your job is to be less afraid.
 
+
+A manager asks a developer: "Can you add dark mode? Should take a day."
+
+The developer says nothing. They know the truth.
+
+Two hours later, the dev returns. "It's not a one-day project."
+
+"Why? It's just a toggle."
+
+"Because our CSS isn't organized by component. It's organized by date. Some colors are hardcoded hex values. Some use CSS variables. Some reference a design system that hasn't been updated since 2019. And some colors literally don't exist in any documentation—someone just guessed them once and they stayed."
+
+The manager stares. "So... how long?"
+
+"Unknown. Maybe a week. Maybe a month. Depends on how many undocumented color schemes are hiding in the code."
+
+They run a grep for color properties. 47,000 results. The developer's eye twitches.
+
+Three weeks into the project, dark mode mostly works. Except:
+
+- On mobile, some buttons still use hardcoded colors. 
+- The theme system has a hidden dependency on a feature called "custom themes" that nobody's used since 2022.
+- If you enable custom themes, dark mode breaks for unclear reasons.
+
+A user complains: "Dark mode gives me a headache because some text is still light."
+
+The developer finds the issue: a single button is hardcoded to `color: #FFF`. That one button exists nowhere in the CSS files. It's injected by JavaScript. From a plugin. That was installed three years ago.
+
+Two days pass. The plugin is found. It's using inline styles. They add a dark mode rule with `!important`.
+
+It works. Temporarily.
+
+A week later, the developer discovers the plugin is now broken in light mode. The `!important` broke its styling.
+
+They add a condition: `if (darkMode) { ... !important ... }`.
+
+Now the code is:
+
+```javascript
+if (darkMode) {
+  document.querySelector('button').style.color = 'black !important';
+}
+```
+
+This works for three months. Then a user with a custom theme complains: "Dark mode broke my colors."
+
+The developer remembers: the custom theme feature still exists. They check the code. There's a flag: `if (customTheme && darkMode)`. The condition is to skip dark mode entirely if custom themes are enabled. This was added to prevent conflicts.
+
+So dark mode has a feature flag that disables it. Nobody documented this. No error message. The code just silently doesn't work.
+
+The user is left wondering why the toggle doesn't work. They call support.
+
+Support has no documentation. They blame the browser: "Try a different browser."
+
+The user blames the developer: "Your dark mode doesn't work."
+
+The developer blames the architecture: "The codebase has technical debt."
+
+Everyone is correct.
+
+The moral: A toggle isn't a feature. It's a promise to change the codebase in a way that the codebase was never designed to support. Before you ask for one-day features, ask if your code can handle it. 
+
+Usually it can't.
+
+Usually you'll find 47,000 problems hiding in plain sight.
+
+Usually you'll add a configuration flag to disable the feature for users who might need the broken behavior someday.
+
+And eventually, someone will discover the toggle doesn't work and call support.
+
+By then, you'll be on to the next feature request.
+
+The one-day feature that takes three weeks.
+
+## 2026-10-22
+
+A developer writes a function:
+
+```python
+def save_user(user, backup=True):
+    # TODO: document this
+    pass
+```
+
+Two years later, it's called 58 different ways:
+- `save_user(user)` - 47 places
+- `save_user(user, True)` - 8 places
+- `save_user(user, False)` - 3 places
+
+Nobody knows what `backup=True` means. Is it:
+- "Create a backup before saving"?
+- "Save the user and backup the database"?
+- "Use backup mode for this save"?
+- "Save a backup copy somewhere"?
+- "Is this a backup call or a real save"?
+
+Nobody documented it. The original developer left in 2023. The code stayed.
+
+One day, a performance engineer asks: "Why are we doubling I/O by backuping on every save?"
+
+They flip `backup=True` to `backup=False` everywhere.
+
+Production implodes. The backups were critical. They weren't actually backups. They were... something important. Nobody knows what.
+
+The code is reverted. The parameter remains mysterious.
+
+A new junior developer sees:
+
+```python
+save_user(user, False)
+```
+
+They ask: "Why False?"
+
+The team responds in unison: "Never change it. It works. It's always been False. Leave it False."
+
+So now there's production code that does an essential thing—triggered by `False`—and nobody understands why.
+
+Three months later, a different engineer wants to refactor:
+
+"This function should use kwargs instead of positional booleans."
+
+The team freezes. Change the signature? Touch the False parameter?
+
+"No. Absolutely not. That False is the only thing keeping user saves alive. We don't know how, but it is."
+
+So the function signature stays. The mystery parameter stays. The code stays broken in a way that works.
+
+The moral: Never use a boolean parameter. Ever. Use an enum. Use a string constant. Use literally anything else. A boolean is a loaded gun labeled with a question mark. Someone will pull the trigger someday just to see what happens.
+
+Also: That line of code with `False`? It's been there for three years. It's the most important line in the codebase. Nobody dares touch it.
+
+And somewhere, buried in Slack history from 2023, someone once asked "what does this parameter do?" The answer was probably "idk lol." And that's the documentation you'll ever get.
+
