@@ -22286,3 +22286,185 @@ The third moral: The sleep was never the problem. It was a symptom. The real pro
 
 And now it always will be.
 
+
+## 2026-10-23
+
+A developer is refactoring an old module. They find this code:
+
+```python
+def process_user_data(user_id, skip_cache=False):
+    if skip_cache:
+        data = fetch_from_db(user_id)
+    else:
+        data = fetch_from_cache_then_db(user_id)
+    
+    # CRITICAL: Must uppercase the email before validation
+    if data.get('email'):
+        data['email'] = data['email'].upper()
+    
+    # Then lowercase it back for storage
+    if data.get('email'):
+        data['email'] = data['email'].lower()
+    
+    return data
+```
+
+The code uppercases the email, then immediately lowercases it. The net effect: nothing. The email is unchanged.
+
+The developer thinks: "This is obviously broken. Someone copy-pasted uppercase/lowercase logic and forgot to remove one half."
+
+They delete the uppercase line:
+
+```python
+def process_user_data(user_id, skip_cache=False):
+    if skip_cache:
+        data = fetch_from_db(user_id)
+    else:
+        data = fetch_from_cache_then_db(user_id)
+    
+    # Then lowercase it back for storage
+    if data.get('email'):
+        data['email'] = data['email'].lower()
+    
+    return data
+```
+
+They run the tests. All pass. They run them again. Still pass. They run the entire test suite. Perfect. They commit this "cleanup" and push it.
+
+Production breaks.
+
+The email validation is failing for specific users. Users with non-ASCII characters in their email addresses can no longer log in. The error message is cryptic: "Validation failed."
+
+The developer rolls back. Production comes back up. They investigate.
+
+They `git blame` the uppercase line:
+
+```
+abc1234 2019-03-15 <themselves> CRITICAL: Must uppercase the email before validation
+```
+
+They check the commit message:
+
+```
+commit abc1234
+Author: Developer Name
+
+Normalize email for validation (converts special chars to ASCII)
+
+This is required because the email validation library (at the time) 
+did not support Unicode. The uppercase operation forces Python to 
+normalize certain Unicode characters to their ASCII equivalents.
+```
+
+They don't remember writing this. They check the code comments in that commit. There's more context:
+
+```python
+# The validation library doesn't handle Unicode emails. 
+# But it DOES normalize them during the uppercase operation 
+# as a side-effect of its internal processing.
+# This is a side-effect, not the main behavior, so we uppercase 
+# and then lowercase to keep the email unchanged while triggering 
+# the normalization.
+#
+# If you remove this, non-ASCII emails will fail validation.
+#
+# (This is a terrible workaround but it's what we've got until 
+# we upgrade the validation library)
+```
+
+The developer realizes: they didn't write this comment. It's someone else's code from 2019. They checked the blame history... wait, no, the blame clearly shows them as the author.
+
+They check their git config. It's their email. They check the office calendar for 2019. They were definitely here. But they have no memory of this code.
+
+They ask around:
+
+"Hey, did anyone remember writing email validation workarounds in 2019?"
+
+Everyone shakes their head.
+
+They search for Slack messages from 2019:
+
+```
+@developer: why does process_user_data uppercase and then lowercase? that seems wrong
+@developer: (10 min later) don't ask. it's a terrible hack. removing it breaks non-ASCII emails
+```
+
+The developer finds the conversation and realizes: they DID write it. They DID debug it. They DID document it.
+
+And they COMPLETELY FORGOT about it.
+
+The code had:
+- A clear comment explaining the WHY
+- A commit message with the context
+- A Slack conversation backing it up
+
+And yet, six months later, they looked at the code and thought: "This is obviously broken."
+
+They didn't read the comments. They didn't check the commit message. They looked at the code, saw something that *seemed* wrong, and removed it.
+
+The comment was right there:
+
+```
+# If you remove this, non-ASCII emails will fail validation.
+```
+
+But they didn't read it. They saw a three-line comment and thought: "This is probably outdated. The code is what matters."
+
+The code matters. But the WHY is invisible.
+
+So they had to break production to rediscover their own reasoning.
+
+Now they add a new comment, in all caps:
+
+```python
+# DO NOT REMOVE THE UPPERCASE OPERATION.
+# IT TRIGGERS UNICODE NORMALIZATION IN THE VALIDATION LIBRARY.
+# THIS IS DOCUMENTED IN COMMIT abc1234 AND SLACK.
+# IF YOU REMOVE IT, NON-ASCII EMAILS WILL FAIL.
+```
+
+Two years later, another developer comes across this comment and thinks:
+
+"This comment is scary. All caps. Multiple warnings. This must be really important."
+
+They research it. They find the commit. They find the Slack message. They read the whole thing.
+
+And they think: "This is absurd. We shouldn't have a workaround this fragile. Let's upgrade the validation library."
+
+So they spend a week upgrading the library. The upgrade removes the need for the workaround. They test it thoroughly. Non-ASCII emails work perfectly.
+
+They remove the uppercase operation. All tests pass. They deploy to production.
+
+But the new validation library has its own bug: it doesn't handle emails with plus signs (like `user+tag@example.com`). The old library handled those just fine.
+
+The old library handled plus signs because it was doing Unicode normalization as a side effect. The Unicode normalization ALSO normalized plus signs to a specific format that the downstream code expected.
+
+Now the downstream code receives plus signs in a different format. It doesn't recognize them. It fails silently.
+
+A thousand users who use email aliases with plus signs suddenly can't filter their email properly.
+
+The team adds the validation library upgrade to the list of "things we didn't think through."
+
+The developer who upgraded it doesn't remember why the Unicode workaround existed in the first place. They look at the commit message and think: "The comment was clear. But the REAL reason was in the dependencies. The validation library was fragile. Our code was a shim around fragile dependencies."
+
+So they add a new comment:
+
+```python
+# This library handles Unicode and plus signs correctly.
+# If this ever changes, the downstream email filtering will break.
+# See commit XXXXX where we learned this the hard way.
+```
+
+And then they ship it.
+
+Three years later, a developer removes that comment because they're cleaning up old comments, and they think: "Comments aren't part of the code. Let me just delete the comment and keep the code clean."
+
+The comment was the code.
+
+The moral: The code you write today is often a workaround for something you don't fully understand. Six months from now, you will be that person who "doesn't fully understand" your own code. You will look at it and think it's broken. You will remove it. And production will break.
+
+The second moral: A comment that says "DO NOT REMOVE" is not a comment. It's a scream. And it's the scream of someone who already tried removing the code once and learned the hard way.
+
+The third moral: The best comment is not the one that explains the WHAT. It's the one that explains the WHEN and WHY you should NOT do something. But nobody reads those. They read the code and think they understand. They don't.
+
+So the pattern repeats forever: code that does nothing, with warnings that no one reads, protecting other code that depends on the nothing, that nothing protects.
