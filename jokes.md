@@ -22113,3 +22113,176 @@ And you never read comments.
 
 You just copy the function.
 
+
+## 2026-10-23
+
+A manager asks: "Why is our API endpoint taking 500ms for a simple lookup?"
+
+A developer investigates and finds the answer: there's a `time.sleep(0.5)` in the code.
+
+They ask the original author why it's there.
+
+The original author doesn't remember. But the comment says:
+
+```python
+# Temporary delay to test timeout behavior
+# TODO: Remove this before production
+```
+
+It was added three years ago.
+
+It's been in production the entire time.
+
+The developer removes it. The endpoint now takes 5ms.
+
+They feel like a hero for thirty seconds.
+
+Then a test breaks. Then another. Then five more.
+
+The test suite had been written *around* the 500ms delay. Tests were checking that if you send a request and wait 600ms, you get a response. They were brittle. They expected that delay.
+
+Now with the 5ms response, the tests are failing on timing assertions.
+
+The developer realizes: the delay wasn't a bug. It was infrastructure. The entire deployment strategy assumed this latency. The load-balancing logic. The circuit-breaker thresholds. The cache TTL. Everything.
+
+One test explicitly says:
+
+```python
+def test_timeout_on_slow_endpoint():
+    # This endpoint is slow (500ms), so we expect timeouts if...
+    response = client.get("/api/lookup", timeout=400)
+    assert response.status == 408  # timeout
+```
+
+But wait. The endpoint isn't slow. It's fast. Why is the test written like this?
+
+The developer digs through git history. The test was added by someone who *assumed* the endpoint was slow. They never actually measured it. They just looked at the code, saw the sleep, and wrote tests around it.
+
+The test was testing the *symptom*, not the *requirement*.
+
+So the developer has a choice:
+
+1. Put the sleep back
+2. Rewrite all the tests
+3. Update the infrastructure to handle 5ms latency
+
+Option 1 takes 5 seconds.
+
+Options 2 and 3 take a week.
+
+The developer puts the sleep back.
+
+They add a new comment:
+
+```python
+# DO NOT REMOVE THIS. The entire system depends on it.
+# See: JIRA-2847, JIRA-3102, JIRA-5501, and commit 7a3f8c9
+```
+
+Three months later, another developer removes it.
+
+They see the comment. They think it's outdated. They remove the comment too.
+
+Now it's in the code and in the git history that "someone was holding onto legacy sleep code."
+
+So the new developer feels justified removing it. "We need to modernize this."
+
+The entire system breaks again. But this time, it breaks in production at 3am on a Sunday.
+
+The oncall engineer pages the developer who removed it. The developer is asleep. So they page the manager. The manager doesn't know why the system is down. So they page the original developer.
+
+The original developer is no longer at the company.
+
+They find the original developer's personal email (it's in the commit message from 2019 that added the sleep). They email them at midnight on a Sunday asking for help.
+
+The original developer responds 8 hours later:
+
+"I don't remember writing that. Let me check the code."
+
+After investigating, they send back a three-paragraph explanation of why the sleep is there and why removing it breaks things.
+
+The company adds the sleep back.
+
+They now have *two* comments:
+
+```python
+# DO NOT REMOVE THIS. The entire system depends on it.
+# This is NOT a bug. It is a FEATURE.
+```
+
+A performance engineer sees this and flags it in a code review:
+
+"This is a performance anti-pattern. We should refactor this out."
+
+They suggest wrapping it in a feature flag:
+
+```python
+ENABLE_LEGACY_500MS_DELAY = os.getenv("ENABLE_LEGACY_500MS_DELAY", "true")
+
+if ENABLE_LEGACY_500MS_DELAY:
+    time.sleep(0.5)
+```
+
+Smart. Now they can disable it in staging. They add it to the deployment config:
+
+```yaml
+production:
+  ENABLE_LEGACY_500MS_DELAY: "true"
+staging:
+  ENABLE_LEGACY_500MS_DELAY: "false"
+```
+
+They test it in staging. Everything works. The endpoint is fast. All tests pass.
+
+They deploy to production.
+
+Production goes down.
+
+They rollback.
+
+The problem: the feature flag was added *after* the comment, so the load-balancer never knew about the feature flag. It was still expecting 500ms latency. With 5ms latency, it reclassified all the fast responses as anomalies. It throttled them.
+
+So now they need to update the load-balancer config. But the load-balancer is managed by a different team. They need to file a ticket.
+
+The ticket goes into the backlog.
+
+Meanwhile, they set the feature flag back to `"true"` in production.
+
+Three weeks later, the load-balancer team gets to the ticket.
+
+They update the config to handle 5ms latency.
+
+But they also suggest: "Why not just remove the sleep entirely? It seems like an anti-pattern."
+
+The developer sends them the three-paragraph explanation from the original author.
+
+The load-balancer team reads it and says: "OK, keep the sleep."
+
+So they leave the system as-is.
+
+The feature flag is now deployed and unused. It exists in the code. It exists in the deployment manifest. It exists in the documentation.
+
+But both environments use the same setting.
+
+Two years later, a new developer—trying to understand the codebase—finds the feature flag. They think it's a configuration option that teams should be setting. They add it to their internal wiki under "Performance Tuning Options."
+
+Someone reads the wiki. They think: "Oh, we can get a 100x speedup by disabling this feature flag!"
+
+They disable it in their environment.
+
+Their service crashes.
+
+The error message is unhelpful: "Connection timeout."
+
+There's no indication that the feature flag caused it.
+
+The developer re-enables it and moves on with their life.
+
+The moral: A 500ms `time.sleep()` is not a bug or a feature. It's an *implicit dependency*. It's code that does nothing, but everything depends on it. When you remove it, you break the things that depend on it—not because the code is wrong, but because the code is doing something invisible: establishing the *timing contract* that the rest of the system expects.
+
+The second moral: Comments that say "DO NOT REMOVE" without explaining *why* are just wishes. They're pleas for future developers to trust you. And future developers don't trust you. They've never met you. They're going to remove it and learn the hard way.
+
+The third moral: The sleep was never the problem. It was a symptom. The real problem was that the system's behavior was encoded implicitly in a function instead of explicitly in the architecture.
+
+And now it always will be.
+
