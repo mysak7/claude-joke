@@ -21869,3 +21869,247 @@ Also: That comment will stay there for ten years. New developers will read it an
 You're not paranoid.
 
 You're just haunted by this moment.
+
+## 2026-10-22
+
+A developer writes a function:
+
+```python
+def is_ready_to_deploy():
+    return check_tests() and check_build() and check_linting()
+```
+
+Simple. Straightforward. Readable.
+
+Two months later, another developer adds a safety check:
+
+```python
+def is_ready_to_deploy():
+    if has_pending_changes():
+        return False
+    return check_tests() and check_build() and check_linting()
+```
+
+Good defensive coding. Prevents accidental deploys with uncommitted work.
+
+Six months later, someone adds emergency deploy capability:
+
+```python
+def is_ready_to_deploy():
+    if environment_variable_exists("FORCE_DEPLOY"):
+        return True
+    if has_pending_changes():
+        return False
+    return check_tests() and check_build() and check_linting()
+```
+
+Now it's "ready to deploy" if you set an environment variable. They document it: "Emergency use only."
+
+A year goes by. The code is used in:
+- The main deployment pipeline
+- The staging deployment
+- The backup deployment
+- A shell script someone wrote
+- A GitHub Actions workflow
+- That one Jenkins job nobody remembers
+
+Each one passes different flags. Each one expects different behavior.
+
+Then an engineer needs to add database migration checks:
+
+```python
+def is_ready_to_deploy():
+    if environment_variable_exists("FORCE_DEPLOY"):
+        return True
+    if has_pending_changes():
+        return False
+    if has_pending_migrations():
+        return False
+    return check_tests() and check_build() and check_linting()
+```
+
+Seems reasonable. But now the emergency deploy flag bypasses migrations too.
+
+A junior dev on-call at 2 AM sees the emergency flag. "Oh, this is for emergencies. Perfect."
+
+They deploy during an incident without running migrations.
+
+Everything breaks.
+
+The flag is renamed to `SKIP_ALL_SAFETY_CHECKS` in an angry comment. But the shell script still exports `FORCE_DEPLOY=1` from three years ago. So it still works. By accident. For the wrong reasons.
+
+Six months later: "Why do we have both `FORCE_DEPLOY` and `SKIP_ALL_SAFETY_CHECKS`? This is confusing."
+
+Someone removes one. Production doesn't break, so it was probably unused.
+
+Spoiler: It's still being used in that shell script. But the shell script silently failed. So nobody noticed.
+
+Now there's a function that supposedly checks if you're ready to deploy. But actually it's a permission system where:
+- Environment variables override everything
+- Missing environment variables sometimes mean "do the checks" and sometimes mean "skip the checks"
+- The documentation is outdated by two years
+- The function has been copy-pasted into 7 different files
+- 3 of those files have slightly different versions
+- One version is correct
+- Nobody knows which one
+
+The function name is `is_ready_to_deploy()`. The actual behavior is "returns unpredictable boolean based on environment variables, git state, and the phase of the moon."
+
+A comment above it says:
+
+```python
+# This function is the source of truth for deployment readiness
+```
+
+It's not. It's the source of confusion.
+
+The moral: A function that "checks readiness" becomes the place everyone adds their own special logic. It starts simple. It becomes a permission system. It becomes a heuristic. It becomes incomprehensible. It becomes trusted.
+
+And somewhere, someone will deploy to production because this function said yes.
+
+And they'll be right to blame the function.
+
+But not because the function is wrong.
+
+Because nobody knows what it's supposed to do anymore.
+
+## 2026-10-23
+
+A developer writes a utility function:
+
+```python
+def safe_parse_json(data):
+    try:
+        return json.loads(data)
+    except:
+        return None
+```
+
+It's copied into three different services. Each copy is identical.
+
+Six months later, in one of those services, it's failing silently on malformed JSON. Nobody knows why. The developer adds logging:
+
+```python
+def safe_parse_json(data):
+    try:
+        return json.loads(data)
+    except Exception as e:
+        logger.warning(f"JSON parse failed: {e}")
+        return None
+```
+
+Now they can see the problem. The fix goes into the *original* function. They update it:
+
+```python
+def safe_parse_json(data):
+    try:
+        return json.loads(data)
+    except Exception as e:
+        logger.warning(f"JSON parse failed: {e}")
+        return None
+```
+
+Good. But there's a problem: nobody knows where else this function was copied.
+
+Grep finds it in Service B and Service C.
+
+Service B has:
+
+```python
+def safe_parse_json(data):
+    try:
+        return json.loads(data)
+    except:
+        print("Failed to parse")  # stdout, not logging
+        return None
+```
+
+Service C has:
+
+```python
+def safe_parse_json(data):
+    try:
+        return json.loads(data)
+    except ValueError:
+        logger.error("JSON parse failed")
+        return None
+```
+
+Wait. Service C catches `ValueError` specifically. But `json.loads()` raises `JSONDecodeError`. Service C never sees the error. It catches nothing. It logs nothing. The exception propagates.
+
+Nobody knows this is happening because—surprise—nobody is monitoring that service.
+
+The developer updates all three. Problem solved.
+
+A year passes. The utility is still being copied. Now there are six copies across the codebase. They've diverged:
+
+- Version 1: catches `Exception`, logs warning
+- Version 2: catches `Exception`, logs error
+- Version 3: catches `JSONDecodeError`, returns empty dict instead of None
+- Version 4: catches `Exception`, returns `{}`
+- Version 5: doesn't catch anything
+- Version 6: catches `Exception` but actually delegates to a different function
+
+Someone reports a bug: "JSON parsing behavior is inconsistent across services."
+
+Everyone stares at the six identical-looking functions that do six different things.
+
+The developer wants to create a *real* shared utility in a library. They propose moving to:
+
+```python
+from shared_lib import safe_parse_json
+```
+
+But now they have a problem: which version is "correct"? Version 1? Version 3? The one from Service B?
+
+They argue for an hour about error handling philosophy. Finally they pick Version 2.
+
+Service C breaks immediately. It was relying on the exception propagating.
+
+Now there's a comment in Service C's code:
+
+```python
+# DO NOT USE shared_lib.safe_parse_json
+# It logs errors to stderr and we need stdout for our pipeline
+from service_c_utils import safe_parse_json  # local version instead
+```
+
+So Service C still uses its own copy.
+
+Three months later, a new developer joins and sees `from shared_lib import safe_parse_json` and assumes the utility is standard. They start using it everywhere. They don't know there's a different version in Service C.
+
+They don't know because the comment is in the *code* and they never read it.
+
+Now when data flows between services, sometimes it's parsed one way, sometimes another. Sometimes errors are logged, sometimes they're suppressed, sometimes they propagate.
+
+The codebase now has seven different `safe_parse_json` implementations.
+
+The original developer, now on a different team, sees a PR: "Let's create a *real* shared utility for JSON parsing."
+
+They've proposed this three times already.
+
+They comment: "+1, let's finally clean this up."
+
+But creating the library requires migrating all seven versions. And nobody knows which behavior is actually *correct* anymore. So instead, they create a new utility with a different name:
+
+```python
+def parse_json_safely(data):
+    # This is the official version. Use this.
+```
+
+And add it to the shared library.
+
+Now there are eight implementations.
+
+The moral: When you copy-paste code, you're not copying code. You're forking it. The copies diverge. They evolve independently. They become incompatible. And the "standard" version nobody uses is probably the wrong one anyway.
+
+The moral, part two: That comment that says "DO NOT USE THIS"? It will be deleted in three years by someone refactoring. Then someone will use it. Then production will break.
+
+And nobody will understand why.
+
+Because the comment was in the code.
+
+And you never read comments.
+
+You just copy the function.
+
