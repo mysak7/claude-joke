@@ -22468,3 +22468,39 @@ The second moral: A comment that says "DO NOT REMOVE" is not a comment. It's a s
 The third moral: The best comment is not the one that explains the WHAT. It's the one that explains the WHEN and WHY you should NOT do something. But nobody reads those. They read the code and think they understand. They don't.
 
 So the pattern repeats forever: code that does nothing, with warnings that no one reads, protecting other code that depends on the nothing, that nothing protects.
+
+## 2026-10-24
+
+**The Invisible Coupling**
+
+A developer creates a utility function:
+
+```python
+def get_user_email(user_id):
+    return cache.get(f"user:{user_id}:email")
+```
+
+Simple. Fast. Caching works perfectly.
+
+Another developer uses it in the authentication service:
+
+```python
+def authenticate(user_id, email):
+    cached_email = get_user_email(user_id)
+    return cached_email == email
+```
+
+Works fine.
+
+Six months later: a user changes their email. The authentication system still uses the old email from the cache. They can't log in.
+
+The issue: the cache is never invalidated when the email changes. Somewhere, there should be a call to `cache.invalidate(f"user:{user_id}:email")` in the code that changes the email. But nobody put it there. Because nobody knew about it.
+
+The authentication developer didn't know they were using a cache. They just called `get_user_email()` because it looked like a normal function.
+
+The email-change code didn't know about the cache either. The developer just updated the database.
+
+Two systems are tightly coupled through an invisible side-effect. The authentication system DEPENDS on the cache being invalidated. But there's no comment. No assertion. No test that verifies the cache gets invalidated when the email changes.
+
+You can't see the coupling by reading the code. You can only see it when it breaks.
+
