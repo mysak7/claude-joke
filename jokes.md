@@ -22504,3 +22504,158 @@ Two systems are tightly coupled through an invisible side-effect. The authentica
 
 You can't see the coupling by reading the code. You can only see it when it breaks.
 
+
+## 2026-10-24
+
+**The Dead Code That Lived**
+
+A developer notices some old code:
+
+```python
+def process_order(order_id):
+    order = db.fetch(order_id)
+    validate_order(order)
+    check_payment_method(order)
+    # reconcile_inventory(order)  # DEPRECATED - Oct 2023
+    ship_order(order)
+    return order
+```
+
+The line is commented out. Has been for a year. The comment says "DEPRECATED."
+
+They ask: "Can we delete this?"
+
+"Sure," says the person who wrote the comment. "We switched to the new inventory system in October 2023. That function is dead."
+
+So they delete it.
+
+Three days later: the inventory team is confused. Their new system shows orders being shipped, but they're not being marked as "inventory-reserved" in the warehouse management system. It's causing double-shipments. Real packages are going to the wrong customers.
+
+The developer adds the line back. Orders stop being shipped to the wrong people.
+
+The person who wrote the deprecation comment says: "Oh. Right. The `reconcile_inventory()` function doesn't just validate inventory. It ALSO triggers the warehouse management system to reserve stock."
+
+"Then why," asks the developer, "did you comment it out in 2023?"
+
+"Because we thought the new inventory system would do that. But the new system only checks inventory. It doesn't reserve it. So we had to keep calling the old function. I meant to document that. But I was in a rush."
+
+So the function isn't deprecated. It's the opposite of deprecated. It's load-bearing. It's part of the critical path. But it's marked with a comment that says it's dead.
+
+The code now looks like this:
+
+```python
+def process_order(order_id):
+    order = db.fetch(order_id)
+    validate_order(order)
+    check_payment_method(order)
+    reconcile_inventory(order)  # DEPRECATED - Oct 2023 (DO NOT REMOVE - controls warehouse reservation)
+    ship_order(order)
+    return order
+```
+
+The function name suggests it's been replaced. The comment suggests it's been replaced. But it's still critical.
+
+Six months later, a new developer looks at this and reads only the function name. They see "reconcile_inventory" and think: "The inventory validation happens in `check_payment_method()`. Why are we calling reconcile_inventory twice?"
+
+They read more carefully. They find that `check_payment_method()` doesn't touch inventory at all. It only checks the payment method. So the function isn't called twice. The developer who read it just wasn't paying attention.
+
+But now they're curious. They search for where else `reconcile_inventory()` is called. Nowhere. It's only called here. So it must be for a specific reason.
+
+They read the function:
+
+```python
+def reconcile_inventory(order):
+    """Deprecated. Use the new inventory system."""
+    response = legacy_inventory_api.reserve_stock(
+        order_id=order.id,
+        items=order.items
+    )
+    return response
+```
+
+It says it's deprecated. The function inside calls a legacy API. So they think: "This is old code. The new inventory system should handle this. Let me refactor it to use the new system instead."
+
+They change it:
+
+```python
+def process_order(order_id):
+    order = db.fetch(order_id)
+    validate_order(order)
+    check_payment_method(order)
+    inventory_system.check_availability(order)  # Uses new system
+    ship_order(order)
+    return order
+```
+
+The new inventory system has a function called `check_availability()`. It checks if items are in stock. Perfect. The developer tests it locally. All tests pass. They ship it.
+
+Two days later: the warehouse is shipping the wrong items. Multiple customers report receiving items they didn't order. The warehouse manager says the new system doesn't reserve stock before shipping. So two different orders are reading the same inventory and both thinking they can ship.
+
+The legacy API had a `reserve_stock()` function that LOCKED inventory. The new system only has `check_availability()`, which returns true/false but doesn't prevent other orders from checking the same stock at the same time.
+
+The problem is a race condition. Order A checks availability at 10:00:00. Order B checks availability at 10:00:01. Both see 2 units in stock. Both reserve the units (via separate systems). But there are only 2 units total. So one order gets the wrong items.
+
+The developer reverts the change. The legacy reconcile_inventory() function goes back in. The comment still says "DEPRECATED" but at least the orders ship correctly.
+
+Now the comment needs to explain not just that it's critical, but WHY it's critical, and which system it integrates with, and what would break if you removed it, and what you'd need to change before removing it.
+
+The comment becomes:
+
+```python
+# DO NOT REMOVE - The legacy inventory API provides LOCKING via reserve_stock().
+# The new inventory system (check_availability) only provides checking.
+# We need to reserve stock before shipping to prevent double-shipments.
+# Before removing this, the new inventory system MUST support atomic reservation.
+# See incident #2026-1847 where we shipped wrong items to multiple customers.
+```
+
+The comment is now longer than the function call.
+
+But it's still being ignored. Because comments are optional. Code is required. Comments rot. Code executes.
+
+A developer running a linter sees "This function is deprecated according to its docstring." The linter suggests removing deprecated code. So they remove it. Tests still pass (because the tests don't verify warehouse reservation). They ship it.
+
+Three days later: wrong items are being shipped again.
+
+The team adds a TODO to the code:
+
+```python
+# TODO: Consolidate with new inventory system once locking is supported.
+# reconcile_inventory(order)  # CANNOT REMOVE - see comment above
+```
+
+But TODO comments aren't enforced. They're not checked by the CI system. Nobody reads them. They're just wishes that didn't come true.
+
+The code is now like a house where one beam is holding up the roof, but it's painted red to make it look decorative, and there's a sign on it that says "DEPRECATED - please ignore this," and the only thing preventing it from being removed is a comment that nobody reads.
+
+Every few months, someone new to the project looks at this code and thinks: "This can't be right. It says deprecated. Let me remove it."
+
+And every few months, it gets added back when the inventory breaks.
+
+Eventually, someone adds a runtime assertion:
+
+```python
+def process_order(order_id):
+    order = db.fetch(order_id)
+    validate_order(order)
+    check_payment_method(order)
+    reconcile_inventory(order)
+    
+    # Verify that reconcile_inventory actually works
+    assert legacy_inventory_api.get_reservation_status(order.id) == "reserved", \
+        "Inventory not reserved! Orders will be shipped to wrong customers!"
+    
+    ship_order(order)
+    return order
+```
+
+The assertion is a comment written in code. It says: "This function MUST work. If it doesn't, your customer's order will be wrong. This is not optional."
+
+Finally, someone needs to understand the real requirement: orders need atomic inventory reservation. The old system provided it via a legacy API. The new system doesn't. So the old code has to stay until the new system catches up.
+
+But that's not what the code says. The code says "DEPRECATED." And the comment says it's optional. And the function name suggests it's something we don't need anymore.
+
+So every time someone new to the project sees this, they will try to remove it. And every time, production will break.
+
+The moral: Code doesn't tell you why it's there. Comments don't get read. Naming gets misunderstood. And the only thing that survives is the incident report, which nobody reads either until they cause the same incident again.
+
