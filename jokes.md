@@ -22659,3 +22659,233 @@ So every time someone new to the project sees this, they will try to remove it. 
 
 The moral: Code doesn't tell you why it's there. Comments don't get read. Naming gets misunderstood. And the only thing that survives is the incident report, which nobody reads either until they cause the same incident again.
 
+
+## 2026-10-24
+
+A developer inherits a payment processing system. Everything works. But there's a helper function that bothers them:
+
+```python
+def safe_call(func, *args, **kwargs):
+    """Safely call a function and return None if it fails."""
+    try:
+        return func(*args, **kwargs)
+    except Exception:
+        return None
+```
+
+It's used everywhere:
+
+```python
+def process_payment(customer_id, amount):
+    stripe_customer = safe_call(get_stripe_customer, customer_id)
+    if stripe_customer:
+        charge = safe_call(stripe_customer.charge, amount)
+        return charge
+    return None
+
+def refund_payment(charge_id):
+    stripe_charge = safe_call(get_stripe_charge, charge_id)
+    if stripe_charge:
+        return safe_call(stripe_charge.refund)
+    return None
+```
+
+The developer thinks: "This is bad. We're silencing errors. We should log them. We should know when things fail."
+
+So they improve it:
+
+```python
+def safe_call(func, *args, **kwargs):
+    """Safely call a function and log errors."""
+    try:
+        return func(*args, **kwargs)
+    except Exception as e:
+        logger.error(f"Error calling {func.__name__}: {e}")
+        return None
+```
+
+They deploy it. Tests pass. Everything seems fine. Then their monitoring starts lighting up.
+
+The logs are full of errors like:
+
+```
+Error calling charge: Connection refused
+Error calling refund: Connection refused
+```
+
+But the system is still running. Money is being processed (or is it?). The developer checks: are payments actually going through?
+
+They look at the payment logs. Half the payments show as "processing" but have no Stripe charge ID. The money isn't leaving customer accounts, but the customers are seeing pending charges. Stripe is seeing nothing.
+
+The developer realizes: the `safe_call()` function is designed to return `None` on error. But the system is checking `if stripe_customer:` and `if stripe_charge:` — and `None` is falsy.
+
+So when Stripe is temporarily down (network blip, 30-second outage, whatever), the code just returns `None` instead of raising an error. The payment "succeeds" by returning `None`. The database records the payment as "pending." The customer's browser shows "processing." But Stripe never got the request.
+
+Then Stripe comes back up. The next request works. But now the system has a pending payment with no Stripe charge ID, and a new request trying to charge the customer again.
+
+The fix is simple: don't catch exceptions. Let them bubble up.
+
+But the developer realizes why `safe_call()` was there in the first place. They search the git history:
+
+```
+commit 8f2c9a1 (2024-03-15)
+Author: old_dev
+Message: Add safe_call to prevent random errors from killing the service
+```
+
+They look at the code before that commit. It had no error handling at all. A Stripe API failure would crash the entire service. The old developer added `safe_call()` to keep the service running.
+
+But they chose the wrong strategy. They kept the service running but broke the payments.
+
+So the new developer adds proper error handling:
+
+```python
+def safe_call(func, *args, **kwargs):
+    """Call a function and raise an error if it fails."""
+    try:
+        return func(*args, **kwargs)
+    except StripeAPIError as e:
+        logger.error(f"Stripe API error in {func.__name__}: {e}")
+        raise
+    except NetworkError as e:
+        logger.error(f"Network error in {func.__name__}: {e}")
+        raise
+    except UnexpectedError as e:
+        logger.error(f"Unexpected error in {func.__name__}: {e}")
+        raise
+```
+
+Now errors propagate. The service will fail on network errors. So they add a retry mechanism:
+
+```python
+def safe_call_with_retry(func, *args, max_retries=3, **kwargs):
+    """Call a function with retries."""
+    for attempt in range(max_retries):
+        try:
+            return func(*args, **kwargs)
+        except TemporaryError:
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)
+            else:
+                raise
+        except PermanentError:
+            raise
+```
+
+They deploy this. Now transient errors are retried. Permanent errors bubble up. The system fails safe.
+
+But the service is running in a serverless environment. Each request times out after 30 seconds. If a payment request retries three times with exponential backoff, it takes 2 + 4 + 8 = 14 seconds. The request barely fits in the timeout.
+
+Then one day, a Stripe API change causes all requests to take 12 seconds instead of 1 second. The retries now take 2 + 4 + 8 = 14 seconds, but each attempt takes 12 seconds, so the total is 12 + 12 + 12 = 36 seconds. The timeout triggers. The function is killed mid-request. The Stripe charge goes through (Stripe recorded it), but the code never gets the response. The database shows "pending."
+
+The developer adds a circuit breaker:
+
+```python
+def safe_call_with_circuit_breaker(func, *args, **kwargs):
+    """Call a function with a circuit breaker."""
+    if circuit_breaker.is_open():
+        raise CircuitBreakerOpen("Too many failures")
+    
+    try:
+        result = func(*args, **kwargs)
+        circuit_breaker.on_success()
+        return result
+    except TemporaryError as e:
+        circuit_breaker.on_failure()
+        raise
+```
+
+Now if Stripe is down, the circuit breaker opens after a few failures, and new requests fail immediately instead of timing out.
+
+But the circuit breaker needs to know when to close. The original code:
+
+```python
+def is_open(self):
+    if self.failures > threshold:
+        return True
+    return False
+```
+
+This never closes. Once Stripe fails, the circuit breaker stays open forever.
+
+The developer fixes it:
+
+```python
+def is_open(self):
+    if time.time() - self.last_failure > cooldown_period:
+        self.failures = 0
+    if self.failures > threshold:
+        return True
+    return False
+```
+
+Now the circuit breaker closes after a cooldown period. It's called "half-open" state — the circuit breaker allows a test request to see if Stripe is back up.
+
+The developer tests it. It works. They deploy it. Everything runs smoothly for three weeks.
+
+Then they're on-call one Saturday morning. Stripe is having a regional outage in one availability zone. The circuit breaker opens (correct). But it takes 30 seconds to open because it waits for 5 consecutive failures. During those 30 seconds, payment requests are timing out.
+
+The developer adds metrics:
+
+```python
+circuit_breaker.on_failure()
+metrics.increment("payment.stripe_failure", tags={"type": "network"})
+```
+
+They set up an alert for `payment.stripe_failure > 5 in 1 minute`. Now they're alerted before the circuit breaker even opens.
+
+But the alert fires all the time. Every transient network blip triggers it. The team starts ignoring it. The alert is noisy.
+
+The developer adds noise suppression:
+
+```python
+if circuit_breaker.failure_rate() > 0.5:
+    alert("High payment failure rate")
+```
+
+Now it only alerts if more than 50% of requests are failing.
+
+But 50% is a guess. What if the threshold should be 30%? What if it should be 80%? Nobody knows. The developer looks at historical data. Over the past year, the baseline failure rate is 0.1%. So they set the threshold to 1%.
+
+But they set it in the code. If they need to change it, they need to redeploy.
+
+So they move it to configuration:
+
+```python
+PAYMENT_FAILURE_THRESHOLD = os.getenv("PAYMENT_FAILURE_THRESHOLD", "0.01")
+```
+
+Now it's configurable. But nobody documents what this value should be. A new team member accidentally sets it to "10" (thinking it's a percentage, 0-100 scale, not a ratio). Alerts stop firing. Production breaks. They don't notice for six hours.
+
+Eventually, someone adds a validation:
+
+```python
+threshold = float(os.getenv("PAYMENT_FAILURE_THRESHOLD", "0.01"))
+assert 0 < threshold < 1, "threshold must be between 0 and 1"
+```
+
+Now bad values are caught at startup.
+
+But the original `safe_call()` function is still there, and someone new to the codebase finds it. They think it's a utility function. They use it in a different part of the system. It silently fails again.
+
+The original function looked simple. "Don't crash on errors." Smart, right?
+
+But simple error handling is complex error handling wearing a disguise. You can't just not crash. You have to decide: do you retry? How many times? Do you timeout? Do you alert? Do you fail open (pretend everything is fine) or fail closed (assume the worst)? Do you use a circuit breaker? What threshold triggers it? How long does it stay open? Do you have metrics? What do you alert on? What's the baseline failure rate?
+
+Every one of those questions has a wrong answer that causes a production incident.
+
+The developer writes a comment at the top of the file:
+
+```python
+# NOTE: DO NOT USE safe_call() ANYMORE
+# Use safe_call_with_circuit_breaker() instead.
+# See: https://internal-docs/payment-error-handling.md
+```
+
+But it's just a comment. A new developer will still find `safe_call()` and think it's fine to use.
+
+The only thing that would prevent it is deleting the function. But what if something still depends on it? What if there's a cron job that nobody knows about that still calls it?
+
+So it stays in the codebase. A dormant bomb waiting for someone new to find it and rediscover the payment bug.
+
+The lesson: "Don't crash" is not a strategy. It's a direction. The strategy is "fail in a way that's observable, retryable, and doesn't corrupt data." And once you have that strategy, it's more complex than the original bug it was meant to prevent.
