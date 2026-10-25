@@ -22973,3 +22973,52 @@ And somewhere, a new developer is reading this joke and thinking: "That would ne
 
 Narrator voice: "It was happening in their codebase."
 
+
+## 2026-10-25
+
+A developer is debugging a subtle bug where the checkout flow sometimes fails to calculate tax correctly. They stare at the code for six hours. The tax calculation logic looks correct. The database queries look correct. The rate tables look correct.
+
+Finally, they notice something strange: if they print the `total` variable before and after the tax calculation, it's different. But the variable should be immutable.
+
+After two days of investigation, they realize: the value is being modified in a different part of the codebase by a cron job that runs every 30 seconds. The cron job scans for "checkout in progress" records and updates a shared cache entry. But it's using the same key as the `total` variable.
+
+The developer fixes it by renaming the cache key. Problem solved.
+
+But here's the thing: they don't know who wrote the cron job. It's not documented. Nobody remembers. It's just been running for five years, silently fixing bugs that would otherwise happen.
+
+Years later, the developer is in a meeting about moving to a new cache system. Someone asks: "Can we retire the old cache?"
+
+The developer says: "No. There's a cron job that depends on it."
+
+"What does it do?"
+
+"I... don't actually know. But if I remove it, the checkout flow breaks. I've confirmed this three times."
+
+Nobody can find the documentation for the cron job. The original author doesn't work there anymore. You can't just delete it because it's obviously critical infrastructure—if it was removed, tax calculation breaks. But it was never meant to exist in the first place. It's not even in the repo. It's running on a random server somewhere, started by someone's local cron job years ago, and somehow nobody ever moved it to the proper job scheduler.
+
+So it stays.
+
+And every quarter, during performance reviews, the developer has to explain: "I maintain a system that nobody understands and that shouldn't exist."
+
+The cron job is their burden now. They've become its only guardian. If they leave the company, whoever replaces them will inherit a 500-line cron job with zero comments, no tests, and a history that starts with "mysterious tax fix."
+
+The developer starts documenting it, just so the next person has a prayer of understanding what they're looking at.
+
+The documentation says: "This cron job has saved production four times. We have no idea how. Do not remove it."
+
+And that becomes the most honest and most terrifying line of documentation in the entire codebase.
+
+The real lesson: the code you write today to fix a problem you don't understand becomes the infrastructure someone else has to maintain tomorrow. And the worst part is when it works. When something just works despite being inexplicable, it becomes unfireable. It stays. It propagates. It accrues responsibility until it's more critical than the system it was meant to fix.
+
+A good bug fix has a clear cause and a clear solution. A really good codebase doesn't have mysterious cron jobs keeping it alive.
+
+But most codebases do. Most have several.
+
+Somewhere in your production infrastructure right now, there's a line of code (or a job, or a configuration, or a comment) that is inexplicable. It works. Nobody knows why. And removing it would break something.
+
+That's not a bug. That's a feature. It's just a feature that nobody asked for, nobody documented, and everyone secretly hates.
+
+But it stays anyway.
+
+Because code that works is more valuable than code that's understood. Even when it shouldn't be.
+
