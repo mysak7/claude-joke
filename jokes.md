@@ -22889,3 +22889,87 @@ The only thing that would prevent it is deleting the function. But what if somet
 So it stays in the codebase. A dormant bomb waiting for someone new to find it and rediscover the payment bug.
 
 The lesson: "Don't crash" is not a strategy. It's a direction. The strategy is "fail in a way that's observable, retryable, and doesn't corrupt data." And once you have that strategy, it's more complex than the original bug it was meant to prevent.
+
+## 2026-10-25
+
+A developer finds a weird line of code in the codebase:
+
+```python
+time.sleep(0.001)  # DO NOT REMOVE
+```
+
+That's it. One millisecond sleep. No context. No comment explaining why. Just a warning in the comment.
+
+They ask around: "Why is this here?"
+
+Nobody knows. It was added five years ago by someone who left. The git blame message is just "fix timing issue."
+
+The developer thinks: "One millisecond won't hurt anyone. Let me remove it and see if anything breaks."
+
+They remove it. Tests pass. They deploy.
+
+Three hours later, the payment processing service is down. Hundreds of transactions are stuck. The on-call engineer pages the team.
+
+They revert the commit. Payment processing recovers instantly.
+
+The developer adds the sleep back, plus a more detailed comment:
+
+```python
+time.sleep(0.001)  # DO NOT REMOVE - race condition in payment reconciliation
+                   # See: https://github.com/company/repo/issues/4782
+```
+
+They look at issue #4782. It's closed. The description is: "Fixed the race condition. Don't ask me how."
+
+The root cause? The payment system had a race condition where two threads could read the balance, both think there's enough money, and both charge the customer. Adding a 1ms sleep made the race condition statistically unlikely. It wasn't a fix—it was a workaround that made the bug happen so rarely that everyone forgot about it.
+
+The developer thinks: "This is insane. I should properly fix the race condition instead of band-aiding it with a sleep."
+
+They spend three weeks redesigning the payment system to use proper locking. They test it thoroughly. It works. They remove the sleep and deploy.
+
+Four hours later, a different race condition emerges. The locking mechanism has a deadlock. The payment system freezes. Everything is down again.
+
+They revert. The sleep comes back. Everyone is mad at the developer now.
+
+Six months pass. Nobody dares touch the payment code. New features go to different services. The sleep stays.
+
+Then a new employee, fresh from a distributed systems course, sees it and thinks: "This is a race condition. This is obviously wrong. Let me fix it properly."
+
+They don't ask anyone. They redesign the entire system. They spend two months on it. They test it exhaustively. They deploy.
+
+Everything breaks. Different race condition.
+
+The developer who originally added the sleep (the one who left) is now working at a competitor. Someone tracks down their email and asks what they did.
+
+The response: "Oh yeah, that. We tried everything. Locking, transactions, semaphores, even distributed consensus. Nothing worked. We eventually realized the real problem was that we were caching the balance in Redis without invalidation. Every time someone updated their balance, the cache was stale, but the code checked the cache instead of the database. The 1ms sleep gave the invalidation event time to propagate through the message queue. I didn't document it because I didn't fully understand it myself, and by the time I did, everyone was afraid to touch it."
+
+The current team reads this and realizes: the sleep wasn't fixing a race condition. It was masking a bug in a different system entirely. The real fix would require changing the Redis caching strategy, which touches code owned by another team, which hasn't been maintained in three years.
+
+So the sleep stays. It stays for five more years. Then ten. Then fifteen.
+
+New developers learn about it in onboarding: "There's a sleep in the payment code. Don't remove it."
+
+"Why?"
+
+"We don't know. Don't remove it."
+
+One day, the CEO asks: "Why is our payment API slower than our competitors?"
+
+Everyone points to the 1ms sleep.
+
+The CEO asks: "Can we remove it?"
+
+Everyone says: "No."
+
+"Why?"
+
+"We don't know."
+
+The lesson: one bad decision creates a mystery. Ten bad decisions create a culture where nobody touches anything. A hundred bad decisions create a codebase where everything is sacred and nothing is understood. And a thousand bad decisions create a company where "but it's always worked this way" is a valid architectural defense.
+
+The real tragedy is that the original developer with the solution is now working elsewhere, probably making the same mistakes in their new codebase, probably creating their own 1ms sleeps that will haunt developers for a generation.
+
+And somewhere, a new developer is reading this joke and thinking: "That would never happen in MY codebase."
+
+Narrator voice: "It was happening in their codebase."
+
