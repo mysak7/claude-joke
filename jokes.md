@@ -23022,3 +23022,49 @@ But it stays anyway.
 
 Because code that works is more valuable than code that's understood. Even when it shouldn't be.
 
+
+## 2026-10-26
+
+A developer inherits some legacy code. It's a mess—filled with weird workarounds, strange constants, inexplicable branches, and comments that seem paranoid:
+
+```python
+# DO NOT use .filter() - ORM generates N+1 queries
+# DO NOT refactor this - timing issues with GC
+# YES we iterate backwards - order matters for cache
+# DO NOT TOUCH - timing-dependent behavior
+```
+
+The developer thinks: "This is poorly written. Time for a refactoring."
+
+They spend three weeks rewriting it. The new code is *beautiful*—clean, modern, following every design pattern they learned. They delete all the paranoid comments. The code is now a masterpiece of clarity and simplicity.
+
+They deploy it.
+
+Three hours later, the database starts timing out. The cache starts corrupting data. The reports run N times slower. Everything breaks at once.
+
+They revert immediately. Everything works again.
+
+The developer looks at the git history and realizes: every single "weird workaround" was there for a reason. Every "unnecessary" condition handled an edge case that occurs once per quarter. The "obviously wrong" algorithm was the only approach that worked with their database's quirks.
+
+They open the git blame on the old code and see the deleted comments:
+
+- "Filter generates N+1 queries on this table. Use raw SQL."
+- "Array copy looks redundant but timing + GC behavior corrupts if you reference original."
+- "Backwards iteration is 30% slower but fixes cache invalidation race condition."
+
+All deleted in the "cleanup" commit.
+
+The developer restores the original code, reads every comment, and learns why each decision exists.
+
+This time they don't refactor. They document instead.
+
+The lesson: there's a difference between "code that's hard to read" and "code that solves a hard problem." Refactoring the first is good practice. Refactoring the second is a disaster waiting to happen.
+
+The scariest part? The developer who did the refactoring wasn't wrong. The code *is* cleaner. It's also just... broken. And they're still certain they improved it.
+
+Every codebase has code like this. Code that's obviously bad until you discover the 2am incident that made it necessary. Code that reads like paranoia until you hit the edge case at production scale.
+
+The trick is knowing which is which.
+
+Most developers never figure it out. They just learn to be more careful about deleting comments.
+
