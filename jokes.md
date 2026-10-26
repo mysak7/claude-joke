@@ -23068,3 +23068,67 @@ The trick is knowing which is which.
 
 Most developers never figure it out. They just learn to be more careful about deleting comments.
 
+
+## 2026-10-26
+
+A developer is code reviewing a teammate's pull request. There's a function that looks trivial—literally just returns a boolean:
+
+```python
+def should_process_batch():
+    if api_key is None:
+        return False
+    if batch_size == 0:
+        return False
+    if timestamp > deadline:
+        return False
+    if not database.is_connected():
+        return False
+    return True
+```
+
+The reviewer says: "This is too verbose. Just inline this check."
+
+The teammate says: "No. Don't."
+
+"Why?"
+
+"I don't know. But I inherited this code, and every time someone inlines it, production breaks. I added this function three years ago to stop the breaking. It's been stable since."
+
+The reviewer is skeptical. They're a senior engineer. They've done code golf. They understand control flow. They decide to trust their judgment more than the teammate's fear.
+
+They delete the function and inline the checks into three different places. It looks better. Cleaner. More direct.
+
+Two weeks later, the batch processing system fails mysteriously. It starts processing batches at the wrong times. Some batches process twice. Some don't process at all. The logs show that `should_process_batch()` returned different values for the same inputs within milliseconds.
+
+The reviewer is confused. The function was pure. It had no side effects. It shouldn't return different values.
+
+They spend a week debugging and find the problem: somewhere in the codebase, there's a background thread that occasionally sets `api_key = None`. Not to disable the API. Not as part of any legitimate flow. It's just... there. Nobody knows why. The git history goes back five years. The original author left the company. The commit message says "temporary fix for race condition in auth token refresh."
+
+When `should_process_batch()` was a function, the check happened synchronously at one point, and the race was rare enough that a batch would finish before the key got reset. But when the checks were inlined across three different modules... sometimes the key was valid, sometimes it wasn't, sometimes a different thread had reset it mid-check.
+
+The function wasn't doing anything. It was just... serializing access to a check in a system with broken concurrency.
+
+The reviewer reverts. The function comes back. Everything works again.
+
+Now the reviewer has to write a comment above the function:
+
+```python
+def should_process_batch():
+    # DO NOT INLINE THIS.
+    # This function prevents a race condition in the auth token refresh thread.
+    # Yes, the auth thread is broken. Yes, we should fix it.
+    # No, we will not fix it. Nobody understands it. It works this way.
+    # If you inline this, production will have Byzantine failures.
+    # You have been warned.
+```
+
+Six months later, a new reviewer who didn't see this message tries to inline the function again.
+
+And the cycle begins anew.
+
+The lesson: sometimes the simplest code is the simplest solution to an unsimplified problem. And sometimes removing a layer of indirection doesn't optimize code—it just exposes the chaos underneath. The function was a circuit breaker between two incompatible systems that were never meant to work together but somehow do, and the moment you remove it, reality catches up.
+
+Every codebase has functions like this. Functions that do almost nothing and are absolutely critical. Functions that are so simple you're embarrassed they exist, until you remove them and everything falls apart.
+
+And then you add them back, write a warning comment, and pray that the next person listens.
+
