@@ -23209,3 +23209,76 @@ And every quarter, when a new engineer looks at that constant and asks "why 137?
 
 And they learn a lesson: sometimes the most important numbers in your system are the ones that make the least sense.
 
+
+## 2026-10-26
+
+A developer is looking at the user input validation code and spots something odd:
+
+```python
+def validate_email(email):
+    if len(email) > 500:
+        raise ValueError("Email too long")
+    # This check seems paranoid—emails are at most 254 characters per RFC
+    if len(email) > 254:
+        raise ValueError("Email impossibly long")
+    # Parse with regex, check domain, etc.
+    ...
+```
+
+There are *two* length checks. The comment even admits it's redundant. So they remove it:
+
+```python
+def validate_email(email):
+    if len(email) > 254:
+        raise ValueError("Email too long")
+    # Parse with regex, check domain, etc.
+    ...
+```
+
+Cleaner. More correct. More professional.
+
+Three months later, the system starts silently dropping emails. Not rejecting them. Not failing visibly. Just... dropping them into a void. The logs show no errors. The validation passes. The email gets stored in the database. But it never gets sent. And nobody notices for a week because the monitoring alerts aren't set up to catch silent failures.
+
+The developer digs into the email service integration and finds the problem: the mail server has a 500-character limit on the envelope. Not the email itself. The full recipient address, including headers, routing information, and metadata. It's an old system. Nobody knows why. The documentation was written by someone who didn't know what "limit" meant. When an email exceeds 500 characters, the mail server silently truncates it, the address becomes invalid, and the email evaporates.
+
+The removed validation check was the *only* thing catching that case before it reached the mail server.
+
+The developer adds it back:
+
+```python
+def validate_email(email):
+    if len(email) > 500:
+        raise ValueError("Email too long—mail server limit")
+    if len(email) > 254:
+        raise ValueError("Email exceeds RFC length")
+    ...
+```
+
+And adds a comment above the first check:
+
+```python
+# DO NOT REMOVE. This prevents silent email loss due to the mail server's
+# undocumented 500-char limit. We know it's redundant. Yes, the mail server
+# should fail visibly. It doesn't. We checked. This is the workaround.
+```
+
+Six months pass. A new developer doing a code cleanup audit sees this:
+
+"Two length checks? We're validating against RFC 254. The second one makes the first one unreachable."
+
+They refactor:
+
+```python
+def validate_email(email):
+    if len(email) > 254:
+        raise ValueError("Email exceeds RFC and mail server limits")
+```
+
+And remove the comment because it made the code "more maintainable."
+
+Emails start disappearing again.
+
+And the cycle continues, because the real problem—that the mail server has an undocumented limit and fails silently—will never be fixed. It's legacy. It works. Nobody dares touch it. So generation after generation of developers will have to learn, the hard way, that you need a 500-character check.
+
+The tragic part? If anyone had looked at the git log, they'd have found the commit message explaining why that check was there. But nobody reads commit messages. They read code. And code doesn't explain its own constraints—especially when those constraints are insane.
+
