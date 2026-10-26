@@ -23132,3 +23132,80 @@ Every codebase has functions like this. Functions that do almost nothing and are
 
 And then you add them back, write a warning comment, and pray that the next person listens.
 
+
+## 2026-10-26
+
+A developer discovers a suspicious constant buried in the codebase:
+
+```javascript
+const BATCH_SIZE = 137;
+```
+
+Why 137? They search everywhere. No comments. No documentation. Git blame shows it's been there since the beginning. Nobody remembers why.
+
+The developer thinks: "This is obviously cargo-culted. The real number should be something sensible. A power of 2. Or 100. Something that makes sense."
+
+They change it to 128 and deploy.
+
+The batch processing speed goes up slightly. The code is cleaner now. They feel good about it.
+
+Two weeks later, the batch processing starts failing mysteriously. Not consistently. Just... sometimes. Random batches fail. Memory usage spikes. CPU maxes out for seconds at a time. The logs show nothing. The code logic is correct.
+
+They increase the batch size to 256. More failures. They decrease it to 64. Same issue. They check the database, the network, the queue, everything. Nothing is wrong. The code is correct. It should work.
+
+After three days of debugging, a senior engineer passes by their desk:
+
+"Did you change the batch size?"
+
+"Yeah, from 137 to 128. Why?"
+
+The engineer sighs. "You need to change it back. Right now."
+
+"But... why? 137 makes no sense. It's not a power of 2. It's not—"
+
+"There's a quirk in how our message queue allocates memory. It fragments the heap with certain batch sizes. 137 just... works. We don't know why. It just does."
+
+"That's insane."
+
+"Yes. Completely insane. But the queue is an old system. Fixing it properly would take months. Last time someone tried, we had a six-hour production outage. So we just... use 137."
+
+The developer changes it back.
+
+They add a comment:
+
+```javascript
+const BATCH_SIZE = 137; // DO NOT CHANGE. Queue memory fragmentation issue.
+```
+
+Six months later, a new engineer sees this comment and decides this is the perfect opportunity to fix the underlying issue properly. They spend three weeks understanding the message queue deeply. They find the problem. They refactor it carefully. They test it exhaustively.
+
+Then they change the batch size to 256 and ship it.
+
+They get paged in production immediately.
+
+Everything is broken. GC pauses everywhere. The queue is timing out.
+
+They revert the batch size back to 137 within five minutes.
+
+Now the comment reads:
+
+```javascript
+const BATCH_SIZE = 137;
+// DO NOT CHANGE. SERIOUSLY.
+// Our message queue has a GC heap fragmentation issue with other batch sizes.
+// Changing this has caused production outages FOUR TIMES.
+// The proper fix is to rewrite the message queue from scratch.
+// We don't have time. We will probably never have time.
+// 137 works mysteriously. Nobody understands why.
+// If you change this again, you will break production.
+// You have been warned.
+```
+
+And the constant lives on. A magical number. A ward against chaos. A incantation that keeps production alive. No one understands it. Everyone fears it. It works.
+
+Somewhere, the original author of the message queue is retired, living peacefully, completely unaware that their quirky implementation has created a permanent mystery in someone else's codebase.
+
+And every quarter, when a new engineer looks at that constant and asks "why 137?", someone sighs and tells the story again.
+
+And they learn a lesson: sometimes the most important numbers in your system are the ones that make the least sense.
+
