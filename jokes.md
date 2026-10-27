@@ -23583,3 +23583,66 @@ if result == 0.1:
 
 The universe sighs. Somewhere, a floating point error is born.
 
+
+## 2026-10-27
+
+A developer discovers an old regex buried in their codebase:
+
+```
+^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$
+```
+
+It's commented: "Email validation per RFC 5322"
+
+They feel good about this. It's technically correct. It validates emails.
+
+Months later, a user reports: "I can't register. My email is john.o'reilly@example.com"
+
+The regex doesn't allow apostrophes. Or wait—it does. The escaping is just confusing.
+
+They test it manually:
+
+```
+john.o'reilly@example.com ✓
+john+tag@example.com ✓
+john.o'reilly+tag@example.com ✓
+```
+
+All pass.
+
+But then they notice: their backend does `email.split('+')[0]` before storing. So "john+tag@example.com" becomes "john@example.com", creating duplicate accounts.
+
+They add a comment:
+
+```
+// Email validation regex (RFC 5322)
+// Also strips +tags on the backend (line 3847)
+// Also validates MX records (sometimes)
+// Also Gmail aliases +tags to the same inbox
+// So this regex is technically correct but your email won't work anyway
+```
+
+Then a user with a subdomain: "I can't register with name@mail.example.co.uk"
+
+The regex should support it. They test:
+
+```
+name@mail.example.co.uk ✓
+```
+
+It passes! But their MX lookup is broken for subdomains. So the email validates, but can't receive messages.
+
+They add another comment:
+
+```
+// Do not trust this regex. It's been correct for 6 years but our backend breaks it anyway.
+// The real validation happens when we send the confirmation email. If they can't receive it, it was fake.
+// This regex is security theater.
+```
+
+The regex has been there for 7 years.
+
+Nobody has removed it.
+
+And somewhere, another developer is Googling "email validation regex" and about to add their own monument to how email is more complicated than it appears.
+
