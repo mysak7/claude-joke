@@ -23468,3 +23468,118 @@ And somewhere, the original developer who added that first `@lru_cache` decorato
 Because nobody—and I mean *nobody*—ever learns about cache invalidation. It's the programming equivalent of nuclear waste. We know it's a problem. We know it'll cause incidents. But there's no solution that doesn't require either removing it (impossible—we've become dependent) or making it exponentially more complex.
 
 Phil Karlton was right. And he was absolutely brutal about it.
+
+## 2026-10-27
+
+A developer writes a simple function to check if a number is an integer:
+
+```python
+def is_integer(x):
+    return x == int(x)
+```
+
+Seems reasonable. They use it to validate user input. Works great in testing.
+
+Then a user reports a bug: "I'm trying to enter 0.1 + 0.2 in the form, which equals 0.3, but your system says it's invalid."
+
+The developer runs the code:
+
+```python
+>>> 0.1 + 0.2
+0.30000000000000004
+>>> is_integer(0.30000000000000004)
+False
+```
+
+"That's weird. Let me check my validation..." They look at the function again. It looks fine. They add some debugging:
+
+```python
+>>> 0.1 + 0.2 == int(0.30000000000000004)
+False
+>>> int(0.30000000000000004)
+0
+```
+
+Oh. Oh no.
+
+They redesign the function:
+
+```python
+def is_integer(x):
+    return x % 1 == 0
+```
+
+Test it:
+
+```python
+>>> 0.1 + 0.2 % 1
+0.30000000000000004
+>>> 0.30000000000000004 == 0
+False
+```
+
+Still broken. Now they realize the issue: floating point math is inexact by definition. So they use a tolerance:
+
+```python
+def is_integer(x):
+    return abs(x - round(x)) < 1e-9
+```
+
+This works. They deploy it. Everything is fine for three months.
+
+Then a scientist using their API passes in 1e-10 (a very small but precise number) and expects it to not be an integer. The system rounds it to 0 anyway.
+
+They add a comment to the code:
+
+```python
+def is_integer(x):
+    # TODO: what even IS an integer for floats???
+    return abs(x - round(x)) < 1e-9
+```
+
+The TODO stays there for two years. Every developer who touches the code adds their own interpretation of what the tolerance should be. There are now four different versions of this function in the codebase, each with different tolerances, none of which are obviously correct.
+
+In the meantime, a backend engineer looks at the validation and decides it's too strict. They loosen it:
+
+```python
+def is_integer(x):
+    return abs(x - round(x)) < 0.5
+```
+
+Now 2.4 is considered an integer because `round(2.4)` is 2, and `abs(2.4 - 2)` is 0.4, which is less than 0.5.
+
+A data analyst reports: "Your integer column contains 2.4. I think there's a bug."
+
+There is a bug. Multiple bugs, actually. All cascading from the simple premise that floating point numbers shouldn't be treated like exact values, but programmers keep trying anyway.
+
+Someone suggests: "Why don't we just store integers as integers and decimals as decimals?"
+
+"Because the API accepts floats."
+
+"Why does it accept floats?"
+
+"Because... users might want to do math with them?"
+
+"But then they shouldn't be integers."
+
+"...exactly."
+
+Silence.
+
+The function will probably always be broken. Not because of bad code, but because the question "is this float an integer?" is philosophically incoherent when floating point is inherently inexact.
+
+Much like trying to use `==` to compare floats in the first place.
+
+Which is why the real lesson is: don't use `==` on floats, ever. Use integer types when you need exact values. Store currency as cents, not dollars. Count things as integers.
+
+Except it's now buried under three layers of tolerance functions and TODOs, so nobody new will ever learn it.
+
+And somewhere, another developer is writing:
+
+```python
+if result == 0.1:
+    print("Success!")
+```
+
+The universe sighs. Somewhere, a floating point error is born.
+
