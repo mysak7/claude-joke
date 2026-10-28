@@ -23646,3 +23646,137 @@ Nobody has removed it.
 
 And somewhere, another developer is Googling "email validation regex" and about to add their own monument to how email is more complicated than it appears.
 
+
+## 2026-10-28
+
+A developer adds a temporary flag:
+
+```python
+def get_users():
+    if temporary_fix:  # TODO: remove this
+        return legacy_users()
+    return new_users()
+```
+
+Six months later, they can't remove it because someone depends on `legacy_users()`. So they add another flag:
+
+```python
+def get_users():
+    if legacy_mode:
+        if temporary_fix:
+            return legacy_users()
+        return new_users()
+    return shiny_new_users()
+```
+
+A year later there are five flags. The code is incomprehensible. They add a comment:
+
+```python
+# DO NOT CHANGE THIS FUNCTION
+# It's held together by flags and prayers
+# Current flags: legacy_mode, temporary_fix, use_v1, beta_enabled, emergency_bypass
+# Any combination of these flags might be set in production
+# We have no idea which combinations actually work
+```
+
+Months pass. Someone asks: "Can we remove the legacy_mode flag?"
+
+Answer: "One customer in Uruguay is using it."
+
+"Just one?"
+
+"Just one."
+
+"How many customers use temporary_fix?"
+
+"We... don't know. We'd have to check the logs."
+
+They check the logs. Seventeen customers explicitly depend on temporary_fix being True. Eight depend on it being False. The rest never set it.
+
+So they add another flag: `customers_special_mode` and attempt migration. But the migration is complex, so they add another flag to control the migration rollout: `enable_migration`.
+
+A year later, the function looks like a decision tree from hell. New developers are instructed: "Don't touch this function. Just... don't."
+
+It becomes a rite of passage: when you become a senior developer, you get read into the secrets of the flags. There's a wiki page. It has seven sections. The last section is labeled "Mysteries."
+
+Eventually someone discovers you can't remove ANY of the flags because the combinations have evolved into the actual business logic. The flags ARE the feature. You can't simplify it without breaking someone's undocumented workflow that relies on a very specific flag combination.
+
+Someone will try to refactor it. They will add three more flags. Then they will give up and update the comment to "Please contact the elders before modifying this."
+
+The function will exist in this state for the rest of the company's lifespan.
+
+Somewhere, another developer is preparing to add their own "temporary" flag.
+
+The cycle continues.
+
+## 2026-10-28
+
+A developer is onboarding a new team member. They point to the README:
+
+"Read this, it explains everything about how to set up the project."
+
+The new developer reads it. It says:
+
+```
+1. Clone the repo
+2. Run `npm install`
+3. Run `npm start`
+```
+
+They follow the instructions. It fails.
+
+"Oh, the README is outdated," the senior developer says. "You need to use yarn now."
+
+They use yarn. Different error.
+
+"Right, and you need Node 18, not Node 16."
+
+They upgrade. Another error.
+
+"And you need to set DATABASE_URL in your .env. There's a .env.example in the repo."
+
+The .env.example file is missing. They figure it out from an old PR from two years ago.
+
+After 90 minutes, they get it running locally.
+
+"Great! Now read this other doc to understand the architecture."
+
+The doc is 200 lines and references a service called "auth-service" and mentions a database schema that "will be explained below" but never is.
+
+It mentions: "See CONTRIBUTING.md for our code review process."
+
+CONTRIBUTING.md says: "Follow the guidelines in ARCHITECTURE.md"
+
+ARCHITECTURE.md says: "For more info, see the onboarding wiki."
+
+The wiki is a Confluence page from 2021 that says: "This page is being updated."
+
+It has never been updated.
+
+They find the actual architecture by grep'ing for comments in the code. The comments are:
+
+```
+// TODO: document this
+// This is cursed. Do not touch.
+// Why does this work? Nobody knows. Don't change it.
+// Legacy code but it's 6 years old now so it's kind of retro-cool
+```
+
+A week later, they have questions. They ask a senior developer.
+
+"Yeah, that's... nobody really understands that part. Just don't touch it."
+
+The README still says `npm install` works.
+
+Meanwhile, the original author of the README is on a different project now. If you ask them about the setup steps, they smile mysteriously and say: "I don't remember. It's probably fine though."
+
+And somewhere, another developer is being onboarded to a different project. They see the README says:
+
+"This code is self-documenting."
+
+It is not self-documenting.
+
+The cycle continues. And in a meeting six months from now, a product manager will ask: "Why does onboarding take so long?" The answer will be documented in a Slack channel from 2023.
+
+Nobody has read that Slack channel in years.
+
