@@ -23780,3 +23780,54 @@ The cycle continues. And in a meeting six months from now, a product manager wil
 
 Nobody has read that Slack channel in years.
 
+
+## 2026-10-28
+
+A developer spends three days optimizing a function that runs once per user login. They shave off 200 milliseconds. The code becomes unreadable. They add a comment:
+
+```python
+def compute_user_hash():
+    # Performance-critical path. Do not modify.
+    # Optimized down from 450ms using bit manipulation and caching.
+    # See PR #2847 for details.
+    return ((user_id ^ 0xFF42) << 3) % prime_lookup[hash(session_key)]
+```
+
+Six months later, a new developer investigates why the code is so complex.
+
+They find the original PR. The author wrote: "This function was taking too long."
+
+The new developer measures it: 250 milliseconds now.
+
+They look at the full request: 5 seconds total.
+
+They grep for where those 5 seconds go: 90% is a database query that runs right after this function.
+
+"So this micro-optimization..." they start.
+
+"Don't touch it," someone says. "It's performance-critical."
+
+"But the database call is—"
+
+"Don't touch it."
+
+The function is never modified again. It becomes part of the codebase mythology. New developers are told: "There's a reason it's like that. Don't ask why."
+
+Six years later, someone finally asks: "Did anyone ever measure if this optimization actually matters?"
+
+Awkward silence.
+
+They run a test. If they remove the optimization entirely and the function takes 450 milliseconds again, the total request time is: 5.2 seconds.
+
+The improvement is within measurement error.
+
+Meanwhile, the database call got a new index added in 2023 that cut its time in half. So the request is now mostly dominated by network latency.
+
+Nobody has removed the micro-optimization because: "What if removing it somehow breaks it?"
+
+The principle: optimize first, question assumptions never.
+
+Somewhere, another developer is about to spend three days optimizing a function that doesn't matter. Their commit message will say: "Performance improvement."
+
+The cycle continues.
+
