@@ -23880,3 +23880,95 @@ Somewhere, another system is building its own accidental correctness from a perf
 
 The principle: if it's incomprehensible, it's bulletproof.
 
+
+## 2026-10-29
+
+A developer adds a feature. Tests pass. Code review approved. Deployed to production.
+
+Two hours later: bug reported.
+
+They check the test coverage. 97%.
+
+"How did this slip through?" they ask.
+
+They look at the test:
+
+```python
+def test_user_creation():
+    user = create_user("Alice")
+    assert user is not None
+```
+
+The test passes because the function runs without crashing. It doesn't check if the user was *actually* created. It doesn't verify the name was saved. It doesn't test the actual behavior.
+
+But it contributed to the coverage metric.
+
+Later, they check another 'passing' test:
+
+```python
+def test_payment_processing():
+    result = process_payment(100)
+    assert True
+```
+
+These tests don't fail. They report success. They maintain the illusion of safety.
+
+Six months later, someone asks: "Why is our coverage so high but bugs keep shipping?"
+
+"The tests are green," someone answers.
+
+"Yes, but they don't test anything."
+
+"Well, if we delete them, coverage drops."
+
+And there it is. Tests that exist to maintain coverage metrics. Code that exists to make the tests pass. Coverage that exists to make management happy.
+
+Somewhere, a manager is looking at a coverage report: 87%. "We need to get this higher," they say.
+
+And somewhere else, a developer is writing:
+
+```python
+def test_email_parsing():
+    email = parse_email("test@example.com")
+    assert isinstance(email, str)
+```
+
+The test passes. Coverage increases. Reality remains unchecked.
+
+The principle: a passing test is just a test that doesn't fail. Whether it proves anything is a separate question.
+
+A junior developer encounters a problem. They search Stack Overflow. They find a solution with 47 upvotes.
+
+They copy-paste it into their code.
+
+It works. They commit it.
+
+Years later, they're now a senior developer. They encounter the same problem again. They search Stack Overflow.
+
+Same solution. Still 47 upvotes. Still works.
+
+But the comments have changed. Someone added a note three years ago: "This doesn't handle X, use this instead—" (links to a different solution).
+
+The senior developer thinks: "I should use the better solution."
+
+They implement it. Production breaks. The 'better' solution doesn't handle the edge cases the original code did silently.
+
+They revert. Back to the copy-pasted code.
+
+The next junior developer sees this and thinks: "That's a weird way to solve it. Let me improve it."
+
+They search Stack Overflow again. Find a solution with 55 upvotes now.
+
+They change the code to match it.
+
+Production breaks in a different way.
+
+The cycle continues forever.
+
+The original author of the 47-upvote solution hasn't logged into Stack Overflow in 11 years. They have no idea their answer is still propagating through billions of lines of production code, creating a distributed network of identical bugs across the world.
+
+Each copy adds a new comment explaining why the solution is broken.
+
+Nobody removes the old answer.
+
+The principle: copy-pasting spreads bugs like a virus. Every line of code you don't understand is a landmine you planted for future you.
