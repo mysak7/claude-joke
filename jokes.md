@@ -23831,3 +23831,52 @@ Somewhere, another developer is about to spend three days optimizing a function 
 
 The cycle continues.
 
+
+## 2026-10-29
+
+A developer discovers a critical bug in production. The symptoms are bizarre: under specific conditions, the system returns the exact data that's needed, even though the query is wrong.
+
+They trace the code. It's been like this for four years.
+
+They ask a senior developer: "How is this working?"
+
+"Don't ask. It just does."
+
+"But the SQL is clearly selecting the wrong columns—"
+
+"Stop. If you understand why it works, you'll try to fix it. Then it will break."
+
+They dig deeper anyway. They find the answer: the wrong columns happen to return NULL, which the frontend then filters out, leaving only the correct data by accident. Meanwhile, there's a duplicate caching layer they didn't see that's *also* filtering. And somehow, when the cache misses, the database is restarted, which forces a reconnect that flushes corrupted state from three bugs ago.
+
+The original author retired in 2019. They're unreachable.
+
+So the developer calls a meeting to discuss a proper fix.
+
+"How long would the refactor take?" someone asks.
+
+"Three weeks to redo it properly. A day to introduce new bugs we don't understand."
+
+"And if we leave it as-is?"
+
+"It keeps working, and we never have to think about it again."
+
+The meeting ends. The code remains.
+
+A year later, a new backend service is added. It does the same thing: accidentally correct behavior emerged from a stack of contradictory bugs. Now they're considering making it official: "Maybe the bugs are features."
+
+Someone writes a document titled: "Accidental Correctness: A Pattern We Didn't Intend."
+
+It becomes part of the architecture.
+
+Meanwhile, a junior developer runs a static analysis tool. It flags 47 errors in the "correct" flow.
+
+"Should we fix these?" they ask.
+
+Silence.
+
+A senior developer slowly turns and says: "The analysis tool doesn't have code review privileges. Let's keep it that way."
+
+Somewhere, another system is building its own accidental correctness from a perfect storm of unrelated bugs. Engineers are learning that sometimes you don't optimize toward correctness. You optimize toward "nobody touches this again."
+
+The principle: if it's incomprehensible, it's bulletproof.
+
