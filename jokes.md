@@ -23972,3 +23972,69 @@ Each copy adds a new comment explaining why the solution is broken.
 Nobody removes the old answer.
 
 The principle: copy-pasting spreads bugs like a virus. Every line of code you don't understand is a landmine you planted for future you.
+
+## 2026-10-30
+
+A developer encounters a critical bug in production. It only happens at 2 AM on Tuesdays. It never happens locally. It doesn't happen on the staging server.
+
+They spend eight hours debugging. They add logging. They review the code. They trace the data flow. Everything looks correct.
+
+They ask: "Why would this only break on production?"
+
+A senior developer has a theory: "Check the environment variables."
+
+They SSH into production and run `env | grep -i config`.
+
+There are 47 environment variables. Most of them are documented nowhere.
+
+One is named `LEGACY_MODE`. It's set to `true`. The comment that explained it has been deleted from git.
+
+The code that reads it has this:
+
+```python
+if os.getenv('LEGACY_MODE') == 'true':
+    use_old_parsing_logic()
+```
+
+They search git log. The variable was added in 2018. The author left in 2019. The ticket that created it was archived. The Slack channel it was discussed in was deleted when the team reorganized.
+
+So they ask: "What does LEGACY_MODE do?"
+
+Nobody knows.
+
+But it breaks one specific data type that only shows up in the real data, at 2 AM, on Tuesdays, when an automated process runs.
+
+The developer's first instinct: delete it.
+
+But then they think: what if something else is depending on this? What if removing it breaks something else they don't understand?
+
+So they ask on Slack: "Can we remove LEGACY_MODE?"
+
+Silence.
+
+Finally, someone replies: "Don't. I remember now. We set that for a customer that required old behavior. The customer left in 2020, but we never removed it because... I don't know. We just never did."
+
+"Can I remove it now?"
+
+"Sure, but do it in a way you can revert quickly."
+
+So they remove it. They test. They deploy.
+
+Production breaks in a completely different way. A different system, one they didn't even think about, was accidentally depending on LEGACY_MODE being set wrong.
+
+They revert. LEGACY_MODE stays.
+
+Six months later, another developer asks: "Why do we have LEGACY_MODE?"
+
+"Don't ask. It just has to be there."
+
+Now there are 48 environment variables, and nobody can remove any of them. Each one is a ghost of a past requirement, each one could break something invisible if touched.
+
+The developer adds one more variable: `DO_NOT_TOUCH_ANYTHING_HERE`. It's set to `true`.
+
+It does nothing.
+
+But it serves as a warning to future developers: "Here lies the code graveyard. Trespassers will be haunted."
+
+The principle: the safest code is the code you don't understand and can't change.
+
