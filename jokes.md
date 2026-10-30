@@ -24038,3 +24038,79 @@ But it serves as a warning to future developers: "Here lies the code graveyard. 
 
 The principle: the safest code is the code you don't understand and can't change.
 
+
+## 2026-10-30
+
+A developer looks at a function in the codebase:
+
+```python
+def calculate_price(items):
+    total = sum(item.price for item in items)
+    if total > 100:
+        total = total * 0.9  # TODO: remove this, it's for that one customer
+    if any(item.sku.startswith('LEGACY_') for item in items):
+        total = total * 1.15  # compensate for old pricing
+    if is_wednesday():
+        total = total * 0.95  # weekly special, but only for some customers?
+    if len(items) > 50:
+        total = total / 1.05  # Mike's fix for bulk orders
+    return round(total, 2)
+```
+
+"This is a mess," they think. "Let me clean it up."
+
+They look at git blame. The `TODO: remove this` comment was added in 2017. The commit message says "Customer X negotiated a deal, temporary discount."
+
+Customer X went out of business in 2019.
+
+But removing it might break something. So it stays.
+
+The LEGACY_ check was added by someone who left in 2021. No explanation. The code works though.
+
+The Wednesday special was someone's joke that became real. Now some reports depend on that discount existing on Wednesdays. Is it still a joke? Nobody knows.
+
+Mike's fix is actually two fixes. The first one didn't work, so he multiplied by something different. He commented: "DO NOT TOUCH THIS, the ratio matters because of the way the old system calculated bulk discounts."
+
+So the developer asks: "Can I refactor this?"
+
+Everyone says yes.
+
+Three days later, it's broken. Not the price calculation—something else broke that depended on the exact sequence of these operations happening in this order.
+
+So the developer reverts and adds a comment:
+
+```python
+def calculate_price(items):
+    # WARNING: This function contains customer-specific hacks spanning 2017-2024.
+    # DO NOT REFACTOR. DO NOT SIMPLIFY. DO NOT TOUCH.
+    # If you change anything, test against:
+    # - Customer X (deceased but code persists)
+    # - LEGACY_ products (unknown purpose)
+    # - Wednesdays (maybe)
+    # - Orders with 50+ items (Mike's ratio is critical)
+    # Good luck.
+```
+
+Six months later, a new hire asks: "Why is this so complicated?"
+
+"Don't ask."
+
+A year later, the company acquires another business. Their pricing system is compatible, so they merge codebases.
+
+The function still exists, but now it's been copy-pasted 47 times across different services, each with slightly different hacks for slightly different customers.
+
+One version accidentally removed the Wednesday check. Wednesday orders started failing silently.
+
+Another version changed Mike's ratio from 1.05 to 1.5 (someone thought it was a typo).
+
+Bulk orders started costing 50% more.
+
+The developer who merged the code asks: "Which version is correct?"
+
+"All of them and none of them," someone replies.
+
+So they create a new service just to manage pricing, and it calls the old function as a fallback.
+
+The new service works 95% of the time. The other 5%, nobody knows why the price is wrong, and they just manually adjust it.
+
+The principle: the best time to refactor was five years ago. The second best time is never, because something you don't understand is depending on your code being broken in exactly the right way.
