@@ -24114,3 +24114,103 @@ So they create a new service just to manage pricing, and it calls the old functi
 The new service works 95% of the time. The other 5%, nobody knows why the price is wrong, and they just manually adjust it.
 
 The principle: the best time to refactor was five years ago. The second best time is never, because something you don't understand is depending on your code being broken in exactly the right way.
+
+## 2026-10-30
+
+A developer notices a function that looks like this:
+
+```python
+def validate_email(email):
+    # Regex from Stack Overflow 2011
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return bool(re.match(pattern, email))
+```
+
+They think: "This regex is terrible. It doesn't even follow RFC 5322. Let me update it to something proper."
+
+They spend three hours researching and write:
+
+```python
+def validate_email(email):
+    # Proper RFC 5322 compliance
+    pattern = r'^(?:[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$'
+    return bool(re.match(pattern, email, re.IGNORECASE))
+```
+
+They test locally. Perfect. Emails validate correctly. Invalid emails are rejected.
+
+They deploy.
+
+Five minutes later, Slack explodes:
+
+- A user with email `jo+tag@example.co.uk` can't sign up.
+- Someone with `first.last@sub.domain.example.com` is locked out.
+- Support is getting angry emails from `consultant_2024@client-name.io`.
+
+Rollback.
+
+So they ask the team: "Why is the old regex in production?"
+
+Someone replies: "That regex works."
+
+"But it doesn't validate emails properly!"
+
+"No, it doesn't validate emails correctly. But our system expects it to reject `+` and allow only simple domains. We have payment system downstream that can't handle special characters. We have a legacy partner that only uses simple domains. And we have one VIP customer who specifically required their `_` character to work, so we added that exception."
+
+They look at git blame. Nobody knows when these exceptions were added. A comment says "DO NOT CHANGE" in three different places.
+
+So the developer asks: "What's the actual spec for valid emails in this system?"
+
+Silence.
+
+Finally: "Whatever the regex accepts."
+
+"And the regex spec is?"
+
+"Whatever the code does."
+
+So they ask: "If I improve the regex, what breaks?"
+
+"Unknown. You'll find out when it breaks. Probably a customer. Probably on Friday."
+
+The developer looks at the regex again:
+
+```
+^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+```
+
+They count it.
+
+One hundred and fourteen characters.
+
+It accepts:
+- `user+tag@example.com` (for that one customer)
+- `_underscore@company.io` (for consultants)
+- But NOT `é@example.fr` (something about unicode broke once)
+- But NOT `user..name@example.com` (double dots caused a database issue)
+- But NOT `user@192.168.1.1` (IP addresses weren't in the original spec)
+
+The regex has become a law unto itself. It is the interface between the business requirements and the implementation, and those requirements no longer exist anywhere but in the regex.
+
+The developer adds a comment:
+
+```python
+def validate_email(email):
+    # DO NOT MODIFY THIS REGEX
+    # Historical constraints:
+    # - Customer requiring '+' (defunct since 2019)
+    # - Underscore legacy support (reason lost)
+    # - Rejects double dots (database was storing them wrongly)
+    # - No IP addresses (pre-2015 limitation)
+    # - No unicode (unclear)
+    # If you change this, something will break that depends on it being broken.
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return bool(re.match(pattern, email))
+```
+
+They get code review approval because everyone is afraid.
+
+The regex stays for another decade.
+
+The principle: the most important code is often the code you don't understand, can't improve, and must never touch.
+
