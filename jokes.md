@@ -24214,3 +24214,104 @@ The regex stays for another decade.
 
 The principle: the most important code is often the code you don't understand, can't improve, and must never touch.
 
+
+## 2026-10-31
+
+A developer writes:
+
+```python
+def process_user(user):
+    return user['name'].upper()
+```
+
+Someone says: "What if user is None?"
+
+So they add a check:
+
+```python
+if user is None:
+    return None
+return user['name'].upper()
+```
+
+"What if 'name' is missing?"
+
+```python
+if user is None:
+    return None
+if 'name' not in user:
+    return None
+return user['name'].upper()
+```
+
+"What if 'name' is None?"
+
+```python
+if user is None:
+    return None
+if 'name' not in user:
+    return None
+if user['name'] is None:
+    return None
+return user['name'].upper()
+```
+
+"What if 'name' is an empty string?"
+
+"What if it's whitespace only?"
+
+"What if we get a list instead of a user?"
+
+"What if it contains unicode that upper() can't handle?"
+
+"What if the user object is a string (because of a bug from 2018)?"
+
+"What if the user is a dict subclass that doesn't support 'in'?"
+
+Now it's:
+
+```python
+def process_user(user):
+    if user is None:
+        return None
+    if isinstance(user, str):
+        user = parse_user_from_string(user)  # Legacy code path
+        if user is None:
+            return None
+    if not isinstance(user, dict):
+        log_error(f"Expected dict, got {type(user)}")
+        return None
+    if 'name' not in user:
+        return None
+    name = user['name']
+    if not name or (isinstance(name, str) and not name.strip()):
+        return None
+    if isinstance(name, list):
+        # One customer has a list of names
+        name = name[0] if name else None
+    if name is None:
+        return None
+    try:
+        return name.upper()
+    except (AttributeError, TypeError):
+        return None
+    except Exception as e:
+        log_error(f"Unexpected error processing user: {e}")
+        return None
+```
+
+The junior dev asks: "Why not just use `.get()`?"
+
+"Because," the senior says, "none of these checks would catch the actual bugs."
+
+A month later, a bug: a customer is passing user objects with 'username' instead of 'name'. So they add another check:
+
+```python
+if 'name' not in user and 'username' not in user:
+    return None
+name = user.get('name') or user.get('username')
+```
+
+Now no one knows which field it's checking or why certain inputs were rejected.
+
+The principle: the more you try to make code robust, the harder it becomes to understand what it's actually supposed to do.
