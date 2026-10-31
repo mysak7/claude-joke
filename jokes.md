@@ -24315,3 +24315,100 @@ name = user.get('name') or user.get('username')
 Now no one knows which field it's checking or why certain inputs were rejected.
 
 The principle: the more you try to make code robust, the harder it becomes to understand what it's actually supposed to do.
+
+A developer writes:
+
+```python
+class User:
+    def __init__(self):
+        self.is_active = True
+```
+
+Six months later, a customer asks: "Can we deactivate accounts temporarily?"
+
+```python
+self.is_active = True
+self.is_suspended = False
+```
+
+"Actually, we need to distinguish temporary suspension from permanent deactivation."
+
+```python
+self.is_active = True
+self.is_suspended = False
+self.is_deleted = False
+```
+
+"Can we track *why* they were deactivated?"
+
+```python
+self.is_active = True
+self.is_suspended = False
+self.is_deleted = False
+self.suspension_reason = None
+```
+
+"We need to support deactivating just certain features."
+
+```python
+self.is_active = True
+self.is_suspended = False
+self.is_deleted = False
+self.suspension_reason = None
+self.can_login = True
+self.can_upload = True
+self.can_comment = True
+self.can_purchase = True
+self.can_refund = True
+```
+
+"What if an account is active but restricted by billing?"
+
+```python
+self.is_active = True
+self.is_active_but_billing_restricted = False
+```
+
+"Can we have a 'dormant' state for accounts inactive for 6 months?"
+
+```python
+self.is_active = True
+self.is_dormant = False
+self.dormant_since = None
+```
+
+"We need to track regional restrictions."
+
+```python
+self.is_active_in_us = True
+self.is_active_in_eu = True
+self.is_active_in_china = False
+```
+
+Now someone writes:
+
+```python
+def user_can_do_thing(user):
+    if not user.is_active:
+        return False
+    if user.is_suspended or user.is_deleted:
+        return False
+    if user.is_active_but_billing_restricted:
+        return False
+    if user.is_dormant:
+        return False
+    if user.can_upload and user.can_comment:
+        # ... but what about refunds?
+    if user.is_active_in_us:  # or is it EU? or global?
+        # ... missing half the logic
+    return None  # or maybe True?
+```
+
+A junior dev asks: "What does 'is_active' actually mean?"
+
+Nobody knows.
+
+The senior dev says: "It's legacy. We can't change it. Someone might depend on it being True. Or False. Or... undefined."
+
+The principle: the more states you add, the less anyone understands what a single state means.
+
