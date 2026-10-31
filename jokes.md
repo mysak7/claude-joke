@@ -24412,3 +24412,53 @@ The senior dev says: "It's legacy. We can't change it. Someone might depend on i
 
 The principle: the more states you add, the less anyone understands what a single state means.
 
+
+## 2026-10-31
+
+A programmer is debugging an issue. Their variable is named `temp`.
+
+"Why is it called temp?" asks the junior.
+
+"Because it was temporary when I created it in 2015."
+
+"So... we've been shipping production code with a variable named `temp` for 11 years?"
+
+"Yes, and I can't rename it now. Someone might be relying on it in their fork. Or a customer might be inspecting the source. Or the variable might be regex'd by their monitoring script. Or—"
+
+"—you're terrified?"
+
+"Welcome to legacy code."
+
+A few months later, they need to store not just temporary data, but *multiple* temporary data structures. So they create:
+
+```python
+temp2 = None
+temp3 = None
+temp_dict = None
+temp_list = None
+temp_holder = None
+_temp = None
+my_temp = None
+temporary_storage = None
+the_temp = None
+```
+
+Someone eventually asks: "What's the difference between `temp` and `temp2`?"
+
+The original developer, who left in 2018, didn't comment. Nobody knows. So they write code that handles both:
+
+```python
+if temp is not None:
+    process(temp)
+if temp2 is not None:
+    process(temp2)
+# temp3 is always None, but removing it breaks something
+if temp3 is not None:
+    process(temp3)
+```
+
+A code review comment: "This seems redundant. Why not consolidate?"
+
+The response: "Because I don't understand why `temp2` exists either. The test suite passes, so I'm leaving it."
+
+The principle: temporary variables have a half-life of infinity.
