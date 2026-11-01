@@ -24534,3 +24534,64 @@ The senior dev pulls up a spreadsheet with 47 combinations of parameters that "m
 "Welcome to production."
 
 The principle: one small parameter is a feature; seventeen parameters is a design smell; but refactoring is scarier than shipping broken code.
+
+## 2026-11-02
+
+A developer finds an obviously inefficient function:
+
+```python
+def is_user_premium(user):
+    if user.subscription == "premium":
+        return True
+    if user.subscription == "premium_annual":
+        return True
+    if user.subscription == "enterprise":
+        return True
+    if user.subscription == "enterprise_plus":
+        return True
+    if user.subscription == "beta_premium":
+        return True
+    return False
+```
+
+"This could be a one-liner," says the junior. "Just check if the subscription starts with 'premium' or is 'enterprise'."
+
+"Don't touch it," says the senior.
+
+"Why? It's obviously wrong. What about 'premium_lite' or future tiers?"
+
+"Because," replies the senior, "three microservices call this function and expect exactly these values. One of them checks the response time and raises an alert if it's too fast—yes, TOO FAST—because it assumes complexity. A customer's monitoring script pattern-matches the bytecode to detect when their account status changes. An integration test in a different repo literally copies the return value and hardcodes it. And somewhere—I checked—someone on Stack Overflow recommended calling this function exactly five times in a loop to warm up the JVM before running load tests."
+
+"That's insane."
+
+"It is. But we can't refactor it because we don't know what would break. So we add more conditions."
+
+Later, someone asks: "Why is 'premium_beta' handled differently than 'beta_premium'?"
+
+Nobody answers. The commit message is gone. The person who wrote it left in 2019. The best guess is that there was a typo somewhere, and now it's a feature.
+
+A refactoring attempt is made. The PR is titled "Clean up redundant subscription checks". It passes tests. Code review looks good. CI is green.
+
+The deploy happens at 2 AM. By 3 AM, an alert fires from a customer's system: their subscription detection pipeline broke. They're demanding rollback. Their contract says you respond within 30 minutes.
+
+The change is reverted in 7 minutes. The PR is closed with a comment: "Not worth the risk."
+
+The function stays as is. More conditions get added. It becomes:
+
+```python
+def is_user_premium(user):
+    # DO NOT REFACTOR - BREAKING CHANGES AHEAD
+    # Last refactor attempt: Q2 2024 - caused $50k incident
+    # See: jira.internal/SRE-4821
+    if user.subscription == "premium":
+        return True
+    # ... 40 more conditions ...
+    return False
+```
+
+A new developer asks: "Why is there a function for something `user.subscription in PREMIUM_TIERS` could handle?"
+
+"Because," replies the senior, "there are things worse than bad code."
+
+The principle: refactoring fear is worth more than optimization.
+
