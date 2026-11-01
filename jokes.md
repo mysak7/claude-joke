@@ -24595,3 +24595,52 @@ A new developer asks: "Why is there a function for something `user.subscription 
 
 The principle: refactoring fear is worth more than optimization.
 
+
+## 2026-11-03
+
+A junior dev looks at the data schema and asks a simple question: "Why does this table have 14 different status fields—status, internal_status, canonical_status, legacy_status, platform_status, team_a_status, team_b_status, customer_facing_status, payment_status, subscription_status, audit_status, api_status, and two that are just called old_status and temp_status_do_not_use?"
+
+The senior dev sighs. "Story time."
+
+"It started in 2019 with one status field. Then payments wanted their own view, so we added payment_status. Then customer support needed something different for their UI, so customer_facing_status. Then accounting needed to report on something that wasn't quite the same as anything else, so audit_status. And legacy_status is there because some old code reads from it, and we don't know if it's still in use, but we're afraid to delete it."
+
+"Why not just... delete the code that reads from it?"
+
+"Because it's in a deployed function we can't modify without a feature flag. Or it's in a customer's instance that's running old code. Or it's behind a payment wall, and we'd have to refund three customers to force an upgrade."
+
+"What about consolidating them? Normalizing somehow?"
+
+"We tried. Someone from the legacy team said if we changed how status worked, it would break reports they run quarterly. Someone from payments said their whole settlement process is hardcoded around payment_status being exactly this format. Someone from customer support said their helpdesk UI literally has 'if platform_status == "completed" then show X' baked into a rule file that's managed by non-technical staff, and touching it would require three PMs to align."
+
+"So what, you just... add more status fields when you need something different?"
+
+"Yes. Last week, someone asked if we could show different statuses for different locales. We created locale_specific_status. The PR passed review in six minutes because everyone was too tired to ask questions."
+
+"And the two that say 'do_not_use'?"
+
+"internal_status was supposed to replace everything in 2023. Turns out two SQL queries were reading from it in production, and we found them three months after launch. The code was commented: '// temporary—will refactor when we upgrade the DB.' That was in 2017. temp_status_do_not_use was literally named 'temp' by someone who was 'just testing something.' Then someone ran a production script that migrated data based on it, and now that field exists in millions of rows."
+
+A new data migration is proposed. It will take three months. It will touch ten microservices. It might fix the problem.
+
+"How much does this status mess cost us?" asks the junior.
+
+The senior pulls up a Slack channel where payment_status and canonical_status diverge. It happens once a month. Each time, it takes four hours of debugging and causes customers to receive emails about orders that don't exist in their view.
+
+"So we know it costs at least four hours per month."
+
+"And there's probably more we don't know about."
+
+"Can we at least document which field to use for what?"
+
+"We tried. The documentation says 'use canonical_status for business logic, platform_status for API responses, and audit_status for regulatory compliance.' But then someone built a feature using customer_facing_status because the ticket said 'show the user the status,' and now we have code that works but shouldn't work according to the rules."
+
+"What if we just killed all of them and started over?"
+
+"Then we'd break things. So we add another status field."
+
+Last week, there was a feature request: "Can we show a different status to different customer tiers?"
+
+The PR is already in code review. It adds tier_status.
+
+The principle: every status field is a small decision that never goes away.
+
