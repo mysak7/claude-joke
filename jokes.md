@@ -24462,3 +24462,75 @@ A code review comment: "This seems redundant. Why not consolidate?"
 The response: "Because I don't understand why `temp2` exists either. The test suite passes, so I'm leaving it."
 
 The principle: temporary variables have a half-life of infinity.
+
+## 2026-11-01
+
+A function is born simple:
+
+```python
+def process_order(order):
+    return calculate_total(order)
+```
+
+Two months in, someone says: "Can we skip tax for certain regions?"
+
+```python
+def process_order(order, skip_tax=False):
+    total = calculate_total(order)
+    if not skip_tax:
+        total += calculate_tax(order)
+    return total
+```
+
+"Can we also apply a discount code?"
+
+```python
+def process_order(order, skip_tax=False, discount_code=None):
+    # ...
+```
+
+"We need to handle subscriptions differently."
+
+```python
+def process_order(order, skip_tax=False, discount_code=None, is_subscription=False):
+    # ...
+```
+
+"What about bulk orders?"
+
+```python
+def process_order(order, skip_tax=False, discount_code=None, is_subscription=False, bulk_discount_percent=None):
+    # ...
+```
+
+"Some orders are payment plans."
+
+```python
+def process_order(order, skip_tax=False, discount_code=None, is_subscription=False, bulk_discount_percent=None, is_payment_plan=False):
+    # ...
+```
+
+"We need to handle gift cards, but only for certain order types."
+
+```python
+def process_order(order, skip_tax=False, discount_code=None, is_subscription=False, bulk_discount_percent=None, is_payment_plan=False, gift_card_code=None, apply_gift_card_to_tax=None):
+    # ...
+```
+
+A junior dev looks at the function signature and asks: "What's the right way to call this?"
+
+The senior dev pulls up a spreadsheet with 47 combinations of parameters that "might" work. Seventeen of them crash. Twenty-three give the wrong answer. Seven do something that might be correct but nobody wants to run the tests to find out.
+
+"How did this get so bad?" asks the junior.
+
+"Each change felt small at the time," replies the senior.
+
+"So... we should refactor this into a proper Order processing class with different subclasses and—"
+
+"Don't. The tests only care about this function signature. Refactoring would break the entire test suite, which depends on passing parameters in a specific order. Besides, we have customers calling this directly. Or actually, I'm not sure if they are. But we can't risk it."
+
+"So we're stuck with this forever?"
+
+"Welcome to production."
+
+The principle: one small parameter is a feature; seventeen parameters is a design smell; but refactoring is scarier than shipping broken code.
