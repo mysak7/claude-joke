@@ -24810,3 +24810,15 @@ A new feature request comes in: "Can we also export as JSON?"
 The engineer just stares at the screen.
 
 The principle: a simple feature request is never simple. It's just simple until you build it.
+
+A junior dev reports: "It works on my machine."
+
+DevOps: "Then we'll ship your machine."
+
+Dev: "Fine, but it's running Ubuntu 14.04 with a hand-compiled libssl from 2015."
+
+DevOps: "No problem. We'll put it in a container."
+
+Three hours later, the container is 11 GB, takes forty minutes to build, and still needs a sudo password that's written on a sticky note on the monitor.
+
+The principle: Docker didn't fix the problem. It just gave your mess a shipping address.
