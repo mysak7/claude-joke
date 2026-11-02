@@ -24716,3 +24716,97 @@ A new developer asks: "What's the difference?"
 
 The principle: some code doesn't get refactored because we're afraid of what we'll discover about how it's being used.
 
+
+
+## 2026-11-02
+
+A product manager asks: "Can we add a simple button that downloads the user's data as CSV?"
+
+The engineer estimates: "Two days. It's straightforward."
+
+Day 1, 2 PM: "Wait, which data? All of it?"
+
+"Yes, all of it."
+
+"...including deleted records?"
+
+"Uhhh, probably?"
+
+Day 1, 4 PM: "Legal wants to know if this violates GDPR compliance mode when the export is from an EU-region user account."
+
+"That's a compliance question, not an engineering one."
+
+"But the export path is region-specific, so it IS an engineering question."
+
+Day 2, 8 AM: "Accounting says some users have multiple accounts in different currency zones. If we export their data, which currency do we use for transaction records?"
+
+"Just export the native currency."
+
+"But their linked accounts use different currencies. If we show one without the other, the totals won't match their internal reports. They'll think we're hiding something."
+
+A new parameter: `include_linked_accounts`.
+
+Day 2, 10 AM: "Customer support is saying some power users have 10+ years of history. The CSV will be 500MB. Excel can't open it."
+
+"Use a ZIP with multiple CSVs."
+
+"Good idea. But the customer might not know which file has which date range. We should add a manifest file explaining the structure."
+
+A new parameter: `include_manifest`.
+
+Day 2, 1 PM: "The QA team says if a user exports their data, deletes their account, and then we get audited, we need proof that we showed them exactly what we exported. So we need to log every export with a hash and timestamp."
+
+"That's... actually important for compliance."
+
+An audit table gets added.
+
+Day 2, 3 PM: "Someone in the backend Slack just realized our CSV export function doesn't handle edge cases like circular references in the data model. If a record points to itself, the CSV breaks."
+
+"How does a record point to itself?"
+
+"Accounts can reference their own parent account. It was meant for organizational hierarchies but someone used it to create a self-reference as a joke in 2019. We never cleaned it up."
+
+A new validation layer.
+
+Day 2, 5 PM: The feature is now:
+- Region-aware export
+- Multi-account consolidation
+- Dynamic file splitting
+- Manifest generation
+- Audit logging
+- Self-reference detection
+- Error reporting
+- Retry logic for large exports
+
+The original estimate was 2 days. It's now 6 days. The PR is 2,400 lines across four services.
+
+Someone comments: "The product manager asked for a download button. We built an entire data governance framework."
+
+"Well," replies the engineer, "they wanted CSV. CSV exports touch everything."
+
+The button finally ships. A user clicks it. A CSV downloads. It works.
+
+For three weeks, everything is fine.
+
+Then: a customer exports their data. The file is blank. No error. Just... empty.
+
+The debug process finds: their account creation predates a migration that added a required field. Their records exist in the old format. The new export logic assumes the new format. So it exports nothing because every row is technically invalid.
+
+The customer has been paying for twelve years. Their data is worthless to them now.
+
+A fix is deployed. An apology is sent. And now, somewhere in that 2,400-line export code, there's a comment:
+
+```python
+# LEGACY FIX: 2026-11-02
+# Handle accounts created before the 2018 migration
+# These records exist in a state that violates our schema
+# But we can't change the schema because export code depends on it
+# So we convert on-the-fly during export
+# If you're reading this: I'm sorry
+```
+
+A new feature request comes in: "Can we also export as JSON?"
+
+The engineer just stares at the screen.
+
+The principle: a simple feature request is never simple. It's just simple until you build it.
