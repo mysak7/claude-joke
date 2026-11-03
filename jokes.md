@@ -24848,3 +24848,41 @@ The new hire asks: "Shouldn't we fix the flaky tests?"
 "There are no flaky tests," says the lead. "Every test is a flaky test that happens to be passing today."
 
 The principle: a green build proves that your tests agree with each other, not that your code works.
+
+A developer writes an email validation regex. It is 412 characters long and takes four people to read.
+
+Code review:
+
+"What does this do?"
+
+"It validates email addresses."
+
+"Does it work?"
+
+"It works for every address that matches it."
+
+"And the addresses that don't match?"
+
+"Those are invalid."
+
+"Including valid ones?"
+
+"The RFC allows quoted strings with semicolons in the local part."
+
+"Do we have any users like that?"
+
+"We have one. He's the CEO."
+
+A special case is added. Then a second special case, for the CEO's assistant, who uses the same pattern. Then a third, for "legacy addresses" that were created before the regex existed and were grandfathered in as "probably fine."
+
+The regex is now 1,100 characters. It has a comment that says `# do not simplify`. Nobody has tested whether it accepts `a@b`.
+
+The principle: a validation regex never rejects bad input for long. It just rejects the people who don't matter.
+
+Two bugs walk into a code review.
+
+The reviewer squints and says, "These aren't bugs. They're features."
+
+Two weeks later, both appear in the changelog under "Fixed."
+
+The principle: a bug is just an unscheduled feature with a worse PR description.
