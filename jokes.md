@@ -24822,3 +24822,29 @@ DevOps: "No problem. We'll put it in a container."
 Three hours later, the container is 11 GB, takes forty minutes to build, and still needs a sudo password that's written on a sticky note on the monitor.
 
 The principle: Docker didn't fix the problem. It just gave your mess a shipping address.
+
+## 2026-11-03
+
+Our test suite has a 100% pass rate. Nobody knows why.
+
+The CI pipeline has been green for eleven months. The last person who touched the test runner left a comment at the top of the file: `# don't touch this`.
+
+A new hire tries removing the `sleep(30)` in setup. Forty-one tests fail. The sleep goes back in.
+
+"What does it sleep for?" they ask.
+
+"Nobody knows. Something async. Maybe a race condition. Maybe the database. It was there before the git history starts."
+
+The new hire investigates. They find a test that asserts `assert True`. Another that catches every exception and returns `None`. A third that mocks the function under test, then asserts that the mock was called.
+
+"Those are fine," says the lead. "They pass."
+
+"They don't test anything."
+
+"Neither did the old ones. Those were flaky. Now they're stable."
+
+The new hire asks: "Shouldn't we fix the flaky tests?"
+
+"There are no flaky tests," says the lead. "Every test is a flaky test that happens to be passing today."
+
+The principle: a green build proves that your tests agree with each other, not that your code works.
