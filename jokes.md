@@ -24916,3 +24916,19 @@ Nobody has ever seen it. The only person who understood it left in 2019, and the
 ```
 
 The principle: a circular dependency is just two modules that never got a divorce, and now they share a house, a bank account, and a utils.py.
+
+A file is created with a single line:
+
+```python
+# TEMP: remove before launch
+```
+
+The launch happens in 2017. The file is still running in production.
+
+Every year, someone opens it, reads the comment, and decides it's too risky to touch. The comment is now older than most of the engineers on the team. Some of them have started treating it as a load-bearing wall.
+
+A new hire asks: "Why is there a TEMP here?"
+
+The lead shrugs: "Because nobody ever removes anything. We just add new things next to it, and the TEMP gets a little more permanent each quarter."
+
+The principle: nothing is more permanent than a temporary fix with a good intention and a missing deadline.
