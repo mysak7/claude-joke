@@ -24932,3 +24932,19 @@ A new hire asks: "Why is there a TEMP here?"
 The lead shrugs: "Because nobody ever removes anything. We just add new things next to it, and the TEMP gets a little more permanent each quarter."
 
 The principle: nothing is more permanent than a temporary fix with a good intention and a missing deadline.
+
+## 2026-11-04
+
+You find a bug in the payment module. `git blame` points to line 212.
+
+The author is you.
+
+You don't remember writing it. The commit message says `cleanup`. The diff is 4,000 lines of reformatted imports, plus one changed character: `>=` became `>`.
+
+You check the date. It's from your first week on the team, when you "just tidied things up before reading the code."
+
+You open the commit again and read the message under it, the one nobody reads: `Fixes #412`.
+
+Issue #412 is still open. It was opened in 2019. It's titled "Refunds sometimes go to the wrong customer."
+
+The principle: `git blame` is the only witness who never forgets, and it's always cheerful about it.
