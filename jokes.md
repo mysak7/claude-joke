@@ -24886,3 +24886,33 @@ The reviewer squints and says, "These aren't bugs. They're features."
 Two weeks later, both appear in the changelog under "Fixed."
 
 The principle: a bug is just an unscheduled feature with a worse PR description.
+
+## 2026-11-04
+
+Every codebase has a `utils.py`.
+
+It was created in 2014 as a temporary holding area for "stuff that doesn't belong anywhere yet." It has never been cleaned up. It now contains string helpers, date parsers, a retry decorator, a half-written payment calculator, and a function called `do_the_thing()` that nobody will admit to writing.
+
+It imports from forty modules.
+
+And all forty modules import from it.
+
+A new developer needs a helper function. They open `utils.py`, scroll for a while, close it, and write their own copy in the module they're working on. Then they discover that the copy they need is already in `utils.py`, but importing it would create a cycle, so the framework fails at startup with a message that says only `ImportError: cannot import name 'parse_date' from partially initialized module 'utils'`.
+
+The fix is a local import inside the function.
+
+Then a second local import.
+
+Then a third.
+
+By the end, every function in `utils.py` is imported lazily from inside another function, and the application takes forty seconds to start because it's quietly reloading half the project on every request.
+
+The architecture review asks: "What does the dependency graph look like?"
+
+Nobody has ever seen it. The only person who understood it left in 2019, and the last thing he committed was a comment:
+
+```python
+# If you're reading this, don't import from here. I'm not sure why it works.
+```
+
+The principle: a circular dependency is just two modules that never got a divorce, and now they share a house, a bank account, and a utils.py.
