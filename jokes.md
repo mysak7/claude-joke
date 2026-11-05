@@ -24978,3 +24978,27 @@ Your app still calls `get_user()`. It has done so since 2016. The deprecation wa
 Someone finally upgrades. The migration guide is a PDF, and it's titled "Migrating from 1.x to 2.x." There is no guide for 3.x. Version 3 was released before the guide could be written.
 
 The principle: a deprecated function is never removed; it just gets a longer and more apologetic warning message.
+
+## 2026-11-05
+
+A product manager asks for a simple feature: "Show the meeting time in the user's timezone."
+
+The developer says, "Easy. We store everything in UTC and convert on display."
+
+Three weeks later, the feature is still in progress.
+
+The first bug: a user in Nepal sees a meeting at 5:45 p.m. instead of 5:00 p.m. The team discovers that Nepal is UTC+5:45, a fact nobody had ever needed to know until that exact moment.
+
+The second bug: a user in Arizona sees the meeting one hour off every summer, because Arizona has opted out of daylight saving time and nobody told the calendar library.
+
+The third bug: a meeting scheduled for "2:30 a.m. on the second Sunday in March" doesn't exist for half the users, and the other half have it happen twice.
+
+The fix is to store the timezone name alongside the timestamp. The team does this, then discovers that the timezone name is `"EST"`, which means different things in three countries and, depending on the year, one that is no longer observed at all.
+
+A senior engineer reviews the code and says, "You should have used the epoch."
+
+The junior engineer asks, "Didn't we say that was the easy part?"
+
+The senior engineer replies, "The epoch is easy. Everything that talks to the epoch is not."
+
+The principle: time is the only data type where "just convert it" is a sentence that has ended careers.
