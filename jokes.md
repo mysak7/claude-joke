@@ -24948,3 +24948,17 @@ You open the commit again and read the message under it, the one nobody reads: `
 Issue #412 is still open. It was opened in 2019. It's titled "Refunds sometimes go to the wrong customer."
 
 The principle: `git blame` is the only witness who never forgets, and it's always cheerful about it.
+
+## 2026-11-05
+
+Our on-call rotation has a runbook. Page one says: "If the pager goes off at 3 a.m., restart the service."
+
+Page two says: "If the restart doesn't fix it, restart it again."
+
+Page three is a diagram nobody can read, with an arrow labeled `magic` pointing at a box labeled `Dave`.
+
+The service has been restarted so often that its uptime is measured in minutes, and its SLA is measured in apologies.
+
+Someone proposes fixing the root cause. The manager replies that the root cause is on the roadmap for next quarter, and the roadmap has been on next quarter since 2022.
+
+The principle: a runbook is just a list of fixes you have agreed not to fix.
