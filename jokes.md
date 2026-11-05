@@ -24962,3 +24962,19 @@ The service has been restarted so often that its uptime is measured in minutes, 
 Someone proposes fixing the root cause. The manager replies that the root cause is on the roadmap for next quarter, and the roadmap has been on next quarter since 2022.
 
 The principle: a runbook is just a list of fixes you have agreed not to fix.
+
+## 2026-11-05
+
+A library ships version 1.0 with a function called `get_user()`.
+
+Version 2.0 deprecates it with a warning: "Use `fetch_user()` instead."
+
+Version 3.0 deprecates `fetch_user()`: "Use `load_user()` instead."
+
+Version 4.0 adds `load_user()` and deprecates it in favor of `user.get()`, which turns out to be a method on an object that's returned by `get_user()`.
+
+Your app still calls `get_user()`. It has done so since 2016. The deprecation warnings print at startup, so nobody sees them, because the logs are already 40,000 lines of the same ImportWarning.
+
+Someone finally upgrades. The migration guide is a PDF, and it's titled "Migrating from 1.x to 2.x." There is no guide for 3.x. Version 3 was released before the guide could be written.
+
+The principle: a deprecated function is never removed; it just gets a longer and more apologetic warning message.
