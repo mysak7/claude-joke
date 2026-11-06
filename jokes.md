@@ -25002,3 +25002,27 @@ The junior engineer asks, "Didn't we say that was the easy part?"
 The senior engineer replies, "The epoch is easy. Everything that talks to the epoch is not."
 
 The principle: time is the only data type where "just convert it" is a sentence that has ended careers.
+
+## 2026-11-06
+
+A feature flag is created to hide an unfinished checkout redesign.
+
+The ticket says: "Remove flag after launch."
+
+The launch happens. The new checkout works. Everyone celebrates, closes the ticket, and moves on to the next sprint.
+
+The flag stays.
+
+It is now called `new_checkout_v2_enabled`, and it is `true` for everyone except one enterprise customer from 2018, whose contract requires the "legacy experience" and whose account manager has never been seen again.
+
+Someone adds a second flag, `new_checkout_v2_enabled_for_real`, to fix a bug in the first one.
+
+A third flag, `checkout_v2_kill_switch`, is added after an incident. It turns off the new checkout, the old checkout, and, for reasons no one can reconstruct, the search bar.
+
+The flag configuration file is now 900 lines long. Every line is a bet on a state of the world that stopped existing two reorganizations ago.
+
+A new engineer asks which flag controls the button color.
+
+The lead checks. There are four flags that could, and all of them are `true`, so the button has been turquoise since the spring, and nobody can say whether that was the plan.
+
+The principle: a feature flag is just a dead code path that is still getting a vote.
