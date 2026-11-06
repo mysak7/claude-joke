@@ -25026,3 +25026,37 @@ A new engineer asks which flag controls the button color.
 The lead checks. There are four flags that could, and all of them are `true`, so the button has been turquoise since the spring, and nobody can say whether that was the plan.
 
 The principle: a feature flag is just a dead code path that is still getting a vote.
+
+## 2026-11-06
+
+Our payment service needs retries, so someone implements exponential backoff: wait one second, then two, then four, then eight.
+
+It's a sensible design. It's also how a two-second outage becomes a three-hour one.
+
+By attempt twelve, the client is waiting over an hour between tries. The payment provider comes back after ninety seconds, sees nothing wrong, and goes back to sleep.
+
+Meanwhile, the customer's card has been charged, the order is still "pending," and the retry is scheduled for Tuesday.
+
+The support team gets a ticket: "I paid four hours ago and my order is still processing."
+
+The engineer checks the logs. The retry queue has a single message in it, scheduled for 9:14 a.m. next Tuesday, with a backoff multiplier that has quietly reached 2,048.
+
+The fix is to add a jitter. Then a max delay. Then a dashboard, so the next time this happens, someone can watch the wait time grow in real time, which is somehow worse.
+
+The principle: exponential backoff is a plan for recovery that assumes the outage ends before the user does.
+
+## 2026-11-06
+
+A pull request arrives. It changes forty-one files, adds a new caching layer, and has the description: "Small cleanup."
+
+The reviewer opens it, scrolls for a while, and leaves a single comment: "nit: trailing whitespace on line 12."
+
+The author replies, "Thanks, fixed." The reviewer approves.
+
+Two weeks later, the caching layer serves one customer's invoices to another customer. The incident channel fills up. Someone pulls up the PR, and the review thread has forty-three comments, all of them about naming a variable `tmp` versus `temp`, and one from the reviewer that says "LGTM, looks good to me."
+
+The postmortem asks what the review covered. The answer, in the reviewer's own words, is that the whitespace was correct.
+
+A new process is introduced: every PR must have two approvals. The first reviewer approves after fixing the whitespace. The second reviewer approves after reading the first reviewer's approval.
+
+The principle: a code review is only as thorough as the person who scrolled past the part that mattered.
