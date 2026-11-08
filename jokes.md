@@ -25076,3 +25076,19 @@ The search results show a closed question with 4,000 upvotes, asked by you in 20
 The duck, still on your desk, says nothing. It has never been wrong, and it has never once been helpful.
 
 The principle: the best debugging partner is the one who lets you find the bug yourself and then quietly reminds you that you've been here before.
+
+## 2026-11-08
+
+Dependabot opens a pull request: "Bump left-pad from 1.3.0 to 1.3.1."
+
+Then another: "Bump is-odd from 3.0.0 to 3.0.1."
+
+By Friday there are 214 open pull requests. The team holds a Monday ritual called "Dependency Thursday," which has been rescheduled eleven times.
+
+Someone finally merges them all. CI goes red. The failing test lives in a file nobody has touched since 2017, and its only assertion is `expect(true).toBe(true)`, which somehow fails.
+
+After a full day of bisecting, the cause turns out to be a transitive dependency of a dev-only linter. It pinned a minor version to avoid a bug in a library the linter no longer uses.
+
+The team pins everything. The lockfile grows to 40,000 lines. Dependabot, undeterred, opens a pull request to bump the lockfile.
+
+The principle: a dependency update is a small change whose blast radius is measured in other people's `package.json` files.
