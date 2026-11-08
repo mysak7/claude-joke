@@ -25060,3 +25060,19 @@ The postmortem asks what the review covered. The answer, in the reviewer's own w
 A new process is introduced: every PR must have two approvals. The first reviewer approves after fixing the whitespace. The second reviewer approves after reading the first reviewer's approval.
 
 The principle: a code review is only as thorough as the person who scrolled past the part that mattered.
+
+## 2026-11-08
+
+You spend three hours on a bug that makes no sense. You try explaining it to the rubber duck on your desk, step by step, out loud.
+
+Halfway through the third sentence, you spot it: the variable is shadowed inside the loop. Problem solved.
+
+Relieved, you open Stack Overflow to write down the question anyway, for posterity.
+
+The title field autocompletes: "Variable shadowed inside loop causes wrong value."
+
+The search results show a closed question with 4,000 upvotes, asked by you in 2014. The answer is accepted. It's your own answer, with a note: "Marked as duplicate of this question."
+
+The duck, still on your desk, says nothing. It has never been wrong, and it has never once been helpful.
+
+The principle: the best debugging partner is the one who lets you find the bug yourself and then quietly reminds you that you've been here before.
