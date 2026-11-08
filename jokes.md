@@ -25092,3 +25092,15 @@ After a full day of bisecting, the cause turns out to be a transitive dependency
 The team pins everything. The lockfile grows to 40,000 lines. Dependabot, undeterred, opens a pull request to bump the lockfile.
 
 The principle: a dependency update is a small change whose blast radius is measured in other people's `package.json` files.
+
+## 2026-11-08
+
+Your Dockerfile starts with `FROM ubuntu:latest`, which feels responsible, because you are always getting the newest version.
+
+It works perfectly on your laptop for eight months. Then one morning the image rebuilds, and production fails with a single line: `libssl.so.3: cannot open shared object file`.
+
+You try to reproduce it locally. Your laptop still works, because your laptop is running an Ubuntu from before the release that broke everything. You have not updated it since 2021, because updating it would break the thesis.
+
+The fix is to pin the tag to `ubuntu:22.04`. Then you pin the digest. Then a teammate asks why the base image is two years old, and you explain that it's a deliberate choice, which is the first time anyone has called it that.
+
+The principle: `latest` is a tag for when you want to be surprised on a schedule that someone else controls.
