@@ -25104,3 +25104,19 @@ You try to reproduce it locally. Your laptop still works, because your laptop is
 The fix is to pin the tag to `ubuntu:22.04`. Then you pin the digest. Then a teammate asks why the base image is two years old, and you explain that it's a deliberate choice, which is the first time anyone has called it that.
 
 The principle: `latest` is a tag for when you want to be surprised on a schedule that someone else controls.
+
+## 2026-11-09
+
+A production bug. The stack trace points to a file you don't remember writing.
+
+You run `git blame` on the offending line. The author is you.
+
+The commit is from 2017. The message: "temp fix, revert later."
+
+The diff is a hardcoded timeout of `9999`, with a comment above it: `// don't ask`.
+
+You stare at the screen, then at the calendar, then at the commit again. The team has been reorganized twice, two frameworks have come and gone, and the only thing that has touched the file since is a bot that fixes whitespace.
+
+You do the only responsible thing: you add a new comment above the line, "// temp fix, revert later," and commit.
+
+The principle: `git blame` always points to the one person who knows exactly what happened, and who has no memory of it.
