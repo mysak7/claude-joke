@@ -25120,3 +25120,17 @@ You stare at the screen, then at the calendar, then at the commit again. The tea
 You do the only responsible thing: you add a new comment above the line, "// temp fix, revert later," and commit.
 
 The principle: `git blame` always points to the one person who knows exactly what happened, and who has no memory of it.
+
+## 2026-11-09
+
+The team hits 100% test coverage for the first time in the project's history. The dashboard turns green, and the manager sends a congratulatory email with a GIF of a cat in sunglasses.
+
+Look closer at the test suite. Every dependency is mocked. The database mock returns exactly the row the test expects. The payment gateway mock always replies `{"status": "ok"}`. The clock mock always says it's noon, on a Tuesday, in a year where nothing is on fire.
+
+The code passes every single test, because every test is a conversation between the code and its own imagination.
+
+Then the service goes to production. The real database returns `null` for a column that the schema swears is never null. The real payment gateway responds with a 202 and a body in a format nobody has ever seen.
+
+The mocks never complained. They never do. They just agreed with whatever the developer thought the world looked like.
+
+The principle: a test suite that mocks everything proves your code agrees with your assumptions, which is the one thing your code was never in danger of disagreeing with.
