@@ -25134,3 +25134,19 @@ Then the service goes to production. The real database returns `null` for a colu
 The mocks never complained. They never do. They just agreed with whatever the developer thought the world looked like.
 
 The principle: a test suite that mocks everything proves your code agrees with your assumptions, which is the one thing your code was never in danger of disagreeing with.
+
+## 2026-11-09
+
+A designer sends a mockup with one small request: center the logo vertically in the header.
+
+You open the stylesheet. It contains 4,812 lines of CSS, three `!important` declarations on the logo alone, and a comment from 2016: `/* do not touch, centering works */`.
+
+You try `margin: auto`. Nothing. You try `display: flex`. The logo moves to the left, which is at least a direction. You add `align-items: center`, and the logo centers itself perfectly, then vanishes behind the navigation bar.
+
+Two hours later, you find the culprit: a `position: absolute; top: 50%; transform: translateY(-50%)` on a parent element, inherited from a component that was deleted in a redesign nobody finished.
+
+You delete the component. The footer collapses. Somewhere, a QA engineer files a bug about the footer's color, which has been `#f0f0f1` since before the footer existed.
+
+You revert. You write `margin-top: 7px`. It works in Chrome. Safari shows the logo seven pixels too low, and the designer, who has been watching the staging server all morning, asks whether the logo is supposed to be "breathing."
+
+The principle: vertical centering has been solved for a decade, and every stylesheet in existence is still negotiating with the last person who tried.
