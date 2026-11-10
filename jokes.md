@@ -25184,3 +25184,17 @@ The settings page asks for a timezone. It presents a dropdown of 419 entries, an
 You ship it. A tester in Lord Howe Island, which has a thirty-minute daylight saving shift, files a bug report with the subject "time is a lie."
 
 The principle: every timestamp is a promise about where someone was standing, and most of our code forgot to ask.
+
+## 2026-11-10
+
+Every long-running service has a log file containing the same line, repeated 2.3 million times: `WARNING: parse_v1() is deprecated, use parse_v2()`.
+
+Nobody reads it. The line has been there so long that it's part of the log's background texture, like the hum of a server room.
+
+Then `parse_v2()` ships with a bug, and the workaround is to call `parse_v1()` for one afternoon. Someone greps for the warning, finds 412 call sites, and opens a ticket titled "Migrate to parse_v2," priority P4. It sits in the backlog, politely, next to "Consider upgrading to Python 3."
+
+Two years later, `parse_v1()` is finally removed in a major release. Forty minutes after deployment, a nightly billing job that nobody has owned since a contractor left crashes at 2 a.m. with `AttributeError: module has no attribute 'parse_v1'`.
+
+The warning was accurate the entire time. It just never said when.
+
+The principle: a deprecation warning is a deadline written in a language only the logs speak.
