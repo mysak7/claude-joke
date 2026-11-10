@@ -25150,3 +25150,21 @@ You delete the component. The footer collapses. Somewhere, a QA engineer files a
 You revert. You write `margin-top: 7px`. It works in Chrome. Safari shows the logo seven pixels too low, and the designer, who has been watching the staging server all morning, asks whether the logo is supposed to be "breathing."
 
 The principle: vertical centering has been solved for a decade, and every stylesheet in existence is still negotiating with the last person who tried.
+
+## 2026-11-10
+
+A product manager asks for one small thing: validate email addresses on the signup form.
+
+You write a regex. It's a beautiful regex. It has groups, lookaheads, and a comment at the top that says "do not modify without a senior engineer and a long walk."
+
+You test it on three addresses. It passes all three. You ship it.
+
+Within a week, support receives a ticket from a user whose address is `o'brien+shop@example.co.uk`. The form rejects it. The user has been trying to sign up for four days and has started to suspect that the internet doesn't want them.
+
+You add the apostrophe. Then the plus sign. Then a rule for quoted local parts, which you've read about but never seen in the wild, and which turns out to be legal, and which nobody on your team can explain.
+
+Three sprints later, the regex is 400 characters long. It correctly accepts every address allowed by RFC 5322, and it rejects `bob@gmail` because "gmail" has no dot, and it will not be changed, because the last person who touched it is now a staff engineer who gave a talk about it.
+
+The final version does one thing: it sends a confirmation email. If the email arrives, the address is valid. If it doesn't, the address was probably wrong all along.
+
+The principle: the only email validator that has ever been fully correct is the one that tries to deliver the message.
