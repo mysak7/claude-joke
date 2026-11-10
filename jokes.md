@@ -25168,3 +25168,19 @@ Three sprints later, the regex is 400 characters long. It correctly accepts ever
 The final version does one thing: it sends a confirmation email. If the email arrives, the address is valid. If it doesn't, the address was probably wrong all along.
 
 The principle: the only email validator that has ever been fully correct is the one that tries to deliver the message.
+
+## 2026-11-10
+
+A user in Auckland reports that their scheduled reminder fired at 3 a.m. on a Tuesday. They are not a morning person, and they are not pleased.
+
+You check the code. The reminder is stored as `2026-11-10 09:00`, which seemed clear when you wrote it, because you were in Berlin and everything you have ever done has been in Berlin.
+
+The server runs in UTC. The database stores local time without a timezone. The frontend converts to the browser's timezone, which the user set to a region that changed its daylight saving rules last spring, and nobody on the team has ever set foot there.
+
+You add a timezone column. Then you realize the column should be the user's preference, not the server's, but the preference was never collected, so you add a settings page.
+
+The settings page asks for a timezone. It presents a dropdown of 419 entries, and one of them is "Eastern Standard Time (current)," which is wrong for half the year and for everyone in Arizona.
+
+You ship it. A tester in Lord Howe Island, which has a thirty-minute daylight saving shift, files a bug report with the subject "time is a lie."
+
+The principle: every timestamp is a promise about where someone was standing, and most of our code forgot to ask.
