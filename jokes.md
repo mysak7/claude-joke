@@ -25228,3 +25228,15 @@ You approve your own pull request, which the tooling does not allow, so you ask 
 By Friday, the diff has 38 commits, a rename, and a new linter rule that flags the word "data." The original bug fix is still in there, untouched, on line 212, where it has been quietly working the entire time.
 
 The principle: a code review's most valuable comment is usually the one nobody bothered to write, which is "this is fine."
+
+## 2026-11-11
+
+Your product page takes 900 milliseconds to load, so you add a cache. It now takes 4 milliseconds to load, and it shows last Tuesday's price.
+
+You add a five-minute TTL. The page is fast and five minutes wrong. Then marketing launches a flash sale, and for five minutes customers see the old price, which is exactly long enough for the sale to become a customer-service incident.
+
+You add invalidation on write. Now every update must remember to clear every key that depends on the product. Nobody has written that list down. It includes the homepage carousel, the sitemap, and an email template cached in 2019 that nobody knew existed.
+
+You add a second cache to cache the invalidation list. It works until the first cache's TTL expires, at which point the two caches agree on a price that was never real.
+
+The principle: there are two hard problems in computer science, cache invalidation, naming things, and off-by-one errors, and the cache is currently winning.
