@@ -25198,3 +25198,19 @@ Two years later, `parse_v1()` is finally removed in a major release. Forty minut
 The warning was accurate the entire time. It just never said when.
 
 The principle: a deprecation warning is a deadline written in a language only the logs speak.
+
+## 2026-11-11
+
+Somewhere in the codebase there is a feature flag called `new_checkout_flow_v2`. It was created for a two-week experiment in the spring of 2021.
+
+The experiment succeeded. The new checkout flow shipped to everyone. The flag was supposed to be removed in a follow-up ticket, and the ticket was assigned to a developer who has since left for a startup that makes flags for flags.
+
+The flag still lives in the config. It is still checked in 47 places. Twelve of those checks are in code paths that no longer exist, and three are in a file that compiles only on a machine running an operating system from 2019.
+
+You're asked to remove it. You search for the flag name and find references everywhere, including a comment: `// TODO: delete after launch`.
+
+You delete the flag. The payment service fails for exactly one country, the one whose tax logic was only ever tested under the old flag's default of `false`.
+
+You turn the flag back on, to "fix" it. Now the mobile app, which has been pinned to the old flag's behavior for three years, starts showing a button labeled "Continue to Continue."
+
+The principle: a feature flag is a temporary switch that quietly becomes a load-bearing wall, and nobody remembers which side of it the house is on.
