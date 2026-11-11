@@ -25214,3 +25214,17 @@ You delete the flag. The payment service fails for exactly one country, the one 
 You turn the flag back on, to "fix" it. Now the mobile app, which has been pinned to the old flag's behavior for three years, starts showing a button labeled "Continue to Continue."
 
 The principle: a feature flag is a temporary switch that quietly becomes a load-bearing wall, and nobody remembers which side of it the house is on.
+
+## 2026-11-11
+
+Your pull request has 412 lines of changes and one comment from a reviewer: "nit: consider renaming `data` to `data`."
+
+You look at the diff. The variable is named `data`. The reviewer's suggestion is also `data`. You reply, politely, asking which part they'd like renamed. They reply with a thumbs-up emoji, which you decide to interpret as a request for the word to be spelled slightly more formally.
+
+Three more nits arrive before lunch. One asks for a trailing comma. One asks for the opposite of the trailing comma from the previous review. One is a link to a style guide that was archived in 2019 and, on closer reading, was written by the reviewer.
+
+You approve your own pull request, which the tooling does not allow, so you ask a colleague to click the button. They leave a comment: "lgtm, but have you considered a nit?"
+
+By Friday, the diff has 38 commits, a rename, and a new linter rule that flags the word "data." The original bug fix is still in there, untouched, on line 212, where it has been quietly working the entire time.
+
+The principle: a code review's most valuable comment is usually the one nobody bothered to write, which is "this is fine."
