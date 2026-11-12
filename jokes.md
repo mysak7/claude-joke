@@ -25240,3 +25240,19 @@ You add invalidation on write. Now every update must remember to clear every key
 You add a second cache to cache the invalidation list. It works until the first cache's TTL expires, at which point the two caches agree on a price that was never real.
 
 The principle: there are two hard problems in computer science, cache invalidation, naming things, and off-by-one errors, and the cache is currently winning.
+
+## 2026-11-12
+
+Your new hire's first task is to set up the project locally. The README has been updated carefully. It says: "Run `make setup`, then `make dev`, and you're good to go!"
+
+`make setup` fails on a missing `.env.example`. You find the file in a branch from 2022. It lists a database host that was decommissioned in the spring, along with a secret key that is, by now, a tradition.
+
+You ask a senior engineer for help. They sigh, open a terminal, and type a command from memory. It works. They close the terminal before you can see what they typed.
+
+When you ask again the next day, they say, "Oh, I just follow the steps in my head."
+
+The steps are not in the README. They are in a Slack thread from 2021, a sticky note on a monitor that has since been recycled, and the muscle memory of the one person who has never once been asked to write it down.
+
+You finally commit a working setup guide. It takes you a week. The README now says "Run `make setup`, then `make dev`, and you're good to go!", and nobody has the heart to tell the new hire that the README is also an aspiration.
+
+The principle: the most accurate documentation in any codebase lives in the head of the person who is about to leave.
