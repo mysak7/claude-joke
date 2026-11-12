@@ -25256,3 +25256,17 @@ The steps are not in the README. They are in a Slack thread from 2021, a sticky 
 You finally commit a working setup guide. It takes you a week. The README now says "Run `make setup`, then `make dev`, and you're good to go!", and nobody has the heart to tell the new hire that the README is also an aspiration.
 
 The principle: the most accurate documentation in any codebase lives in the head of the person who is about to leave.
+
+## 2026-11-12
+
+Your manager asks how long it will take to add a "remember me" checkbox to the login form. You say, confidently, "Two hours, tops."
+
+The checkbox is the easy part. The rest is the session store, which turns out to be a cookie, a Redis cache, and a JWT that someone added "temporarily" in a branch that was merged by accident. The cookie expires after 24 hours, the JWT after 30 days, and the Redis key after whatever the last person to touch it guessed.
+
+You make the checkbox persist the session. Now the session persists on shared computers, which the security team discovers during a routine audit, along with a CSV export containing every user's session token from the last six months.
+
+You revert the checkbox. Support tickets pour in from people who expected to stay logged in. You add a banner: "Please check the box to stay signed in." The banner has a link to a help article, which describes a feature that was removed in March.
+
+Two weeks later, the task is closed. The time log says "2 hours." The time log is the only part of the project that has ever been accurate about how long things take.
+
+The principle: the estimate was never about the checkbox, it was about the thing hiding behind the checkbox, and nobody estimates what they cannot see.
