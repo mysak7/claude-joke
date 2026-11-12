@@ -25270,3 +25270,19 @@ You revert the checkbox. Support tickets pour in from people who expected to sta
 Two weeks later, the task is closed. The time log says "2 hours." The time log is the only part of the project that has ever been accurate about how long things take.
 
 The principle: the estimate was never about the checkbox, it was about the thing hiding behind the checkbox, and nobody estimates what they cannot see.
+
+## 2026-11-12
+
+Your project needs to check whether a number is odd. The obvious solution is `n % 2 === 1`, which takes four characters and has never failed anyone.
+
+A teammate looks at it and says, "We should use a library for that." Within the hour, `is-odd` is in `package.json`.
+
+`is-odd` depends on `is-number`. `is-number` depends on something that was written to handle the edge case of strings that look like numbers. That something has a test suite that checks whether `"5"` is odd, and the test suite is nine megabytes because it includes the README for every dependency it has ever considered.
+
+Your build now downloads 412 packages to answer a question a first-year student solves on a whiteboard.
+
+Then a maintainer of one of these packages, who has not been paid since 2016, decides to stop maintaining it. The package is deleted from the registry. Your CI fails with `Cannot find module 'is-number'` in a project whose only purpose is to decide whether a number is odd.
+
+You search for a replacement. You find four. They each have a different opinion about negative zero.
+
+The principle: the most reliable code in your dependency tree is the function you could have written in four characters and didn't.
