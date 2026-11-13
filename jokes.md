@@ -25286,3 +25286,15 @@ Then a maintainer of one of these packages, who has not been paid since 2016, de
 You search for a replacement. You find four. They each have a different opinion about negative zero.
 
 The principle: the most reliable code in your dependency tree is the function you could have written in four characters and didn't.
+
+## 2026-11-13
+
+Your test suite has 1,400 tests, and one of them is marked `@skip("flaky, TODO fix")`. The commit that added the skip is from 2022. The TODO has been there long enough to qualify as a historical landmark.
+
+Every release, someone looks at the skipped test, sighs, and moves on. It checks whether the payment webhook retries correctly when the second request arrives before the first one finishes. As far as anyone can tell, that is a real bug.
+
+Last month, the team finally sets aside a day to fix the flakiness. It turns out the test was never flaky. The code was racing itself in production, and the test failed exactly when it should have, roughly once a week, at 4 a.m., when nobody was watching the dashboard.
+
+You unskip the test. It passes. You feel good for about six minutes, until you notice that it has been passing in staging since 2022, because staging never receives two webhooks at once.
+
+The principle: a flaky test is often the only honest witness in a suite full of tests that always agree with each other.
