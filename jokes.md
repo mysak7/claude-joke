@@ -25312,3 +25312,17 @@ You run the tests. They pass, which is somehow worse, because it means the confl
 On Monday, a colleague asks why the checkout service sends `uid` to the payment provider while the rest of the system uses `user_id`. You open `git blame` and find your own name on the line, next to the words "resolved conflict, looks fine."
 
 The principle: a merge conflict is the codebase asking which of two people was more right, and the answer is always the one who wrote the commit message.
+
+## 2026-11-13
+
+The monitoring dashboard shows 99.99% uptime for the last quarter. It is a beautiful green number, and the leadership team puts it on a slide titled "Reliability is our culture."
+
+The uptime check pings `/health` every 30 seconds. `/health` returns `200 OK` every time, because it was written in the first week of the project by someone who wanted the load balancer to stop complaining.
+
+Meanwhile, the checkout page has been returning a blank white screen for 11 days. Customers have been reporting it on Twitter. Support has been replying with a link to the status page, which says "All systems operational."
+
+You ask the team who owns `/health`. Nobody does. It has always just been there, the way a fire door is always just there, until the building is on fire and somebody tries to open it.
+
+You change the endpoint to check the database, the cache, and the payment provider. The dashboard turns red for the first time in three years. Leadership asks what changed. You say, "We finally started measuring the thing customers actually use," and they schedule a meeting to discuss the slide.
+
+The principle: a health check that can't fail is not a health check, it's a very reliable way of saying "the server process exists."
