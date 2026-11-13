@@ -25298,3 +25298,17 @@ Last month, the team finally sets aside a day to fix the flakiness. It turns out
 You unskip the test. It passes. You feel good for about six minutes, until you notice that it has been passing in staging since 2022, because staging never receives two webhooks at once.
 
 The principle: a flaky test is often the only honest witness in a suite full of tests that always agree with each other.
+
+## 2026-11-13
+
+You pull `main` on a Friday afternoon and get a merge conflict in a file you've never opened. The conflict markers are so large they have their own zip code.
+
+On the top half, someone renamed `userId` to `user_id`. On the bottom half, someone renamed `userId` to `uid`. Both changes are correct. Both are the kind of change that makes a senior engineer quietly reach for the coffee.
+
+You resolve it by keeping both. The file now has three variables for the same thing and a comment that says `// TODO: pick one`, which was written by the person who created the first one.
+
+You run the tests. They pass, which is somehow worse, because it means the conflict was in a part of the code no test has ever loaded.
+
+On Monday, a colleague asks why the checkout service sends `uid` to the payment provider while the rest of the system uses `user_id`. You open `git blame` and find your own name on the line, next to the words "resolved conflict, looks fine."
+
+The principle: a merge conflict is the codebase asking which of two people was more right, and the answer is always the one who wrote the commit message.
