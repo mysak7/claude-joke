@@ -25344,3 +25344,17 @@ Nobody has touched it. It is load-bearing. Somewhere under it lies a migration t
 You're asked to write a changelog for the release. You run `git log`, read it for four minutes, and quietly start drafting a version bump to 0.0.1, because some things are better left at the beginning.
 
 The principle: a git history is the only honest record of a project, and it reads like a diary written by someone who was too tired to spell "final" correctly.
+
+## 2026-11-14
+
+Your scheduling feature works perfectly in your timezone. You ship it, and a customer in Tokyo books a meeting for "9 a.m. tomorrow," which the system stores as a naive timestamp with no zone attached.
+
+The server is in Virginia. The database is in Frankfurt. The frontend developer is in a timezone that observes daylight saving time on a schedule decided, as far as anyone can tell, by a committee in 1974.
+
+The meeting shows up at 2 a.m. for the Tokyo customer, and at a time that doesn't exist at all for a user in a region that skipped an hour in March. Two bookings land on the same slot, because one was saved in UTC and the other in "local time," and "local" turns out to mean three different things depending on which service you ask.
+
+You add a fix: store everything in UTC. The fix works until a user in a country whose government changes its offset with twelve days' notice books a recurring event for "the first Monday of every month."
+
+You open the bug tracker and find a ticket titled "Times are wrong," created in 2019, with a single comment from a user in Auckland: "Works fine for me, I just add 13 hours in my head."
+
+The principle: time is the one data type everybody thinks they understand, and the one that quietly acquires a new opinion every spring and autumn.
