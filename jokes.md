@@ -25358,3 +25358,19 @@ You add a fix: store everything in UTC. The fix works until a user in a country 
 You open the bug tracker and find a ticket titled "Times are wrong," created in 2019, with a single comment from a user in Auckland: "Works fine for me, I just add 13 hours in my head."
 
 The principle: time is the one data type everybody thinks they understand, and the one that quietly acquires a new opinion every spring and autumn.
+
+## 2026-11-14
+
+Your designer asks for a modal that is centered vertically and horizontally. You say, confidently, "Flexbox, one line." You type `display: flex; align-items: center; justify-content: center;`, and it works, which is the last time anything will work that easily.
+
+The next request is for the modal to stay centered on mobile, but aligned to the top of the card. The card lives inside a grid, inside a container with `overflow: hidden`, which somebody added in 2018 to hide a bug that was itself caused by a float.
+
+You try `position: absolute; top: 50%; transform: translateY(-50%)`. The modal is perfectly centered and also covers the navigation bar, the cookie banner, and the "Subscribe" button, which now exists only as a rumor behind the overlay.
+
+You add `z-index: 9999`. Then `z-index: 99999`. Then, in a moment of genuine despair, `z-index: 999999999`, which is the CSS equivalent of shouting into a well and hoping the echo is polite.
+
+Three weeks later, a new engineer asks why the modal is centered but the logo in the header is not. You explain that the header has `margin: 0 auto`, `width: 100%`, and `padding: 0 16px`, which is correct in exactly the way a trapdoor is correct. They nod slowly and ask whether there's a framework that handles this.
+
+There is. It's called Tailwind. Now the div is centered by a class list that is 47 characters long, and nobody is entirely sure which of the 47 is doing the work.
+
+The principle: centering a div is the one problem that has been solved in every decade of the web and still needs a Stack Overflow tab open.
