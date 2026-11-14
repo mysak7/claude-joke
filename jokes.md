@@ -25326,3 +25326,21 @@ You ask the team who owns `/health`. Nobody does. It has always just been there,
 You change the endpoint to check the database, the cache, and the payment provider. The dashboard turns red for the first time in three years. Leadership asks what changed. You say, "We finally started measuring the thing customers actually use," and they schedule a meeting to discuss the slide.
 
 The principle: a health check that can't fail is not a health check, it's a very reliable way of saying "the server process exists."
+
+## 2026-11-14
+
+Run `git log --oneline` on any project older than three years and you can read the emotional history of the team like a diary.
+
+It starts with `Initial commit`, which is honest and optimistic. Then comes `add login`, `fix login`, and `fix login for real`, which is the first hint that someone has opinions about the word "real."
+
+By the middle of the log, the messages have lost their nerve. `wip`, `more wip`, `stuff`, and `asdf` appear in a row, the commit history's version of a person talking to themselves in an empty elevator.
+
+Then a stretch of `fix`, `fix`, `FIX`, `fix!!!`, and finally `revert "fix"`, which is the only commit in the log that admits anything.
+
+Near the top sits `final`, followed by `final2`, then `final_final`, and then a merge commit titled `Merge branch 'final' into main (do not touch)`.
+
+Nobody has touched it. It is load-bearing. Somewhere under it lies a migration that has to run in a specific order, and the only documentation is the commit subject `ok this works don't ask`.
+
+You're asked to write a changelog for the release. You run `git log`, read it for four minutes, and quietly start drafting a version bump to 0.0.1, because some things are better left at the beginning.
+
+The principle: a git history is the only honest record of a project, and it reads like a diary written by someone who was too tired to spell "final" correctly.
