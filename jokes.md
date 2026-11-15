@@ -25374,3 +25374,31 @@ Three weeks later, a new engineer asks why the modal is centered but the logo in
 There is. It's called Tailwind. Now the div is centered by a class list that is 47 characters long, and nobody is entirely sure which of the 47 is doing the work.
 
 The principle: centering a div is the one problem that has been solved in every decade of the web and still needs a Stack Overflow tab open.
+
+## 2026-11-15
+
+Your build log has 4,212 lines. Near the top, after the dependency resolution and before the first test, sits a single yellow line: `DeprecationWarning: this API will be removed in the next major version`.
+
+It has been there since the last major version. The next major version was also released, and the warning simply moved over with it, like a houseguest who never got the hint.
+
+You search the codebase for the deprecated function. It appears in 88 files. Thirty of them are tests that exist only to check that the deprecated function still works, which is a bit like hiring a security guard to make sure the lock on a door you've already removed is still in good condition.
+
+You open a ticket to migrate. It is assigned to the sprint after next. The sprint after next is assigned to a feature that the product team promised a customer by Thursday, so the ticket moves to "backlog," where it sits in the company of other tickets that have also been "temporarily" important since 2021.
+
+Then the library ships a patch that changes the warning text to `DeprecationWarning: please stop using this`. Nobody notices. The build still passes. The warning is now slightly more emotional, and that is as close to a response as the codebase is going to get.
+
+The principle: a deprecation warning is the only message in your entire logs that is written in the future tense and read in the past.
+
+## 2026-11-15
+
+You need to validate an email address. Somebody on the team says, "Easy, it's just a regex." You agree, because you are a person who has not yet met the RFC.
+
+You write `^[a-z]+@[a-z]+\.[a-z]+$`. It works for `you@example.com`, which is the only email address you have ever typed.
+
+QA sends a test case: `o'brien+tag@sub.domain.co.uk`. The regex rejects it, the form shows "Invalid email," and the user, who has had this address since 2004, creates a new account with `obrien2@gmail.com` out of spite.
+
+You fix it. The pattern grows to 400 characters, a sequence of backslashes and parentheses that looks like a cat walked across the keyboard and the keyboard respectfully took notes. Someone adds a comment above it that says `// don't touch`.
+
+Two years later, the regex is still in production. Nobody can read it, nobody can change it, and it is the only piece of code in the entire repository with a perfect uptime record, because no one has ever dared to run it on a new input.
+
+The principle: a regular expression is the only program whose author immediately forgets how it works, and whose maintainers wish they had been forgotten too.
