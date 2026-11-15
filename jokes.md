@@ -25402,3 +25402,17 @@ You fix it. The pattern grows to 400 characters, a sequence of backslashes and p
 Two years later, the regex is still in production. Nobody can read it, nobody can change it, and it is the only piece of code in the entire repository with a perfect uptime record, because no one has ever dared to run it on a new input.
 
 The principle: a regular expression is the only program whose author immediately forgets how it works, and whose maintainers wish they had been forgotten too.
+
+## 2026-11-15
+
+Your pull request is 4,312 lines long and titled "misc fixes." You tag a reviewer and go get lunch.
+
+Eleven minutes later, a comment appears: "LGTM 👍." The reviewer did not open the diff. They opened the PR, saw the line count, and respected it the way you respect a thunderstorm, from a safe distance and without asking questions.
+
+The change goes out. Two days later, the checkout total is off by a few cents for users in one specific currency. You check the PR. The reviewer's approval is still there, shining like a medal for bravery nobody requested.
+
+You ask why they approved it. They say, "The tests passed." You look at the tests. You wrote them, in the same PR, and they check that the function returns whatever the function returns.
+
+The CI pipeline trusted the tests. The tests trusted you. You trusted the reviewer. The reviewer trusted that the author had already thought about it. Every link in the chain was confident, and none of them was looking at the thing in question.
+
+The principle: an approval on a 4,000-line diff is not a review, it is a signature on a contract nobody read, and the contract is with your customers.
