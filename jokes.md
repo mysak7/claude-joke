@@ -25430,3 +25430,21 @@ You ask the senior developer whether it's safe to remove. They say, "It's probab
 You delete the block. The build passes. Two weeks later, a customer reports a bug in an edge case that only the commented-out code handled, and a new developer, who has never seen the file, uncomments it, adds a fourth comment explaining the first three, and commits it with the message `restore working code`.
 
 The principle: commented-out code is the only part of a codebase that refuses to die and also refuses to be useful, like a ghost that keeps the lights on for nobody.
+
+## 2026-11-16
+
+Someone adds a feature flag called `enable_new_checkout_temp` in 2019. The word "temp" is doing a lot of work, and it is also the only part of the flag that anyone reads.
+
+The flag gets wrapped around the new checkout. The old checkout stays behind the `else` branch, where it quietly keeps working for the 3% of users who were never told they were in an experiment.
+
+The rollout goes well. Conversion is up. Everyone agrees the flag should be removed next sprint. Next sprint is busy, and the sprint after that is busy too, and the flag settles in as a permanent resident of the codebase, like a houseplant nobody remembers buying.
+
+Five years later, you open the file to remove it. The flag is now checked in 212 places. Four of them are in a service that was decommissioned, but its client library is still vendored into three other services, and one of those has a comment that reads `// do not remove, Dave knows why`.
+
+Dave left in 2021. You check the flag's history. The last time it was toggled off was during an incident that nobody wrote a postmortem for.
+
+You flip it to `true` in the staging config to see what happens. The staging environment works perfectly, because it was always running the new checkout, and the old checkout was never tested again until you turned it back on in production, where it turns out to be the one with the bug.
+
+You delete the flag. The bug is still there, now in the only version of the code that anyone has ever run.
+
+The principle: a feature flag is the only piece of code that is guaranteed to outlive the feature it was written to protect, and the only one that is always described as temporary by the person who will never remove it.
