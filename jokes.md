@@ -25448,3 +25448,19 @@ You flip it to `true` in the staging config to see what happens. The staging env
 You delete the flag. The bug is still there, now in the only version of the code that anyone has ever run.
 
 The principle: a feature flag is the only piece of code that is guaranteed to outlive the feature it was written to protect, and the only one that is always described as temporary by the person who will never remove it.
+
+## 2026-11-16
+
+Your manager asks how long the "quick" export feature will take. You look at the requirements, which include CSV, Excel, PDF, a scheduled email, and "just like the one in the other app," and you say, "About two days."
+
+Everyone in the room hears "two days" and writes it down. Nobody hears the word "about," which is doing the same job as the seatbelt on a bus.
+
+Day one goes to the happy path. Day two goes to the second happy path, the one where the user has forty thousand rows. Day three reveals that the other app's export was written by a contractor in 2014 and documented only by a screenshot.
+
+By day five, you have a progress bar that reaches 90% in one hour and then spends the next nine days contemplating its own mortality.
+
+Your manager asks for an update. You say, "Almost there," which is the only phrase in software that has never once been accurate and is also never once been challenged.
+
+On day fourteen, the feature ships. The product team calls it "a quick win" in the quarterly review. You never correct them, because the word "quick" is now the only thing about the project that everyone agrees on.
+
+The principle: an estimate is a promise made by someone who has not yet met the requirements, and the requirements have been looking forward to meeting you.
