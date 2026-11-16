@@ -25416,3 +25416,17 @@ You ask why they approved it. They say, "The tests passed." You look at the test
 The CI pipeline trusted the tests. The tests trusted you. You trusted the reviewer. The reviewer trusted that the author had already thought about it. Every link in the chain was confident, and none of them was looking at the thing in question.
 
 The principle: an approval on a 4,000-line diff is not a review, it is a signature on a contract nobody read, and the contract is with your customers.
+
+## 2026-11-16
+
+You open a legacy file to fix a single typo and find forty lines of code that have been commented out since 2017. Nobody has ever deleted them, because deleting code feels like throwing away a letter from a friend who might one day return.
+
+The first comment above the block reads `// old implementation, keep for reference`. The reference it points to is a Git commit that is itself a reference to a commit that was squashed in 2019.
+
+You consider deleting it. Then you notice a second block, marked `// TODO: remove after release`, which has survived eleven releases. The release notes for version 2.0 say "cleaned up dead code." The dead code is still there, sitting in the file like a fossil in a museum that nobody is allowed to dust.
+
+You ask the senior developer whether it's safe to remove. They say, "It's probably fine," which is what senior developers say when the answer is "I wrote it, and I don't remember why."
+
+You delete the block. The build passes. Two weeks later, a customer reports a bug in an edge case that only the commented-out code handled, and a new developer, who has never seen the file, uncomments it, adds a fourth comment explaining the first three, and commits it with the message `restore working code`.
+
+The principle: commented-out code is the only part of a codebase that refuses to die and also refuses to be useful, like a ghost that keeps the lights on for nobody.
