@@ -25492,3 +25492,17 @@ You ask Priya. Priya is on a plane. Her reply, when it finally arrives, is a Sla
 You fix the setup, write a new section titled "Troubleshooting," and commit it. Three months later, a new hire opens a ticket asking why the Troubleshooting section doesn't mention the error they're seeing, which is the one you just fixed, because it is now the error they're seeing on a different machine.
 
 The principle: a README is the only document that is always out of date and always certain that it isn't, and the only one that trusts its reader to be exactly as clever as its author.
+
+## 2026-11-17
+
+You start a function by naming a variable `data`. Ten minutes later, you need a second one, so you call it `data2`, which feels responsible, like labeling the second drawer in a kitchen.
+
+By the afternoon the function has `dataFinal`, `dataFinalReal`, and `dataFinalReal_v2`. Somewhere in the middle, a variable called `temp` is holding the only copy of the user's shipping address, and nobody can say for certain what `x` is, although everyone agrees it is important.
+
+The code review arrives with one comment: "What does `flag2` mean?" You open the file, stare at it, and realize you are the only person who can answer, and you are no longer sure you can either. You reply, "It's a boolean," which is true in the same way that a sandwich is a meal.
+
+You rename everything. The new names are long and precise: `customerShippingAddressForInvoiceRendering`. The line no longer fits on the screen, so the formatter wraps it across six lines, and the function now looks like a legal disclaimer that somebody started reading out loud.
+
+Eighteen months later, a new developer finds `customerShippingAddressForInvoiceRendering` and adds a comment above it: `// shipping address`. It is the most accurate thing anyone has written about that variable since it was created.
+
+The principle: a variable name is the only documentation that every future reader is forced to read, and the only one that every author is certain is self-explanatory right up until the moment it isn't.
