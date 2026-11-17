@@ -25478,3 +25478,17 @@ Somewhere in those 38,000 lines, a package has been updated from `1.4.2` to `1.4
 You approve your own PR, because the reviewer is also on a deadline, and the reviewer has already scrolled past the collapsed section with the quiet dignity of someone who knows that nobody has ever read a lockfile in full.
 
 The principle: a lockfile is the only file in a repository that is longer than the project it describes, and the only one that everyone trusts completely while understanding it not at all.
+
+## 2026-11-17
+
+Every project has a README, and every README has the same final line: "Setup is self-explanatory." It is the only sentence in software documentation that is written with total confidence and read with total despair.
+
+The first section says `npm install`. The second says `npm start`. The third, which was added by a developer who left in 2020, says `make sure you have the right Node version`, without saying which one, the way a fortune cookie tells you a journey is coming without mentioning the bus.
+
+You follow the steps. The app fails with `Error: cannot find module './config'`. The config file is in the repo, but in a folder called `.local` that is gitignored, and its contents are described as "ask Priya."
+
+You ask Priya. Priya is on a plane. Her reply, when it finally arrives, is a Slack message with a single attachment: a screenshot of a sticky note reading `DB_HOST=localhost (the other one is wrong)`.
+
+You fix the setup, write a new section titled "Troubleshooting," and commit it. Three months later, a new hire opens a ticket asking why the Troubleshooting section doesn't mention the error they're seeing, which is the one you just fixed, because it is now the error they're seeing on a different machine.
+
+The principle: a README is the only document that is always out of date and always certain that it isn't, and the only one that trusts its reader to be exactly as clever as its author.
