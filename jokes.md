@@ -25536,3 +25536,19 @@ You fix it by storing everything in UTC. The fix works beautifully for every tim
 You add a comment: `// all times are UTC`. Three weeks later a report generator reads it, converts the UTC value into local time for display, and then saves the local value back to the database, so every report is now a few hours older than the one before it, like a photocopy of a photocopy of a fax.
 
 The principle: a timestamp is the only piece of data that is always correct, and it is correct in exactly one time zone, which is the one your code is never running in.
+
+## 2026-11-18
+
+You write a shell script in `/tmp` to rename some files once. It has no error handling, no comments, and a variable called `x`. You run it, it works, and you delete it in your head, which is the only place it will ever be deleted.
+
+Two months later, the script is in `~/bin`. A colleague adds a `cron` line to it, with the comment "temporary, until we have a real pipeline." It runs every night at 02:00 and quietly copies the production database to a folder that has no retention policy.
+
+A new hire asks what `backup.sh` does. Nobody knows, because its author left, and the only documentation is a `git log` consisting entirely of the word "fix."
+
+The script is now load-bearing. It has a `--dry-run` flag that nobody uses, because the dry run was never implemented and the flag exists only to make the script look responsible in a code review.
+
+Then the disk fills, and the script, which has no `set -e`, cheerfully keeps writing partial copies until the disk is full of backups that are all corrupted in exactly the same way.
+
+The post-mortem names the root cause as "lack of formal backup process." The formal backup process, when it finally arrives, is a Jira ticket and a new Terraform module that wraps the same script, unchanged, in three more layers of YAML.
+
+The principle: a throwaway script is the only piece of infrastructure that is never planned, never reviewed, and never shut down, because its author always meant to clean it up right after the one time they needed it.
