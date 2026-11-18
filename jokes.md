@@ -25506,3 +25506,19 @@ You rename everything. The new names are long and precise: `customerShippingAddr
 Eighteen months later, a new developer finds `customerShippingAddressForInvoiceRendering` and adds a comment above it: `// shipping address`. It is the most accurate thing anyone has written about that variable since it was created.
 
 The principle: a variable name is the only documentation that every future reader is forced to read, and the only one that every author is certain is self-explanatory right up until the moment it isn't.
+
+## 2026-11-18
+
+At 3:14 a.m. your phone buzzes with a page: "CRITICAL: disk usage on logs-prod-07 at 81%." You wake up, open a laptop with the glare of a tiny sun, and log in to find the disk has been at 81% since 2019.
+
+The alert was created by someone who was very worried about disks. The threshold was set at 80%, which was reasonable, and then the disk crossed it, and the alert fired, and nobody ever resolved it, because resolving it would have required deciding what to do about the logs.
+
+So the alert has been firing quietly for seven years, sending its gentle notification to a channel called `#alerts-noise`, which is muted by everyone and read by nobody except the bot that posts the weekly "you have 4,118 unacknowledged alerts" summary.
+
+You silence it for 24 hours. The silence expires on Tuesday. On Tuesday, a different alert fires for a real outage in the payment service, and it lands in the same channel, wearing the same emoji, and gets the same reaction from everyone: a single "👀" and a long, shared silence.
+
+The post-incident review says the on-call engineer was "not sufficiently responsive." The on-call engineer says they were responsive to 212 alerts that week, and that the real one was the 213th, which is also the only one that arrived on a Tuesday.
+
+You propose a fix: fewer alerts, each one actionable, each one with a runbook. Leadership approves it enthusiastically and adds a new dashboard to track alert volume, which sends its own alert when the volume crosses 80%.
+
+The principle: an alert is a promise that something needs a human right now, and every false alarm is a small lesson in how to stop listening, which is the one thing the on-call rotation was supposed to prevent.
