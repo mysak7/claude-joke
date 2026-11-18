@@ -25522,3 +25522,17 @@ The post-incident review says the on-call engineer was "not sufficiently respons
 You propose a fix: fewer alerts, each one actionable, each one with a runbook. Leadership approves it enthusiastically and adds a new dashboard to track alert volume, which sends its own alert when the volume crosses 80%.
 
 The principle: an alert is a promise that something needs a human right now, and every false alarm is a small lesson in how to stop listening, which is the one thing the on-call rotation was supposed to prevent.
+
+## 2026-11-18
+
+Your calendar app lets you book a recurring meeting for every Sunday at 2:30 a.m. It accepts the booking without complaint, because calendars are optimistic and have never once been asked to attend the meeting.
+
+The first Sunday in March, the clocks jump from 2:00 to 3:00. The meeting at 2:30 does not exist. The scheduler, which was built by someone who believed time was a straight line with no kinks in it, decides the meeting is happening at 3:30, then at 1:30, then at both, then in a state that the spec calls "implementation-defined."
+
+You discover this when a user in another country reports that their invoice was generated "at a time in the future," and the timestamp on it is `2024-03-10T02:30:00`, which is a time that, for one hour a year, simply isn't there.
+
+You fix it by storing everything in UTC. The fix works beautifully for every timestamp except the ones that come from the user's phone, which is set to a time zone the database has never heard of, and the one from the batch job, which runs on a server that has been secretly on Kiribati time since a config change in 2021.
+
+You add a comment: `// all times are UTC`. Three weeks later a report generator reads it, converts the UTC value into local time for display, and then saves the local value back to the database, so every report is now a few hours older than the one before it, like a photocopy of a photocopy of a fax.
+
+The principle: a timestamp is the only piece of data that is always correct, and it is correct in exactly one time zone, which is the one your code is never running in.
