@@ -25568,3 +25568,17 @@ You finally trace the bug. The test is right, the code is wrong, and the fix is 
 You open the pull request. The reviewer asks, "Does this make the test faster?" You say it makes the test correct, which is a different property, and they approve it with the expression of a person who has just been told that the bridge is safe, but only after they stopped asking about the bridge.
 
 The principle: a retry is a way of making a bug stop complaining without making it stop happening, and the test runner is the only colleague who never needs to be told that the problem is still there.
+
+## 2026-11-19
+
+Two developers work on the same file for three days, each on a different branch, each convinced the other is the reason the code is slow to change. On Friday, one of them opens a pull request, and GitHub, with the calm of a referee who has seen it all, announces: "This branch has conflicts that must be resolved."
+
+The conflict markers appear in the file like scar tissue: `<<<<<<< HEAD`, a wall of your code, `=======`, a wall of their code, `>>>>>>> feature/checkout-redesign`. It looks less like a merge and more like a border dispute, drawn through the middle of a function that used to work.
+
+You open the file to resolve it. Your version wants the discount applied before tax. Their version wants it after. Neither of you wrote a comment explaining why, because both of you were certain the answer was obvious, which is the most reliable way to guarantee that it will never be obvious again.
+
+You consider the three options. Keep yours: they will be angry. Keep theirs: you will be angry. Keep both: the function now applies the discount twice, and the customer receives a refund of negative forty dollars, which the payment processor describes as "a bold strategy."
+
+In the end you pick "Accept Incoming Change" on the whole file, and the tests pass, because the tests were written by the person who lost the argument, and they check only the things that person remembered to care about.
+
+The principle: a merge conflict is the only place in software where two people finally agree on the same problem, which is that neither of them wrote down what the other one was trying to do.
