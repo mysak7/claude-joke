@@ -25552,3 +25552,19 @@ Then the disk fills, and the script, which has no `set -e`, cheerfully keeps wri
 The post-mortem names the root cause as "lack of formal backup process." The formal backup process, when it finally arrives, is a Jira ticket and a new Terraform module that wraps the same script, unchanged, in three more layers of YAML.
 
 The principle: a throwaway script is the only piece of infrastructure that is never planned, never reviewed, and never shut down, because its author always meant to clean it up right after the one time they needed it.
+
+## 2026-11-19
+
+The test suite has 2,400 tests and one of them fails about one time in five. Nobody knows why. It passes on your laptop, passes on the second CI run, and fails on the one that matters, the one with the deploy button.
+
+Someone adds `retries: 3` to the test runner config. The build goes green. The team celebrates the way sailors celebrate a leak that has stopped for the moment, with the quiet relief of people who did not ask where the water is coming from.
+
+Six months later the suite takes forty minutes, because the flaky test now runs four times and sometimes five, and the retry count has been raised twice by people who each read the previous comment as a lesson about patience.
+
+A new engineer asks why the test is flaky. The answer, found in a git blame, is a single line: `// sleep(500) so the race condition goes away`. The race condition has not gone away. It has moved into production, where it is no longer called a race condition but "intermittent checkout errors," which are tracked on a board nobody opens.
+
+You finally trace the bug. The test is right, the code is wrong, and the fix is four lines that make a background job wait for a lock it should have held all along.
+
+You open the pull request. The reviewer asks, "Does this make the test faster?" You say it makes the test correct, which is a different property, and they approve it with the expression of a person who has just been told that the bridge is safe, but only after they stopped asking about the bridge.
+
+The principle: a retry is a way of making a bug stop complaining without making it stop happening, and the test runner is the only colleague who never needs to be told that the problem is still there.
