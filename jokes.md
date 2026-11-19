@@ -25582,3 +25582,19 @@ You consider the three options. Keep yours: they will be angry. Keep theirs: you
 In the end you pick "Accept Incoming Change" on the whole file, and the tests pass, because the tests were written by the person who lost the argument, and they check only the things that person remembered to care about.
 
 The principle: a merge conflict is the only place in software where two people finally agree on the same problem, which is that neither of them wrote down what the other one was trying to do.
+
+## 2026-11-19
+
+Every app eventually prints a yellow line in the console: `DeprecationWarning: this method will be removed in a future version.` It is the friendliest sentence in software, delivered with the calm of a weather forecast about a storm that has been scheduled for six years.
+
+Nobody reads it. The warning scrolls past between the build output and the test summary, and it becomes part of the scenery, like the hum of a refrigerator or a coworker who says "per my last email" in every meeting.
+
+Then the future arrives. The method is removed in a minor release, a patch that was labeled "no breaking changes," and the app falls over at startup with a stack trace that points to a library nobody on the team has opened since the Obama administration.
+
+You look up the replacement. The migration guide is three paragraphs long and assumes you already know the new API, which is the only situation in which you would not need the guide.
+
+You upgrade. The new method takes the same arguments in a different order, returns a promise instead of a value, and silently treats a `null` as an empty string, so the invoices for one customer now say "Total: undefined" in a font that makes it look intentional.
+
+You add the deprecation warning to the backlog. It is ticket number 1,207, between "refactor the logger" and "investigate why the staging VPN has a different IP address on Tuesdays." It will be the first thing you do in the next sprint, which is what you said about the last one.
+
+The principle: a deprecation warning is the only message in software that is always right, always ignored, and always proven correct on the day it stops being a warning and starts being an outage.
