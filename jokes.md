@@ -25628,3 +25628,19 @@ You delete `fixDates`. Eleven tests fail. You restore it, and then you spend a d
 You add a new comment above the function: `// TODO: remove this once everyone is ready`. Everyone is never ready. The comment is now the most honest line in the file, and it is also, technically, a promise.
 
 The principle: a temporary workaround is the only piece of code that is guaranteed to outlive the problem it was written to solve, and the only one that everyone depends on precisely because nobody was ever brave enough to call it a feature.
+
+## 2026-11-20
+
+Dependabot opens its first pull request at 3:00 a.m. on a Sunday. It is bumping a logging library from `4.17.20` to `4.17.21`, a patch release with the description "fixes a bug in an edge case." The PR has a green checkmark, a changelog, and a title that reads "Bump lodash from 4.17.20 to 4.17.21," which is the most emotionally neutral sentence ever written about a dependency.
+
+By Monday there are forty-seven of them. The bot never sleeps, never takes a holiday, and has never once said "let's wait until after the release." It is the only team member with perfect attendance, and it is also the only one that has no idea what the application does.
+
+You merge the first one. Nothing happens. You merge the second one. Nothing happens. You merge the third, and the build goes red in a test that checks whether the invoice PDF renders a euro sign, which it did last Tuesday and does not do now, because a transitive dependency of a dependency changed its default encoding in a release that the changelog describes as "internal cleanup."
+
+You ask the bot to rebase. It rebases. It opens a new set of pull requests, all of which are identical to the old ones, except that their titles now include the word "(rebased)," which is the software equivalent of changing your shirt and calling it a new outfit.
+
+You group them into one branch, merge it, and the application starts up. It takes eleven seconds, up from one, because a package that was supposed to be a dev dependency has quietly been promoted to production and is now loading a 200-megabyte test fixture on boot.
+
+The lockfile diff is 14,000 lines long. Nobody reviews it. The reviewer approves the pull request with a single comment: "LGTM, Dependabot is usually right." The sentence is true, in the same way that the weather is usually right, and the thunderstorm that follows is treated as a surprise.
+
+The principle: a dependency update is the only change that arrives with a changelog, a green checkmark, and a bot's confidence, and the only one that nobody reads until the day it finally breaks something that was working fine.
