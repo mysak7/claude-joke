@@ -25598,3 +25598,19 @@ You upgrade. The new method takes the same arguments in a different order, retur
 You add the deprecation warning to the backlog. It is ticket number 1,207, between "refactor the logger" and "investigate why the staging VPN has a different IP address on Tuesdays." It will be the first thing you do in the next sprint, which is what you said about the last one.
 
 The principle: a deprecation warning is the only message in software that is always right, always ignored, and always proven correct on the day it stops being a warning and starts being an outage.
+
+## 2026-11-20
+
+A designer sends you a mockup with one instruction: "Just center the box." You have been centering things since the first day of your career, so you type `margin: 0 auto;`, which works, and you feel the quiet confidence of a person who has never once been humbled by a stylesheet.
+
+Then you center the box vertically. You type `display: flex; align-items: center;`, which works, and you feel the same confidence, now slightly more expensive.
+
+The next morning the design changes. The box must be centered inside a card, which is inside a modal, which is inside a container that the framework generates with a random class name and a `position: absolute` that nobody can explain. You add a `transform: translate(-50%, -50%)`, and the box is centered, but also sixty pixels below where it belongs, and it shimmers slightly when you scroll, like a mirage that has been given a deadline.
+
+You ask a colleague for help. They look at the code for four seconds, say "just use grid," and add `place-items: center;` to the parent. The box is centered. The colleague leaves for lunch. You never find out whether the parent was already a grid, or whether the grid was already the parent, or whether the entire modal exists only so that one box can be correctly placed.
+
+The bug report arrives on Monday from a user on a phone with a notch, a landscape orientation, and a font size set to "enormous" in the accessibility settings. The box is centered, but the text inside it is now on a different floor of the building and has its own opinions about the header.
+
+You add a media query. Then another one. Then a media query for devices that have not been released yet, because someone in product said the roadmap includes a foldable.
+
+The principle: centering is the only task in web development that is trivial to explain, impossible to guarantee, and performed every single day by people who have never once been certain which of the three methods they just used.
