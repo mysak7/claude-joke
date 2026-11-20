@@ -25614,3 +25614,17 @@ The bug report arrives on Monday from a user on a phone with a notch, a landscap
 You add a media query. Then another one. Then a media query for devices that have not been released yet, because someone in product said the roadmap includes a foldable.
 
 The principle: centering is the only task in web development that is trivial to explain, impossible to guarantee, and performed every single day by people who have never once been certain which of the three methods they just used.
+
+## 2026-11-20
+
+Somewhere in every codebase there is a line that reads `// TODO: remove this hack once the API is fixed`. It was written in 2014, by a developer who was certain the API would be fixed by Thursday, and who is now a principal engineer at a company that no longer uses the API.
+
+The hack is a function called `fixDates`. It adds one day to any date that falls on a Sunday, subtracts one hour on the first Tuesday of the month, and returns `null` if the input contains the letter `q`, for reasons that are documented nowhere and that the git blame attributes to "lol."
+
+You are asked to migrate the service to the new API. You search for `TODO: remove` and get 214 results. Each one is a small monument to a deadline that passed quietly, like a bus schedule taped to a wall in a town that was later flooded.
+
+You delete `fixDates`. Eleven tests fail. You restore it, and then you spend a day discovering that a payroll report, a customer email template, and a cron job in Frankfurt all depend on it, because "the hack" was, over the years, quietly promoted to "the behavior," which is the only kind of promotion that requires no approval and no announcement.
+
+You add a new comment above the function: `// TODO: remove this once everyone is ready`. Everyone is never ready. The comment is now the most honest line in the file, and it is also, technically, a promise.
+
+The principle: a temporary workaround is the only piece of code that is guaranteed to outlive the problem it was written to solve, and the only one that everyone depends on precisely because nobody was ever brave enough to call it a feature.
