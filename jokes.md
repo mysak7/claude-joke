@@ -25644,3 +25644,17 @@ You group them into one branch, merge it, and the application starts up. It take
 The lockfile diff is 14,000 lines long. Nobody reviews it. The reviewer approves the pull request with a single comment: "LGTM, Dependabot is usually right." The sentence is true, in the same way that the weather is usually right, and the thunderstorm that follows is treated as a surprise.
 
 The principle: a dependency update is the only change that arrives with a changelog, a green checkmark, and a bot's confidence, and the only one that nobody reads until the day it finally breaks something that was working fine.
+
+## 2026-11-21
+
+Your manager asks how long the new login page will take. You look at the mockup, which has one input box and one button, and say "two days," with the serene confidence of someone who has not yet been introduced to OAuth, password reset emails, or the legal team.
+
+Day one is the form. Day two is the form again, because the button is now "Continue with Google," which requires a client ID, a redirect URI, and a consent screen that someone in marketing has to approve, and who is on vacation until the fourth.
+
+By Thursday you have a working login. It logs you in, which is the only thing it was ever supposed to do, and you feel the glow of a task completed on schedule, which is a feeling that lasts until the product manager asks what happens when the user forgets their password.
+
+The estimate is revised to "one more sprint." The sprint planning meeting, which lasts ninety minutes, reaches the consensus that the login page is "basically done," which is what everyone says about a thing that has not yet met a single real user.
+
+You track the actual time spent. It is 212 hours. The estimate was 16. The ratio is the most reliable metric in the company, and it is the only one nobody ever puts on a dashboard, because the dashboard would then need a red square for the estimator.
+
+The principle: an estimate is a prediction made by the person with the least information about the work, and the only number in software that grows at exactly the rate of the enthusiasm that produced it.
