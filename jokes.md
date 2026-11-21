@@ -25674,3 +25674,17 @@ The image is 4.2 gigabytes. It contains the operating system, three compilers, a
 You add `make` to the image. The build passes. The app starts on the server. It also starts on the tester's machine, which is now the only environment in the company where the app behaves exactly like it does on your laptop, because it is, in every meaningful way, your laptop, zipped and emailed.
 
 The principle: "works on my machine" was never a statement about the software, only about the one machine that was never quite the same as the others, and the Docker image is just the first time we have had to admit that the machine was the bug.
+
+## 2026-11-21
+
+You are asked to add a field to the user profile. The struct has `name`, `email`, and `phone`, and the new requirement is "a second address for shipping." You name it `address2`, because the first address was called `address`, and the naming scheme of the codebase has so far consisted of counting upward.
+
+Two sprints later the company needs a billing address, a work address, and a "vacation home that may or may not exist." The struct now contains `address`, `address2`, `address3`, `addressNew`, `addressNewFinal`, and `addr_old`, which is still used by the invoice generator, because it was the only one anyone remembered to wire up before the rename.
+
+You are asked which one is the real address. Nobody knows. The field called `address` has been empty since 2019, but three services read it and treat an empty string as a valid postal code for a town in Norway that does not exist.
+
+You propose a clean-up. The proposal goes into a backlog ticket called `refactor-addresses`, which is assigned to nobody, and which is, after a while, the only ticket that everyone agrees is important and nobody is willing to touch.
+
+You finally rename `address2` to `shippingAddress`. The compiler is happy. The tests are happy. The customer's package goes to the vacation home that may or may not exist, and it arrives, as far as anyone can tell, at a house in the middle of a lake.
+
+The principle: a variable name is a promise about what a value means, and the only promise in software that is made once, kept never, and inherited by every developer who comes after as if they had signed it themselves.
