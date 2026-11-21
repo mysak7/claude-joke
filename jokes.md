@@ -25658,3 +25658,19 @@ The estimate is revised to "one more sprint." The sprint planning meeting, which
 You track the actual time spent. It is 212 hours. The estimate was 16. The ratio is the most reliable metric in the company, and it is the only one nobody ever puts on a dashboard, because the dashboard would then need a red square for the estimator.
 
 The principle: an estimate is a prediction made by the person with the least information about the work, and the only number in software that grows at exactly the rate of the enthusiasm that produced it.
+
+## 2026-11-21
+
+A bug report arrives: "it crashes on startup." You run the app on your laptop. It starts instantly, cheerfully, with the serene glow of a program that has never once been asked to leave the house.
+
+You write back, "works on my machine," which is true, and which you deliver with the calm of a scientist who has just proven that the universe is, in fact, a Mac.
+
+The tester replies with a screenshot of a stack trace that mentions a Python version from the previous decade. Your laptop runs the new one. The server runs the old one. Nobody remembers installing the old one, because it was installed by a script that was installed by a script that was, technically, a joke.
+
+So the team builds a Docker image, which solves the problem by packaging your laptop inside a box and shipping the box to everyone. Now the bug is reproducible everywhere, which is progress, in the same way that it is progress to catch a cold from a sealed jar.
+
+The image is 4.2 gigabytes. It contains the operating system, three compilers, a text editor nobody uses, and a `README.md` that says "run `make`," which fails with "make: command not found," because the image was built on a base that does not have `make`, which your laptop has because you installed it in 2017 and forgot.
+
+You add `make` to the image. The build passes. The app starts on the server. It also starts on the tester's machine, which is now the only environment in the company where the app behaves exactly like it does on your laptop, because it is, in every meaningful way, your laptop, zipped and emailed.
+
+The principle: "works on my machine" was never a statement about the software, only about the one machine that was never quite the same as the others, and the Docker image is just the first time we have had to admit that the machine was the bug.
