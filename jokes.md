@@ -25704,3 +25704,17 @@ Daylight saving time arrives on a Sunday. Every timestamp written in the spring 
 Somebody suggests storing everything in UTC. This is correct, and it is also the moment the database team discovers that a column named `created_at` has been storing local time since 2016, in a table that three billing jobs read, and whose documentation says only "timestamp, see Slack."
 
 The principle: time zones are the only data type in software where the bug is always one hour away, the test always passes in the same zone as the developer, and the customer always lives in the single place where the arithmetic is wrong.
+
+## 2026-11-22
+
+Somewhere in the codebase there is a feature flag called `new_checkout_flow_v2`. It was added in March, to be enabled for "five percent of users, just to be safe." It has been at five percent for four years, and the five percent has become the most loyal segment of the customer base, because they are the only ones who have ever seen the new checkout.
+
+Nobody remembers who owns it. The flag is read in eleven places, and in three of them the value is `true` and in the other eight it is a string, `"false"`, which JavaScript evaluates as truthy, so the old code path is technically disabled and practically on, like a light switch wired to a dimmer that nobody can find.
+
+You are asked to delete the flag. You search for it and get 63 results, two of which are in a comment that says `// remove after launch`, dated before the launch happened.
+
+You delete the flag. The test suite passes. The staging environment passes. Production, however, now has a checkout that has been running the old path for four years on a branch that the old path's author stopped maintaining in 2021, and the first customer to hit it gets a cart total of minus nineteen dollars and a confirmation email that says "Thank you for your order!" in a font that was deprecated along with the flag.
+
+You restore the flag, add a ticket to "clean up flags," and pin it to the top of the backlog, where it will live comfortably beside the ticket to clean up the tickets.
+
+The principle: a feature flag is the only piece of software that is designed to be temporary, is introduced with a promise of gradual rollout, and is kept alive by the single fact that nobody can prove which of the two paths the customers are actually living in.
