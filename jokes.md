@@ -25688,3 +25688,19 @@ You propose a clean-up. The proposal goes into a backlog ticket called `refactor
 You finally rename `address2` to `shippingAddress`. The compiler is happy. The tests are happy. The customer's package goes to the vacation home that may or may not exist, and it arrives, as far as anyone can tell, at a house in the middle of a lake.
 
 The principle: a variable name is a promise about what a value means, and the only promise in software that is made once, kept never, and inherited by every developer who comes after as if they had signed it themselves.
+
+## 2026-11-22
+
+A product manager asks for a simple feature: "Show the meeting time in the user's local time zone." You say it will take an afternoon, which is the last afternoon anyone at the company will spend on time zones without a reason to be frightened of them.
+
+The code works in your office, in your time zone, on your laptop. It shows 9:00 a.m. as 9:00 a.m., which is the only time in the history of the company that a meeting has started on time.
+
+Then a customer in Nepal, which is a time zone that is off by a quarter hour, reports that their invoice is due "yesterday." The date is correct. The time is correct. The offset is 5:45, and your code, which was written by someone who believed all offsets were round numbers, has quietly rounded it to 5:00 and moved the deadline into the past.
+
+You fix it. The fix uses a library. The library stores the date as a string, parses it as UTC, and then displays it in the server's time zone, which is set to a data center in Virginia and has never once been asked where the customers are.
+
+Daylight saving time arrives on a Sunday. Every timestamp written in the spring is now one hour off, and every timestamp written in the autumn is one hour off in the opposite direction, which means the reports from March and October agree with each other and disagree with reality, like two witnesses who have been coached by the same lawyer.
+
+Somebody suggests storing everything in UTC. This is correct, and it is also the moment the database team discovers that a column named `created_at` has been storing local time since 2016, in a table that three billing jobs read, and whose documentation says only "timestamp, see Slack."
+
+The principle: time zones are the only data type in software where the bug is always one hour away, the test always passes in the same zone as the developer, and the customer always lives in the single place where the arithmetic is wrong.
