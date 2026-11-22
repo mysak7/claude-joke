@@ -25718,3 +25718,19 @@ You delete the flag. The test suite passes. The staging environment passes. Prod
 You restore the flag, add a ticket to "clean up flags," and pin it to the top of the backlog, where it will live comfortably beside the ticket to clean up the tickets.
 
 The principle: a feature flag is the only piece of software that is designed to be temporary, is introduced with a promise of gradual rollout, and is kept alive by the single fact that nobody can prove which of the two paths the customers are actually living in.
+
+## 2026-11-22
+
+Every project has a README, and every README begins with the same optimistic line: "Getting started takes five minutes." It is written by the one person on the team who has the environment already installed, the database already seeded, and the environment variables already memorized, which is to say, the only person who will never need to read it.
+
+The instructions are short. Step one: `npm install`. Step two: copy `.env.example` to `.env`. Step three: run `make dev`. There is no step four, because the author believed step four was obvious, and step four is "ask Priya, she set up the staging proxy in 2021 and nobody else knows how it works."
+
+You follow the steps. `npm install` takes eleven minutes, produces a warning about 340 deprecated packages, and ends with "found 0 vulnerabilities," which is true in the same way that a lock on a screen door is true. You copy the `.env` file. It contains `DATABASE_URL=changeme`, a value that the code has been quietly accepting as a real password since the first commit.
+
+`make dev` fails with "make: command not found," which the README does not mention, because the author's laptop has had `make` since before the author could spell it. You install it. The next error is a port already in use. The port belongs to a process that was started on Tuesday by someone who has since left the company and whose terminal has been open ever since, like a candle in an empty house.
+
+Three hours in, the app runs. You open the browser and see a login screen. The README says the test credentials are in "the usual place." There is no usual place. You search the repository and find them in a comment, in a file called `notes_DO_NOT_COMMIT.txt`, which has been committed in eleven commits.
+
+You add a section to the README called "Troubleshooting." It says: "If it doesn't work, ask Priya." Priya reads it, adds a line underneath that says "I am not Priya's manager, but I am available on Thursdays," and the README becomes, for the first time in its life, honest.
+
+The principle: a README is the only document in software that is written for a reader who already knows everything it explains, and the only one that is read for the first time by the person who is about to inherit the project and the blame for its setup.
