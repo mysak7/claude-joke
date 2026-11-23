@@ -25748,3 +25748,19 @@ Then someone adds `retry: 3` to the config, which turns the slot machine into a 
 You finally open the flaky test. It sleeps for 200 milliseconds and then asserts that a background job has finished. The job takes between 180 and 260 milliseconds, depending on whether the staging database is busy, whether a coffee machine in another building is running, and whether the moon is in the right house. You change the sleep to 500 milliseconds. The test is green for three weeks, and the team congratulates itself on fixing a bug nobody had described correctly.
 
 The principle: a flaky test is the only part of a codebase that is trusted precisely when it lies, and the only one where the fix is always a longer wait, which is what software engineers have been calling "a timing issue" since before the word "issue" was invented to avoid saying "we don't know."
+
+## 2026-11-23
+
+A user signs up with an email address, and the form has to validate it. You think, "This is a solved problem," and you write a regular expression, because you have heard that regular expressions are the sharpest tool in the drawer and you would like to be the kind of person who uses sharp tools.
+
+The regex is one line. It is also a small cathedral of backslashes, brackets, and question marks, and when you look at it for long enough it begins to look back. You test it against `john@example.com`. It passes. You test it against `not-an-email`. It fails, which is the only test you were confident about.
+
+Then the product manager adds a requirement: the validator must accept every address permitted by RFC 5322. You open the RFC. It is a document that defines, among other things, quoted strings, comments inside addresses, and the legal status of an address like `"very.(),:;<>[]\".VERY.\"very@\\ \"very\".unusual"@strange.example.com`. You close the RFC. You feel the same quiet respect you would feel for a bear that has learned to play dead.
+
+You decide to be pragmatic and accept only the normal kind of address. Your regex now rejects `o'brien@example.com`, which is a real person's real address, and a real person who will later write to support, politely, to ask why a company that exists to process their money does not believe in their surname.
+
+You relax the pattern. It now accepts `a@b`, which is not an email in any sense that matters to a mail server, but is a perfectly valid input to a regex that was never asked to understand the internet.
+
+The final version is three hundred characters long. It has a comment above it that says `// don't touch, see ticket #412`. Ticket #412 was closed in 2019 with the resolution "works for now."
+
+The principle: an email address is the only string in software that looks simple, is mathematically intricate, and is validated by a regex that everyone trusts precisely because nobody has ever been able to read it twice.
