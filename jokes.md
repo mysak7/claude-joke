@@ -25734,3 +25734,17 @@ Three hours in, the app runs. You open the browser and see a login screen. The R
 You add a section to the README called "Troubleshooting." It says: "If it doesn't work, ask Priya." Priya reads it, adds a line underneath that says "I am not Priya's manager, but I am available on Thursdays," and the README becomes, for the first time in its life, honest.
 
 The principle: a README is the only document in software that is written for a reader who already knows everything it explains, and the only one that is read for the first time by the person who is about to inherit the project and the blame for its setup.
+
+## 2026-11-23
+
+The test suite has 1,400 tests and one of them is flaky. It fails about one time in twenty, always in the CI job for the checkout service, always with the message "expected true, received false," which is the most honest error message in computing, because it describes the test's mood and nothing else.
+
+Someone opens a ticket called "Investigate flaky test." The ticket is labeled `low-priority`, which is the software equivalent of a dishwasher that is "making a noise but still washes."
+
+The team adopts a policy: if the build fails, click "Re-run." If it passes on the second try, the change is merged, and the first failure is filed under "weather." Within a month the pipeline has a retry button that is pressed more often than the save button, and the tests have become a slot machine that pays out a green checkmark roughly every other pull.
+
+Then someone adds `retry: 3` to the config, which turns the slot machine into a casino with a loyalty program. Now a test can fail three times and still be green, which means the suite is no longer testing the code. It is testing the patience of the developer who has been staring at the spinner since lunch.
+
+You finally open the flaky test. It sleeps for 200 milliseconds and then asserts that a background job has finished. The job takes between 180 and 260 milliseconds, depending on whether the staging database is busy, whether a coffee machine in another building is running, and whether the moon is in the right house. You change the sleep to 500 milliseconds. The test is green for three weeks, and the team congratulates itself on fixing a bug nobody had described correctly.
+
+The principle: a flaky test is the only part of a codebase that is trusted precisely when it lies, and the only one where the fix is always a longer wait, which is what software engineers have been calling "a timing issue" since before the word "issue" was invented to avoid saying "we don't know."
