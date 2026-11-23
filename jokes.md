@@ -25764,3 +25764,19 @@ You relax the pattern. It now accepts `a@b`, which is not an email in any sense 
 The final version is three hundred characters long. It has a comment above it that says `// don't touch, see ticket #412`. Ticket #412 was closed in 2019 with the resolution "works for now."
 
 The principle: an email address is the only string in software that looks simple, is mathematically intricate, and is validated by a regex that everyone trusts precisely because nobody has ever been able to read it twice.
+
+## 2026-11-23
+
+Every repository has a history, and somewhere inside that history is a commit called `fix`. It was pushed at 4:58 p.m. on a Friday, contains forty-one changed files, and is followed, nine minutes later, by a commit called `fix again`, and then by `fix for real this time`, and finally by `ok`, which is the commit message of a developer who has stopped believing in language.
+
+Commit messages are the only documentation that is written at the exact moment the author understands the least. The author is tired, the terminal is waiting, and the sentence that will be read by every future maintainer is typed with the same care as a password prompt.
+
+You run `git blame` on a line that reads `if (retries > 3) return;` and it leads you to a commit called `wip`, which contains the words "don't touch, works in prod." The commit is from 2018. The author has since become a manager, and has written, in a performance review, that they "value clear communication."
+
+You try to find out why the line exists. You read the diff, which is seven hundred lines long and touches the logging module, the billing module, and a file called `utils2.js`, which has no functions in it, only a comment that says `// moved here during the great reorganization`. The reorganization was not great. It was, according to the commit log, also called `reorg`, `reorg 2`, and `revert reorg (oops)`.
+
+Someone proposes a convention: "Use the imperative mood, under seventy-two characters, and explain the why." The convention is adopted with enthusiasm, documented in a wiki page, and followed for exactly the length of one sprint, after which the most senior engineer on the team merges a pull request titled `stuff`, because the change was, in their words, "self-explanatory."
+
+It was not self-explanatory. Nothing has ever been self-explanatory to the person reading it six months later, staring at a diff and a commit message that says `misc fixes`, and wondering whether the misc in question was the one that cost the company a weekend.
+
+The principle: a commit message is the only note ever left for the future by someone who, at the moment of writing, was certain they would remember exactly why they did it, and who did not.
