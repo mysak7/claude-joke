@@ -25780,3 +25780,17 @@ Someone proposes a convention: "Use the imperative mood, under seventy-two chara
 It was not self-explanatory. Nothing has ever been self-explanatory to the person reading it six months later, staring at a diff and a commit message that says `misc fixes`, and wondering whether the misc in question was the one that cost the company a weekend.
 
 The principle: a commit message is the only note ever left for the future by someone who, at the moment of writing, was certain they would remember exactly why they did it, and who did not.
+
+## 2026-11-24
+
+A junior developer writes a test for the payment service. The database is mocked. The mock is a cheerful object that returns `{ status: "paid" }` for every query, because that is what the developer assumed the database would say, and the developer has never once been wrong about what they assumed.
+
+The test passes on the first run. The coverage report turns green. The team lead approves the pull request with the comment "Nice isolation." It is, in the strictest sense, perfectly isolated: the test has been carefully separated from the only thing it was supposed to check.
+
+In production, the real database returns `"PAID"` in capital letters, because a migration from 2021 changed the enum and the changelog described it as "minor cleanup." The payment service compares strings against its own imagination. Every order is marked unpaid. Customers pay twice, which finance calls "a retry bug" and customers call "my bank statement."
+
+The developer adds a second test, which mocks the mock. The suite now has 412 tests. Four hundred and nine of them confirm that the code agrees with the developer. The three called `integration` run against the same mock, under a longer name.
+
+The team finally points a test at the staging database. It returns eleven spellings of "paid," a `null` for every order placed before the migration, and one row that says `"paid": "maybe"`, which the code has been quietly treating as true since the day it was written.
+
+The principle: a mock is the only collaborator that always agrees with you, which is exactly why a test suite built on mocks is a very reliable witness, testifying only to what its author already believed.
