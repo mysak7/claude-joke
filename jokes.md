@@ -25810,3 +25810,19 @@ You type "LGTM" and press the green button. It is the most common comment in the
 The CI passes. The migration runs. Forty minutes after deployment, a background job that was never mentioned in the diff, because it lived in a file that was "moved, not changed," begins to delete invoices older than ninety days, which are, according to the business, legally required to exist for seven years.
 
 The principle: a code review is a ritual in which a person is asked to certify, in a single word, the work of someone who understood the change better than they ever will, and the word "LGTM" is the only signature in software that is trusted by everyone and read by no one.
+
+## 2026-11-24
+
+Dependabot opens its first pull request on a Monday morning, cheerfully titled "Bump lodash from 4.17.20 to 4.17.21." It is a patch release. It is, the bot assures you, compatible. You merge it with the serene confidence of someone who has never read a changelog and has never needed to.
+
+By Friday there are forty-one open pull requests. They bump everything: a logger, a date library, a CSS framework, and a package called `is-odd`, whose entire job is to tell you whether a number is odd, and which now depends on eleven other packages to do it.
+
+You decide to batch them. You merge everything into a branch called `deps-all`, which passes the linter, passes the unit tests, and fails only in an integration test that nobody has run since the previous CTO left.
+
+Then the build breaks somewhere unexpected. A transitive dependency of a dependency of a dependency has moved one function from one file to another, and a library that worked for six years now throws `TypeError: cannot read property 'default' of undefined` in a module you have never opened. You cannot find it, because it lives in `node_modules`, which contains 1,212 directories and not one README you would trust.
+
+You pin the version. The pin is a single line in `package.json` with a comment: `// do not upgrade, see incident 2023-07`. Incident 2023-07 was resolved by a different pin, which is still there, and which nobody dares to remove, because a dependency removed from the tree is a dependency whose consequences nobody can see.
+
+Dependabot, undeterred, opens a new pull request: "Bump lodash from 4.17.20 to 4.17.21." It is the same pull request as the first one. It will stay open, cheerful, and fully compatible, long after the company that wrote the original code has been acquired.
+
+The principle: a dependency update is the only change in software that is called "safe" by a robot, approved by a human who did not read it, and reverted by a team that has forgotten the original sin, which was the day someone typed `"lodash": "^4"` and went home for the weekend.
