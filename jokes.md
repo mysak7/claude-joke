@@ -25794,3 +25794,19 @@ The developer adds a second test, which mocks the mock. The suite now has 412 te
 The team finally points a test at the staging database. It returns eleven spellings of "paid," a `null` for every order placed before the migration, and one row that says `"paid": "maybe"`, which the code has been quietly treating as true since the day it was written.
 
 The principle: a mock is the only collaborator that always agrees with you, which is exactly why a test suite built on mocks is a very reliable witness, testifying only to what its author already believed.
+
+## 2026-11-24
+
+A pull request arrives. The title is "Minor refactor of the order pipeline." The diff is 4,312 lines long, touches forty-seven files, and includes a new file called `helpers_final_v3.ts` that contains exactly one function, which is also called `helper`, and is never called at all.
+
+You open the first file. The changes look fine. You open the second file. The changes look fine. By the twelfth file your eyes have entered the state that scientists call "scanning" and that everyone else calls "scrolling with a purpose." You are looking for bugs, but the diff is so large that the bugs have become camouflage, like a single wrong sock in a drawer of identical wrong socks.
+
+You leave a comment on line 14 of a file you have not actually read: "nit: naming." The author replies within four minutes, which is the fastest response of the entire week and the only evidence that anyone has read anything at all. The reply says "good catch," which is a phrase that means "I will now make a change that is also unread."
+
+Your teammate, who has been waiting for review since Tuesday, sends a message: "Can you just approve it? It's mostly deletions." It is not mostly deletions. It is mostly moves, which is the diff format's way of saying "this code used to live somewhere else, and now it lives here, and nobody will ever be able to prove otherwise."
+
+You type "LGTM" and press the green button. It is the most common comment in the history of software, and the only one that means, with perfect precision, "I have looked at the shape of this change and decided to trust the shape."
+
+The CI passes. The migration runs. Forty minutes after deployment, a background job that was never mentioned in the diff, because it lived in a file that was "moved, not changed," begins to delete invoices older than ninety days, which are, according to the business, legally required to exist for seven years.
+
+The principle: a code review is a ritual in which a person is asked to certify, in a single word, the work of someone who understood the change better than they ever will, and the word "LGTM" is the only signature in software that is trusted by everyone and read by no one.
