@@ -25826,3 +25826,19 @@ You pin the version. The pin is a single line in `package.json` with a comment: 
 Dependabot, undeterred, opens a new pull request: "Bump lodash from 4.17.20 to 4.17.21." It is the same pull request as the first one. It will stay open, cheerful, and fully compatible, long after the company that wrote the original code has been acquired.
 
 The principle: a dependency update is the only change in software that is called "safe" by a robot, approved by a human who did not read it, and reverted by a team that has forgotten the original sin, which was the day someone typed `"lodash": "^4"` and went home for the weekend.
+
+## 2026-11-25
+
+The on-call rotation is a fair system. Every engineer takes a week on call, and during that week the pager will wake you at 3:12 a.m. to report that a disk on a server you have never heard of is "at 84 percent." The warning has fired every night since 2019 and has never been followed by anything except a sigh.
+
+You acknowledge the alert, because acknowledging is the only action that makes the pager stop, and you open the runbook. It is titled "Disk Space Warning (see also: Disk Space Critical)." Step one is "Check disk usage." Step two is "Clear old logs." Step three is "If the problem persists, contact the owning team." According to the service catalog, the owning team was merged into the billing team in 2022, and the billing team was reorganized into nobody.
+
+You clear old logs. The disk drops to 61 percent, and you feel the particular joy of solving a problem that was never a problem and will be one again on Thursday.
+
+At 3:40 a.m. a different alert fires. The error rate has crossed its threshold of 5 percent, which someone set to be strict. The error rate has been 6 percent since a dependency was upgraded. The upgrade is fine for everyone except the three customers who depend on the other 94 percent being quiet.
+
+You silence the alert for four hours and write "monitored" in the handoff notes. The next engineer reads "monitored" and, being a reasonable person, takes it to mean that someone is watching.
+
+Nobody is watching. The dashboard is a graph of a line that has been flat for so long it has acquired the dignity of a landmark, and the only thing that moves on it is the sleep schedule of the person who built it.
+
+The principle: an alert is the only message in software designed to interrupt a human at night, and it is most reliably silenced by a human who has learned that the fastest way to make the pager stop is to decide, quietly, that the thing it warns about belongs to somebody else.
