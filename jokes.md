@@ -25856,3 +25856,17 @@ The developer estimates the meeting at one hour. The meeting lasts three weeks, 
 Someone asks, gently, whether the two-day estimate still holds. The developer checks the ticket history and discovers that the estimate has been "two days" in every standup since March, which makes it the most stable number in the project, and the only one that has never once been updated by reality.
 
 The principle: an estimate is the only forecast in software that gets more accurate the longer it is ignored, because by the time anyone checks, the thing it predicted has either shipped, been cancelled, or quietly become somebody else's two days.
+
+## 2026-11-25
+
+A meeting is scheduled for 2:30 a.m. on the last Sunday in March. Nobody notices, because nobody in the meeting invite is awake at 2:30 a.m. on the last Sunday in March. The clocks in Europe jump forward at 2:00 a.m., which means 2:30 a.m. does not exist that night. It is the only time of the year that is simultaneously scheduled and impossible.
+
+The scheduler is written in a single file, and the file was written by a developer who assumed every user lives in the same city as the office. The timestamp is stored without a time zone, as a plain string, `"2026-03-29 02:30"`, because storing time zones was "a problem for version two." Version two has not been released. Version one has been used in four countries, two continents, and one ferry.
+
+When the reminder job runs, it finds a time that has never happened, and does what all software does when reality disagrees with it: it quietly picks one. The meeting is now at 3:30. The team in Lisbon receives the reminder at 1:00 a.m. and replies with a single, polite question mark. The team in Tokyo receives it nine hours later than they expected, which is still somehow too early.
+
+The bug report says "reminders are an hour off." The developer tries to reproduce it on their laptop, where it works perfectly, because the laptop is set to the same zone as the developer's opinion of the bug. The CI server runs in UTC. The tests run in the developer's zone. One test is marked `skip`, with the comment `// DST flaky, revisit`, which is the software industry's most honest way of saying "we have decided not to be in Europe in March."
+
+You add `TZ=UTC` to the Dockerfile. Now every timestamp is consistent, in the same way that a clock stuck at noon is consistent. The users in Prague see their stand-up at 10 a.m., which is the time it has always been, except that it is now also the time it was supposed to be at 9 a.m., and nobody can say which of these is the real one without checking a calendar that is itself in UTC.
+
+The principle: a timestamp is the only piece of data in software that is precise to the millisecond and still manages to be wrong about what hour it is, which is why every calendar app has a little warning icon for meetings that happen in the gap between two versions of the truth.
