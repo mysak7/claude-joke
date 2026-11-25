@@ -25842,3 +25842,17 @@ You silence the alert for four hours and write "monitored" in the handoff notes.
 Nobody is watching. The dashboard is a graph of a line that has been flat for so long it has acquired the dignity of a landmark, and the only thing that moves on it is the sleep schedule of the person who built it.
 
 The principle: an alert is the only message in software designed to interrupt a human at night, and it is most reliably silenced by a human who has learned that the fastest way to make the pager stop is to decide, quietly, that the thing it warns about belongs to somebody else.
+
+## 2026-11-25
+
+A product manager asks how long the new search filter will take. The developer looks at the ticket, which says "add a dropdown," and answers, with the confidence of someone who has never built a dropdown, "two days."
+
+Two days is a special unit of time in software. It is the length of a task that has not yet been understood. Once the task is understood, it becomes "about a week," and once the week has passed, it becomes "almost done," a phrase that will continue to be true for the rest of the quarter, like a train that is always just pulling into the station.
+
+The dropdown needs to show results as you type, so there is a debounce. The debounce needs to cancel stale requests, so there is an abort controller. The results need to be sorted by relevance, which means someone has to define relevance, which turns out to be a meeting. The meeting produces a document with four definitions of "relevant," one of which is "the thing the VP clicked last week."
+
+The developer estimates the meeting at one hour. The meeting lasts three weeks, during which the dropdown is quietly rebuilt as a modal, then a sidebar, then a page, and finally back to a dropdown, but now with a loading spinner, because the spinner was in the design file and nobody had the heart to remove it.
+
+Someone asks, gently, whether the two-day estimate still holds. The developer checks the ticket history and discovers that the estimate has been "two days" in every standup since March, which makes it the most stable number in the project, and the only one that has never once been updated by reality.
+
+The principle: an estimate is the only forecast in software that gets more accurate the longer it is ignored, because by the time anyone checks, the thing it predicted has either shipped, been cancelled, or quietly become somebody else's two days.
