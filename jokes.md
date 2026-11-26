@@ -25886,3 +25886,17 @@ You are asked to remove the flag. You grep for it and find 212 references, nine 
 The rollback takes forty minutes. The flag is restored, renamed to `new_checkout_flow_final`, and given a new ticket that says "temporary."
 
 The principle: a feature flag is the only temporary thing in software that is designed to outlive the people who created it, the product it was meant to test, and the company that once knew what the experiment was for, which is why every mature codebase is secretly a museum of decisions that nobody is allowed to make twice.
+
+## 2026-11-26
+
+A new hire opens a file for the first time and finds, on line 3, a comment that says `// TODO: remove before launch`. The blame annotation says 2014. The launch happened in 2015. The product that was supposed to launch has since been acquired, renamed, and quietly shut down in a blog post that nobody read, but the comment is still there, sitting at the top of the file like a sticky note on a fridge in a house nobody lives in anymore.
+
+A TODO is the only promise in software that is made with complete sincerity and tracked by no one. The author meant it. They had a clear picture of the future, in which the hardcoded admin password would be replaced, the retry loop would be fixed, and the function called `doStuff2` would be given a name that describes what it does. They wrote the TODO at 11 p.m. on a Thursday, which is the exact hour when intentions are at their most noble and their least durable.
+
+The TODO has no owner, no ticket, and no deadline. It has only a verb, which is "remove," and a condition, which is "before launch," and the condition is the cleverest part, because it is the one thing in the sentence that was guaranteed to be untrue. Launch is a moving target. It moves to the next quarter, then to version two, then to a rewrite that is itself, by a stroke of poetry, also marked TODO.
+
+The new hire asks the team about it. The senior engineer looks at the comment, nods slowly, and says, "Oh, that one. It's load-bearing." Nobody knows what it bears. Nobody has ever removed it, because removing a TODO means admitting that the future arrived without you and that the plan you wrote for it was never followed.
+
+So the TODO stays. It is joined over the years by fourteen others, each more urgent than the last, one of which says `// FIXME: this is a terrible hack, do not ship`, and which has been shipping for nine years, in production, to the largest customer, with the reliability of a bridge built by someone who was only asked to draw the railings.
+
+The principle: a TODO comment is the only task in software that is guaranteed to be completed, because it is already written, and the only one that is guaranteed never to be finished, because the person who wrote it has since been promoted into a job where they no longer open the file.
