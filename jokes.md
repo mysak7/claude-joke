@@ -25870,3 +25870,19 @@ The bug report says "reminders are an hour off." The developer tries to reproduc
 You add `TZ=UTC` to the Dockerfile. Now every timestamp is consistent, in the same way that a clock stuck at noon is consistent. The users in Prague see their stand-up at 10 a.m., which is the time it has always been, except that it is now also the time it was supposed to be at 9 a.m., and nobody can say which of these is the real one without checking a calendar that is itself in UTC.
 
 The principle: a timestamp is the only piece of data in software that is precise to the millisecond and still manages to be wrong about what hour it is, which is why every calendar app has a little warning icon for meetings that happen in the gap between two versions of the truth.
+
+## 2026-11-26
+
+A feature flag is born on a Tuesday with a noble purpose. It is called `new_checkout_flow`, it has a ticket that says "temporary, remove after rollout," and it is wrapped around a single `if` statement that the author is certain will be deleted in two weeks, when the experiment concludes and the team gathers to celebrate its success or quietly bury its failure.
+
+Two weeks pass. The experiment concludes with the result "inconclusive, but the designer really likes it." Nobody wants to be the person who removes the flag, because removing a flag means deciding which branch is real, and every branch has at least one executive who remembers approving it in a meeting that was, for them, mostly about lunch.
+
+So the flag stays. It is joined by `new_checkout_flow_v2`, which is the same flag but with a different default, and by `checkout_flow_legacy_override`, which exists to restore the original behavior for one customer in Ohio who was, in 2021, promised that nothing would change.
+
+The codebase begins to resemble a house where every light switch controls a different light in a different room, and no one has ever mapped the wiring. The flag configuration lives in a dashboard that has three tabs, two of which are labeled "Staging" and one of which is labeled "Staging (old)," and the production tab has a toggle with a red warning icon that says "Are you sure?" which everyone has learned to answer with a shrug.
+
+You are asked to remove the flag. You grep for it and find 212 references, nine of which are in tests that test the flag, four in comments that describe the flag, and one in a file called `flags_do_not_touch.json`, which is read by nothing but is loaded by everything. You remove the `if`. Checkout breaks for every customer who was on the branch you thought was dead, which turns out to be all of them, because the dashboard was showing the staging default for six months.
+
+The rollback takes forty minutes. The flag is restored, renamed to `new_checkout_flow_final`, and given a new ticket that says "temporary."
+
+The principle: a feature flag is the only temporary thing in software that is designed to outlive the people who created it, the product it was meant to test, and the company that once knew what the experiment was for, which is why every mature codebase is secretly a museum of decisions that nobody is allowed to make twice.
