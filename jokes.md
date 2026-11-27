@@ -25932,3 +25932,17 @@ The app starts. You open the browser. The homepage says "Welcome," and under it,
 You add a section to the README called "Getting Started (actually)." It has eleven steps. Step seven says "ask the engineer who knows." The engineer is you.
 
 The principle: a README is the only document in software written by the person who needs it least, for the reader who needs it most, and it works perfectly on exactly one machine, which is the machine it was written on, in the week before its author forgot what they had installed.
+
+## 2026-11-27
+
+The commit history of a long-lived project is a diary written by someone who is never allowed to read it back. Scroll far enough and the same story appears in increasingly desperate forms: "fix login," then "fix login again," then "actually fix login," then "fix login for real this time, I mean it," then "wip," then "asdf," then "please work," and finally, from a Friday evening in 2019, a single period.
+
+The period is not a message. It is a confession. Nobody can tell you what it fixed, because the author was not fixing anything in the usual sense. They were negotiating with a test that failed only on the CI server, in a timezone that nobody remembers configuring, using a version of a library that has since been yanked from the registry for reasons that are also, by now, a commit message.
+
+Git blame is the only tool that treats you as a suspect. You open a line of code that makes no sense, and it points, with cold precision, to a commit from a developer who has since left the company, written under the message "small tweak," touching eleven files, most of which are in a folder named `old_do_not_use`. That folder is imported by the production build, because the build tool was configured in 2018 to include everything, and "everything" has never once been reconsidered.
+
+You try to clean up the history. You run an interactive rebase, squash the wip commits into something respectable, and write a beautiful message: "Refactor login flow for clarity." The pull request is approved within minutes, which is the first time in the project's life that anyone has trusted a sentence written by someone who was clearly trying to end a conversation.
+
+Three months later, a customer reports that logins fail for users with accents in their names. You find the bug in commit number four of the squashed history, which no longer exists, because you squashed it, and which you can only recover by reading the reflog, a log of everything you did, kept by a system that assumes you already know what you were thinking.
+
+The principle: a commit message is the only documentation in software that is written in the heat of the moment, read in the cold of an incident, and judged by a future engineer who will look at the word "fix" and conclude, correctly, that whoever wrote it was not, at the time, in a position to explain anything.
