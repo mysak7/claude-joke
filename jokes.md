@@ -25900,3 +25900,17 @@ The new hire asks the team about it. The senior engineer looks at the comment, n
 So the TODO stays. It is joined over the years by fourteen others, each more urgent than the last, one of which says `// FIXME: this is a terrible hack, do not ship`, and which has been shipping for nine years, in production, to the largest customer, with the reliability of a bridge built by someone who was only asked to draw the railings.
 
 The principle: a TODO comment is the only task in software that is guaranteed to be completed, because it is already written, and the only one that is guaranteed never to be finished, because the person who wrote it has since been promoted into a job where they no longer open the file.
+
+## 2026-11-27
+
+A bug report arrives: "Checkout sometimes charges the wrong amount." There is no stack trace, no reproduction steps, and no indication of which of the forty-two services involved is responsible. You do what every experienced engineer does, which is to open the file that feels most suspicious and add a print statement.
+
+The first print says `here`. It is followed by `here 2`, `here 3`, and then, after a long and reflective pause, `HERE???`, which is the most honest log message ever written, because it is a confession that the author has no idea where they are, only that they are, for the moment, somewhere.
+
+By the afternoon the codebase is decorated with more debug output than a Christmas tree in a shopping mall. There is `console.log("amount", amount)`, `console.log("amount2", amount2)`, and `console.log("AMOUNT IS", typeof amount, amount, JSON.stringify(amount))`, which is what happens when a developer stops trusting the value and starts interrogating it.
+
+The output reveals the truth, which is that the amount is correct. The bug is in the currency conversion, which is in a different repository, owned by a different team, and documented only by a comment that says `// magic, don't ask`. You, having learned from this experience, do not ask.
+
+You remove your print statements. Nine of them are gone. One remains, in a function called `refund`, where it has been printing `"got here"` into production logs for eleven weeks. Nobody has noticed, because the logs are read only by an alert that fires when they are empty, and the `got here` line has kept them comfortingly non-empty since March.
+
+The principle: a debug print is the only piece of code written with the explicit intention of being deleted, and the only piece that, once it escapes into production, becomes the most reliable evidence that somebody, at some point, was absolutely certain they had made it to the right place.
