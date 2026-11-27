@@ -25914,3 +25914,21 @@ The output reveals the truth, which is that the amount is correct. The bug is in
 You remove your print statements. Nine of them are gone. One remains, in a function called `refund`, where it has been printing `"got here"` into production logs for eleven weeks. Nobody has noticed, because the logs are read only by an alert that fires when they are empty, and the `got here` line has kept them comfortingly non-empty since March.
 
 The principle: a debug print is the only piece of code written with the explicit intention of being deleted, and the only piece that, once it escapes into production, becomes the most reliable evidence that somebody, at some point, was absolutely certain they had made it to the right place.
+
+## 2026-11-27
+
+Every project has a README, and every README has a section called "Getting Started," which is written in the tone of a man who has just finished building a boat and is now explaining, to a crowd on the shore, how simple it is to sail. The steps are three lines long. Clone the repository. Run `npm install`. Run `npm start`. The section ends with a cheerful sentence that begins "That's it!" and which is the most optimistic word ever typed into a markdown file.
+
+You clone the repository. You run `npm install`, which downloads 1,412 packages, one of which compiles a native module and fails with a message about a Python version that the README does not mention, because the author's Python has been the same Python since 2017 and the author no longer remembers it is a dependency. You install Python. You run `npm install` again. It succeeds, with eleven warnings, nine of which say "deprecated" and one of which says "this package is no longer maintained, please reconsider your life choices."
+
+You run `npm start`. The server prints `Error: missing environment variable DATABASE_URL`. The README does not mention environment variables. It does mention, in a different file called `CONTRIBUTING.md`, that you should "ask Priya for the .env," and Priya left the company in 2022 to start a bakery, which, judging by her LinkedIn, is going very well.
+
+You find an old `.env.example` file. It contains a variable called `DB_HOST=localhost`, which is not the variable the code reads. The code reads `DATABASE_URL`, which was renamed in a commit called `rename env stuff`, which did not update the example, the README, or the Dockerfile, which still builds the application with the variable it was given in 2021.
+
+You spend the afternoon reconstructing the setup from the only reliable source in the project, which is the head of the one engineer who has run the application on their own laptop. That engineer has, over the years, installed a specific version of Node, a specific version of Postgres, a global package they forgot to list, and a symlink in `/usr/local/bin` that makes the seed script work. None of this is written anywhere. All of it is, in the engineer's memory, "just how you set it up."
+
+The app starts. You open the browser. The homepage says "Welcome," and under it, in small gray text, "Build 2019-03-14, dev only." Nobody has deployed a build since then. It is, technically, the only documentation that is kept up to date.
+
+You add a section to the README called "Getting Started (actually)." It has eleven steps. Step seven says "ask the engineer who knows." The engineer is you.
+
+The principle: a README is the only document in software written by the person who needs it least, for the reader who needs it most, and it works perfectly on exactly one machine, which is the machine it was written on, in the week before its author forgot what they had installed.
