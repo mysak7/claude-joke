@@ -25960,3 +25960,17 @@ Then the requirements get stricter. A lookahead is added to check for a dot in t
 Eventually someone sends a confirmation email, which is the only validation that actually works, because it proves the address exists by asking its owner to show up. The confirmation arrives in 0.4 seconds, which means the entire regex was an elaborate way of avoiding the one question the mail server would have answered for free.
 
 The principle: an email validation regex is the only code in software that tries to prove a stranger exists by inspecting their spelling, and it is most reliably correct when it finally admits that the only real test is sending them a message and waiting to see whether they reply.
+
+## 2026-11-28
+
+A pull request arrives in your review queue with the title "Minor refactor of user service." The description is one line: "Cleanup." The diff is 4,312 lines across 97 files. You open it with the calm of someone who has been doing this for years and has developed a reliable method: you scroll to the bottom, see the approval count, and check whether anyone else has already said something kind.
+
+Two people have approved. One comment says "LGTM 🚀." The other says "nice cleanup!" and has been added to the thread eleven minutes after the PR was opened, which is roughly the time it takes to read the title.
+
+You scroll back to the top and begin, with the enthusiasm of a lighthouse keeper in a storm, to review the diff. Line 1 is a rename. Line 40 is a rename of the rename. Line 812 is a file moved from `utils/` to `helpers/`, and the file it was moved to has, in the same commit, been moved back, so that the net change is a file that was moved and then moved again and is now exactly where it started, but with a different git history and a new author.
+
+Somewhere around line 2,000 you find a function that used to check whether a user was an admin. It now checks whether `user.role` is equal to the string `"admin"`, which is fine, except that the enum that used to define the roles has been deleted, and the new string is spelled `"Admin"`, with a capital A. Nothing fails. Nothing ever fails. The admin panel simply stops being visible to admins, and the support queue fills with messages from people who have been told by the company that they are, in fact, admins.
+
+You leave a comment. The author replies "good catch, fixed," and pushes a commit titled "fix typo." The commit is 3 lines. It is the only part of the PR that you can review in under a minute, which is also the only part that changed the behavior.
+
+The principle: a code review is the only meeting in software where a dozen people sign off on something they have not read, in order to be seen approving it, and the most valuable comment in the thread is always the one left by the person who spent their Friday afternoon reading line 2,000 instead of reacting to the title.
