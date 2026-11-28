@@ -25974,3 +25974,19 @@ Somewhere around line 2,000 you find a function that used to check whether a use
 You leave a comment. The author replies "good catch, fixed," and pushes a commit titled "fix typo." The commit is 3 lines. It is the only part of the PR that you can review in under a minute, which is also the only part that changed the behavior.
 
 The principle: a code review is the only meeting in software where a dozen people sign off on something they have not read, in order to be seen approving it, and the most valuable comment in the thread is always the one left by the person who spent their Friday afternoon reading line 2,000 instead of reacting to the title.
+
+## 2026-11-28
+
+The unit test suite is a fortress of 2,400 assertions, and every one of them is green. The CI badge glows the calm, reassuring green of a traffic light that has been stuck on "go" since the last deployment. The team celebrates, because coverage is at 94 percent, which is the number that goes into the quarterly slide, right between "velocity" and "vibes."
+
+Coverage is a measure of which lines were executed during the tests, not of whether anything they did was checked. A test that calls a function and asserts that it returned something, anything, is a test that has done its job, in the same way that a security guard who waves everyone through has technically been present at the door.
+
+The payment service is mocked. The database is mocked. The email sender, the cache, the clock, and the function that decides whether the current user is an admin are all mocked, and mocked so thoroughly that each mock returns exactly the value the test wants to hear. The test is a conversation in which the code asks a question and the mock answers, "yes, of course, that's right," because the mock was written by the same developer who wrote the code and who, at the time, was very sure they were correct.
+
+A bug report arrives on a Monday: the charge endpoint accepts a negative amount and credits the customer's account. You open the test for the charge endpoint. It is named `should charge the correct amount`. It passes. You read the body, and it mocks the payment gateway to return `{ success: true }` and then asserts that the response is `{ success: true }`. The test has, in its own way, proved the function returns what the mock returns, which is a rigorous result that nobody needed.
+
+You delete the mock and run the real code against the real sandbox. It charges a negative amount, cheerfully, in four milliseconds. The test suite, meanwhile, continues to report 2,400 passing assertions, all of which are now aware that the gateway is a fiction, because they wrote the fiction.
+
+You add a test that sends `-100` and expects a rejection. It fails, which is the first useful thing the suite has done in months. Someone in the standup says, with genuine admiration, "Nice, we're finally testing the real thing," and the team moves on to the next ticket with the coverage number unchanged at 94 percent.
+
+The principle: a unit test is the only piece of software that proves, with complete certainty, that a mock behaves exactly as its author imagined, which is the most reliable way ever devised to confirm that a system works in every situation except the one that matters.
