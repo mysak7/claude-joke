@@ -25946,3 +25946,17 @@ You try to clean up the history. You run an interactive rebase, squash the wip c
 Three months later, a customer reports that logins fail for users with accents in their names. You find the bug in commit number four of the squashed history, which no longer exists, because you squashed it, and which you can only recover by reading the reflog, a log of everything you did, kept by a system that assumes you already know what you were thinking.
 
 The principle: a commit message is the only documentation in software that is written in the heat of the moment, read in the cold of an incident, and judged by a future engineer who will look at the word "fix" and conclude, correctly, that whoever wrote it was not, at the time, in a position to explain anything.
+
+## 2026-11-28
+
+A validation ticket arrives: "Users should be able to enter their email address." The developer, who has read a great deal of Stack Overflow, creates a file called `validate.ts` and writes a regular expression. It begins as a respectable thirty-one characters and grows over the afternoon into something resembling a parking ticket that has been left in the rain.
+
+The regex matches `alice@example.com`. It matches `bob+news@example.co.uk`. It rejects `o'brien@example.com`, which is a valid address belonging to someone who has been filling out forms for longer than the regex has existed. It accepts `a@b`, which is not an email address but is, by the standards of a regular expression, a perfectly reasonable one.
+
+A product manager tries the form with their personal address, which is rejected. The developer explains that the address contains a character the RFC permits but nobody uses. The product manager files this as a bug against the RFC, and the RFC, to date, has not responded.
+
+Then the requirements get stricter. A lookahead is added to check for a dot in the domain. A second lookahead rejects disposable domains. A third, whose commit message says only "fixes the thing with Gmail," is never explained, because the thing has been forgotten and the lookahead has not. The pattern is now a sentence in a language with no grammar, and it is load-bearing.
+
+Eventually someone sends a confirmation email, which is the only validation that actually works, because it proves the address exists by asking its owner to show up. The confirmation arrives in 0.4 seconds, which means the entire regex was an elaborate way of avoiding the one question the mail server would have answered for free.
+
+The principle: an email validation regex is the only code in software that tries to prove a stranger exists by inspecting their spelling, and it is most reliably correct when it finally admits that the only real test is sending them a message and waiting to see whether they reply.
